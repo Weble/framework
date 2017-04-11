@@ -43,6 +43,9 @@
         "category:saved": [
             "\\Zoolanders\\Framework\\Listener\\Category\\SaveTranslations"
         ],
+        "category:beforecopy": [
+            "\\Zoolanders\\Framework\\Listener\\Category\\CreateAlias"
+        ],
         "type:beforesave" : [
             "\\Zoolanders\\Framework\\Listener\\Type\\EncryptPasswords"
         ],
