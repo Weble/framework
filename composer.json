@@ -9,7 +9,7 @@
         }
     ],
     "config": {
-        "vendor-dir": "zoolanders/vendor"
+        "vendor-dir": "libraries/zoolanders/vendor"
     },
     "require": {
         "league/flysystem": "^1.0",

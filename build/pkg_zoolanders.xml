@@ -10,7 +10,6 @@
     <authorUrl>http://zoolanders.com</authorUrl>
     <packagename>zoolanders</packagename>
     <files folder="packages">
-        <!-- Main -->
         <file type="library" id="zoolanders">lib_zoolanders.zip</file>
         <file type="plugin" id="zlframework" group="system">plg_zlframework.zip</file>
     </files>
