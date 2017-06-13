@@ -88,8 +88,7 @@ trait ListOptions
         // Sorting:
         $sort = $request->get('sort', [], 'array');
 
-        if(!empty($sort))
-        {
+        if (!empty($sort)) {
             foreach($sort as $field => $dir){
                 $this->model->setSorting($field, $dir);
             }

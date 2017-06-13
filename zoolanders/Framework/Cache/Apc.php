@@ -1,14 +1,8 @@
 <?php
-/**
- * @package     ZOOlanders Framework
- * @version     4.0.0-beta11
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
 
 namespace Zoolanders\Framework\Cache;
-use Zoolanders\Framework\Container\Container;
 
+use Zoolanders\Framework\Container\Container;
 
 /**
  * Cache class with alternative PHP cache (APC) storage.

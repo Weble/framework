@@ -1,4 +1,5 @@
 <?php
+
 namespace Zoolanders\Framework;
 
 use Composer\Autoload\ClassLoader;
@@ -54,7 +55,7 @@ class Autoloader
     }
 }
 
-if(!defined('ZF_TEST')){
+if (!defined('ZF_TEST')){
     define('ZF_TEST', false);
 }
 
@@ -63,7 +64,5 @@ $composerAutoloader = require_once dirname(__FILE__) . '/vendor/autoload.php';
 // Create autoloader and add the mapping to the framework
 $loader = Autoloader::getInstance($composerAutoloader);
 $loader->addPsr4('Zoolanders\\Framework\\', dirname(__FILE__) . '/Framework');
-
-\JPluginHelper::importPlugin('zoolanders');
 
 return $loader;

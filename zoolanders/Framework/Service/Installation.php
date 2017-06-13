@@ -1,10 +1,4 @@
 <?php
-/**
- * @package     ZOOlanders Framework
- * @version     4.0.0-beta11
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
 
 namespace Zoolanders\Framework\Service;
 
@@ -125,7 +119,7 @@ class Installation
 
         // set ZOOtools and ZL Elements right after ZOOlingual
         $order++;
-        $db->setQuery("UPDATE `#__extensions` SET `ordering` = {$order} WHERE `type` = 'plugin' AND `element` in 
+        $db->setQuery("UPDATE `#__extensions` SET `ordering` = {$order} WHERE `type` = 'plugin' AND `element` in
 			('zootools', 'zoo_zlelements')
 		")->execute();
 

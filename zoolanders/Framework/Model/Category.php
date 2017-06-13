@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dimmask
- * Date: 10.04.17
- * Time: 11:58
- */
 
 namespace Zoolanders\Framework\Model;
 

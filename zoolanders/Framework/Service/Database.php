@@ -1,16 +1,4 @@
 <?php
-/**
- * @package     ZOOlanders Framework
- * @version     4.0.0-beta11
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-/**
- * @package   com_zoo
- * @author    YOOtheme http://www.yootheme.com
- * @copyright Copyright (C) YOOtheme GmbH
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
- */
 
 namespace Zoolanders\Framework\Service;
 

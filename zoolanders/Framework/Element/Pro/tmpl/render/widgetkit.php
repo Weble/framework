@@ -1,14 +1,4 @@
 <?php
-/**
- * @package     ZOOlanders Framework
- * @version     4.0.0-beta11
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
-
-
- 
 
 defined('_JEXEC') or die();
 
@@ -24,19 +14,19 @@ if($this->app->zlfw->checkExt('com_widgetkit'))
 	// init vars
 	$lparams  = $this->app->data->create($params->get('layout'));
 	$layout   = "render/widgetkit/{$lparams->find('widgetkit._widget')}/{$lparams->find('widgetkit._style')}/template.php";
-	
+
 	// prepare widget settings
 	$settings = array();
 	foreach ((array) $lparams->find('widgetkit.settings') as $key => $value) {
 		$settings[$key] = is_numeric($value) ? (float) $value : $value;
 	}
-	
+
 	// set widget object
 	$widget 			= $this->app->data->create();
 	$widget->id 		= $this->identifier;
 	$widget->settings 	= $settings;
 	$widget->mode 		= "{$lparams->find('widgetkit._widget')}.{$lparams->find('widgetkit._style')}";
-	
+
 	// render widget
 	if ($layout = $this->getLayout($layout))
 	{
@@ -44,12 +34,12 @@ if($this->app->zlfw->checkExt('com_widgetkit'))
 		$separator = $params->find('separator._by') == 'custom' ? $params->find('separator._by_custom') : $params->find('separator._by');
 
 		$result = $this->renderLayout($layout, compact('widget', 'params', 'widgetkit', 'separator'));
-	
+
 		// if enclosing tag present wrap whole layout
 		if(preg_match('/enclosing_tag=\[(.*)\]/U', $separator, $enclosed_by)){
 			$result = $this->app->zlfw->applySeparators($enclosed_by[0], $result, $params->find('separator._class'), $params->find('separator._fixhtml'));
 		}
-		
+
 		echo $result;
 	}
 }
@@ -57,5 +47,5 @@ else
 {
 	echo JText::_('PLG_ZLFRAMEWORK_WK_NOT_PRESENT');
 }
-	
+
 ?>
