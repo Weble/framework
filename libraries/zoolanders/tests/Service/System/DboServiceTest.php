@@ -11,15 +11,13 @@ use Zoolanders\Framework\Service\System\Dbo;
  *
  * @package ZFTests\Service\System
  */
-class DboServiceTest extends SystemServiceTestLayer
-{
+class DboServiceTest extends SystemServiceTestLayer {
     protected $serviceClassNames = ['JDatabaseDriverMysqli', 'JDatabaseDriverMysql'];
 
     /**
      * Service class instance provider
      */
-    protected function getServiceInstance()
-    {
+    protected function getServiceInstance () {
         return new Dbo(self::$container);
     }
 }

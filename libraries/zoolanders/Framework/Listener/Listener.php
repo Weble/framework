@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Listener;
 
-abstract class Listener
-{
+abstract class Listener {
 
 }

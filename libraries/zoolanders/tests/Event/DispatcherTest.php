@@ -12,14 +12,13 @@ use Zoolanders\Framework\Event\Dispatcher;
  *
  * @package ZFTests\Event
  */
-class DispatcherTest extends ZFTestCase
-{
+class DispatcherTest extends ZFTestCase {
     public static $check = false;
 
     /**
      * Sample listening method
      */
-    public static function listenerSample($event){
+    public static function listenerSample ($event) {
         self::$check = $event->getReturnValue();
     }
 
@@ -29,7 +28,7 @@ class DispatcherTest extends ZFTestCase
      * @covers      Dispatcher::trigger()
      * @depends     testNotify
      */
-    public function testTriggerEvent(){
+    public function testTriggerEvent () {
         $dispatcher = new Dispatcher(self::$container->zoo);
         $event = new TestEvent();
 

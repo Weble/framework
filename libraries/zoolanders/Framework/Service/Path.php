@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Service;
 
-class Path
-{
+class Path {
     /**
      * Shortcut to the zoo's path helper (where zoo and zoolanders have to register the paths)
      * @var \PathHelper
@@ -27,8 +26,7 @@ class Path
      * @param Filesystem|null $fs
      * @param Zoo $zoo
      */
-    public function __construct(Filesystem $fs = null, Zoo $zoo)
-    {
+    public function __construct (Filesystem $fs = null, Zoo $zoo) {
         $this->filesystem = $fs;
         $this->helper = $zoo->path;
     }
@@ -39,8 +37,7 @@ class Path
      * @param string $path The path to register
      * @param string $namespace The namespace to register the path to
      */
-    public function register($path, $namespace = 'default')
-    {
+    public function register ($path, $namespace = 'default') {
         if (!isset($this->registeredPaths[$namespace])) {
             $this->registeredPaths[$namespace] = array();
         }
@@ -60,8 +57,7 @@ class Path
      *
      * @since 1.0.0
      */
-    public function path($resource)
-    {
+    public function path ($resource) {
         return $this->helper->path($resource);
     }
 
@@ -74,8 +70,7 @@ class Path
      *
      * @since 1.0.0
      */
-    public function paths($resource)
-    {
+    public function paths ($resource) {
         return $this->helper->paths($resource);
     }
 
@@ -88,8 +83,7 @@ class Path
      *
      * @since 1.0.0
      */
-    public function url($resource)
-    {
+    public function url ($resource) {
         // init vars
         $parts = explode('?', $resource);
         $path = $this->path($parts[0]);
@@ -121,8 +115,7 @@ class Path
      *
      * @since 1.0.0
      */
-    public function files($resource, $recursive = false, $filter = null)
-    {
+    public function files ($resource, $recursive = false, $filter = null) {
         return $this->ls($resource, 'file', $recursive, $filter);
     }
 
@@ -137,8 +130,7 @@ class Path
      *
      * @since 1.0.0
      */
-    public function dirs($resource, $recursive = false, $filter = null)
-    {
+    public function dirs ($resource, $recursive = false, $filter = null) {
         return $this->ls($resource, 'dir', $recursive, $filter);
     }
 
@@ -152,8 +144,7 @@ class Path
      *
      * @return array The list of files or directories
      */
-    public function ls($resource, $mode = 'file', $recursive = false, $filter = null)
-    {
+    public function ls ($resource, $mode = 'file', $recursive = false, $filter = null) {
         $files = array();
         $res = $this->parse($resource);
 
@@ -177,8 +168,7 @@ class Path
      *
      * @return array An associative array containing "namespace", "paths", "path"
      */
-    public function parse($resource)
-    {
+    public function parse ($resource) {
         // init vars
         $parts = explode(':', $resource, 2);
         $count = count($parts);
@@ -214,8 +204,7 @@ class Path
      *
      * @since 1.0.0
      */
-    protected function _list($path, $prefix = '', $mode = 'file', $recursive = false, $filter = null)
-    {
+    protected function _list ($path, $prefix = '', $mode = 'file', $recursive = false, $filter = null) {
         $files = array();
         $ignore = array('.', '..', '.DS_Store', '.svn', '.git', '.gitignore', '.gitmodules', 'cgi-bin');
 
@@ -275,8 +264,7 @@ class Path
      *
      * @since 1.0.0
      */
-    public function relative($path)
-    {
+    public function relative ($path) {
         $relative = ltrim(preg_replace('/^' . preg_quote(str_replace(DIRECTORY_SEPARATOR, '/', JPATH_ROOT), '/') . '/i', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath($path))), '/');
 
         // if equal, probably something went wrong, try without realpath (symlinks?)
@@ -295,8 +283,7 @@ class Path
      *
      * @since 3.3.8
      */
-    protected function normalizePath($path)
-    {
+    protected function normalizePath ($path) {
         $path = str_replace(['\\', '//'], '/', $path);
         $prefix = preg_match('|^(?P<prefix>([a-zA-Z]+:)?//?)|', $path, $matches) ? $matches['prefix'] : '';
         $path = substr($path, strlen($prefix));

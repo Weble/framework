@@ -1,312 +1,306 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
 /*
 	Class: zlfwHelperZlux
 		A class that contains ZLUX functions
 */
+
 class zlfwHelperZlux extends AppHelper {
 
-	/**
-	 * The list of loaded zlux classes
-	 *
-	 * @var array
-	 */
-	protected $_classes = array();
+    /**
+     * The list of loaded zlux classes
+     *
+     * @var array
+     */
+    protected $_classes = array();
 
-	/**
-	 * Class Constructor
-	 *
-	 * @param App $app A reference to the global App object
-	 */
-	public function __construct($app) {
-		parent::__construct($app);
+    /**
+     * Class Constructor
+     *
+     * @param App $app A reference to the global App object
+     */
+    public function __construct ($app) {
+        parent::__construct($app);
 
-		// load class
-		$this->app->loader->register('zlux', 'classes:zlux.php');
-	}
+        // load class
+        $this->app->loader->register('zlux', 'classes:zlux.php');
+    }
 
-	/**
-	 * Get a zlux class
-	 *
-	 * @param string $name The name of the class to retrieve
-	 *
-	 * @return object The zlux class
-	 */
-	public function get($name)
-	{
-		// load zlux class
-		$name = strtolower($name);
-		$class = 'zlux'.ucfirst($name);
-		$this->app->loader->register($class, 'zlfw:zlux/manager'.strtolower($name).'/class.php');
+    /**
+     * Get a zlux class
+     *
+     * @param string $name The name of the class to retrieve
+     *
+     * @return object The zlux class
+     */
+    public function get ($name) {
+        // load zlux class
+        $name = strtolower($name);
+        $class = 'zlux' . ucfirst($name);
+        $this->app->loader->register($class, 'zlfw:zlux/manager' . strtolower($name) . '/class.php');
 
-		// add class, if not exists
-		if (!isset($this->_classes[$name])) {
-			$this->_classes[$name] = new $class($this->app);
-		}
+        // add class, if not exists
+        if (!isset($this->_classes[$name])) {
+            $this->_classes[$name] = new $class($this->app);
+        }
 
-		return $this->_classes[$name];
-	}
+        return $this->_classes[$name];
+    }
 
-	/**
-	 * Magic method to get a zlux class
-	 *
-	 * @param string $name The name of the class
-	 *
-	 * @return object The class object
-	 */
-	public function __get($name) {
-		return $this->get($name);
-	}
+    /**
+     * Magic method to get a zlux class
+     *
+     * @param string $name The name of the class
+     *
+     * @return object The class object
+     */
+    public function __get ($name) {
+        return $this->get($name);
+    }
 
-	/**
-	 * Load ZLUX Main assets
-	 */
-	protected $_zlux1_loaded = false;
-	protected $_zlux2_loaded = false;
-	public function loadMainAssets($zlux2 = false)
-	{
-		// load zlux2 if indicated
-		if($zlux2 && !$this->_zlux2_loaded) {
-			$template = JFactory::getApplication()->getTemplate();
-			$path = 'root:templates/'.$template.'/warp.php';
+    /**
+     * Load ZLUX Main assets
+     */
+    protected $_zlux1_loaded = false;
+    protected $_zlux2_loaded = false;
 
-			// if no file found it's not warp 7, load zlux uikit css and js
-			if (!$this->app->path->path($path)) {
-				$this->app->document->addStylesheet('zlmedia:vendor/zlux/dist/css/zlux-uikit.min.css');
-				$this->app->document->addScript('zlmedia:vendor/uikit/js/uikit.min.js');
-			} else {
-				// load warp uikit js
-				$this->app->document->addScript('root:templates/'.$template.'/warp/vendor/uikit/js/uikit.js');
-				// and zlux styles
-				$this->app->document->addStylesheet('zlmedia:vendor/zlux/dist/css/zlux.min.css');
-			}
+    public function loadMainAssets ($zlux2 = false) {
+        // load zlux2 if indicated
+        if ($zlux2 && !$this->_zlux2_loaded) {
+            $template = JFactory::getApplication()->getTemplate();
+            $path = 'root:templates/' . $template . '/warp.php';
 
-			$this->app->document->addScript('zlmedia:vendor/zlux/dist/js/zlux.min.js');
+            // if no file found it's not warp 7, load zlux uikit css and js
+            if (!$this->app->path->path($path)) {
+                $this->app->document->addStylesheet('zlmedia:vendor/zlux/dist/css/zlux-uikit.min.css');
+                $this->app->document->addScript('zlmedia:vendor/uikit/js/uikit.min.js');
+            } else {
+                // load warp uikit js
+                $this->app->document->addScript('root:templates/' . $template . '/warp/vendor/uikit/js/uikit.js');
+                // and zlux styles
+                $this->app->document->addStylesheet('zlmedia:vendor/zlux/dist/css/zlux.min.css');
+            }
 
-			$this->loadVariables(true);
+            $this->app->document->addScript('zlmedia:vendor/zlux/dist/js/zlux.min.js');
 
-			// set loaded state
-			$this->_zlux2_loaded = true;
+            $this->loadVariables(true);
 
-		} else if(!$zlux2 && !$this->_zlux1_loaded) {
+            // set loaded state
+            $this->_zlux2_loaded = true;
 
-			// zlux assets
-			$this->app->document->addStylesheet('zlfw:zlux/zluxMain.css');
-			$this->app->document->addScript('zlfw:zlux/zluxMain.js');
+        } else if (!$zlux2 && !$this->_zlux1_loaded) {
 
-			$this->loadBootstrap(true);
-			$this->loadVariables();
+            // zlux assets
+            $this->app->document->addStylesheet('zlfw:zlux/zluxMain.css');
+            $this->app->document->addScript('zlfw:zlux/zluxMain.js');
 
-			// set loaded state
-			$this->_zlux1_loaded = true;
-		}
-	}
+            $this->loadBootstrap(true);
+            $this->loadVariables();
 
-	/**
-	 * Load ZL Bootstrap assets
-	 */
-	public function loadBootstrap($loadJS = false)
-	{
-		if ($this->app->joomla->isVersion('2.5')) {
-			$this->app->document->addStylesheet('zlfw:zlux/assets/zlbootstrap/css/bootstrap-zl.min.css');
-			$this->app->document->addStylesheet('zlfw:zlux/assets/zlbootstrap/css/bootstrap-zl-responsive.min.css');
+            // set loaded state
+            $this->_zlux1_loaded = true;
+        }
+    }
 
-			// if stated load JS too
-			if ($loadJS) $this->app->document->addScript('zlfw:zlux/assets/zlbootstrap/js/bootstrap.min.js');
+    /**
+     * Load ZL Bootstrap assets
+     */
+    public function loadBootstrap ($loadJS = false) {
+        if ($this->app->joomla->isVersion('2.5')) {
+            $this->app->document->addStylesheet('zlfw:zlux/assets/zlbootstrap/css/bootstrap-zl.min.css');
+            $this->app->document->addStylesheet('zlfw:zlux/assets/zlbootstrap/css/bootstrap-zl-responsive.min.css');
 
-		// j3
-		} else {
+            // if stated load JS too
+            if ($loadJS) $this->app->document->addScript('zlfw:zlux/assets/zlbootstrap/js/bootstrap.min.js');
 
-			// load the BS assets
-			JHtml::_('bootstrap.framework');
+            // j3
+        } else {
 
-			$this->app->document->addStylesheet('zlfw:zlux/assets/zlbootstrap/css/font-awesome-zl.min.css');
-		}
-	}
+            // load the BS assets
+            JHtml::_('bootstrap.framework');
 
-	/**
-	 * Load JS Variables
-	 */
-	public function loadVariables($zlux2 = false)
-	{
-		// init vars
-		$javascript = '';
+            $this->app->document->addStylesheet('zlfw:zlux/assets/zlbootstrap/css/font-awesome-zl.min.css');
+        }
+    }
 
-		// save Joomla! URLs
-		if ($zlux2) {
-			$urls = array(
-				'zlfw' => 'plugins/system/zlframework/zlframework/',
-				'zlux' => 'media/com_zoolanders/vendor/zlux/dist/',
-				'ajax' => JURI::base() . 'index.php?option=com_zoolanders&format=raw&'. $this->app->session->getFormToken() .'=1',
-				'root' => JURI::root(),
-				'root_path' => JURI::root(true)
-			);
+    /**
+     * Load JS Variables
+     */
+    public function loadVariables ($zlux2 = false) {
+        // init vars
+        $javascript = '';
 
-			$javascript .= "zlux.url.push(" . json_encode($urls) . ");";
+        // save Joomla! URLs
+        if ($zlux2) {
+            $urls = array(
+                'zlfw' => 'plugins/system/zlframework/zlframework/',
+                'zlux' => 'media/com_zoolanders/vendor/zlux/dist/',
+                'ajax' => JURI::base() . 'index.php?option=com_zoolanders&format=raw&' . $this->app->session->getFormToken() . '=1',
+                'root' => JURI::root(),
+                'root_path' => JURI::root(true)
+            );
 
-		} else {
-			$app_id = $this->app->zoo->getApplication() ? $this->app->zoo->getApplication()->id : '';
+            $javascript .= "zlux.url.push(" . json_encode($urls) . ");";
 
-			$javascript .= 'jQuery.zlux.url._root = "' . JURI::root() . '";';
-			$javascript .= 'jQuery.zlux.url._root_path = "' . JURI::root(true) . '";';
-			$javascript .= 'jQuery.zlux.url._base = "' . JURI::base() . '";';
-			$javascript .= 'jQuery.zlux.url._base_path = "' . JURI::base(true) . '";';
-			$javascript .= 'jQuery.zlux.zoo.app_id = "' . $app_id . '";';
-		}
+        } else {
+            $app_id = $this->app->zoo->getApplication() ? $this->app->zoo->getApplication()->id : '';
 
-		// set translations strings
-		$translations = array
-		(
-			// ZLUX Main
-			'APPLY_FILTERS' => 'PLG_ZLFRAMEWORK_ZLUX_APPLY_FILTERS',
-			'REFRESH' => 'PLG_ZLFRAMEWORK_REFRESH',
-			'DELETE' => 'PLG_ZLFRAMEWORK_DELETE',
-			'RENAME' => 'PLG_ZLFRAMEWORK_RENAME',
-			'NAME' => 'PLG_ZLFRAMEWORK_NAME',
-			'TYPE' => 'PLG_ZLFRAMEWORK_TYPE',
-			'SIZE' => 'PLG_ZLFRAMEWORK_SIZE',
-			'CONFIRM' => 'PLG_ZLFRAMEWORK_CONFIRM',
-			'AUTHOR' => 'PLG_ZLFRAMEWORK_AUTHOR',
-			'CREATED' => 'PLG_ZLFRAMEWORK_CREATED',
-			'ACCESS' => 'PLG_ZLFRAMEWORK_ACCESS',
-			'ROUTE' => 'PLG_ZLFRAMEWORK_ROUTE',
-			'ROOT' => 'PLG_ZLFRAMEWORK_ROOT',
-			'SOMETHING_WENT_WRONG' => 'PLG_ZLFRAMEWORK_ZLUX_SOMETHING_WENT_WRONG',
+            $javascript .= 'jQuery.zlux.url._root = "' . JURI::root() . '";';
+            $javascript .= 'jQuery.zlux.url._root_path = "' . JURI::root(true) . '";';
+            $javascript .= 'jQuery.zlux.url._base = "' . JURI::base() . '";';
+            $javascript .= 'jQuery.zlux.url._base_path = "' . JURI::base(true) . '";';
+            $javascript .= 'jQuery.zlux.zoo.app_id = "' . $app_id . '";';
+        }
 
-			// ZLUX FilesManager
-			'STORAGE_PARAM_MISSING' => 'PLG_ZLFRAMEWORK_ZLUX_FM_STORAGE_PARAM_MISSING',
-			'INPUT_THE_NEW_NAME' => 'PLG_ZLFRAMEWORK_ZLUX_FM_INPUT_THE_NEW_NAME',
-			'DELETE_THIS_FILE' => 'PLG_ZLFRAMEWORK_ZLUX_FM_DELETE_THIS_FILE',
-			'DELETE_THIS_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_DELETE_THIS_FOLDER',
-			'FOLDER_NAME' => 'PLG_ZLFRAMEWORK_ZLUX_FM_FOLDER_NAME',
-			'EMPTY_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_EMPTY_FOLDER',
+        // set translations strings
+        $translations = array
+        (
+            // ZLUX Main
+            'APPLY_FILTERS' => 'PLG_ZLFRAMEWORK_ZLUX_APPLY_FILTERS',
+            'REFRESH' => 'PLG_ZLFRAMEWORK_REFRESH',
+            'DELETE' => 'PLG_ZLFRAMEWORK_DELETE',
+            'RENAME' => 'PLG_ZLFRAMEWORK_RENAME',
+            'NAME' => 'PLG_ZLFRAMEWORK_NAME',
+            'TYPE' => 'PLG_ZLFRAMEWORK_TYPE',
+            'SIZE' => 'PLG_ZLFRAMEWORK_SIZE',
+            'CONFIRM' => 'PLG_ZLFRAMEWORK_CONFIRM',
+            'AUTHOR' => 'PLG_ZLFRAMEWORK_AUTHOR',
+            'CREATED' => 'PLG_ZLFRAMEWORK_CREATED',
+            'ACCESS' => 'PLG_ZLFRAMEWORK_ACCESS',
+            'ROUTE' => 'PLG_ZLFRAMEWORK_ROUTE',
+            'ROOT' => 'PLG_ZLFRAMEWORK_ROOT',
+            'SOMETHING_WENT_WRONG' => 'PLG_ZLFRAMEWORK_ZLUX_SOMETHING_WENT_WRONG',
 
-				// Upload
-				'ADD_NEW_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ADD_NEW_FILES',
-				'START_UPLOADING' => 'PLG_ZLFRAMEWORK_ZLUX_FM_START_UPLOADING',
-				'CANCEL_CURRENT_UPLOAD' => 'PLG_ZLFRAMEWORK_ZLUX_FM_CANCEL_CURRENT_UPLOAD',
-				'NEW_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_NEW_FOLDER',
-				'UPLOAD_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_UPLOAD_FILES',
-				'DROP_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_DROP_FILES',
+            // ZLUX FilesManager
+            'STORAGE_PARAM_MISSING' => 'PLG_ZLFRAMEWORK_ZLUX_FM_STORAGE_PARAM_MISSING',
+            'INPUT_THE_NEW_NAME' => 'PLG_ZLFRAMEWORK_ZLUX_FM_INPUT_THE_NEW_NAME',
+            'DELETE_THIS_FILE' => 'PLG_ZLFRAMEWORK_ZLUX_FM_DELETE_THIS_FILE',
+            'DELETE_THIS_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_DELETE_THIS_FOLDER',
+            'FOLDER_NAME' => 'PLG_ZLFRAMEWORK_ZLUX_FM_FOLDER_NAME',
+            'EMPTY_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_EMPTY_FOLDER',
 
-				// Errors
-				'FILE_EXT_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_FILE_EXT',
-				'FILE_SIZE_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_FILE_SIZE',
-				'RUNTIME_MEMORY_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_RUNTIME_MEMORY',
-				'S3_BUCKET_PERIOD_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_S3_BUCKET_PERIOD',
-				'S3_BUCKET_MISSCONFIG_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_S3_BUCKET_MISSCONFIG',
-				'UPLOAD_URL_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_UPLOAD_URL',
+            // Upload
+            'ADD_NEW_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ADD_NEW_FILES',
+            'START_UPLOADING' => 'PLG_ZLFRAMEWORK_ZLUX_FM_START_UPLOADING',
+            'CANCEL_CURRENT_UPLOAD' => 'PLG_ZLFRAMEWORK_ZLUX_FM_CANCEL_CURRENT_UPLOAD',
+            'NEW_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_NEW_FOLDER',
+            'UPLOAD_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_UPLOAD_FILES',
+            'DROP_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_DROP_FILES',
 
-				// plupload core strings
-				'File extension error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_EXTENSION_ERROR',
-				'File size error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_SIZE_ERROR',
-				'File count error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_COUNT_ERROR',
+            // Errors
+            'FILE_EXT_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_FILE_EXT',
+            'FILE_SIZE_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_FILE_SIZE',
+            'RUNTIME_MEMORY_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_RUNTIME_MEMORY',
+            'S3_BUCKET_PERIOD_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_S3_BUCKET_PERIOD',
+            'S3_BUCKET_MISSCONFIG_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_S3_BUCKET_MISSCONFIG',
+            'UPLOAD_URL_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_UPLOAD_URL',
 
-			// ZLUX ItemsManager
-			'IM_NO_ITEMS_FOUND' => 'PLG_ZLFRAMEWORK_ZLUX_IM_NO_ITEMS_FOUND',
-			'IM_PAGINATION_INFO' => 'PLG_ZLFRAMEWORK_ZLUX_IM_PAGINATION_INFO',
-			'IM_FILTER_BY_APP' => 'PLG_ZLFRAMEWORK_ZLUX_IM_FILTER_BY_APP',
-			'IM_FILTER_BY_TYPE' => 'PLG_ZLFRAMEWORK_ZLUX_IM_FILTER_BY_TYPE',
-			'IM_FILTER_BY_CATEGORY' => 'PLG_ZLFRAMEWORK_ZLUX_IM_FILTER_BY_CATEGORY',
-			'IM_FILTER_BY_TAG' => 'PLG_ZLFRAMEWORK_ZLUX_IM_FILTER_BY_TAG'
-		);
+            // plupload core strings
+            'File extension error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_EXTENSION_ERROR',
+            'File size error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_SIZE_ERROR',
+            'File count error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_COUNT_ERROR',
 
-		// translate
-		$translations = array_map(array('JText', '_'), $translations);
+            // ZLUX ItemsManager
+            'IM_NO_ITEMS_FOUND' => 'PLG_ZLFRAMEWORK_ZLUX_IM_NO_ITEMS_FOUND',
+            'IM_PAGINATION_INFO' => 'PLG_ZLFRAMEWORK_ZLUX_IM_PAGINATION_INFO',
+            'IM_FILTER_BY_APP' => 'PLG_ZLFRAMEWORK_ZLUX_IM_FILTER_BY_APP',
+            'IM_FILTER_BY_TYPE' => 'PLG_ZLFRAMEWORK_ZLUX_IM_FILTER_BY_TYPE',
+            'IM_FILTER_BY_CATEGORY' => 'PLG_ZLFRAMEWORK_ZLUX_IM_FILTER_BY_CATEGORY',
+            'IM_FILTER_BY_TAG' => 'PLG_ZLFRAMEWORK_ZLUX_IM_FILTER_BY_TAG'
+        );
 
-		// add to script
-		if ($zlux2) {
-			$javascript .= "zlux.lang.push(" . json_encode($translations) . ");";
-		} else {
-			$javascript .= "jQuery.zlux.lang.set(" . json_encode($translations) . ");";
-		}
+        // translate
+        $translations = array_map(array('JText', '_'), $translations);
 
-		// load the script
-		$this->app->document->addScriptDeclaration($javascript);
-	}
+        // add to script
+        if ($zlux2) {
+            $javascript .= "zlux.lang.push(" . json_encode($translations) . ");";
+        } else {
+            $javascript .= "jQuery.zlux.lang.set(" . json_encode($translations) . ");";
+        }
 
-	/**
-	 * Get Amazon S3 signed policy
-	 */
-	public function getAmazonS3signedPolicy($bucket, $secretkey)
-	{
-		// prepare policy
-		$policy = base64_encode(json_encode(array(
-			// ISO 8601 - date('c'); generates uncompatible date, so better do it manually
-			'expiration' => date('Y-m-d\TH:i:s.000\Z', strtotime('+1 day')),
-			'conditions' => array(
-				array('bucket' => $bucket),
-				array('acl' => 'public-read'),
-				array('starts-with', '$key', ''),
-				// "Some versions of the Adobe Flash Player do not properly handle HTTP responses that have an empty body.
-				// To configure POST to return a response that does not have an empty body, set success_action_status to 201.
-				// When set, Amazon S3 returns an XML document with a 201 status code."
-				// http://docs.amazonwebservices.com/AmazonS3/latest/dev/HTTPPOSTFlash.html
-				array('success_action_status' => '201'),
-				// Plupload internally adds name field, so we need to mention it here
-				array('starts-with', '$name', ''),
-				// One more field to take into account: Filename - gets silently sent by FileReference.upload() in Flash
-				// http://docs.amazonwebservices.com/AmazonS3/latest/dev/HTTPPOSTFlash.html
-				array('starts-with', '$Filename', ''),
-			)
-		)));
+        // load the script
+        $this->app->document->addScriptDeclaration($javascript);
+    }
 
-		// sign policy
-		$signature = base64_encode(hash_hmac('sha1', $policy, $secretkey, true));
+    /**
+     * Get Amazon S3 signed policy
+     */
+    public function getAmazonS3signedPolicy ($bucket, $secretkey) {
+        // prepare policy
+        $policy = base64_encode(json_encode(array(
+            // ISO 8601 - date('c'); generates uncompatible date, so better do it manually
+            'expiration' => date('Y-m-d\TH:i:s.000\Z', strtotime('+1 day')),
+            'conditions' => array(
+                array('bucket' => $bucket),
+                array('acl' => 'public-read'),
+                array('starts-with', '$key', ''),
+                // "Some versions of the Adobe Flash Player do not properly handle HTTP responses that have an empty body.
+                // To configure POST to return a response that does not have an empty body, set success_action_status to 201.
+                // When set, Amazon S3 returns an XML document with a 201 status code."
+                // http://docs.amazonwebservices.com/AmazonS3/latest/dev/HTTPPOSTFlash.html
+                array('success_action_status' => '201'),
+                // Plupload internally adds name field, so we need to mention it here
+                array('starts-with', '$name', ''),
+                // One more field to take into account: Filename - gets silently sent by FileReference.upload() in Flash
+                // http://docs.amazonwebservices.com/AmazonS3/latest/dev/HTTPPOSTFlash.html
+                array('starts-with', '$Filename', ''),
+            )
+        )));
 
-		// return
-		return array('signature' => $signature, 'policy' => $policy);
-	}
+        // sign policy
+        $signature = base64_encode(hash_hmac('sha1', $policy, $secretkey, true));
 
-	/**
-	 * Convert an Item ZOO Object to ZLUX one
-	 *
-	 * @param array $items List of ZOO Items Objects
-	 *
-	 * @return array List of ZLUX Items Objects
-	 */
-	public function getItemObject($items)
-	{
-		// validate data
-		settype($items, 'array');
+        // return
+        return array('signature' => $signature, 'policy' => $policy);
+    }
 
-		$objects = array();
-		foreach ($items as $item)
-		{
-			// prepare author data
-			$author = $item->created_by_alias;
-			$author_id = $item->created_by;
-			$users  = $this->app->table->item->getUsers($item->application_id);
-			if (!$author && isset($users[$item->created_by])) {
-				$author = $users[$item->created_by]->name;
-				$author_id = $users[$item->created_by]->id;
-			}
+    /**
+     * Convert an Item ZOO Object to ZLUX one
+     *
+     * @param array $items List of ZOO Items Objects
+     *
+     * @return array List of ZLUX Items Objects
+     */
+    public function getItemObject ($items) {
+        // validate data
+        settype($items, 'array');
 
-			// set object
-			$objects[$item->id] = array(
-				'id' => $item->id,
-				'name' => $item->name,
-				'_itemname' => $item->name, // necesary
-				'application' => array(
-					'name' => $item->getApplication()->name,
-					'id' => $item->getApplication()->id
-				),
-				'type' => array(
-					'name' => $item->getType()->name,
-					'id' => $item->getType()->id
-				),
-				'access' => JText::_($this->app->zoo->getGroup($item->access)->name),
-				'created' => $item->created,
-				'author' => array(
-					'name' => $author,
-					'id' => $author_id
-				)
-			);
-		}
+        $objects = array();
+        foreach ($items as $item) {
+            // prepare author data
+            $author = $item->created_by_alias;
+            $author_id = $item->created_by;
+            $users = $this->app->table->item->getUsers($item->application_id);
+            if (!$author && isset($users[$item->created_by])) {
+                $author = $users[$item->created_by]->name;
+                $author_id = $users[$item->created_by]->id;
+            }
 
-		return $objects;
-	}
+            // set object
+            $objects[$item->id] = array(
+                'id' => $item->id,
+                'name' => $item->name,
+                '_itemname' => $item->name, // necesary
+                'application' => array(
+                    'name' => $item->getApplication()->name,
+                    'id' => $item->getApplication()->id
+                ),
+                'type' => array(
+                    'name' => $item->getType()->name,
+                    'id' => $item->getType()->id
+                ),
+                'access' => JText::_($this->app->zoo->getGroup($item->access)->name),
+                'created' => $item->created,
+                'author' => array(
+                    'name' => $author,
+                    'id' => $author_id
+                )
+            );
+        }
+
+        return $objects;
+    }
 }

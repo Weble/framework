@@ -1,10 +1,4 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
@@ -41,7 +35,7 @@ $result = array();
 <?php if (count($links['result'])) : ?>
 
 	<?php foreach ($links['result'] as $key => $link) : ?>
-	
+
 		<?php
 
 			$title 		= $link['title'] && empty($title) ? 'title="'.$link['title'].'"' : $title;
@@ -59,11 +53,11 @@ $result = array();
 			}
 
 		?>
-	
+
 	<?php endforeach; ?>
-	
+
 	<?php echo $this->app->zlfw->applySeparators($params->find('separator._by'), $result, $params->find('separator._class')); ?>
-	
+
 <?php else : ?>
 	<?php echo "No links found."; ?>
 <?php endif; ?>

@@ -5,8 +5,7 @@ namespace Zoolanders\Framework\Migration;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
-class Manager
-{
+class Manager {
     /**
      * @var \Phinx\Migration\Manager
      */
@@ -16,8 +15,7 @@ class Manager
      * Manager constructor.
      * @param array $config
      */
-    public function __construct($config = [])
-    {
+    public function __construct ($config = []) {
         $config = new Config($config);
 
         $input = new ArrayInput([]);
@@ -29,23 +27,21 @@ class Manager
     /**
      * @param array $config
      */
-    public function setConfig($config = [])
-    {
+    public function setConfig ($config = []) {
         $config = new Config($config);
         $this->manager->setConfig($config);
     }
 
     /**
-    public function getConfig()
-    {
-        return $this->manager->getConfig();
-    }
-
-    /**
+     * public function getConfig()
+     * {
+     * return $this->manager->getConfig();
+     * }
+     *
+     * /**
      * @param string $environment
      */
-    public function run($environment = 'production')
-    {
+    public function run ($environment = 'production') {
         $this->manager->migrate($environment);
     }
 }

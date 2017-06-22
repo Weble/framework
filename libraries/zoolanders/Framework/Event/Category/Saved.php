@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Event\Category;
 
-class Saved extends Category
-{
+class Saved extends Category {
 
 }

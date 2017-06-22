@@ -2,6 +2,5 @@
 
 namespace Zoolanders\Framework\Event\Element;
 
-class Beforesubmissiondisplay extends Beforedisplay
-{
+class Beforesubmissiondisplay extends Beforedisplay {
 }

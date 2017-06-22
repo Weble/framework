@@ -24,8 +24,7 @@ class EventNode {
      * @param $name
      * @param null $event
      */
-    public function __construct($name, $event = null)
-    {
+    public function __construct ($name, $event = null) {
         $this->name = $name;
         $this->event = $event;
     }

@@ -10,8 +10,7 @@ use Zoolanders\Framework\Service\Data;
  *
  * @package ZFTests\Service
  */
-class DataServiceTest extends ServiceTest
-{
+class DataServiceTest extends ServiceTest {
     /**
      * Test create data container
      *
@@ -19,7 +18,7 @@ class DataServiceTest extends ServiceTest
      *
      * @dataProvider    dataFormatSet
      */
-    public function testCreate($data, $format){
+    public function testCreate ($data, $format) {
         $data_service = self::$container->data;
         $object = $data_service->create($data, $format);
 
@@ -33,11 +32,11 @@ class DataServiceTest extends ServiceTest
     /**
      * Data set for test creating different data types
      */
-    public function dataFormatSet(){
+    public function dataFormatSet () {
         return [
-            [ array('a' => 'alpha'), 'json'],
-            [ array('a' => 'alpha'), 'data'],
-            [ array('a' => 'alpha'), 'parameter']
+            [array('a' => 'alpha'), 'json'],
+            [array('a' => 'alpha'), 'data'],
+            [array('a' => 'alpha'), 'parameter']
         ];
     }
 }

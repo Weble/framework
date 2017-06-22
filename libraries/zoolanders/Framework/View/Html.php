@@ -14,8 +14,7 @@ use Zoolanders\Framework\Service\System;
  * Class Html
  * @package Zoolanders\Framework\View
  */
-class Html extends View
-{
+class Html extends View {
     /**
      * @var string
      */
@@ -43,8 +42,7 @@ class Html extends View
     /**
      * HtmlView constructor.
      */
-    public function __construct(Dispatcher $event, System $system, System\Document $document, Request $request)
-    {
+    public function __construct (Dispatcher $event, System $system, System\Document $document, Request $request) {
         parent::__construct($event);
 
         $this->system = $system;
@@ -64,8 +62,7 @@ class Html extends View
      *
      * @return  void
      */
-    protected function setTemplatePath($path)
-    {
+    protected function setTemplatePath ($path) {
         // Clear out the prior search dirs
         $this->templatePaths = array();
 
@@ -87,8 +84,7 @@ class Html extends View
      *
      * @return  void
      */
-    public function addTemplatePath($path)
-    {
+    public function addTemplatePath ($path) {
         // Just force to array
         settype($path, 'array');
 
@@ -115,8 +111,7 @@ class Html extends View
      *
      * @return  mixed  The escaped value.
      */
-    public function escape($var)
-    {
+    public function escape ($var) {
         return htmlspecialchars($var, ENT_COMPAT, 'UTF-8');
     }
 
@@ -125,8 +120,7 @@ class Html extends View
      *
      * @return  string  The layout name
      */
-    public function getLayout()
-    {
+    public function getLayout () {
         return $this->layout;
     }
 
@@ -137,8 +131,7 @@ class Html extends View
      *
      * @return  $this
      */
-    public function setLayout($layout)
-    {
+    public function setLayout ($layout) {
         if (is_null($layout)) {
             $layout = $this->getLayout();
         }
@@ -166,8 +159,7 @@ class Html extends View
      *
      * @throws  \Exception  When the layout file is not found
      */
-    public function loadTemplate($tpl = null)
-    {
+    public function loadTemplate ($tpl = null) {
         $tpl = empty($tpl) ? $this->getLayout() : $tpl;
 
         ob_start();
@@ -192,9 +184,8 @@ class Html extends View
      * @param array $data
      * @return string
      */
-    public function render($data = [])
-    {
-        if(!empty($data)){
+    public function render ($data = []) {
+        if (!empty($data)) {
             $this->data = $data;
         }
 

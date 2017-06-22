@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Event\Element;
 
-class Configparams extends Element
-{
+class Configparams extends Element {
 
 }

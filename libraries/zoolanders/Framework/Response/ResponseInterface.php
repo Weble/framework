@@ -6,8 +6,7 @@ namespace Zoolanders\Framework\Response;
  * Interface ResponseInterface
  * @package Zoolanders\Framework\Response
  */
-interface ResponseInterface
-{
+interface ResponseInterface {
     /**
      * Set response header
      *
@@ -16,7 +15,7 @@ interface ResponseInterface
      *
      * @return  Response
      */
-    public function setHeader($key, $value);
+    public function setHeader ($key, $value);
 
     /**
      * Set content
@@ -25,12 +24,12 @@ interface ResponseInterface
      *
      * @return  void
      */
-    public function setContent($content);
+    public function setContent ($content);
 
     /**
      * Send prepared response to user agent
      *
      * @return  mixed
      */
-    public function send();
+    public function send ();
 }

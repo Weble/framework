@@ -6,8 +6,7 @@ use Zoolanders\Framework\Event\Item;
 use Zoolanders\Framework\Item\Indexer;
 use Zoolanders\Framework\Listener\Listener;
 
-class IndexSearchValues extends Listener
-{
+class IndexSearchValues extends Listener {
     /**
      * @var Indexer
      */
@@ -16,16 +15,14 @@ class IndexSearchValues extends Listener
     /**
      * IndexSearchValues constructor.
      */
-    function __construct(Indexer $indexer)
-    {
+    function __construct (Indexer $indexer) {
         $this->indexer = $indexer;
     }
 
     /**
      * @param Item\Saved $event
      */
-    public function handle(Item\Saved $event)
-    {
+    public function handle (Item\Saved $event) {
         $item = $event->getItem();
         $this->indexer->index($item);
     }

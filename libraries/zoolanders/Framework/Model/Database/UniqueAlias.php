@@ -11,8 +11,7 @@ use Zoolanders\Framework\Collection\Resources;
  *
  * @package Zoolanders\Framework\Model\Database
  */
-trait UniqueAlias
-{
+trait UniqueAlias {
     /**
      * @var string  Alias column name (e.g. "alias", "slug")
      */
@@ -25,12 +24,12 @@ trait UniqueAlias
      *
      * @return bool
      */
-    public function aliasExists($alias){
+    public function aliasExists ($alias) {
 
         $query = $this->db->getQuery(true);
-        $query  ->select('*')
-                ->from($query->qn($this->tableName))
-                ->where([$query->qn($this->alias_column). '='. $query->q($alias)]);
+        $query->select('*')
+            ->from($query->qn($this->tableName))
+            ->where([$query->qn($this->alias_column) . '=' . $query->q($alias)]);
 
         $records = Resources::make($this->db->queryObjectList($query));
 
@@ -44,22 +43,22 @@ trait UniqueAlias
      *
      * @return  array alias, copy_number
      */
-    public function generateAlias($alias){
+    public function generateAlias ($alias) {
         $copy_tail_pattern = '/(-copy)+(-(\d+))*$/';
         $start_index = 0;
 
-        if(preg_match($copy_tail_pattern, $alias, $matches)){
-            $start_index = isset($matches[3]) ? 1+(int)$matches[3] : 1;
+        if (preg_match($copy_tail_pattern, $alias, $matches)) {
+            $start_index = isset($matches[3]) ? 1 + (int)$matches[3] : 1;
             $alias = preg_replace('/' . $matches[0] . '$/', '-copy', $alias);
         } else {
             $alias = $alias . '-copy';
         }
 
-        do{
-            $safe_alias = $alias . ($start_index ? '-'.$start_index : '');
+        do {
+            $safe_alias = $alias . ($start_index ? '-' . $start_index : '');
             $exists = $this->aliasExists($safe_alias);
             $start_index++;
-        }while($exists);
+        } while ($exists);
 
         return $safe_alias;
     }

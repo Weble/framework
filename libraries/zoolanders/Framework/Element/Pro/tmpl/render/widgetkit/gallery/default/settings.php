@@ -1,17 +1,11 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return 
+	return
 	'{"fields": {
 
 		"autoplay":{
@@ -67,7 +61,7 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 			"type": "text",
 			"label": "Effect Duration (ms)",
 			"default": "500"
-		},		
+		},
 		"index":{
 			"type": "text",
 			"label": "Start Index",

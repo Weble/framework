@@ -1,6 +1,5 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
 // WORKFLOW: all view params are rendered and nulled (if not the selected one). When View chosen the appropiate params are enabled.

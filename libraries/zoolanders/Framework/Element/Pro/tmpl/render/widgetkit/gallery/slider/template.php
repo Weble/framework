@@ -1,10 +1,4 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
@@ -55,7 +49,7 @@ defined('_JEXEC') or die();
 			$lightbox  = '';
 			$spotlight = '';
 			$overlay   = '';
-		
+
 			/* Prepare Caption */
 			$caption = '';
 			if($settings->get('zl_captions') == 2 && $title = $settings->get('_custom_caption')){
@@ -65,7 +59,7 @@ defined('_JEXEC') or die();
 			} else {
 				$caption = $image['filename'];
 			}
-			
+
 			/* Prepare Lightbox */
 			if ($settings->get('lightbox') && !$params->find('specific._link_to_item')) // no compatible with item link
 			{
@@ -82,12 +76,12 @@ defined('_JEXEC') or die();
 				} elseif($settings->get('lightbox_caption') == 2 && $title = $settings->get('_lightbox_custom_title')){
 					$lbc = $title;
 				}
-	
+
 				if (strlen($lbc)) $lightbox .= ' title="'.$lbc.'"';
 			}
 
 			/* Prepare Spotlight */
-			if ($settings->get('spotlight')) 
+			if ($settings->get('spotlight'))
 			{
 				// override caption
 				if($settings->get('zl_captions') == 0) $caption = '';
@@ -117,19 +111,19 @@ defined('_JEXEC') or die();
 			$rel  = $this->config->find('specific._custom_link') ? '' : 'rel="nofollow" ';
 			$link = $this->config->find('specific._custom_link') && $image['link'] ? $image['link'] : $image['bigimg']['fileurl'];
 			$link = 'href="'.$link.'"'.($image['target'] ? ' target="_blank"' : '');
-			
+
 		?>
 
 		<?php if ($settings->get('lightbox') || strlen($image['link'])) : ?>
 			<li <?php echo $background; ?>><a <?php echo $rel ?>class="" style="<?php echo 'width: '.$image['width'].'px;'; ?>" <?php echo $link ?> <?php echo $lightbox; ?> <?php echo $spotlight; ?>><?php echo $content; ?></a></li>
 		<?php elseif ($settings->get('spotlight')) : ?>
 			<li <?php echo $background; ?>><div style="<?php echo 'width: '.$image['width'].'px;'; ?>" <?php echo $spotlight; ?>><?php echo $content; ?></div></li>
-		<?php else : ?>		
+		<?php else : ?>
 			<li <?php echo $background; ?>><?php echo $content; ?></li>
 		<?php endif; ?>
-	
+
 	<?php endforeach; ?>
-	
+
 </ul>
 </div>
 

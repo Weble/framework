@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Service;
 
-class Cache
-{
+class Cache {
 
     /**
      * Creates an Cache instance
@@ -14,8 +13,7 @@ class Cache
      *
      * @return \Zoolanders\Framework\Cache\Cache
      */
-    public function create($file, $hash = true, $lifetime = null, $type = 'file')
-    {
+    public function create ($file, $hash = true, $lifetime = null, $type = 'file') {
         if ($type == 'apc' && extension_loaded('apc') && class_exists('\\APCIterator')) {
             $cache = new \Zoolanders\Framework\Cache\Apc(md5($file), $lifetime);
         } else {

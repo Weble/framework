@@ -1,13 +1,12 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return
-	'{"fields": {
+return
+    '{"fields": {
 		"_wkcheck_info":{
 			"type": "info",
 			"specific":{
@@ -26,7 +25,7 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 				"options": {
 					"PLG_ZLFRAMEWORK_SELECT_WIDGET":""
 				},
-				"opt_file":"elements:'.$element->getElementType().'\/params\/widgets.json"
+				"opt_file":"elements:' . $element->getElementType() . '\/params\/widgets.json"
 			},
 			"childs": {
 				"loadfields":{

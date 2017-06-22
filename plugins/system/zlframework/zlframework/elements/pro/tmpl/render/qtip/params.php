@@ -5,8 +5,8 @@ defined('_JEXEC') or die();
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return
-	'{"fields": {
+return
+    '{"fields": {
 
 		"layout_wrapper":{
 			"type": "fieldset",
@@ -55,7 +55,7 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 						},
 						"sub_params": {
 							"type": "subfield",
-							"path":"elements:'.$element->getElementType().'\/params\/render.php",
+							"path":"elements:' . $element->getElementType() . '\/params\/render.php",
 							"control":"specific"
 						},
 

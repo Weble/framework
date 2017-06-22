@@ -1,13 +1,12 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return
-	'{"fields": {
+return
+    '{"fields": {
 
 		"spotlight_effect":{
 			"type": "select",
@@ -30,7 +29,7 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 				"placeholder":"Default"
 			}
 		}
-		'.(isset($params['captions']) ? ',
+		' . (isset($params['captions']) ? ',
 		"captions":{
 			"type": "select",
 			"label": "Captions",
@@ -46,6 +45,6 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 		"custom_caption":{
 			"label":"Custom Caption",
 			"type":"text"
-		}' : '').'
+		}' : '') . '
 
 	}}';

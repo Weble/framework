@@ -7,21 +7,20 @@ defined('_JEXEC') or die();
  */
 class zlux {
 
-	/**
-	 * A reference to the global App object
-	 *
-	 * @var App
-	 */
-	public $app;
+    /**
+     * A reference to the global App object
+     *
+     * @var App
+     */
+    public $app;
 
-	/**
-	 * Class constructor
-	 *
-	 * @param string $app App instance.
-	 */
-	public function __construct($app)
-	{
-		// set application
-		$this->app = $app;
-	}
+    /**
+     * Class constructor
+     *
+     * @param string $app App instance.
+     */
+    public function __construct ($app) {
+        // set application
+        $this->app = $app;
+    }
 }

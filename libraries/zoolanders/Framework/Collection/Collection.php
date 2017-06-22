@@ -16,8 +16,7 @@ use JsonSerializable;
 
 defined('_JEXEC') or die;
 
-class Collection implements CollectionInterface
-{
+class Collection implements CollectionInterface {
     /**
      * The items contained in the collection.
      *
@@ -30,8 +29,7 @@ class Collection implements CollectionInterface
      *
      * @param  array $items
      */
-    public function __construct(array $items = array())
-    {
+    public function __construct (array $items = array()) {
         $this->items = $items;
     }
 
@@ -42,8 +40,7 @@ class Collection implements CollectionInterface
      *
      * @return static
      */
-    public static function make($items)
-    {
+    public static function make ($items) {
         if (is_null($items)) {
             return new static;
         }
@@ -60,8 +57,7 @@ class Collection implements CollectionInterface
      *
      * @return array
      */
-    public function all()
-    {
+    public function all () {
         return $this->items;
     }
 
@@ -70,8 +66,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function collapse()
-    {
+    public function collapse () {
         $results = array();
 
         foreach ($this->items as $values) {
@@ -88,8 +83,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function diff($items)
-    {
+    public function diff ($items) {
         return new static(array_diff($this->items, $this->getArrayableItems($items)));
     }
 
@@ -100,8 +94,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function each(Closure $callback)
-    {
+    public function each (Closure $callback) {
         return new static(array_map($callback, $this->items));
     }
 
@@ -112,8 +105,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function fetch($key)
-    {
+    public function fetch ($key) {
         return new static(array_fetch($this->items, $key));
     }
 
@@ -124,8 +116,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function filter(Closure $callback)
-    {
+    public function filter (Closure $callback) {
         return new static(array_filter($this->items, $callback));
     }
 
@@ -137,8 +128,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed|null
      */
-    public function first(Closure $callback = null, $default = null)
-    {
+    public function first (Closure $callback = null, $default = null) {
         if (is_null($callback)) {
             return count($this->items) > 0 ? reset($this->items) : null;
         } else {
@@ -151,8 +141,7 @@ class Collection implements CollectionInterface
      *
      * @return array
      */
-    public function flatten()
-    {
+    public function flatten () {
         return new static(array_flatten($this->items));
     }
 
@@ -163,8 +152,7 @@ class Collection implements CollectionInterface
      *
      * @return void
      */
-    public function forget($key)
-    {
+    public function forget ($key) {
         unset($this->items[$key]);
     }
 
@@ -176,8 +164,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed
      */
-    public function get($key, $default = null)
-    {
+    public function get ($key, $default = null) {
         if (array_key_exists($key, $this->items)) {
             return $this->items[$key];
         }
@@ -192,8 +179,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function groupBy($groupBy)
-    {
+    public function groupBy ($groupBy) {
         $results = array();
 
         foreach ($this->items as $key => $value) {
@@ -212,8 +198,7 @@ class Collection implements CollectionInterface
      *
      * @return bool
      */
-    public function has($key)
-    {
+    public function has ($key) {
         return array_key_exists($key, $this->items);
     }
 
@@ -225,8 +210,7 @@ class Collection implements CollectionInterface
      *
      * @return string
      */
-    public function implode($value, $glue = null)
-    {
+    public function implode ($value, $glue = null) {
         if (is_null($glue)) {
             return implode($this->lists($value));
         }
@@ -241,8 +225,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function intersect($items)
-    {
+    public function intersect ($items) {
         return new static(array_intersect($this->items, $this->getArrayableItems($items)));
     }
 
@@ -251,8 +234,7 @@ class Collection implements CollectionInterface
      *
      * @return bool
      */
-    public function isEmpty()
-    {
+    public function isEmpty () {
         return empty($this->items);
     }
 
@@ -261,8 +243,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed|null
      */
-    public function last()
-    {
+    public function last () {
         return count($this->items) > 0 ? end($this->items) : null;
     }
 
@@ -274,8 +255,7 @@ class Collection implements CollectionInterface
      *
      * @return array
      */
-    public function lists($value, $key = null)
-    {
+    public function lists ($value, $key = null) {
         return array_pluck($this->items, $value, $key);
     }
 
@@ -286,8 +266,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function map(Closure $callback)
-    {
+    public function map (Closure $callback) {
         return new static(array_map($callback, $this->items, array_keys($this->items)));
     }
 
@@ -298,8 +277,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function merge($items)
-    {
+    public function merge ($items) {
         return new static(array_merge($this->items, $this->getArrayableItems($items)));
     }
 
@@ -308,8 +286,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed|null
      */
-    public function pop()
-    {
+    public function pop () {
         return array_pop($this->items);
     }
 
@@ -320,8 +297,7 @@ class Collection implements CollectionInterface
      *
      * @return void
      */
-    public function prepend($value)
-    {
+    public function prepend ($value) {
         array_unshift($this->items, $value);
     }
 
@@ -332,8 +308,7 @@ class Collection implements CollectionInterface
      *
      * @return void
      */
-    public function push($value)
-    {
+    public function push ($value) {
         $this->items[] = $value;
     }
 
@@ -345,8 +320,7 @@ class Collection implements CollectionInterface
      *
      * @return void
      */
-    public function put($key, $value)
-    {
+    public function put ($key, $value) {
         $this->items[$key] = $value;
     }
 
@@ -358,8 +332,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed
      */
-    public function reduce($callback, $initial = null)
-    {
+    public function reduce ($callback, $initial = null) {
         return array_reduce($this->items, $callback, $initial);
     }
 
@@ -370,8 +343,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed
      */
-    public function random($amount = 1)
-    {
+    public function random ($amount = 1) {
         $keys = array_rand($this->items, $amount);
 
         return is_array($keys) ? array_intersect_key($this->items, array_flip($keys)) : $this->items[$keys];
@@ -382,8 +354,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function reverse()
-    {
+    public function reverse () {
         return new static(array_reverse($this->items));
     }
 
@@ -392,8 +363,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed|null
      */
-    public function shift()
-    {
+    public function shift () {
         return array_shift($this->items);
     }
 
@@ -406,8 +376,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function slice($offset, $length = null, $preserveKeys = false)
-    {
+    public function slice ($offset, $length = null, $preserveKeys = false) {
         return new static(array_slice($this->items, $offset, $length, $preserveKeys));
     }
 
@@ -418,8 +387,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function sort(Closure $callback)
-    {
+    public function sort (Closure $callback) {
         uasort($this->items, $callback);
 
         return $this;
@@ -434,8 +402,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function sortBy($callback, $options = SORT_REGULAR, $descending = false)
-    {
+    public function sortBy ($callback, $options = SORT_REGULAR, $descending = false) {
         $results = array();
 
         if (is_string($callback)) {
@@ -473,8 +440,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function sortByDesc($callback, $options = SORT_REGULAR)
-    {
+    public function sortByDesc ($callback, $options = SORT_REGULAR) {
         return $this->sortBy($callback, $options, true);
     }
 
@@ -487,8 +453,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function splice($offset, $length = 0, $replacement = array())
-    {
+    public function splice ($offset, $length = 0, $replacement = array()) {
         return new static(array_splice($this->items, $offset, $length, $replacement));
     }
 
@@ -499,8 +464,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed
      */
-    public function sum($callback)
-    {
+    public function sum ($callback) {
         if (is_string($callback)) {
             $callback = $this->valueRetriever($callback);
         }
@@ -518,8 +482,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function take($limit = null)
-    {
+    public function take ($limit = null) {
         if ($limit < 0) {
             return $this->slice($limit, abs($limit));
         }
@@ -532,8 +495,7 @@ class Collection implements CollectionInterface
      *
      * @return  Collection
      */
-    public function reset()
-    {
+    public function reset () {
         $this->items = array();
 
         return $this;
@@ -546,8 +508,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function transform($callback)
-    {
+    public function transform ($callback) {
         $this->items = array_map($callback, $this->items);
 
         return $this;
@@ -558,8 +519,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function unique()
-    {
+    public function unique () {
         return new static(array_unique($this->items));
     }
 
@@ -568,8 +528,7 @@ class Collection implements CollectionInterface
      *
      * @return Collection
      */
-    public function values()
-    {
+    public function values () {
         $this->items = array_values($this->items);
 
         return $this;
@@ -582,8 +541,7 @@ class Collection implements CollectionInterface
      *
      * @return \Closure
      */
-    protected function valueRetriever($value)
-    {
+    protected function valueRetriever ($value) {
         return function ($item) use ($value) {
             return is_object($item) ? $item->{$value} : array_get($item, $value);
         };
@@ -594,8 +552,7 @@ class Collection implements CollectionInterface
      *
      * @return array
      */
-    public function toArray()
-    {
+    public function toArray () {
         return array_map(function ($value) {
             return (is_object($value) && method_exists($value, 'toArray')) ? $value->toArray() : $value;
 
@@ -607,8 +564,7 @@ class Collection implements CollectionInterface
      *
      * @return array
      */
-    public function jsonSerialize()
-    {
+    public function jsonSerialize () {
         return $this->toArray();
     }
 
@@ -619,8 +575,7 @@ class Collection implements CollectionInterface
      *
      * @return string
      */
-    public function toJson($options = 0)
-    {
+    public function toJson ($options = 0) {
         return json_encode($this->toArray(), $options);
     }
 
@@ -629,8 +584,7 @@ class Collection implements CollectionInterface
      *
      * @return ArrayIterator
      */
-    public function getIterator()
-    {
+    public function getIterator () {
         return new ArrayIterator($this->items);
     }
 
@@ -641,8 +595,7 @@ class Collection implements CollectionInterface
      *
      * @return \CachingIterator
      */
-    public function getCachingIterator($flags = CachingIterator::CALL_TOSTRING)
-    {
+    public function getCachingIterator ($flags = CachingIterator::CALL_TOSTRING) {
         return new \CachingIterator($this->getIterator(), $flags);
     }
 
@@ -651,8 +604,7 @@ class Collection implements CollectionInterface
      *
      * @return int
      */
-    public function count()
-    {
+    public function count () {
         return count($this->items);
     }
 
@@ -663,8 +615,7 @@ class Collection implements CollectionInterface
      *
      * @return bool
      */
-    public function offsetExists($key)
-    {
+    public function offsetExists ($key) {
         return array_key_exists($key, $this->items);
     }
 
@@ -675,8 +626,7 @@ class Collection implements CollectionInterface
      *
      * @return mixed
      */
-    public function offsetGet($key)
-    {
+    public function offsetGet ($key) {
         return $this->items[$key];
     }
 
@@ -688,8 +638,7 @@ class Collection implements CollectionInterface
      *
      * @return void
      */
-    public function offsetSet($key, $value)
-    {
+    public function offsetSet ($key, $value) {
         if (is_null($key)) {
             $this->items[] = $value;
         } else {
@@ -704,8 +653,7 @@ class Collection implements CollectionInterface
      *
      * @return void
      */
-    public function offsetUnset($key)
-    {
+    public function offsetUnset ($key) {
         unset($this->items[$key]);
     }
 
@@ -714,8 +662,7 @@ class Collection implements CollectionInterface
      *
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString () {
         return $this->toJson();
     }
 
@@ -726,8 +673,7 @@ class Collection implements CollectionInterface
      *
      * @return array
      */
-    private function getArrayableItems($items)
-    {
+    private function getArrayableItems ($items) {
         if ($items instanceof Collection) {
             $items = $items->all();
         } elseif (is_object($items) && method_exists($items, 'toArray')) {

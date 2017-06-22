@@ -2,16 +2,14 @@
 
 namespace Zoolanders\Framework\Event\View;
 
-class BeforeDisplay extends View
-{
+class BeforeDisplay extends View {
     protected $tpl;
 
     /**
      * GetTemplatePath constructor.
      * @param $view
      */
-    public function __construct(\Zoolanders\Framework\View\View $view, $tpl)
-    {
+    public function __construct (\Zoolanders\Framework\View\View $view, $tpl) {
         $this->view = $view;
         $this->tpl = $tpl;
     }
@@ -19,16 +17,14 @@ class BeforeDisplay extends View
     /**
      * @return mixed
      */
-    public function getTpl()
-    {
+    public function getTpl () {
         return $this->tpl;
     }
 
     /**
      * @return View
      */
-    public function getView()
-    {
+    public function getView () {
         return $this->view;
     }
 }

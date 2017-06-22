@@ -11,14 +11,13 @@ use Zoolanders\Framework\Service\Filesystem;
  *
  * @package ZFTests\Service
  */
-class CacheServiceTest extends ServiceTest
-{
+class CacheServiceTest extends ServiceTest {
     /**
      * Test create cache
      *
      * @covers          CacheService::create()
      */
-    public function testCreate(){
+    public function testCreate () {
         $filename = FIXTURES_PATH . '/cache/testcache';
         $cache = new CacheService(self::$container->filesystem);
         $fs = self::$container->filesystem;

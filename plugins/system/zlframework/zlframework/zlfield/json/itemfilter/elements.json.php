@@ -1,6 +1,5 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
 	$node = $this->data->create($node);

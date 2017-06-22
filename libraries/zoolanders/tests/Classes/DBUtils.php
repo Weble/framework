@@ -3,8 +3,7 @@
 namespace ZFTests\Classes;
 
 
-trait DBUtils
-{
+trait DBUtils {
     /**
      * Build sql line ready to be executed
      *
@@ -13,12 +12,12 @@ trait DBUtils
      *
      * @return string
      */
-    private function buildMatchQuery($tablename, $params){
+    private function buildMatchQuery ($tablename, $params) {
         $sql = "SELECT * FROM #__$tablename ";
-        if(!empty($params)){
+        if (!empty($params)) {
             $sql .= "WHERE ";
             $tail = [];
-            foreach($params as $column => $value){
+            foreach ($params as $column => $value) {
                 $tail[] = sprintf("`%s`=%s", $column, self::wrapParam($value));
             }
             $sql .= implode(' AND ', $tail);
@@ -33,11 +32,11 @@ trait DBUtils
      * @param $value
      * @return string
      */
-    private static function wrapParam($value){
+    private static function wrapParam ($value) {
 
-        if(is_string($value)){
+        if (is_string($value)) {
             $db = self::$container->db;
-            $value = "'".$db->escape($value)."'";
+            $value = "'" . $db->escape($value) . "'";
         }
 
         return $value;

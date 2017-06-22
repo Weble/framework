@@ -10,14 +10,13 @@ use Zoolanders\Framework\Request\Request;
  * Class DispatcherTest
  * Test dispatching workflow
  */
-class DispatcherTest extends ZFTestCase
-{
+class DispatcherTest extends ZFTestCase {
     /**
      * Test dispatching front controller
      *
      * @covers      Dispatcher::dispatch()
      */
-    public function testInvalidControllerException(){
+    public function testInvalidControllerException () {
 
         $this->expectException(ControllerNotFound::class);
 
@@ -25,7 +24,9 @@ class DispatcherTest extends ZFTestCase
         $dispatcher->dispatch(new Request());
 
         // Check if expected events were triggered
-        $this->assertEventTriggered('dispatcher:beforedispatch', function(){});
-        $this->assertEventTriggered('dispatcher:afterdispatch', function(){});
+        $this->assertEventTriggered('dispatcher:beforedispatch', function () {
+        });
+        $this->assertEventTriggered('dispatcher:afterdispatch', function () {
+        });
     }
 }

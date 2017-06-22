@@ -1,8 +1,8 @@
 <?php
+
 namespace Zoolanders\Framework\Event\Category;
 
-class BeforeCopy extends \Zoolanders\Framework\Event\Event
-{
+class BeforeCopy extends \Zoolanders\Framework\Event\Event {
     /**
      * @var \Category
      */
@@ -12,16 +12,14 @@ class BeforeCopy extends \Zoolanders\Framework\Event\Event
      * Beforesave constructor.
      * @param \Item $item
      */
-    public function __construct(\Category $category)
-    {
+    public function __construct (\Category $category) {
         $this->category = $category;
     }
 
     /**
      * @return \Category
      */
-    public function getCategory()
-    {
+    public function getCategory () {
         return $this->category;
     }
 }

@@ -4,8 +4,7 @@ namespace Zoolanders\Framework\Cache;
 
 use League\Flysystem\Cached\CacheInterface;
 
-trait Cacheable
-{
+trait Cacheable {
     /**
      * @var
      */
@@ -27,8 +26,7 @@ trait Cacheable
      * @param array $args
      * @return mixed
      */
-    public function cache($key, Callable $fallback, array $args = [])
-    {
+    public function cache ($key, Callable $fallback, array $args = []) {
         $cached = $this->getCache()->get($key);
 
         if ($cached !== null) {
@@ -44,8 +42,7 @@ trait Cacheable
     /**
      * @return Cache
      */
-    public function getCache()
-    {
+    public function getCache () {
         if ($this->cache) {
             return $this->cache;
         }
@@ -58,16 +55,14 @@ trait Cacheable
     /**
      * @param CacheInterface $cache
      */
-    public function setCache(CacheInterface $cache)
-    {
+    public function setCache (CacheInterface $cache) {
         $this->cache = $cache;
     }
 
     /**
      * @return string
      */
-    public function getCacheIndex()
-    {
+    public function getCacheIndex () {
         if (!$this->cacheIndex) {
             $this->cacheIndex = str_replace("\\", "", get_class($this)) . 'Cache';
         }

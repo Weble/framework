@@ -5,8 +5,7 @@ namespace Zoolanders\Framework\Event\Environment;
 use Zoolanders\Framework\Request\Request;
 use Zoolanders\Framework\Service\System\Application;
 
-class Init extends \Zoolanders\Framework\Event\Event
-{
+class Init extends \Zoolanders\Framework\Event\Event {
     /**
      * @var string
      */
@@ -41,8 +40,7 @@ class Init extends \Zoolanders\Framework\Event\Event
      * Init constructor.
      *
      */
-    public function __construct(Request $request, Application $application)
-    {
+    public function __construct (Request $request, Application $application) {
         $this->request = $request;
         $this->application = $application;
 
@@ -57,8 +55,7 @@ class Init extends \Zoolanders\Framework\Event\Event
      * @param $env
      * @return bool
      */
-    public function is($env)
-    {
+    public function is ($env) {
         return (strpos($this->get(), $env) === 0);
     }
 
@@ -69,8 +66,7 @@ class Init extends \Zoolanders\Framework\Event\Event
      *
      * @since 3.0.6
      */
-    public function get()
-    {
+    public function get () {
         // ZOO
         if ($this->component == 'zoo') {
             $path = 'zoo-';
@@ -113,64 +109,56 @@ class Init extends \Zoolanders\Framework\Event\Event
     /**
      * @return Request
      */
-    public function getRequest()
-    {
+    public function getRequest () {
         return $this->request;
     }
 
     /**
      * @return string
      */
-    public function getComponent()
-    {
+    public function getComponent () {
         return $this->component;
     }
 
     /**
      * @return bool
      */
-    public function isAdmin()
-    {
+    public function isAdmin () {
         return ($this->getSide() == 'admin');
     }
 
     /**
      * @return bool
      */
-    public function isSite()
-    {
+    public function isSite () {
         return !$this->isAdmin();
     }
 
     /**
      * @return string
      */
-    public function getController()
-    {
+    public function getController () {
         return $this->controller;
     }
 
     /**
      * @return string
      */
-    public function getSide()
-    {
+    public function getSide () {
         return $this->side;
     }
 
     /**
      * @return string
      */
-    public function getView()
-    {
+    public function getView () {
         return $this->view;
     }
 
     /**
      * @return string
      */
-    public function getTask()
-    {
+    public function getTask () {
         return $this->task;
     }
 }

@@ -1,10 +1,4 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
@@ -52,10 +46,10 @@ if (count($images) && isset($settings['order']) && $settings['order'] =="random"
 		<ul class="slides">
 
 			<?php foreach ($images as $key => $image) : ?>
-            
+
 				<?php
 					$navigation[] = '<li><span></span></li>';
-					
+
 					/* Prepare Captions */
 					$caption = '';
 					if($settings->get('zl_captions') == 2 && $title = $settings->get('_custom_caption')){
@@ -69,8 +63,8 @@ if (count($images) && isset($settings['order']) && $settings['order'] =="random"
 
 					/* Prepare Image */
 					$content = '<img src="'.$image['fileurl'].'" width="'.$image['width'].'" height="'.$image['height'].'" alt="'.$image['filename'].'" />';
-					
-					/* Lazy Loading */				
+
+					/* Lazy Loading */
 					$content = ($i==$settings['index']) ? $content : $widgetkit['image']->prepareLazyload($content);
 
 					/* Separator - if separator tag present wrap each item */
@@ -92,31 +86,31 @@ if (count($images) && isset($settings['order']) && $settings['order'] =="random"
 						// set dimensions
 						$lightbox_options .= $settings->get('width') && $settings->get('width') != 'auto' ? 'width:'.$settings->get('width').';' : '';
 						$lightbox_options .= $settings->get('height') && $settings->get('width') != 'auto' ? 'height:'.$settings->get('height').';' : '';
-						
+
 						// override caption
 						if($settings->get('lightbox_caption') == 0){
 							$caption = '';
 						} if($settings->get('lightbox_caption') == 2 && $title = $settings->get('_lightbox_custom_title')){
 							$caption = $title;
 						}
-						
+
 						$caption = strlen($caption) ? ' title="'.$caption.'"' : '';
 						$content = '<a '.$rel.'href="'.$link.'" data-lightbox="group:'.$widget_id.';'.$lightbox_options.'"'.$caption.'>'.$content.'</a>';
 					}
 				?>
-				
+
 				<li><?php echo $content; ?></li>
-				
+
 				<?php $i=$i+1;?>
 			<?php endforeach; ?>
-			
+
 		</ul>
         <?php if ($settings['buttons']): ?><div class="next"></div><div class="prev"></div><?php endif; ?>
 		<?php if ($settings->get('zl_captions')) : ?><div class="caption"></div><ul class="captions"><?php echo implode('', $captions);?></ul><?php endif; ?>
 	</div>
 	<?php echo ($settings['navigation'] && count($navigation)) ? '<ul class="nav">'.implode('', $navigation).'</ul>' : '';?>
 </div>
-	
+
 <?php else : ?>
 	<?php echo "No images found."; ?>
 <?php endif; ?>

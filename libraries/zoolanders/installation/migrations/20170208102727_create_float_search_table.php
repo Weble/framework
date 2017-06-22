@@ -2,8 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateFloatSearchTable extends AbstractMigration
-{
+class CreateFloatSearchTable extends AbstractMigration {
     /**
      * Change Method.
      *
@@ -25,8 +24,7 @@ class CreateFloatSearchTable extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change()
-    {
+    public function change () {
         $table = $this->table('search_float');
 
         if (!$table->exists()) {

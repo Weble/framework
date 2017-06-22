@@ -13,7 +13,6 @@ use Zoolanders\Framework\Service\Filesystem\Clean;
  *
  * @package ZFTests\Classes
  */
-class Filesystem extends FSBase
-{
+class Filesystem extends FSBase {
     use Size, Mime, Clean;
 }

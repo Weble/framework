@@ -8,8 +8,7 @@ use JHttpResponse;
  * Class JsonResponse
  * HTTP Response helper
  */
-class Response extends JHttpResponse implements ResponseInterface
-{
+class Response extends JHttpResponse implements ResponseInterface {
     /**
      * @var string Data
      */
@@ -37,8 +36,7 @@ class Response extends JHttpResponse implements ResponseInterface
      * @param   int $code
      * @param   $data
      */
-    public function __construct($data = '', $code = 200)
-    {
+    public function __construct ($data = '', $code = 200) {
         $this->code = $code;
         $this->data = $data;
     }
@@ -51,8 +49,7 @@ class Response extends JHttpResponse implements ResponseInterface
      *
      * @return  Response
      */
-    public function setHeader($key, $value)
-    {
+    public function setHeader ($key, $value) {
         $this->headers[$key] = $value;
         return $this;
     }
@@ -62,8 +59,7 @@ class Response extends JHttpResponse implements ResponseInterface
      *
      * @return void
      */
-    protected function sendHeaders()
-    {
+    protected function sendHeaders () {
         header($_SERVER["SERVER_PROTOCOL"] . " $this->code " . @self::$status_codes[$this->code]);
         $this->setHeader('Content-Type', $this->type);
 
@@ -80,8 +76,7 @@ class Response extends JHttpResponse implements ResponseInterface
      * @param   $content
      * @return  Response
      */
-    public function setContent($content)
-    {
+    public function setContent ($content) {
         $this->data = $content;
         return $this;
     }
@@ -91,8 +86,7 @@ class Response extends JHttpResponse implements ResponseInterface
      *
      * @return void
      */
-    protected function sendContent()
-    {
+    protected function sendContent () {
         if (!empty($this->data)) {
             echo $this->data;
         } else if (@self::$status_codes[$this->code]) {
@@ -108,8 +102,7 @@ class Response extends JHttpResponse implements ResponseInterface
      *
      * @return object
      */
-    public function set($varname, $value)
-    {
+    public function set ($varname, $value) {
         $this->{$varname} = $value;
         return $this;
     }
@@ -119,8 +112,7 @@ class Response extends JHttpResponse implements ResponseInterface
      *
      * @return  mixed
      */
-    public function send()
-    {
+    public function send () {
         $this->sendHeaders();
         $this->sendContent();
 

@@ -2,15 +2,13 @@
 
 namespace Zoolanders\Framework\Model\Database;
 
-trait Access
-{
+trait Access {
     /**
      * @param $query
      * @param null $user
      * @return $this
      */
-    protected function filterAccessible($user = null)
-    {
+    protected function filterAccessible ($user = null) {
         if (is_null($user)) {
             $user = \JFactory::getUser();
         }

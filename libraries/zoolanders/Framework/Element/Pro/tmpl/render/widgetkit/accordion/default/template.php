@@ -1,16 +1,10 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
 	$widget_id = $widget->id.'-'.uniqid();
 	$settings  = $widget->settings;
-	
+
 	$items = $this->getRenderedValues($params, $widget->mode);
 	$items = $items['result'];
 

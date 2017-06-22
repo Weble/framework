@@ -4,8 +4,7 @@ namespace Zoolanders\Framework\Event\Element;
 
 use Zoolanders\Framework\Event\Item\Item;
 
-class Beforedisplay extends Item
-{
+class Beforedisplay extends Item {
 
     /**
      * @var bool
@@ -29,8 +28,7 @@ class Beforedisplay extends Item
      * @param \Element|null $element
      * @param array $params
      */
-    public function __construct(\Item $item, &$render = true, \Element $element = null, $params = [])
-    {
+    public function __construct (\Item $item, &$render = true, \Element $element = null, $params = []) {
         parent::__construct($item);
 
         $this->render = &$render;
@@ -38,23 +36,19 @@ class Beforedisplay extends Item
         $this->params = $params;
     }
 
-    public function getRender()
-    {
+    public function getRender () {
         return $this->render;
     }
 
-    public function setRender($render)
-    {
+    public function setRender ($render) {
         $this->render = $render;
     }
 
-    public function getElement()
-    {
+    public function getElement () {
         return $this->element;
     }
 
-    public function getParams()
-    {
+    public function getParams () {
         return $this->params;
     }
 }

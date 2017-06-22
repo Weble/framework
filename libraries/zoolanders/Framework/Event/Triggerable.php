@@ -4,10 +4,8 @@ namespace Zoolanders\Framework\Event;
 
 use Zoolanders\Framework\Container\Container;
 
-trait Triggerable
-{
-    public function triggerEvent(EventInterface $event)
-    {
+trait Triggerable {
+    public function triggerEvent (EventInterface $event) {
         $container = Container::getInstance();
         $eventName = 'on' . $event->getName();
 

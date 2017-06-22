@@ -8,8 +8,7 @@ use Zoolanders\Framework\Data\Data;
  * Class Request
  * @package Zoolanders\Framework\Request
  */
-class Request extends \JInput
-{
+class Request extends \JInput {
     /**
      * @var array|false Request headers
      */
@@ -18,8 +17,7 @@ class Request extends \JInput
     /**
      * Request constructor.
      */
-    public function __construct()
-    {
+    public function __construct () {
         parent::__construct();
 
         // Capture HTTP Request headers:
@@ -41,19 +39,19 @@ class Request extends \JInput
      *
      * @return array
      */
-    public function getHeaders(){
+    public function getHeaders () {
 
-        if(empty($this->headers)){
+        if (empty($this->headers)) {
             $headers = [];
 
-            if(function_exists('getallheaders')){
+            if (function_exists('getallheaders')) {
                 $headers = getallheaders();
             } else {
-                foreach($_SERVER as $key => $value) {
-                    if ( substr($key,0,5) == "HTTP_" ) {
-                        $key = str_replace(" ", "-", ucwords(strtolower(str_replace("_"," ",substr($key,5)))));
+                foreach ($_SERVER as $key => $value) {
+                    if (substr($key, 0, 5) == "HTTP_") {
+                        $key = str_replace(" ", "-", ucwords(strtolower(str_replace("_", " ", substr($key, 5)))));
                         $headers[$key] = $value;
-                    }else{
+                    } else {
                         $headers[$key] = $value;
                     }
                 }
@@ -70,8 +68,7 @@ class Request extends \JInput
      *
      * @return bool True if an ajax call is being made
      */
-    public function isAjax()
-    {
+    public function isAjax () {
         // Joomla way
         if (in_array($this->getCmd('format'), ['json', 'raw'])) {
             return true;

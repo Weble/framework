@@ -1,14 +1,8 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
-return 
+return
 '{"fields": {
 
 	"_widget":{

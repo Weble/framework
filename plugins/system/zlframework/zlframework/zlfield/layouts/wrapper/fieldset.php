@@ -1,45 +1,43 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
-	// prepare label
-	if($label = $fld->find('specific.toggle.label'))
-	{
-		$vars = explode('||', $label);
-		$text = JText::_($vars[0]);
-		unset($vars[0]);
+// prepare label
+if ($label = $fld->find('specific.toggle.label')) {
+    $vars = explode('||', $label);
+    $text = JText::_($vars[0]);
+    unset($vars[0]);
 
-		$label = count($vars) ? $this->app->zlfield->replaceVars($vars, $text) : $text;
-	}
+    $label = count($vars) ? $this->app->zlfield->replaceVars($vars, $text) : $text;
+}
 
 ?>
 
-	<?php if ($fld->find('specific.toggle')) : ?>
+<?php if ($fld->find('specific.toggle')) : ?>
 
-	<fieldset class="wrapper" data-layout="fieldset-toggle" data-id="<?php echo $id ?>">
+    <fieldset class="wrapper" data-layout="fieldset-toggle" data-id="<?php echo $id ?>">
 
-		<div class="zl-toggle open">
-			<div class="btn-close">
-				<?php echo $label ?>
-				<span class="sign"></span>
-			</div>
-			<div class="btn-open">
-				<?php echo $label ?>
-				<span class="sign"></span>
-			</div>
-		</div>
+        <div class="zl-toggle open">
+            <div class="btn-close">
+                <?php echo $label ?>
+                <span class="sign"></span>
+            </div>
+            <div class="btn-open">
+                <?php echo $label ?>
+                <span class="sign"></span>
+            </div>
+        </div>
 
-		<div class="zl-toggle-content">
-			<?php echo $content ?>
-		</div>
+        <div class="zl-toggle-content">
+            <?php echo $content ?>
+        </div>
 
-	</fieldset>
+    </fieldset>
 
-	<?php else : ?>
+<?php else : ?>
 
-	<fieldset class="wrapper" data-id="<?php echo $id ?>">
-		<?php echo $content ?>
-	</fieldset>
+    <fieldset class="wrapper" data-id="<?php echo $id ?>">
+        <?php echo $content ?>
+    </fieldset>
 
-	<?php endif; ?>
+<?php endif; ?>

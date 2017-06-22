@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Dispatcher\Exception;
 
-class ControllerNotFound extends \InvalidArgumentException
-{
+class ControllerNotFound extends \InvalidArgumentException {
 
 }

@@ -5,8 +5,7 @@ namespace Zoolanders\Framework\Service;
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Service\System\Config;
 
-class Crypt
-{
+class Crypt {
     /**
      * @var \JCrypt
      */
@@ -15,8 +14,7 @@ class Crypt
     /**
      * Crypt constructor
      */
-    public function __construct(Config $config)
-    {
+    public function __construct (Config $config) {
         $secret = $config->get('secret');
 
         $key = new \JCryptKey('simple', $secret, $secret);
@@ -27,8 +25,7 @@ class Crypt
      * Encrypt text
      * @param $text
      */
-    public function encrypt($text)
-    {
+    public function encrypt ($text) {
         return $this->crypt->encrypt($text);
     }
 
@@ -36,8 +33,7 @@ class Crypt
      * Decrypt text
      * @param $text
      */
-    public function decrypt($text)
-    {
+    public function decrypt ($text) {
         return $this->crypt->decrypt($text);
     }
 
@@ -50,8 +46,7 @@ class Crypt
      *
      * @since 3.0.3
      */
-    public function decryptPassword($pass)
-    {
+    public function decryptPassword ($pass) {
         $matches = array();
         if (preg_match('/zl-encrypted\[(.*)\]/', $pass, $matches)) {
             return $this->crypt->decrypt($matches[1]);

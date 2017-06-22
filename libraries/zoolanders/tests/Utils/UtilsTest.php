@@ -11,8 +11,7 @@ use Zoolanders\Framework\Utils\IsString;
  *
  * @package ZFTests\Utils
  */
-class UtilsTest extends ZFTestCase
-{
+class UtilsTest extends ZFTestCase {
     use IsString;
 
     /**
@@ -21,8 +20,7 @@ class UtilsTest extends ZFTestCase
      * @covers          IsString::isString()
      * @dataProvider    dataSet
      */
-    public function testIsString($value, $expected)
-    {
+    public function testIsString ($value, $expected) {
         // Check against isString method:
         $this->assertEquals($expected, $this->isString($value));
     }
@@ -30,8 +28,7 @@ class UtilsTest extends ZFTestCase
     /**
      * IsString testing dataset
      */
-    public function dataSet()
-    {
+    public function dataSet () {
 
         $obj = new \stdClass();
 
@@ -49,8 +46,7 @@ class UtilsTest extends ZFTestCase
     /**
      * Testing record set
      */
-    public function recordSetData()
-    {
+    public function recordSetData () {
         return [
             [
                 [

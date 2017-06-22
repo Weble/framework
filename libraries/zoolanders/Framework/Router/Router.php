@@ -10,8 +10,7 @@ defined('_JEXEC') or die();
 /**
  * The ZL router class
  */
-abstract class Router
-{
+abstract class Router {
 
     /**
      * @var Container
@@ -40,8 +39,7 @@ abstract class Router
      * Router constructor.
      * @param Container $c
      */
-    public function __construct(Container $c)
-    {
+    public function __construct (Container $c) {
         // set application
         $this->container = $c;
 
@@ -71,26 +69,24 @@ abstract class Router
     /**
      * @return Container
      */
-    public function getContainer()
-    {
+    public function getContainer () {
         return $this->container;
     }
 
     /**
      * Route building
      */
-    abstract public function buildRoute(&$query, &$segments);
+    abstract public function buildRoute (&$query, &$segments);
 
     /**
      * Route parsing
      */
-    abstract public function parseRoute(&$segments, &$vars);
+    abstract public function parseRoute (&$segments, &$vars);
 
     /**
      * Clears the router cache
      */
-    public function clearCache()
-    {
+    public function clearCache () {
         if ($this->cache) {
             $this->cache->clear()->save();
         }
@@ -101,8 +97,7 @@ abstract class Router
      *
      * @return string the link base
      */
-    public function getLinkBase()
-    {
+    public function getLinkBase () {
         return 'index.php?option=com_zoolanders';
     }
 }

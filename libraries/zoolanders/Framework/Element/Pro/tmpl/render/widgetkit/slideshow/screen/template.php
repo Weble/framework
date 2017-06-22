@@ -1,14 +1,4 @@
 <?php
-/**
-
-
-
-
- */
-
-
-
- 
 
 defined('_JEXEC') or die();
 
@@ -42,7 +32,7 @@ unset($item);
 			<?php
 				$navigation[] = '<li><span></span></li>';
 				$captions[]   = '<li>'.(isset($item['caption']) ? $item['caption']:"").'</li>';
-			
+
 				/* Lazy Loading */
 				$item["content"] = ($i==$settings['index']) ? $item["content"] : $widgetkit['image']->prepareLazyload($item["content"]);
 			?>

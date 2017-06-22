@@ -14,8 +14,7 @@ namespace Zoolanders\Framework\Service;
 
 use Zoolanders\Framework\Utils\IsString;
 
-class Date
-{
+class Date {
     use IsString;
 
     /**
@@ -26,8 +25,7 @@ class Date
      *
      * @return \JDate The JDate object set to the given time / offset
      */
-    public static function create($time = 'now', $offset = null)
-    {
+    public static function create ($time = 'now', $offset = null) {
         return \JFactory::getDate($time, $offset);
     }
 
@@ -38,8 +36,7 @@ class Date
      *
      * @return boolean If the date is today
      */
-    public static function isToday($date)
-    {
+    public static function isToday ($date) {
         // get dates
         $now = self::create();
         $date = self::create($date);
@@ -54,8 +51,7 @@ class Date
      *
      * @return boolean If the date is yesterday
      */
-    public static function isYesterday($date)
-    {
+    public static function isYesterday ($date) {
         // get dates
         $now = self::create();
         $date = self::create($date);
@@ -73,8 +69,7 @@ class Date
      *
      * @return string The text representing the time difference
      */
-    public static function getDeltaOrWeekdayText($date)
-    {
+    public static function getDeltaOrWeekdayText ($date) {
         // get dates
         $now = self::create();
         $date = self::create($date);
@@ -100,8 +95,7 @@ class Date
      *
      * @return string The format in J1.5 version
      */
-    public function format($format)
-    {
+    public function format ($format) {
         return self::strftimeToDateFormat($format);
     }
 
@@ -112,8 +106,7 @@ class Date
      *
      * @return string The date format in strftime() usable format
      */
-    public static function dateFormatToStrftime($dateFormat)
-    {
+    public static function dateFormatToStrftime ($dateFormat) {
         return strtr((string)$dateFormat, self::getDateFormatToStrftimeMapping());
     }
 
@@ -124,8 +117,7 @@ class Date
      *
      * @return string The date format in JDate usable format
      */
-    public static function strftimeToDateFormat($strftime)
-    {
+    public static function strftimeToDateFormat ($strftime) {
         return strtr((string)preg_replace("/(?<![\%|\\\\])(\w)/i", '\\\\$1', $strftime), array_flip(self::getDateFormatToStrftimeMapping()));
     }
 
@@ -134,8 +126,7 @@ class Date
      *
      * @return array The mapping array
      */
-    protected static function getDateFormatToStrftimeMapping()
-    {
+    protected static function getDateFormatToStrftimeMapping () {
         return array(
             // Day - no strf eq : S
             'd' => '%d', 'D' => '%a', 'j' => '%e', 'l' => '%A', 'N' => '%u', 'w' => '%w', 'z' => '%j',
@@ -164,8 +155,7 @@ class Date
      *
      * @return int The timezone offset
      */
-    public static function getOffset($user = null)
-    {
+    public static function getOffset ($user = null) {
         $user = $user == null ? \JFactory::getUser() : $user;
         return $user->getParam('timezone', \JFactory::getConfig()->get('offset'));
     }
@@ -174,8 +164,7 @@ class Date
      * @param $dateTime
      * @return \JDate
      */
-    public function getDateOnly($dateTime)
-    {
+    public function getDateOnly ($dateTime) {
         // replace placeholders
         $value = self::getFromPlaceholder($dateTime);
         $tzoffset = self::getOffset();
@@ -187,8 +176,7 @@ class Date
      * @param $dateTime
      * @return \JDate
      */
-    public static function getDateTime($dateTime)
-    {
+    public static function getDateTime ($dateTime) {
         // replace placeholders
         $value = self::getFromPlaceholder($dateTime);
         $tzoffset = self::getOffset();
@@ -202,8 +190,7 @@ class Date
      * @param mixed $value
      * @return mixed
      */
-    public static function getFromPlaceholder($value)
-    {
+    public static function getFromPlaceholder ($value) {
         if (self::isString($value)) {
             // init vars
             $tzoffset = self::getOffset();
@@ -231,8 +218,7 @@ class Date
      * @param $value
      * @return \JDate
      */
-    public static function getDayStart($value)
-    {
+    public static function getDayStart ($value) {
         $date = self::getDateOnly($value);
         $date->setTime(0, 0, 0);
 
@@ -243,8 +229,7 @@ class Date
      * @param $value
      * @return \JDate
      */
-    public static function getDayEnd($value)
-    {
+    public static function getDayEnd ($value) {
         $date = self::getDateOnly($value);
         $date->setTime(23, 59, 59);
 

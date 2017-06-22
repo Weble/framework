@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Event\Category;
 
-class Init extends Category
-{
+class Init extends Category {
 
 }

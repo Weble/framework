@@ -1,15 +1,14 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	$positions = array('Top left' => 'top left', 'Top center' => 'top center', 'Top right' => 'top right', 'Right top' => 'right top', 'Right center' => 'right center', 'Right bottom' => 'right bottom', 'Bottom right' => 'bottom right', 'Bottom center' => 'bottom center', 'Bottom left' => 'bottom left', 'Left bottom' => 'left bottom', 'Left center' => 'left center', 'Left top' => 'left top', 'Center' => 'center');
+$positions = array('Top left' => 'top left', 'Top center' => 'top center', 'Top right' => 'top right', 'Right top' => 'right top', 'Right center' => 'right center', 'Right bottom' => 'right bottom', 'Bottom right' => 'bottom right', 'Bottom center' => 'bottom center', 'Bottom left' => 'bottom left', 'Left bottom' => 'left bottom', 'Left center' => 'left center', 'Left top' => 'left top', 'Center' => 'center');
 
-	return
-	'{"fields": {
+return
+    '{"fields": {
 
 		"_mode":{
 			"type": "select",
@@ -37,7 +36,7 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					"help": "PLG_ZLFRAMEWORK_QTIP_MY_DESC",
 					"default":"top left",
 					"specific": {
-						"options": '.json_encode($positions).'
+						"options": ' . json_encode($positions) . '
 					}
 				},
 				"_at":{
@@ -46,7 +45,7 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					"help": "PLG_ZLFRAMEWORK_QTIP_AT_DESC",
 					"default":"right top",
 					"specific": {
-						"options": '.json_encode($positions).'
+						"options": ' . json_encode($positions) . '
 					}
 				}
 			}

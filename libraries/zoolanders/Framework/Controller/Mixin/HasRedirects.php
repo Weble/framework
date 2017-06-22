@@ -9,8 +9,7 @@ use Zoolanders\Framework\Response\RedirectResponse;
  * Trait HasRedirects
  * @package Zoolanders\Framework\Controller\Mixin
  */
-trait HasRedirects
-{
+trait HasRedirects {
     /**
      * URL for redirection.
      *
@@ -42,8 +41,7 @@ trait HasRedirects
      *
      * @return  boolean
      */
-    public function hasRedirect()
-    {
+    public function hasRedirect () {
         return !empty($this->redirectUrl);
     }
 
@@ -55,8 +53,7 @@ trait HasRedirects
      *
      * @return  string  Previous message
      */
-    public function setMessage($text, $type = 'message')
-    {
+    public function setMessage ($text, $type = 'message') {
         $previous = $this->redirectMessage;
         $this->redirectMessage = $text;
         $this->redirectMessageType = $type;
@@ -70,8 +67,7 @@ trait HasRedirects
      *
      * @return  RedirectResponse|boolean  False if no redirect exists.
      */
-    public function redirect()
-    {
+    public function redirect () {
         if ($this->app && $this->redirectUrl) {
             $this->app->enqueueMessage($this->redirectMessage, $this->redirectMessageType);
 
@@ -90,8 +86,7 @@ trait HasRedirects
      *
      * @return  Controller   This object to support chaining.
      */
-    public function setRedirect($url, $msg = null, $type = null)
-    {
+    public function setRedirect ($url, $msg = null, $type = null) {
         // Set the redirection
         $this->redirectUrl = $url;
 

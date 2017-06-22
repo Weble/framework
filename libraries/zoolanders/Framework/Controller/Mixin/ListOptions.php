@@ -25,8 +25,7 @@ use Zoolanders\Framework\Utils\ListFilterState;
  *
  * @package Zoolanders\Framework\Controller\Mixin
  */
-trait ListOptions
-{
+trait ListOptions {
     /**
      * @var Config that describes filtering params validation and sefault values
      */
@@ -37,8 +36,7 @@ trait ListOptions
      *
      * @param array $cfg
      */
-    public function setFilterConfig($cfg = [])
-    {
+    public function setFilterConfig ($cfg = []) {
         $this->filters_config = $cfg;
     }
 
@@ -47,8 +45,7 @@ trait ListOptions
      *
      * @return array
      */
-    public function getFilterConfig()
-    {
+    public function getFilterConfig () {
         return $this->filters_config;
     }
 
@@ -57,8 +54,7 @@ trait ListOptions
      *
      * @return array
      */
-    public function getListOptions()
-    {
+    public function getListOptions () {
         // ?
     }
 
@@ -69,15 +65,14 @@ trait ListOptions
      *
      * @return void
      */
-    public function getListStateFromRequest(Request $request)
-    {
+    public function getListStateFromRequest (Request $request) {
         $this->getListOptions();
 
-        if(!empty($this->filters_config)){
+        if (!empty($this->filters_config)) {
             // Filters:
-            foreach($this->filters_config as $param => $settings){
+            foreach ($this->filters_config as $param => $settings) {
                 $value = $request->get($param, @$settings['default'], @$settings['filter']);
-                if(null === $value){
+                if (null === $value) {
                     $this->model->dropFilter($param);
                 } else {
                     $this->model->setFilter($param, $value);
@@ -89,7 +84,7 @@ trait ListOptions
         $sort = $request->get('sort', [], 'array');
 
         if (!empty($sort)) {
-            foreach($sort as $field => $dir){
+            foreach ($sort as $field => $dir) {
                 $this->model->setSorting($field, $dir);
             }
         }

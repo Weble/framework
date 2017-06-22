@@ -4,8 +4,7 @@ namespace Zoolanders\Framework\Model\Item;
 
 use Zoolanders\Framework\Element\Indexer;
 
-trait Elements
-{
+trait Elements {
     protected $elements = [];
 
     protected $types = [];
@@ -15,8 +14,7 @@ trait Elements
     /**
      * @return array
      */
-    public function getTypes()
-    {
+    public function getTypes () {
         if (!$this->types) {
             $groups = $this->zoo->getApp()->application->groups();
             foreach ($groups as $group) {
@@ -31,9 +29,8 @@ trait Elements
      * @param $id
      * @return bool
      */
-    public function getElement($id)
-    {
-        if (!isset($this->elements[$id])){
+    public function getElement ($id) {
+        if (!isset($this->elements[$id])) {
             /** @var \Type $type */
             foreach ($this->getTypes() as $type) {
                 if ($element = $type->getElement($id)) {
@@ -54,8 +51,7 @@ trait Elements
      * @param $operator
      * @param $value
      */
-    public function whereElement($id, $operator, $value, $convert = false)
-    {
+    public function whereElement ($id, $operator, $value, $convert = false) {
         // Normal search
         $value = $this->getQuery()->q($value);
         $alias = $this->getJoinElementAlias();
@@ -72,14 +68,14 @@ trait Elements
             $value = floatval($value);
         }
 
-        $this->whereRaw( $alias . '.element_id = ' . $this->getQuery()->q($id));
+        $this->whereRaw($alias . '.element_id = ' . $this->getQuery()->q($id));
 
         if ($convert) {
-            $this->where( "CONVERT(TRIM( " . $this->getQuery()->qn($alias . '.value') . "+0), {$convert})", $operator, $value);
+            $this->where("CONVERT(TRIM( " . $this->getQuery()->qn($alias . '.value') . "+0), {$convert})", $operator, $value);
             return;
         }
 
-        $this->whereRaw( $alias . '.value  = ' . $value);
+        $this->whereRaw($alias . '.value  = ' . $value);
 
         return $this;
     }
@@ -89,16 +85,15 @@ trait Elements
      * @param $operator
      * @param $value
      */
-    public function whereAnyElement($id, $operator, $value)
-    {
+    public function whereAnyElement ($id, $operator, $value) {
         // Normal search
         $value = $this->getQuery()->q($value);
         $alias = $this->getJoinElementAlias();
 
         $this->joinElement($id);
 
-        $this->where( $this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
-        $this->whereAny( "TRIM( " . $this->getQuery()->qn($alias . '.value') . " )", $operator, $value);
+        $this->where($this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
+        $this->whereAny("TRIM( " . $this->getQuery()->qn($alias . '.value') . " )", $operator, $value);
 
         return $this;
     }
@@ -108,16 +103,15 @@ trait Elements
      * @param $operator
      * @param $value
      */
-    public function orWhereAnyElement($id, $operator, $value)
-    {
+    public function orWhereAnyElement ($id, $operator, $value) {
         // Normal search
         $value = $this->getQuery()->q($value);
         $alias = $this->getJoinElementAlias();
 
         $this->joinElement($id);
 
-        $this->where( $this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
-        $this->orWhereAny( "TRIM( " . $this->getQuery()->qn($alias . '.value') . " )", $operator, $value);
+        $this->where($this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
+        $this->orWhereAny("TRIM( " . $this->getQuery()->qn($alias . '.value') . " )", $operator, $value);
 
         return $this;
     }
@@ -127,15 +121,14 @@ trait Elements
      * @param $operator
      * @param $value
      */
-    public function orWhereElement($id, $operator, $value)
-    {
+    public function orWhereElement ($id, $operator, $value) {
         // Normal search
         $value = $this->getQuery()->q($value);
         $alias = $this->getJoinElementAlias();
 
         $this->joinElement($id);
 
-        $this->orWhere( $this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
+        $this->orWhere($this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
         $this->orWhere("TRIM( " . $this->getQuery()->qn($alias . '.value') . " )", $operator, $value);
 
         return $this;
@@ -145,19 +138,18 @@ trait Elements
      * @param $id
      * @param $values
      */
-    public function whereElementHasAll($id, $values)
-    {
+    public function whereElementHasAll ($id, $values) {
         settype($values, 'array');
 
         $alias = $this->getJoinElementAlias();
         $this->joinElement($id);
 
-        $this->where( $this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
+        $this->where($this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
 
         // Normal selects / radio / etc (ElementOption)
         $multiples = $this->getMultipleElementValues($values, $alias);
 
-        $this->whereRaw( '(' . implode(" AND ", $multiples));
+        $this->whereRaw('(' . implode(" AND ", $multiples));
 
         return $this;
     }
@@ -166,18 +158,17 @@ trait Elements
      * @param $id
      * @param $values
      */
-    public function whereElementHasAny($id, $values)
-    {
+    public function whereElementHasAny ($id, $values) {
         settype($values, 'array');
 
         $alias = $this->getJoinElementAlias();
         $this->joinElement($id);
 
-        $this->where( $this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
+        $this->where($this->getQuery()->qn($alias . '.element_id'), '=', $this->getQuery()->q($id));
         $multiples = $this->getMultipleElementValues($values, $alias);
 
 
-        $this->whereRaw( '(' . implode(" OR ", $multiples));
+        $this->whereRaw('(' . implode(" OR ", $multiples));
 
         return $this;
     }
@@ -185,8 +176,7 @@ trait Elements
     /**
      * @param $id
      */
-    public function joinElement($id, $alias = null)
-    {
+    public function joinElement ($id, $alias = null) {
         if (!$alias) {
             $alias = $this->getJoinElementAlias();
         }
@@ -210,8 +200,7 @@ trait Elements
     /**
      * @return string
      */
-    protected function getJoinElementAlias()
-    {
+    protected function getJoinElementAlias () {
         return 'b' . $this->elementJoins;
     }
 
@@ -220,8 +209,7 @@ trait Elements
      * @param $alias
      * @return array
      */
-    protected function getMultipleElementValues($values, $alias)
-    {
+    protected function getMultipleElementValues ($values, $alias) {
         $multiples = [];
 
         // Normal selects / radio / etc (ElementOption)

@@ -10,12 +10,11 @@ use Zoolanders\Framework\Data\Parameter;
  *
  * @package ZFTests\Data
  */
-class ParameterTest extends DataTest
-{
+class ParameterTest extends DataTest {
     /**
      * Make dataset for forward testing:
      */
-    protected function makeDataSet($dataset){
+    protected function makeDataSet ($dataset) {
 
         $this->object = new Parameter($dataset);
 
@@ -28,7 +27,7 @@ class ParameterTest extends DataTest
      * @covers          Parameter::loadArray()
      * @dataProvider    arrayDataSet
      */
-    public function testLoadArray($dataset, $control_value){
+    public function testLoadArray ($dataset, $control_value) {
         $this->makeDataSet([]);
         $this->object->loadArray($dataset);
 
@@ -42,7 +41,7 @@ class ParameterTest extends DataTest
      * @covers          Parameter::loadObject()
      * @dataProvider    objectDataSet
      */
-    public function testLoadObject($dataset, $control_prop, $control_value){
+    public function testLoadObject ($dataset, $control_prop, $control_value) {
         $this->makeDataSet([]);
         $this->object->loadObject($dataset);
 
@@ -54,7 +53,7 @@ class ParameterTest extends DataTest
     /**
      * Object dataset
      */
-    public function objectDataSet(){
+    public function objectDataSet () {
 
         $object = new \stdClass();
         $object->a = 'alpha';
@@ -62,10 +61,10 @@ class ParameterTest extends DataTest
         $object->c = 'charlie';
 
         return [
-          [ $object, 'a', 'alpha' ],
-          [ $object, 'b', 'bravo' ],
-          [ $object, 'c', 'charlie' ]
+            [$object, 'a', 'alpha'],
+            [$object, 'b', 'bravo'],
+            [$object, 'c', 'charlie']
         ];
     }
 
- }
+}

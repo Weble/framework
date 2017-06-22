@@ -15,8 +15,7 @@ if (class_exists('lib_zoolandersInstallerScript', false)) {
     return;
 }
 
-class lib_zoolandersInstallerScript
-{
+class lib_zoolandersInstallerScript {
     /**
      * The minimum PHP version required to install this extension
      *
@@ -47,8 +46,7 @@ class lib_zoolandersInstallerScript
      *
      * @return  boolean  True to let the installation proceed, false to halt the installation
      */
-    public function preflight($type, $parent)
-    {
+    public function preflight ($type, $parent) {
         // Check the minimum PHP version
         if (!empty($this->minimumPHPVersion)) {
             if (defined('PHP_VERSION')) {
@@ -108,8 +106,7 @@ class lib_zoolandersInstallerScript
      * @param   string $type install, update or discover_update
      * @param   JInstallerAdapterLibrary $parent Parent object
      */
-    public function postflight($type, JInstallerAdapterLibrary $parent)
-    {
+    public function postflight ($type, JInstallerAdapterLibrary $parent) {
         $this->load();
 
         // Run any migration
@@ -124,8 +121,7 @@ class lib_zoolandersInstallerScript
      *
      * @throws  RuntimeException  If the uninstallation is not allowed
      */
-    public function uninstall(JInstallerAdapterLibrary $parent)
-    {
+    public function uninstall (JInstallerAdapterLibrary $parent) {
 
     }
 
@@ -138,8 +134,7 @@ class lib_zoolandersInstallerScript
      *
      * @return  array  The installation status
      */
-    protected function amIAnUpdate(JInstallerAdapterLibrary $parent)
-    {
+    protected function amIAnUpdate (JInstallerAdapterLibrary $parent) {
         /** @var JInstaller $grandpa */
         $grandpa = $parent->getParent();
 
@@ -172,8 +167,7 @@ class lib_zoolandersInstallerScript
     /**
      * Loads the framework
      */
-    protected function load()
-    {
+    protected function load () {
         $filePath = JPATH_LIBRARIES . '/zoolanders/include.php';
         if (file_exists($filePath)) {
             require_once $filePath;

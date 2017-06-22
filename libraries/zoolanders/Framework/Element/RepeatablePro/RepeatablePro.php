@@ -1,10 +1,4 @@
 <?php
-/**
-
-
-
-
- */
 
 namespace Zoolanders\Framework\Element\Pro;
 
@@ -30,11 +24,11 @@ abstract class RepeatablePro extends \ElementRepeatable {
 		$this->registerCallback('returndata');
 		$this->registerCallback('getemptylayout');
 
-		// load default and current language 
+		// load default and current language
 		$this->app->system->language->load('plg_system_zoo_zlelements_'.$this->getElementType(), JPATH_ADMINISTRATOR, 'en-GB');
 		$this->app->system->language->load('plg_system_zoo_zlelements_'.$this->getElementType(), JPATH_ADMINISTRATOR);
 	}
-	
+
 	/*
 		Function: setType
 			Set related type object.
@@ -50,22 +44,22 @@ abstract class RepeatablePro extends \ElementRepeatable {
 	*/
 	public function setType($type) {
 		parent::setType($type);
-		
+
 		$this->checkInstallation();
 	}
-	
+
 	/*
 		Function: checkInstallation
 			Allow for extra steps of checkin installation
-	 		on advanced elements. 
+	 		on advanced elements.
 
 		Returns:
 			Void
 	*/
 	protected function checkInstallation(){
-		
+
 	}
-	
+
 	/*
 		Function: hasValue
 			Override. Checks if the element's value is set.
@@ -94,7 +88,7 @@ abstract class RepeatablePro extends \ElementRepeatable {
 			echo preg_replace('/(elements\[\S+])\[(\d+)\]/', '$1[-1]', $this->renderLayout($layout, array('loadinglayout' => true)));
 		}
 	}
-	
+
 	/*
 		Function: getLayout
 			Get element layout path and use override if exists.
@@ -121,11 +115,11 @@ abstract class RepeatablePro extends \ElementRepeatable {
 		{
 			return $path;
 		}
-		
+
 		// if no layout found, search on pro element
 		return $this->app->path->path("elements:pro/tmpl/{$layout}");
 	}
-	
+
 	/*
 		Function: returnData
 			Renders the element data - use for ajax requests
@@ -135,7 +129,7 @@ abstract class RepeatablePro extends \ElementRepeatable {
 		$params = compact('layout', 'separator', 'filter', 'specific');
 		return $this->render($params);
 	}
-	
+
 	/*
 		Function: loadAssets
 			Load elements css/js assets.
@@ -150,7 +144,7 @@ abstract class RepeatablePro extends \ElementRepeatable {
 		$this->app->document->addStylesheet('zlfw:assets/css/zl_ui.css');
 		return $this;
 	}
-	
+
 	/*
 	   Function: _edit
 	       Renders the repeatable edit form field.
@@ -163,7 +157,7 @@ abstract class RepeatablePro extends \ElementRepeatable {
 		$_edit = $this->config->find('specific._edit_sublayout', '_edit.php');
 		return (($layout = $this->getLayout("edit/$_edit")) || ($layout = $this->getLayout("edit/_edit.php"))) ? $this->renderLayout($layout) : '';
 	}
-	
+
 	/*
 		Function: getRenderedValues
 			render repeatable values
@@ -171,7 +165,7 @@ abstract class RepeatablePro extends \ElementRepeatable {
 		Returns:
 			array
 	*/
-	public function getRenderedValues($params=array(), $mode=false, $opts=array()) 
+	public function getRenderedValues($params=array(), $mode=false, $opts=array())
 	{
 		// create a unique hash for this element position
 		$hash = md5(serialize(array(
@@ -187,11 +181,11 @@ abstract class RepeatablePro extends \ElementRepeatable {
 		{
 			// of limit 0, abort
 			if ($params->find('filter._limit') == '0') return null;
-			
+
 			$report = array();
 
 			$data_is_subarray = isset($opts['data_is_subarray']) ? $opts['data_is_subarray'] : false;
-		
+
 			// render
 			$result = array();
 			$this->seek(0); // let's be sure is starting from first index
@@ -202,30 +196,30 @@ abstract class RepeatablePro extends \ElementRepeatable {
 					$result[] = $values;
 				}
 			}
-			
+
 			if (empty($result)) return null; // if no results abort
-			
+
 			// set offset/limit
 			$offset = ( ($params->find('filter._offset', '') == '') || (!is_numeric($params->find('filter._offset', 0))) ) ? 0 : $params->find('filter._offset', 0);
 			$limit  = ( ($params->find('filter._limit', '') == '') || (!is_numeric($params->find('filter._limit', ''))) ) ? null : $params->find('filter._limit', null);
-			
+
 			$report['limited'] = $limit != null ? $limit < count($result) : false;
 			$result = array_slice($result, $offset, $limit);
-			
+
 			// set prefix/suffix
 			if ($prefix = $params->find('specific._prefix')) array_unshift($result, '<span class="prefix">'.$prefix.'</span>');
 			if ($suffix = $params->find('specific._suffix')) {
 				if (count($result) > 1) $result[] = '<span class="suffix">'.$suffix.'</span>';
 				else $result[0] .= '<span class="suffix">'.$suffix.'</span>';
 			}
-			
+
 			$report['hash'] = $hash;
 			$this->_rendered_values[$hash] = compact('report', 'result');
 		}
-		
+
 		return $this->_rendered_values[$hash];
 	}
-	
+
 	/*
 		Function: render
 			Renders the element.
@@ -239,12 +233,12 @@ abstract class RepeatablePro extends \ElementRepeatable {
 	public function render($params = array())
 	{
 		$params = $this->app->data->create($params);
-		
+
 		// render layout
 		if ($layout = $this->getLayout('render/'.$params->find('layout._layout', 'default.php'))) {
 			return $this->renderLayout($layout, compact('params'));
-		} 
-		else 
+		}
+		else
 		{
 			// for old elements
 			$result = array();
@@ -254,7 +248,7 @@ abstract class RepeatablePro extends \ElementRepeatable {
 			return $this->app->zlfw->applySeparators($params->find('separator._by'), $result, $params->find('separator._class'));
 		}
 	}
-	
+
 	/*
 		Function: _render
 			Renders the repeatable element.
@@ -275,7 +269,7 @@ abstract class RepeatablePro extends \ElementRepeatable {
 			return $this->get('value');
 		}
 	}
-	
+
 	/*
 		Function: _renderRepeatable
 			Renders the repeatable

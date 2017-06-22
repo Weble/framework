@@ -11,15 +11,14 @@ use ZFTests\Classes\TestController;
  *
  * @package ZFTests\Controller
  */
-class ControllerTest extends ZFTestCase
-{
+class ControllerTest extends ZFTestCase {
     /**
      * Test redirect flow
      *
      * @covers      Controller::setRedirect()
      * @covers      Controller::hasRedirect()
      */
-    public function testRedirects(){
+    public function testRedirects () {
         $ctrl = new TestController(self::$container);
 
         $ctrl->setRedirect('/');
@@ -30,7 +29,7 @@ class ControllerTest extends ZFTestCase
     /**
      * Actions and expected responses mapping set
      */
-    public function actionMap(){
+    public function actionMap () {
         return [
             ['ping', 'test'],
             ['_default', 'default']

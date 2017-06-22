@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Utils;
 
-trait NameFromClass
-{
+trait NameFromClass {
     /**
      * The (base) name of the current class
      *
@@ -15,8 +14,7 @@ trait NameFromClass
      * Method to get the model name
      * @return  string  The name of the model
      */
-    public function getName()
-    {
+    public function getName () {
         if (empty($this->name)) {
             $class = explode("\\", get_class($this));
             $this->name = array_pop($class);

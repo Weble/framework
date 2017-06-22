@@ -1,14 +1,4 @@
 <?php
-/**
-
-
-
-
- */
-
-
-
- 
 
 defined('_JEXEC') or die();
 
@@ -31,7 +21,7 @@ defined('_JEXEC') or die();
 	foreach (array_keys($sets) as $s) {
 		$nav[] = '<li><span></span></li>';
 	}
-	
+
 	// workaround for the main dimensions
 	$settings->set('width', $params->find('specific._width', 'auto'));
 	$settings->get('height', $params->find('specific._height', 'auto'));
@@ -45,9 +35,9 @@ defined('_JEXEC') or die();
 			<ul class="slides">
 
 				<?php foreach ($images as $image) : ?>
-				
+
 					<?php
-					
+
 						/* Prepare Captions */
 						$caption = '';
 						if($settings->get('zl_captions') == 2 && $title = $settings->get('_custom_caption')){
@@ -58,7 +48,7 @@ defined('_JEXEC') or die();
 							$caption = $image['filename'];
 						}
 						$captions[]   = "<li>$caption</li>";
-	
+
 						/* Prepare Image */
 						$content = '<img src="'.$image['fileurl'].'" width="'.$image['width'].'" height="'.$image['height'].'" alt="'.$image['filename'].'" />';
 
@@ -80,7 +70,7 @@ defined('_JEXEC') or die();
 					?>
 
 					<li><?php echo $content; ?></li>
-				
+
 				<?php $i=$i+1;?>
 				<?php endforeach; ?>
 
@@ -96,12 +86,12 @@ defined('_JEXEC') or die();
 				<?php foreach ($sets as $set => $items) : ?>
 				<ul class="set">
 					<?php foreach ($items as $thumb) : ?>
-					
+
 					<?php
 						/* Prepare Image */
 						$content = '<img src="'.$thumb['fileurl'].'" width="'.$thumb['width'].'" height="'.$thumb['height'].'" alt="'.$thumb['filename'].'" />';
 					?>
-					
+
 					<li>
 						<div><div><?php echo $content; ?></div></div>
 					</li>
@@ -112,7 +102,7 @@ defined('_JEXEC') or die();
 			<?php if ($settings['slideset_buttons'] && count($sets) > 1) : ?><div class="next"></div><div class="prev"></div><?php endif; ?>
 		</div>
 	</div>
-	
+
 </div>
 
 <?php else : ?>

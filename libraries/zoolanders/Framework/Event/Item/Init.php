@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Event\Item;
 
-class Init extends Item
-{
+class Init extends Item {
 
 }

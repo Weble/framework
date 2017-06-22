@@ -1,6 +1,7 @@
 <?php
 
 namespace Zoolanders\Framework\Repository;
+
 use Zoolanders\Framework\Service\Zoo;
 
 /**
@@ -8,8 +9,7 @@ use Zoolanders\Framework\Service\Zoo;
  * Base table repository for any repository that needs to use the old ZOO table classes
  * @package Zoolanders\Repository
  */
-abstract class Table extends Database
-{
+abstract class Table extends Database {
     /**
      * @var Zoo
      */
@@ -35,8 +35,7 @@ abstract class Table extends Database
      * @param string $tableName
      * @param string $className
      */
-    public function __construct($tableName, $className)
-    {
+    public function __construct ($tableName, $className) {
         parent::__construct();
 
         $this->tableName = $tableName;
@@ -46,8 +45,7 @@ abstract class Table extends Database
         $this->table = $this->app->table->$tableName;
     }
 
-    public function create(array $attributes)
-    {
+    public function create (array $attributes) {
         $object = $this->app->object->create($this->className);
 
         foreach ($attributes as $k => $v) {
@@ -59,18 +57,15 @@ abstract class Table extends Database
         return $object;
     }
 
-    public function all()
-    {
+    public function all () {
         return $this->table->all();
     }
 
-    public function get($id)
-    {
+    public function get ($id) {
         return $this->table->get($id);
     }
 
-    public function delete($ids)
-    {
+    public function delete ($ids) {
         settype($ids, 'array');
 
         foreach ($ids as $id) {

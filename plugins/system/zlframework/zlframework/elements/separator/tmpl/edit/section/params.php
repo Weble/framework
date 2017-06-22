@@ -1,13 +1,12 @@
 <?php
 
-
 defined('_JEXEC') or die('Restricted access');
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return
-	'{"fields": {
+return
+    '{"fields": {
 
 		"layout_wrapper":{
 			"type":"fieldset",
@@ -18,7 +17,7 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					"label":"PLG_ZOOTOLS_SEPARATOR_TITLE",
 					"help":"PLG_ZOOTOLS_SEPARATOR_TITLE_DESC",
 					"adjust_ctrl":{
-						"pattern":'.json_encode('/\[layout\]/').',
+						"pattern":' . json_encode('/\[layout\]/') . ',
 						"replacement":""
 					}
 				},

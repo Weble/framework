@@ -5,8 +5,7 @@ namespace Zoolanders\Framework\Tree;
 /**
  * Base class to deal with tree structures
  */
-class Tree
-{
+class Tree {
 
     /**
      * The root node for the tree
@@ -38,8 +37,7 @@ class Tree
      * @param string $itemClass The name of the class we're dealing with
      * @since 2.0
      */
-    public function __construct($itemClass = null)
-    {
+    public function __construct ($itemClass = null) {
         if ($itemClass == null) {
             $itemClass = 'Item';
         }
@@ -58,8 +56,7 @@ class Tree
      *
      * @since 2.0
      */
-    public function addFilter($filter, $args = array())
-    {
+    public function addFilter ($filter, $args = array()) {
         $this->filters[] = compact('filter', 'args');
 
         return $this;
@@ -72,8 +69,7 @@ class Tree
      *
      * @since 2.0
      */
-    public function applyFilter()
-    {
+    public function applyFilter () {
 
         foreach ($this->filters as $filter) {
             $this->root->filter($filter['filter'], $filter['args']);
@@ -92,8 +88,7 @@ class Tree
      *
      * @since 2.0
      */
-    public function __call($method, $args)
-    {
+    public function __call ($method, $args) {
         return call_user_func_array(array($this->root, $method), $args);
     }
 }

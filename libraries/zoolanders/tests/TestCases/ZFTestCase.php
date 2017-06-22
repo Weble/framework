@@ -15,8 +15,7 @@ use ZFTests\Classes\DBUtils;
  *
  * @package Zoolanders\Framework\TestCases
  */
-class ZFTestCase extends TestCase
-{
+class ZFTestCase extends TestCase {
     use DBUtils;
 
     /**
@@ -24,12 +23,11 @@ class ZFTestCase extends TestCase
      */
     protected static $container;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass () {
         parent::setUpBeforeClass();
 
         $config = new Registry();
-        $config->loadFile(FRAMEWORK_ROOT.'/config.json');
+        $config->loadFile(FRAMEWORK_ROOT . '/config.json');
 
         self::$container = Container::getInstance();
         self::$container->loadConfig($config);
@@ -38,8 +36,7 @@ class ZFTestCase extends TestCase
         //self::$container['event'] = new Event(self::$container);
     }
 
-    public static function tearDownAfterClass()
-    {
+    public static function tearDownAfterClass () {
         self::$container = null;
 
         parent::tearDownAfterClass();
@@ -52,7 +49,7 @@ class ZFTestCase extends TestCase
      *
      * @return  mixed
      */
-    public function __get($name){
+    public function __get ($name) {
         if ($name == 'container') {
             return self::$container;
         } else {
@@ -67,13 +64,12 @@ class ZFTestCase extends TestCase
      * @param callable $callback
      * @param string $message
      */
-    public function assertEventTriggered($eventName, callable $callback, $message = ''){
+    public function assertEventTriggered ($eventName, callable $callback, $message = '') {
         $eventStack = self::$container->eventstack;
         $offset = $eventStack->find($eventName);
         $this->assertThat(($offset !== false), new \PHPUnit_Framework_Constraint_IsTrue, $message);
 
-        if($offset !== false)
-        {
+        if ($offset !== false) {
             call_user_func($callback, $eventStack->get($offset));
         }
     }
@@ -85,14 +81,14 @@ class ZFTestCase extends TestCase
      * @param   $params
      * @param   string $message
      */
-    public function assertTableHasRow($tablename, $params, $message = ''){
+    public function assertTableHasRow ($tablename, $params, $message = '') {
         $sql = $this->buildMatchQuery($tablename, $params);
         $db = self::$container->db;
         $db->setQuery($sql);
 
         $result = $db->loadObjectList();
 
-        if($db->getErrorNum()){
+        if ($db->getErrorNum()) {
             // Mark assertion as failed or incompleted
             $this->markTestIncomplete('DB query built with errors');
         } else {
@@ -108,14 +104,14 @@ class ZFTestCase extends TestCase
      * @param   $params
      * @param   string $message
      */
-    public function assertTableHasNoRow($tablename, $params, $message = ''){
+    public function assertTableHasNoRow ($tablename, $params, $message = '') {
         $sql = $this->buildMatchQuery($tablename, $params);
         $db = self::$container->db;
         $db->setQuery($sql);
 
         $result = $db->loadObjectList();
 
-        if($db->getErrorNum()){
+        if ($db->getErrorNum()) {
             // Mark assertion as failed or incompleted
             $this->markTestIncomplete('DB query built with errors');
         } else {

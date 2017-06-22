@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Service;
 
-class Data
-{
+class Data {
     /**
      * Create a data object
      *
@@ -14,7 +13,7 @@ class Data
      *
      * @since 1.0.0
      */
-    public function create($data = array(), $format = 'json') {
+    public function create ($data = array(), $format = 'json') {
         $class = '\\Zoolanders\\Framework\\Data\\' . ucfirst(strtolower($format));
         return new $class($data);
     }

@@ -1,6 +1,5 @@
 <?php
 
-
 defined('_JEXEC') or die('Restricted access');
 
 // load assets
@@ -14,12 +13,12 @@ $title = $this->config->get('name', '');
 
 <div id="<?php echo $this->identifier; ?>">
 
-	<script type="text/javascript">
-		jQuery(function($) {
-			$("#<?php echo $this->identifier; ?>").ZOOtoolsSeparatorSubsection({
-				title: '<?php echo $title; ?>'
-			});
-		});
-	</script>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $("#<?php echo $this->identifier; ?>").ZOOtoolsSeparatorSubsection({
+                title: '<?php echo $title; ?>'
+            });
+        });
+    </script>
 
 </div>

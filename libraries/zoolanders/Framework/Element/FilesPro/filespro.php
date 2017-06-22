@@ -13,8 +13,7 @@ defined('_JEXEC') or die();
 		The files pro element class
 */
 
-abstract class FilesPro extends RepeatablePro implements FilesInterface
-{
+abstract class FilesPro extends RepeatablePro implements FilesInterface {
 
     protected $_extensions = '';
     protected $_s3;
@@ -32,8 +31,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
     /*
        Function: Constructor
     */
-    public function __construct()
-    {
+    public function __construct () {
         // call parent constructor
         parent::__construct();
 
@@ -54,8 +52,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Function: itemSaved
             Performs actions after item was saved
     */
-    public function itemSaved($event)
-    {
+    public function itemSaved ($event) {
         $item = $event->getSubject();
         $elem = $item->getElement($this->identifier);
 
@@ -88,8 +85,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             String - The ID
     */
-    public function getUniqid()
-    {
+    public function getUniqid () {
         if (!$this->_uniqid && $this->_item->id == 0) {
             $this->_uniqid = $this->get('uniqid') ? $this->get('uniqid') : uniqid();
         }
@@ -104,8 +100,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             Class - Storage php class
     */
-    public function storage()
-    {
+    public function storage () {
         // init storage
         if ($this->_storage == null) {
             // if source is an URI
@@ -133,8 +128,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             Mixed - the elements data
     */
-    public function get($key, $default = null)
-    {
+    public function get ($key, $default = null) {
         // workaround for the repeatable element transition
         if ($value = $this->_item->elements->find("{$this->identifier}.{$key}", null)) {
             // IMPORTANT, ignore the default value
@@ -151,14 +145,12 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             Boolean
     */
-    public function isDownloadLimitReached()
-    {
+    public function isDownloadLimitReached () {
         return ($limit = $this->get('download_limit')) && $this->get('hits', 0) >= $limit;
     }
 
     /* DEPRICATED since 3.0.15 */
-    public function getExtension($file = null, $checkMime = true)
-    {
+    public function getExtension ($file = null, $checkMime = true) {
         $file = empty($file) ? $this->get('file') : $file;
         return strtolower($this->app->zlfw->filesystem->getExtension($file, $checkMime));
     }
@@ -175,8 +167,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             Boolean - true, on success
     */
-    protected function _hasValue($params = array())
-    {
+    protected function _hasValue ($params = array()) {
         $files = $this->getValidResources($this->get('file'));
         return !empty($files);
     }
@@ -188,15 +179,13 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             array
     */
-    public function getRenderedValues($params = array(), $wk = false, $opts = array())
-    {
+    public function getRenderedValues ($params = array(), $wk = false, $opts = array()) {
         $opts['data_is_subarray'] = true;
         return parent::getRenderedValues($params, $wk, $opts);
     }
 
     /* DEPRICATED */
-    public function getFiles($path = null)
-    {
+    public function getFiles ($path = null) {
         return $this->_resources = $this->getValidResources($path);
     }
 
@@ -209,8 +198,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
     */
     protected $_valid_resources = array();
 
-    public function getValidResources($path = null)
-    {
+    public function getValidResources ($path = null) {
         // get final path
         $path = $path ? $path : $this->getDefaultSource();
 
@@ -230,8 +218,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             String - Path to file(s)
     */
-    protected function getDefaultSource()
-    {
+    protected function getDefaultSource () {
         // get default, fallback to default_file as the param name was changed
         $default_source = $this->config->find('files._default_source', $this->config->find('files._default_file', ''));
 
@@ -245,8 +232,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             Void
     */
-    public function loadAssets()
-    {
+    public function loadAssets () {
         parent::loadAssets();
 
         // load ZLUX assets
@@ -269,8 +255,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             JSON or Array
     */
-    public function getFileDetails($file = null, $json = true)
-    {
+    public function getFileDetails ($file = null, $json = true) {
         // get the object path
         $path = $file === null ? $this->get('file') : $file;
 
@@ -294,8 +279,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             HTML
     */
-    public function getFileDetailsDom($file = null)
-    {
+    public function getFileDetailsDom ($file = null) {
         $file = $file === null ? $this->get('file') : $file;
 
         // set storage params
@@ -349,8 +333,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
        Returns:
            String - element legal extensions
     */
-    public function getLegalExtensions($separator = '|')
-    {
+    public function getLegalExtensions ($separator = '|') {
         $extensions = $this->config->find('files._extensions', $this->_extensions);
         return str_replace('|', $separator, $extensions);
     }
@@ -358,8 +341,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
     /*
      * Return the full directory path
      */
-    public function getDirectory($allowroot = false, $item = false)
-    {
+    public function getDirectory ($allowroot = false, $item = false) {
         if (!$this->_directory) {
             $user = JFactory::getUser();
             $item = $item ? $item : $this->getItem();
@@ -416,8 +398,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         return $this->_directory;
     }
 
-    public function replaceVars($path, $item = false)
-    {
+    public function replaceVars ($path, $item = false) {
         jimport('joomla.user.helper');
 
         $user = JFactory::getUser();
@@ -483,8 +464,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             String - html
     */
-    public function _renderSubmission($params = array())
-    {
+    public function _renderSubmission ($params = array()) {
         // init vars
         $trusted_mode = $params->get('trusted_mode');
         $layout = $params->find('layout._layout', 'default.php');
@@ -512,8 +492,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             Array - cleaned value
     */
-    public function validateSubmission($value, $params)
-    {
+    public function validateSubmission ($value, $params) {
         // get old file values, the allready stored ones
         $old_files = array();
         foreach ($this as $self) {
@@ -589,8 +568,7 @@ abstract class FilesPro extends RepeatablePro implements FilesInterface
         Returns:
             void
     */
-    public function submissionBeforeSave($event)
-    {
+    public function submissionBeforeSave ($event) {
         $userfiles = array();
         // merge userfiles element data with post data
         foreach ($_FILES as $key => $userfile) {
@@ -658,8 +636,7 @@ App::getInstance('zoo')->loader->register('AppValidatorFile', 'classes:validator
  *
  * @package Component.Classes.Validators
  */
-class AppValidatorFilepro extends AppValidatorFile
-{
+class AppValidatorFilepro extends AppValidatorFile {
 
     /**
      * Clean the file value
@@ -672,8 +649,7 @@ class AppValidatorFilepro extends AppValidatorFile
      *
      * @since 2.0
      */
-    public function clean($value)
-    {
+    public function clean ($value) {
         if (!is_array($value) || !isset($value['tmp_name'])) {
             throw new AppValidatorException($this->getMessage('invalid'));
         }
@@ -763,8 +739,7 @@ class AppValidatorFilepro extends AppValidatorFile
 		http://au1.php.net/manual/en/class.splfileinfo.php
 */
 
-class FilesProSplFileInfo extends SplFileInfo
-{
+class FilesProSplFileInfo extends SplFileInfo {
     /**
      * Reference to the global App object
      *
@@ -779,8 +754,7 @@ class FilesProSplFileInfo extends SplFileInfo
      *
      * @param String $file_path Path to the file
      */
-    public function __construct($file_path, &$element)
-    {
+    public function __construct ($file_path, &$element) {
 
         // call parent constructor
         parent::__construct($file_path);
@@ -799,8 +773,7 @@ class FilesProSplFileInfo extends SplFileInfo
      *
      * @since 3.0.4
      */
-    public function getExtension()
-    {
+    public function getExtension () {
         if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
             return parent::getExtension();
         } else {
@@ -815,8 +788,7 @@ class FilesProSplFileInfo extends SplFileInfo
      *
      * @since 3.0.5
      */
-    public function getContentType()
-    {
+    public function getContentType () {
         return $this->app->filesystem->getContentType($this->getPathname());
     }
 
@@ -827,8 +799,7 @@ class FilesProSplFileInfo extends SplFileInfo
      *
      * @since 3.0.5
      */
-    public function getURL()
-    {
+    public function getURL () {
         if ($this->element->config->find('files._s3', 0)) // Amazon S3
         {
             $bucket = $this->element->config->find('files._s3bucket');
@@ -847,8 +818,7 @@ class FilesProSplFileInfo extends SplFileInfo
      *
      * @since 3.0.5
      */
-    public function getTitle($title = null)
-    {
+    public function getTitle ($title = null) {
         $title = $title ? $title : $this->getBasename('.' . $this->getExtension());
 
         // return without _ carachter

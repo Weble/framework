@@ -1,13 +1,12 @@
 <?php
 
-
 defined('_JEXEC') or die('Restricted access');
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return
-	'{"fields": {
+return
+    '{"fields": {
 
 		"layout_wrapper":{
 			"type": "fieldset",
@@ -21,9 +20,9 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
 				"render_options": {
 					"type": "subfield",
-					"path":"elements:'.$element->getElementType().'\/params\/render.php",
+					"path":"elements:' . $element->getElementType() . '\/params\/render.php",
 					"adjust_ctrl":{
-						"pattern":'.json_encode('/\[layout\]/').',
+						"pattern":' . json_encode('/\[layout\]/') . ',
 						"replacement":"[specific]"
 					}
 				}

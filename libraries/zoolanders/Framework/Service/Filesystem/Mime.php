@@ -6,8 +6,7 @@ namespace Zoolanders\Framework\Service\Filesystem;
  * Deals with MIME type related stuff
  * @package Zoolanders\Service\Filesystem
  */
-trait Mime
-{
+trait Mime {
     /**
      * Get the content type of a file
      *
@@ -17,8 +16,7 @@ trait Mime
      *
      * @since 1.0.0
      */
-    public function getContentType($filename)
-    {
+    public function getContentType ($filename) {
         $mimes = $this->getMimeMapping();
         $file = pathinfo($filename);
         $ext = isset($file['extension']) ? $file['extension'] : '';
@@ -50,7 +48,7 @@ trait Mime
      *
      * @since 1.0.0
      */
-    public static function getMimeMapping() {
+    public static function getMimeMapping () {
 
         $mimes = array();
         $mimes['3ds'][] = 'image/x-3ds';

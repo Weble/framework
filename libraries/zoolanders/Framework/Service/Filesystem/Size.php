@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Service\Filesystem;
 
-trait Size
-{
+trait Size {
 
     /**
      * Output filesize with suffix.
@@ -14,8 +13,7 @@ trait Size
      *
      * @return string
      */
-    public function formatFilesize($bytes, $format = false, $precision = 2)
-    {
+    public function formatFilesize ($bytes, $format = false, $precision = 2) {
         $kilobyte = 1024;
         $megabyte = $kilobyte * 1024;
         $gigabyte = $megabyte * 1024;
@@ -47,8 +45,7 @@ trait Size
      * @param $format boolean if true will return the result formated for better reading
      * @return string
      */
-    public function getSourceSize($source = null, $format = true)
-    {
+    public function getSourceSize ($source = null, $format = true) {
         // init vars
         $sourcepath = $this->app->path->path('root:' . $source);
 

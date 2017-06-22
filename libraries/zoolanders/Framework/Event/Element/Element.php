@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Event\Element;
 
-class Element extends \Zoolanders\Framework\Event\Event
-{
+class Element extends \Zoolanders\Framework\Event\Event {
     /**
      * @var \Element
      */
@@ -13,16 +12,14 @@ class Element extends \Zoolanders\Framework\Event\Event
      * Element constructor.
      * @param \Element $element
      */
-    public function __construct(\Element $element)
-    {
+    public function __construct (\Element $element) {
         $this->element = $element;
     }
 
     /**
      * @return \Element
      */
-    public function getElement()
-    {
+    public function getElement () {
         return $this->element;
     }
 }

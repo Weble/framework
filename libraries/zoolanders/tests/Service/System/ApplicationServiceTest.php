@@ -11,15 +11,13 @@ use Zoolanders\Framework\Service\System\Application;
  *
  * @package ZFTests\Service\System
  */
-class ApplicationServiceTest extends SystemServiceTestLayer
-{
+class ApplicationServiceTest extends SystemServiceTestLayer {
     protected $serviceClassNames = ['JApplicationSite'];
 
     /**
      * Service class instance provider
      */
-    protected function getServiceInstance()
-    {
+    protected function getServiceInstance () {
         return new Application(self::$container);
     }
 }

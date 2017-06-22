@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Data;
 
-class Parameter extends Json
-{
+class Parameter extends Json {
     /**
      * Class Constructor
      *
@@ -11,8 +10,7 @@ class Parameter extends Json
      *
      * @since 1.0.0
      */
-    public function __construct($data = array())
-    {
+    public function __construct ($data = array()) {
         if ($data instanceof \JRegistry) {
             $data = $data->toArray();
         } else if (is_string($data) && (substr($data, 0, 1) != '{') && (substr($data, -1, 1) != '}')) {
@@ -32,8 +30,7 @@ class Parameter extends Json
      *
      * @since 1.0.0
      */
-    public function get($name, $default = null)
-    {
+    public function get ($name, $default = null) {
         $name = (string)$name;
 
         if (preg_match('/\.$/', $name)) {
@@ -67,8 +64,7 @@ class Parameter extends Json
      *
      * @since 1.0.0
      */
-    public function set($name, $value)
-    {
+    public function set ($name, $value) {
         $name = (string)$name;
 
         if (preg_match('/\.$/', $name)) {
@@ -95,8 +91,7 @@ class Parameter extends Json
      *
      * @since 1.0.0
      */
-    public function remove($name)
-    {
+    public function remove ($name) {
         $name = (string)$name;
 
         if (preg_match('/\.$/', $name)) {
@@ -129,8 +124,7 @@ class Parameter extends Json
      *
      * @since 1.0.0
      */
-    public function loadArray($array)
-    {
+    public function loadArray ($array) {
 
         foreach ($array as $name => $value) {
             $this->offsetSet($name, $value);
@@ -148,8 +142,7 @@ class Parameter extends Json
      *
      * @since 1.0.0
      */
-    public function loadObject($object)
-    {
+    public function loadObject ($object) {
 
         if (is_object($object)) {
             foreach (get_object_vars($object) as $name => $value) {

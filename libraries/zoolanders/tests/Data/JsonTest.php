@@ -10,12 +10,11 @@ use Zoolanders\Framework\Data\Json;
  *
  * @package ZFTests\Data
  */
-class JsonTest extends DataTest
-{
+class JsonTest extends DataTest {
     /**
      * Make dataset for forward testing:
      */
-    protected function makeDataSet($dataset){
+    protected function makeDataSet ($dataset) {
 
         $this->object = new Json($dataset);
 

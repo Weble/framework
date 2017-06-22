@@ -1,13 +1,12 @@
 <?php
 
-
 defined('_JEXEC') or die('Restricted access');
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return
-	'{
+return
+    '{
 		"_render":{
 			"type": "select",
 			"label": "Render",
@@ -27,7 +26,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 			"text": "Options"
 		},
 
-		'./* Text */'
+		' ./* Text */
+    '
 		"text_wrapper":{
 			"type": "wrapper",
 			"fields": {
@@ -45,7 +45,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 			}
 		},
 
-		'./* Link */'
+		' ./* Link */
+    '
 		"link_wrapper":{
 			"type": "wrapper",
 			"fields": {
@@ -62,7 +63,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					"dependents": "linkitem_wrapper > item | linkcat_wrapper > category | linkcustom_wrapper > custom"
 				},
 
-				'./* Link common Options */'
+				' ./* Link common Options */
+    '
 				"_linktext":{
 					"type": "text",
 					"label": "Text"
@@ -83,7 +85,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					"label": "Rel"
 				},
 
-				'./* Item Link */'
+				' ./* Item Link */
+    '
 				"linkitem_wrapper":{
 					"type": "wrapper",
 					"fields": {
@@ -116,7 +119,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					}
 				},
 
-				'./* Category Link */'
+				' ./* Category Link */
+    '
 				"linkcat_wrapper":{
 					"type": "wrapper",
 					"fields": {
@@ -131,7 +135,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					}
 				},
 
-				'./* Link Custom */'
+				' ./* Link Custom */
+    '
 				"linkcustom_wrapper":{
 					"type": "wrapper",
 					"fields": {
@@ -145,7 +150,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 			}
 		},
 
-		'./* Item */'
+		' ./* Item */
+    '
 		"item_wrapper":{
 			"type": "wrapper",
 			"fields": {
@@ -173,14 +179,16 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 		},
 
 
-		'./* Module */'
+		' ./* Module */
+    '
 		"_module":{
 			"type": "modulelist",
 			"label": "Module"
 		},
 
 
-		'./* Iframe */'
+		' ./* Iframe */
+    '
 		"iframe_wrapper":{
 			"type": "wrapper",
 			"fields": {
@@ -196,7 +204,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					"dependents": "item_iframe_wrapper > item | _iframe_custom_url > custom_url"
 				},
 
-				'./* Item Iframe */'
+				' ./* Item Iframe */
+    '
 				"item_iframe_wrapper":{
 					"type": "wrapper",
 					"fields": {
@@ -223,7 +232,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 					}
 				},
 
-				'./* Iframe URL */'
+				' ./* Iframe URL */
+    '
 				"_iframe_custom_url":{
 					"type": "text",
 					"label": "URL"

@@ -5,8 +5,7 @@ defined('_JEXEC') or die();
 jimport('joomla.plugin.plugin');
 jimport('joomla.filesystem.file');
 
-class plgSystemZlframework extends JPlugin
-{
+class plgSystemZlframework extends JPlugin {
     public $app;
 
     /**
@@ -16,8 +15,7 @@ class plgSystemZlframework extends JPlugin
 
     protected $autoloadLanguage = true;
 
-    function onAfterInitialise()
-    {
+    function onAfterInitialise () {
         require_once JPATH_LIBRARIES . '/zoolanders/include.php';
 
         $this->container = \Zoolanders\Framework\Container\Container::getInstance();
@@ -40,8 +38,7 @@ class plgSystemZlframework extends JPlugin
 
     }
 
-    public function onBeforeRender()
-    {
+    public function onBeforeRender () {
         // trigger a Environment/Init event
         $event = $this->container->event->create('Environment\BeforeRender');
         $this->container->event->trigger($event);

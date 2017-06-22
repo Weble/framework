@@ -10,8 +10,7 @@ use Zoolanders\Framework\Model\Item as ItemModel;
  * Class BeforeCopy
  * @package Zoolanders\Framework\Listener\Item
  */
-class CreateAlias extends Listener
-{
+class CreateAlias extends Listener {
     /**
      * @var Item Model
      */
@@ -21,7 +20,7 @@ class CreateAlias extends Listener
      * BeforeCopy constructor.
      * @param ItemModel $model
      */
-    public function __construct(ItemModel $model){
+    public function __construct (ItemModel $model) {
         $this->model = $model;
     }
 
@@ -32,7 +31,7 @@ class CreateAlias extends Listener
      *
      * @return void
      */
-    public function handle(BeforeCopy $event){
+    public function handle (BeforeCopy $event) {
         $item = $event->getItem();
         $item->id = null;
         $item->alias = $this->model->generateAlias($item->alias);

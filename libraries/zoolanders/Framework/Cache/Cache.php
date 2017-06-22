@@ -8,8 +8,7 @@ use Zoolanders\Framework\Service\Filesystem;
 /**
  * The cache class.
  */
-class Cache implements CacheInterface
-{
+class Cache implements CacheInterface {
 
     /**
      * Path to cache file
@@ -56,8 +55,7 @@ class Cache implements CacheInterface
      * @param int $lifetime The values lifetime
      * @since 2.0
      */
-    public function __construct($file, $hash = true, $lifetime = null)
-    {
+    public function __construct ($file, $hash = true, $lifetime = null) {
         $this->filesystem = Container::getInstance()->filesystem;
 
         // if cache file doesn't exist, create it
@@ -92,8 +90,7 @@ class Cache implements CacheInterface
      *
      * @since 2.0
      */
-    public function check()
-    {
+    public function check () {
         return $this->filesystem->has($this->file);
     }
 
@@ -106,8 +103,7 @@ class Cache implements CacheInterface
      *
      * @since 2.0
      */
-    public function get($key)
-    {
+    public function get ($key) {
         if ($this->hash) {
             $key = md5($key);
         }
@@ -128,8 +124,7 @@ class Cache implements CacheInterface
      *
      * @since 2.0
      */
-    public function set($key, $value)
-    {
+    public function set ($key, $value) {
         if ($this->hash) {
             $key = md5($key);
         }
@@ -151,8 +146,7 @@ class Cache implements CacheInterface
      *
      * @since 2.0
      */
-    protected function parse()
-    {
+    protected function parse () {
         $content = $this->filesystem->read($this->file);
 
         if (!empty($content)) {
@@ -173,8 +167,7 @@ class Cache implements CacheInterface
      *
      * @since 2.0
      */
-    public function save()
-    {
+    public function save () {
         if ($this->dirty) {
             $data = json_encode($this->items);
             $this->filesystem->put($this->file, $data);
@@ -188,8 +181,7 @@ class Cache implements CacheInterface
      *
      * @return Cache $this for chaining support
      */
-    public function clear()
-    {
+    public function clear () {
         $this->items = array();
         $this->dirty = true;
 

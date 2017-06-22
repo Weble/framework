@@ -10,8 +10,7 @@ use Zoolanders\Framework\Container\Container;
  *
  * @package ZFTests\Classes
  */
-class FixtureImporter
-{
+class FixtureImporter {
     /**
      * @var     DI
      */
@@ -25,7 +24,7 @@ class FixtureImporter
     /**
      * FixtureImporter constructor.
      */
-    public function __construct(Container $container, $config = []){
+    public function __construct (Container $container, $config = []) {
         $this->container = $container;
         $this->config = $config;
     }
@@ -36,11 +35,11 @@ class FixtureImporter
      * @param $pkg_name
      * @throws \Exception
      */
-    public function import($pkg_name){
+    public function import ($pkg_name) {
         // Lookup for fixtures file:
         $path = realpath(FIXTURES_PATH . '/' . $this->config['path'] . '/' . $pkg_name . '.sql');
 
-        if(file_exists($path)){
+        if (file_exists($path)) {
             $this->processSql($path);
         } else {
             // Silent exit
@@ -52,24 +51,24 @@ class FixtureImporter
      *
      * @param   string Full path to sql dump file
      */
-    protected function processSql($resource){
-        try{
+    protected function processSql ($resource) {
+        try {
             $db = $this->container->db;
             $res = fopen($resource, 'r');
 
-            while( !feof($res) ){
+            while (!feof($res)) {
                 $line = fgets($res);
 
                 $db->setQuery($line);
                 $db->execute();
 
-                if($msg = $db->getErrorMessage($line)){
+                if ($msg = $db->getErrorMessage($line)) {
                     throw new \Exception($msg);
                 }
             }
 
             fclose($res);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
 
         }
     }

@@ -8,8 +8,7 @@ use Assetic\Util\VarUtils;
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Service\Filesystem;
 
-class Writer extends AssetWriter
-{
+class Writer extends AssetWriter {
     protected $dir;
 
     protected $values;
@@ -22,8 +21,7 @@ class Writer extends AssetWriter
      * @param array $dir
      * @param array $values
      */
-    public function __construct(Filesystem $fs, $dir, $values = [])
-    {
+    public function __construct (Filesystem $fs, $dir, $values = []) {
         parent::__construct($dir);
 
         $this->filesystem = $fs;
@@ -31,8 +29,7 @@ class Writer extends AssetWriter
         $this->dir = $dir;
     }
 
-    public function writeAsset(AssetInterface $asset)
-    {
+    public function writeAsset (AssetInterface $asset) {
         foreach (VarUtils::getCombinations($asset->getVars(), $this->values) as $combination) {
             $asset->setValues($combination);
 
@@ -51,13 +48,11 @@ class Writer extends AssetWriter
         }
     }
 
-    public function getPaths()
-    {
+    public function getPaths () {
         return array_unique($this->paths);
     }
 
-    protected function writeAssetFile($path, $contents)
-    {
+    protected function writeAssetFile ($path, $contents) {
         if (!$this->filesystem->has($path)) {
             $this->filesystem->write($path, $contents);
         }

@@ -5,8 +5,7 @@ namespace Zoolanders\Framework\Plugin;
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Event\Zoo;
 
-abstract class Plugin extends \JPlugin
-{
+abstract class Plugin extends \JPlugin {
     /**
      * @var Container
      */
@@ -14,8 +13,7 @@ abstract class Plugin extends \JPlugin
 
     protected $events = [];
 
-    public function __construct(&$subject, $config = array())
-    {
+    public function __construct (&$subject, $config = array()) {
         parent::__construct($subject, $config);
 
         $this->container = \Zoolanders\Framework\Container\Container::getInstance();
@@ -28,16 +26,14 @@ abstract class Plugin extends \JPlugin
         $this->loadEvents();
     }
 
-    protected function registerNamespace()
-    {
+    protected function registerNamespace () {
         $name = ucfirst(strtolower($this->_name));
         $path = JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/' . $name;
 
         $this->container->registerExtension('zoolingual', $path);
     }
 
-    protected function loadEvents()
-    {
+    protected function loadEvents () {
         $this->container->event->bindEvents($this->events);
     }
 }

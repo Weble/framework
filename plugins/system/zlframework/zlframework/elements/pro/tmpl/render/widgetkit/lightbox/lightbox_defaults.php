@@ -1,13 +1,12 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return
-	'{"fields": {
+return
+    '{"fields": {
 		"lightbox_overide":{
 			"type": "checkbox",
 			"label": "Lightbox Defaults",

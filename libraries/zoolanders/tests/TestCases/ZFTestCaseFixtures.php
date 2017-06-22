@@ -8,15 +8,13 @@ use ZFTests\Classes\FixtureImporter;
  * Class ZFTestCaseFixtures
  * @package ZFTests\TestCases
  */
-class ZFTestCaseFixtures extends ZFTestCase
-{
+class ZFTestCaseFixtures extends ZFTestCase {
     static $fixtures = null;
 
     /**
      * SetUp before class
      */
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass () {
         parent::setUpBeforeClass();
         self::$fixtures = new FixtureImporter(self::$container, [
             'path' => 'sql'
@@ -28,8 +26,7 @@ class ZFTestCaseFixtures extends ZFTestCase
     /**
      * Tear down after class
      */
-    public static function tearDownAfterClass()
-    {
+    public static function tearDownAfterClass () {
         self::dropFixtures();
 
         parent::tearDownAfterClass();
@@ -38,19 +35,19 @@ class ZFTestCaseFixtures extends ZFTestCase
     /**
      * Test fixture workflow
      */
-    protected static function raiseFixtures(){
+    protected static function raiseFixtures () {
         $dbo = self::$container->db;
         $dbo->transactionStart();
 
-        self::$fixtures->import( self::getPkgName() );
+        self::$fixtures->import(self::getPkgName());
     }
 
     /**
      * Test fixtures remove
      */
-    protected static function dropFixtures(){
+    protected static function dropFixtures () {
 
-        self::$fixtures->import( self::getPkgName() . '_rollback' );
+        self::$fixtures->import(self::getPkgName() . '_rollback');
 
         $dbo = self::$container->db;
         $dbo->transactionRollback();
@@ -59,7 +56,7 @@ class ZFTestCaseFixtures extends ZFTestCase
     /**
      * Define fixture pkg name
      */
-    protected static function getPkgName(){
+    protected static function getPkgName () {
         $parts = explode('\\', static::class);
         return strtolower(preg_replace('/Test$/Ui', '', array_pop($parts)));
     }

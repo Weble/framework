@@ -1,14 +1,4 @@
 <?php
-/**
-
-
-
-
- */
-
-
-
- 
 
 defined('_JEXEC') or die();
 
@@ -51,7 +41,7 @@ defined('_JEXEC') or die();
 		<div class="sets">
 			<?php foreach ($sets as $set => $items) : ?>
 				<ul class="set">
-					<?php foreach ($items as $key => $image) : 
+					<?php foreach ($items as $key => $image) :
 
 						$lightbox = $spotlight = $overlay = '';
 
@@ -79,15 +69,15 @@ defined('_JEXEC') or die();
 							} if($lbsettings->get('title') == 2 && $title = $lbsettings->get('custom_title')){
 								$lbc = $title;
 							}
-				
+
 							if (strlen($lbc)) $lightbox .= ' title="'.$lbc.'"';
 						}
 
 						/* Prepare Spotlight */
-						if ($slsettings->get('spotlight')) 
+						if ($slsettings->get('spotlight'))
 						{
 							$slcaption = $caption; // set lightbox caption
-							
+
 							// override caption
 							if($slsettings->get('captions') == 2 && $title = $slsettings->get('custom_caption')){
 								$slcaption = $title;
@@ -106,7 +96,7 @@ defined('_JEXEC') or die();
 
 						/* Prepare Image */
 						$content = '<img src="'.$image['fileurl'].'" width="'.$image['width'].'" height="'.$image['height'].'" alt="'.$image['filename'].'" />'.$overlay;
-					
+
 						/* Lazy Loading */
 						$content = ($i==0) ? $content : $widgetkit['image']->prepareLazyload($content);
 
@@ -131,7 +121,7 @@ defined('_JEXEC') or die();
 						<li><article class="wk-content">
 							<div style="<?php echo 'width: '.$image['width'].'px;'; ?>" <?php echo $spotlight; ?>><?php echo $content; ?></div>
 						</article></li>
-					<?php else : ?>		
+					<?php else : ?>
 						<li><article class="wk-content"><?php echo $content; ?></article></li>
 					<?php endif; ?>
 

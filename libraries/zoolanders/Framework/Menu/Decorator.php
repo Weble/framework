@@ -5,8 +5,7 @@ namespace Zoolanders\Framework\Menu;
 /**
  * A decorator class for the menus
  */
-class Decorator implements DecoratorInterface
-{
+class Decorator implements DecoratorInterface {
     /**
      * Add item index and level to class attribute
      *
@@ -15,8 +14,7 @@ class Decorator implements DecoratorInterface
      *
      * @since    2.0
      */
-    public function index(\SimpleXMLElement $node, $args)
-    {
+    public function index (\SimpleXMLElement $node, $args) {
         if ($node->getName() == 'ul') {
             // set ul level
             $level = ($args['level'] / 2) + 1;

@@ -2,13 +2,12 @@
 
 namespace Zoolanders\Framework\Model\Item;
 
-trait Tags
-{
-    abstract public function wherePrefix($sql);
-    abstract public function getQuery();
+trait Tags {
+    abstract public function wherePrefix ($sql);
 
-    public function filterTags($tags)
-    {
+    abstract public function getQuery ();
+
+    public function filterTags ($tags) {
         settype($categories, 'array');
 
         $tags = $this->getQuery()->q($tags);
@@ -23,8 +22,7 @@ trait Tags
         }
     }
 
-    public function filterTagsIn($tags)
-    {
+    public function filterTagsIn ($tags) {
         settype($categories, 'array');
 
         $this->join(ZOO_TABLE_TAG, $this->getTablePrefix() . '.id = t.item_id', 't');

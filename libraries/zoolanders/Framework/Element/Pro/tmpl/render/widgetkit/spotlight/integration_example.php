@@ -1,15 +1,9 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
 	/* Prepare Spotlight */
-	if ($settings->get('spotlight')) 
+	if ($settings->get('spotlight'))
 	{
 		// override caption
 		if($settings->get('zl_captions') == 0) $caption = '';

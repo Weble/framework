@@ -9,8 +9,7 @@ use Zoolanders\Framework\Service\System\Dbo;
  *
  * @package Framework.Helpers
  */
-class Database
-{
+class Database {
 
     /**
      * The name of the database driver we're using
@@ -31,8 +30,7 @@ class Database
     /**
      * Class Constructor
      */
-    public function __construct(Dbo $dbo)
-    {
+    public function __construct (Dbo $dbo) {
         // set database
         $this->_database = $dbo;
         $this->name = $this->_database->name;
@@ -53,8 +51,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function query($query)
-    {
+    public function query ($query) {
         // query database table
         $this->_database->setQuery($query);
         return $this->_database->execute();
@@ -76,8 +73,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function queryResult($query)
-    {
+    public function queryResult ($query) {
 
         // query database table
         $this->_database->setQuery($query);
@@ -101,8 +97,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function queryObject($query, $class = 'stdClass')
-    {
+    public function queryObject ($query, $class = 'stdClass') {
         // query database table
         $this->_database->setQuery($query);
         return $this->_database->loadObject($class);
@@ -127,8 +122,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function queryObjectList($query, $key = '', $class = 'stdClass', $offset = 0, $limit = 0)
-    {
+    public function queryObjectList ($query, $key = '', $class = 'stdClass', $offset = 0, $limit = 0) {
 
         // query database table
         $this->_database->setQuery($query, $offset, $limit);
@@ -151,8 +145,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function queryResultArray($query, $numinarray = 0)
-    {
+    public function queryResultArray ($query, $numinarray = 0) {
 
         // query database table
         $this->_database->setQuery($query);
@@ -174,8 +167,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function queryAssoc($query)
-    {
+    public function queryAssoc ($query) {
 
         // query database table
         $this->_database->setQuery($query);
@@ -200,8 +192,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function queryAssocList($query, $key = '', $offset = 0, $limit = 0)
-    {
+    public function queryAssocList ($query, $key = '', $offset = 0, $limit = 0) {
 
         // query database table
         $this->_database->setQuery($query, $offset, $limit);
@@ -221,8 +212,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function insertObject($table, $object, $key = null)
-    {
+    public function insertObject ($table, $object, $key = null) {
 
         // insert object
         return $this->_database->insertObject($table, $object, $key);
@@ -243,8 +233,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function updateObject($table, &$object, $key, $updatenulls = true)
-    {
+    public function updateObject ($table, &$object, $key, $updatenulls = true) {
 
         // update object
         return $this->_database->updateObject($table, $object, $key, $updatenulls);
@@ -260,8 +249,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function fetchRow($result)
-    {
+    public function fetchRow ($result) {
 
         if ($this->name == 'mysqli') {
             return mysqli_fetch_row($result);
@@ -280,8 +268,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function fetchArray($result, $type = MYSQL_BOTH)
-    {
+    public function fetchArray ($result, $type = MYSQL_BOTH) {
 
         if ($this->name == 'mysqli') {
             return mysqli_fetch_array($result, $type);
@@ -300,8 +287,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function fetchObject($result, $class = 'stdClass')
-    {
+    public function fetchObject ($result, $class = 'stdClass') {
 
         if ($this->name == 'mysqli') {
             return $class != 'stdClass' ? mysqli_fetch_object($result, $class) : mysqli_fetch_object($result);
@@ -319,8 +305,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function freeResult($result)
-    {
+    public function freeResult ($result) {
 
         if ($this->app->system->config->get('debug', 0)) {
             return;
@@ -343,8 +328,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function __call($method, $args)
-    {
+    public function __call ($method, $args) {
         return call_user_func_array(array($this->_database, $method), $args);
     }
 
@@ -358,8 +342,7 @@ class Database
      *
      * @since 1.0.0
      */
-    public function replacePrefix($sql, $prefix = '#__')
-    {
+    public function replacePrefix ($sql, $prefix = '#__') {
         return preg_replace('/' . preg_quote($prefix) . '/', $this->_database->getPrefix(), $sql);
     }
 

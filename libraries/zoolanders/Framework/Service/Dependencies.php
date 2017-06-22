@@ -2,14 +2,12 @@
 
 namespace Zoolanders\Framework\Service;
 
-class Dependencies
-{
+class Dependencies {
     /**
      * Dependencies constructor.
      * @param Path $path
      */
-    public function __construct(Path $path, Filesystem $fs, Zoo $zoo)
-    {
+    public function __construct (Path $path, Filesystem $fs, Zoo $zoo) {
         $this->path = $path;
         $this->filesystem = $fs;
         $this->zoo = $zoo;
@@ -21,8 +19,7 @@ class Dependencies
      * @param   string $file The file with the dependencies to check
      * @return boolean true if all requirements are met
      */
-    public function check($file)
-    {
+    public function check ($file) {
         // init vars
         $status = array('state' => true, 'extensions' => array());
         $groups = $this->path->path($file);
@@ -71,8 +68,7 @@ class Dependencies
      * @param array $extensions The list of estensions to be warned about
      * @param string $extension The extension triggering the warning
      */
-    public function warn($extensions, $extension = 'ZL Framework')
-    {
+    public function warn ($extensions, $extension = 'ZL Framework') {
         foreach ($extensions as $ext) {
             $dep_req = $ext['dependency']; // required
             $dep_inst = $ext['installed']; // installed

@@ -6,8 +6,7 @@ use Zoolanders\Framework\Event\Category;
 use Zoolanders\Framework\Listener\Listener;
 use Zoolanders\Framework\Service\Database;
 
-class SaveTranslations extends Listener
-{
+class SaveTranslations extends Listener {
     /**
      * @var Database
      */
@@ -17,16 +16,14 @@ class SaveTranslations extends Listener
      * SaveTranslations constructor.
      * @param Database $db
      */
-    function __construct(Database $db)
-    {
+    function __construct (Database $db) {
         $this->db = $db;
     }
 
     /**
      * @param Category\Saved $event
      */
-    public function handle(Category\Saved $event)
-    {
+    public function handle (Category\Saved $event) {
         $category = $event->getCategory();
         $currentLanguage = \JFactory::getLanguage()->getTag();
 
@@ -87,8 +84,7 @@ class SaveTranslations extends Listener
      * @param $params
      * @return array
      */
-    protected function setTranslationFromParams(&$values, $params, $param, $key)
-    {
+    protected function setTranslationFromParams (&$values, $params, $param, $key) {
         $translations = $params->get($param, array());
         foreach ($translations as $language => $translation) {
             if ($translation) {

@@ -11,8 +11,7 @@ use Zoolanders\Framework\Tree\Item;
  *
  * @package ZFTests\Tree
  */
-class ItemTest extends ZFTestCase
-{
+class ItemTest extends ZFTestCase {
     /**
      * Test setParent / getParent
      *
@@ -20,7 +19,7 @@ class ItemTest extends ZFTestCase
      * @covers      Item::setParent()
      * @covers      Item::getParent()
      */
-    public function testGetSetParent(){
+    public function testGetSetParent () {
         $item = new Item();
         $parent_item = new Item();
         $parent_id = $parent_item->getID();
@@ -39,7 +38,7 @@ class ItemTest extends ZFTestCase
      * @covers      Item::addChild
      * @covers      Item::hasChild
      */
-    public function testSetHasChild(){
+    public function testSetHasChild () {
         $item = new Item();
         $child_item = new Item();
         $child_id = $child_item->getID();
@@ -57,7 +56,7 @@ class ItemTest extends ZFTestCase
      * @covers          Item::hasChildren
      * @dataProvider    itemDataSet
      */
-    public function testGetSetChildren($itemset){
+    public function testGetSetChildren ($itemset) {
         $item = new Item();
         $itemId = $item->getID();
 
@@ -67,7 +66,7 @@ class ItemTest extends ZFTestCase
 
         $this->assertEquals(count($itemset), $item->hasChildren());
 
-        foreach($item->getChildren() as $child){
+        foreach ($item->getChildren() as $child) {
             $this->assertEquals($itemId, $child->getParent()->getID());
             $this->assertTrue($item->hasChild($child->getID()));
         }
@@ -80,13 +79,13 @@ class ItemTest extends ZFTestCase
      * @covers          Item::removeChild()
      * @dataProvider    itemDataSet
      */
-    public function testRemovingChildren($itemset){
+    public function testRemovingChildren ($itemset) {
         $item = new Item();
         $item->addChildren($itemset);
         $children = $item->getChildren();
         $count = $item->hasChildren();
 
-        foreach($children as $child){
+        foreach ($children as $child) {
             $child_id = $child->getID();
             $this->assertTrue($item->hasChild($child_id));
             $item->removeChild($child);
@@ -102,13 +101,13 @@ class ItemTest extends ZFTestCase
      * @covers          Item::removeChildById()
      * @dataProvider    itemDataSet
      */
-    public function testRemovingChildrenById($itemset){
+    public function testRemovingChildrenById ($itemset) {
         $item = new Item();
         $item->addChildren($itemset);
         $children = $item->getChildren();
         $count = $item->hasChildren();
 
-        foreach($children as $child){
+        foreach ($children as $child) {
             $child_id = $child->getID();
             $this->assertTrue($item->hasChild($child_id));
             $item->removeChildById($child_id);
@@ -122,7 +121,7 @@ class ItemTest extends ZFTestCase
      *
      * @covers      Item::getPathway()
      */
-    public function testPathWay(){
+    public function testPathWay () {
         $top = new Item();
         $middle = new Item();
         $bottom = new Item();
@@ -132,7 +131,7 @@ class ItemTest extends ZFTestCase
         $top->addChild($middle);
         $pathway = $bottom->getPathway();
 
-        for($i = 0; $i<count($pathway); $i++){
+        for ($i = 0; $i < count($pathway); $i++) {
             $this->assertEquals($hierarchy[$i]->getID(), $pathway[$i]->getID());
         }
     }
@@ -140,7 +139,7 @@ class ItemTest extends ZFTestCase
     /**
      * Test filtering method
      */
-    public function testFiltering(){
+    public function testFiltering () {
         //@TODO: Implement, when dataProvider added
         $this->markTestSkipped('Should be implemented');
     }
@@ -148,14 +147,14 @@ class ItemTest extends ZFTestCase
     /**
      * Item dataset for testing mass attachment
      */
-    public function itemDataSet(){
+    public function itemDataSet () {
 
         return [
-            [ [
+            [[
                 new Item(),
                 new Item(),
                 new Item()
-            ] ]
+            ]]
         ];
     }
 

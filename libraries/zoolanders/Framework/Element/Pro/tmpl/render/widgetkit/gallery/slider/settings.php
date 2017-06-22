@@ -1,17 +1,11 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return 
+	return
 	'{"fields": {
 
 		"order":{
@@ -67,5 +61,5 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 			"label":"Custom Caption",
 			"type":"text"
 		}
-		
+
 	}}';

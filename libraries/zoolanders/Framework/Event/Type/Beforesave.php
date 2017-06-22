@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Event\Type;
 
-class Beforesave extends Type
-{
+class Beforesave extends Type {
 
 }

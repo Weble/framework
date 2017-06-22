@@ -6,13 +6,11 @@ namespace Zoolanders\Framework\Response;
  * Class HtmlResponse
  * @package Zoolanders\Framework\Response
  */
-class HtmlResponse extends Response
-{
+class HtmlResponse extends Response {
     /**
      * @inheritdoc
      */
-    public function send()
-    {
+    public function send () {
         $this->sendHeaders();
         $this->sendContent();
 

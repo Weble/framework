@@ -10,8 +10,7 @@ use Zoolanders\Framework\Tree;
  *
  * @package Component.Classes
  */
-class Item extends Tree\Item
-{
+class Item extends Tree\Item {
     /**
      * Id of the menu item
      *
@@ -57,8 +56,7 @@ class Item extends Tree\Item
      * @param string $link Link of the menu item
      * @param array $attributes List of attributes
      */
-    public function __construct($id = null, $name = '', $link = null, array $attributes = array())
-    {
+    public function __construct ($id = null, $name = '', $link = null, array $attributes = array()) {
         $this->id = $id;
         $this->name = $name;
         $this->link = $link;
@@ -69,8 +67,7 @@ class Item extends Tree\Item
      * @param ItemInterface $item
      * @return $this
      */
-    public function addChild(Tree\ItemInterface $item)
-    {
+    public function addChild (Tree\ItemInterface $item) {
         $item->setHidden($this->isHidden());
         parent::addChild($item);
 
@@ -80,16 +77,14 @@ class Item extends Tree\Item
     /**
      * @param boolean $hidden
      */
-    public function setHidden($hidden)
-    {
+    public function setHidden ($hidden) {
         $this->hidden = $hidden;
     }
 
     /**
      * @return boolean
      */
-    public function isHidden()
-    {
+    public function isHidden () {
         return $this->hidden;
     }
 
@@ -100,8 +95,7 @@ class Item extends Tree\Item
      *
      * @since 2.0
      */
-    public function getName()
-    {
+    public function getName () {
         return $this->name;
     }
 
@@ -114,8 +108,7 @@ class Item extends Tree\Item
      *
      * @since 2.0
      */
-    public function setName($name)
-    {
+    public function setName ($name) {
         $this->name = $name;
         return $this;
     }
@@ -127,8 +120,7 @@ class Item extends Tree\Item
      *
      * @since 2.0
      */
-    public function getID()
-    {
+    public function getID () {
         return $this->id ? $this->id : parent::getId();
     }
 
@@ -141,8 +133,7 @@ class Item extends Tree\Item
      *
      * @since 2.0
      */
-    public function getAttribute($key)
-    {
+    public function getAttribute ($key) {
         if (isset($this->attributes[$key])) {
             return $this->attributes[$key];
         }
@@ -160,8 +151,7 @@ class Item extends Tree\Item
      *
      * @since 2.0
      */
-    public function setAttribute($key, $value)
-    {
+    public function setAttribute ($key, $value) {
         $this->attributes[$key] = $value;
         return $this;
     }
@@ -171,8 +161,7 @@ class Item extends Tree\Item
      *
      * @return string The html for this menu item
      */
-    public function render()
-    {
+    public function render () {
         $hidemainmenu = $this->isHidden();
 
         $html = array('<li ' . ArrayHelper::toString($this->attributes) . '>');
@@ -201,8 +190,7 @@ class Item extends Tree\Item
     /**
      * @return null|string
      */
-    public function getLink()
-    {
+    public function getLink () {
         return $this->link;
     }
 }

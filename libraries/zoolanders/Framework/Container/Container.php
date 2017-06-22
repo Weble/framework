@@ -43,8 +43,7 @@ defined('_JEXEC') or die;
  * @property-read   \Zoolanders\Framework\Service\User $user
  * @property-read   \Zoolanders\Framework\Service\Zip $zip
  */
-class Container
-{
+class Container {
     /**
      * Namespaces roots for zoolanders
      */
@@ -95,8 +94,7 @@ class Container
     /**
      * Container constructor.
      */
-    protected function __construct()
-    {
+    protected function __construct () {
         $this->loader = Autoloader::getInstance();
         $this->injector = new Injector();
         $this->factory = new Factory($this);
@@ -108,8 +106,7 @@ class Container
      * @param array $args
      * @return mixed
      */
-    public function make($name, $args = [])
-    {
+    public function make ($name, $args = []) {
         return $this->injector->make($name, $args);
     }
 
@@ -117,8 +114,7 @@ class Container
      * @param $name
      * @return Injector
      */
-    public function share($name)
-    {
+    public function share ($name) {
         return $this->injector->share($name);
     }
 
@@ -126,8 +122,7 @@ class Container
      * @param $callable
      * @param array $args
      */
-    public function execute($callable, $args = [])
-    {
+    public function execute ($callable, $args = []) {
         return $this->injector->execute($callable, $args);
     }
 
@@ -136,8 +131,7 @@ class Container
      * @param null $path
      * @param null $namespace
      */
-    public function registerExtension($name, $path = null, $namespace = null)
-    {
+    public function registerExtension ($name, $path = null, $namespace = null) {
         // Autodetect path
         if (!$path) {
             $componentName = $name;
@@ -161,8 +155,7 @@ class Container
      * @param $extension
      * @return array|mixed
      */
-    public function getRegisteredExtensionNamespaces($extension)
-    {
+    public function getRegisteredExtensionNamespaces ($extension) {
         if (!isset($this->registeredExtensions[$extension])) {
             return [];
         }
@@ -174,8 +167,7 @@ class Container
      * Singleton pattern
      * @return Container
      */
-    public static function &getInstance()
-    {
+    public static function &getInstance () {
         if (self::$container) {
             return self::$container;
         }
@@ -200,8 +192,7 @@ class Container
      * Load the configuration
      * @param Registry $config
      */
-    public function loadConfig(Registry $config)
-    {
+    public function loadConfig (Registry $config) {
         // Merge it with the current config
         if ($this->config) {
             $this->config->merge($config, true);
@@ -226,8 +217,7 @@ class Container
      * Load the service into the DI Container
      * @param $services
      */
-    protected function loadServices($services)
-    {
+    protected function loadServices ($services) {
         // Load the services
         foreach ($services as $name => $class) {
             $this->share($class);
@@ -239,8 +229,7 @@ class Container
      * @param $name
      * @return mixed
      */
-    public function __get($name)
-    {
+    public function __get ($name) {
         $services = $this->config->get('services', []);
         if ($class = $services->$name) {
             return $this->make($class);
@@ -252,8 +241,7 @@ class Container
      * @throws Exception\BadResponseType
      * @throws Exception\ControllerNotFound
      */
-    public function dispatch($default_controller = null)
-    {
+    public function dispatch ($default_controller = null) {
         $event = $this->event->create('Dispatcher\BeforeDispatch');
         $this->event->trigger($event);
 

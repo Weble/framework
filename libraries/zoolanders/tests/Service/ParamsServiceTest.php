@@ -11,8 +11,7 @@ use ZFTests\Classes\Providers\SimpleDataSetProvider;
  *
  * @package ZFTests\Service
  */
-class ParamsServiceTest extends ServiceTest
-{
+class ParamsServiceTest extends ServiceTest {
     use SimpleDataSetProvider;
 
     /**
@@ -25,7 +24,7 @@ class ParamsServiceTest extends ServiceTest
      *
      * @dataProvider    simpleKeyValueProvider
      */
-    public function testBinding($key, $value){
+    public function testBinding ($key, $value) {
         $params = self::$container->params;
         $db = self::$container->db;
         $db->transactionStart();
@@ -55,17 +54,17 @@ class ParamsServiceTest extends ServiceTest
      *
      * @dataProvider    simpleKeyValueProvider
      */
-    public function testMassBinding($key, $value){
+    public function testMassBinding ($key, $value) {
         $params = self::$container->params;
         $db = self::$container->db;
         $db->transactionStart();
 
         // Check get/set ops:
         $params->setParams([$key => $value]);
-        $this->assertArraySubset([ 'com_zoo' => [$key => $value] ], $params->getParams());
+        $this->assertArraySubset(['com_zoo' => [$key => $value]], $params->getParams());
         $params->save();
         $params->reload();
-        $this->assertArraySubset([ 'com_zoo' => [$key => $value] ], $params->getParams());
+        $this->assertArraySubset(['com_zoo' => [$key => $value]], $params->getParams());
         // Drop params:
         $db->transactionRollback();
     }

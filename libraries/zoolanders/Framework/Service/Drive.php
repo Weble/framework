@@ -8,17 +8,14 @@ use League\Flysystem\File;
 use League\Flysystem\Filesystem;
 use Zoolanders\Framework\Element\FilesInterface;
 
-class Drive
-{
+class Drive {
 
-    function __construct(Crypt $crypt, \Zoolanders\Framework\Service\Filesystem $fs)
-    {
+    function __construct (Crypt $crypt, \Zoolanders\Framework\Service\Filesystem $fs) {
         $this->crypt = $crypt;
         $this->filesystem = $fs;
     }
 
-    public function createFromElement(FilesInterface $element)
-    {
+    public function createFromElement (FilesInterface $element) {
         $config = $element->config;
         $storage = $config->get('files.storage', 'local');
 
@@ -32,7 +29,7 @@ class Drive
 
                 $client = new S3Client([
                     'credentials' => [
-                        'key'    => $key,
+                        'key' => $key,
                         'secret' => $secret,
                     ],
                     'region' => $region,

@@ -12,7 +12,6 @@ use Zoolanders\Framework\Container\Container;
  *
  * @package ZFTests\Service
  */
-abstract class ServiceTest extends ZFTestCase
-{
+abstract class ServiceTest extends ZFTestCase {
 
 }

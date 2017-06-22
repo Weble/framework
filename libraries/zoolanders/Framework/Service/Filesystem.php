@@ -5,8 +5,7 @@ namespace Zoolanders\Framework\Service;
 use League\Flysystem\Adapter\Local;
 use Zoolanders\Framework\Container\Container;
 
-class Filesystem
-{
+class Filesystem {
     /**
      * Mime type related stuff
      */
@@ -31,8 +30,7 @@ class Filesystem
      * Filesystem constructor.
      * @param \League\Flysystem\Filesystem|null $fs
      */
-    public function __construct(\League\Flysystem\Filesystem $fs = null, Zoo $zoo)
-    {
+    public function __construct (\League\Flysystem\Filesystem $fs = null, Zoo $zoo) {
         if (!$fs) {
             $adapter = new Local('/');
             $fs = new \League\Flysystem\Filesystem($adapter);
@@ -48,8 +46,7 @@ class Filesystem
      * @param $arguments
      * @return mixed
      */
-    public function __call($name, $arguments)
-    {
+    public function __call ($name, $arguments) {
         return call_user_func_array([$this->filesystem, $name], $arguments);
     }
 
@@ -58,8 +55,7 @@ class Filesystem
      * @param $name
      * @return mixed
      */
-    public function __get($name)
-    {
+    public function __get ($name) {
         return $this->filesystem->$name;
     }
 
@@ -70,8 +66,7 @@ class Filesystem
      *
      * @since 1.0.0
      */
-    public function output($file)
-    {
+    public function output ($file) {
         @error_reporting(E_ERROR);
 
         $name = basename($file);
@@ -121,8 +116,7 @@ class Filesystem
      *
      * @since 1.0.0
      */
-    public function readDirectory($path, $prefix = '', $filter = false, $recursive = true)
-    {
+    public function readDirectory ($path, $prefix = '', $filter = false, $recursive = true) {
 
         $dirs = array();
         $ignore = array('.', '..', '.DS_Store', '.svn', '.git', '.gitignore', '.gitmodules', 'cgi-bin');
@@ -171,8 +165,7 @@ class Filesystem
      *
      * @since 1.0.0
      */
-    public function readDirectoryFiles($path, $prefix = '', $filter = false, $recursive = true)
-    {
+    public function readDirectoryFiles ($path, $prefix = '', $filter = false, $recursive = true) {
         $files = array();
         $ignore = array('.', '..', '.DS_Store', '.svn', '.git', '.gitignore', '.gitmodules', 'cgi-bin');
 
@@ -219,8 +212,7 @@ class Filesystem
      *
      * @since 1.0.0
      */
-    public function getExtension($filename)
-    {
+    public function getExtension ($filename) {
         $mimes = $this->getMimeMapping();
         $file = pathinfo($filename);
         $ext = isset($file['extension']) ? $file['extension'] : null;
@@ -251,8 +243,7 @@ class Filesystem
      * @param string $ds optional directory seperator
      * @return string $a DIRECTORY_SEPARATOR $b
      */
-    public function makePath($a, $b, $ds = DIRECTORY_SEPARATOR)
-    {
+    public function makePath ($a, $b, $ds = DIRECTORY_SEPARATOR) {
         return $this->cleanPath($a . $ds . $b, $ds);
     }
 
@@ -261,8 +252,7 @@ class Filesystem
      * @param $folder
      * @return boolean
      */
-    public function folderCreate($folder)
-    {
+    public function folderCreate ($folder) {
         return $this->filesystem->createDir($folder);
     }
 
@@ -275,8 +265,7 @@ class Filesystem
      * Adapted to ZOO by ZOOlanders
      * Copyright 2011, ZOOlanders.com
      */
-    public function getUploadValue()
-    {
+    public function getUploadValue () {
         $upload = trim(ini_get('upload_max_filesize'));
         $post = trim(ini_get('post_max_size'));
 
@@ -297,8 +286,7 @@ class Filesystem
      * @param  string $size_str size string
      * @return string
      */
-    public function returnBytes($size_str)
-    {
+    public function returnBytes ($size_str) {
         $last_sign = substr($size_str, -1);
         $last_sign = in_array($last_sign, ['B', 'b']) ? substr($size_str, -2, 1) : $last_sign;
 

@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Event\Submission;
 
-class Submission extends \Zoolanders\Framework\Event\Event
-{
+class Submission extends \Zoolanders\Framework\Event\Event {
     /**
      * @var \Category
      */
@@ -13,16 +12,14 @@ class Submission extends \Zoolanders\Framework\Event\Event
      * Beforesave constructor.
      * @param \Submission $submission
      */
-    public function __construct(\Submission $submission)
-    {
+    public function __construct (\Submission $submission) {
         $this->submission = $submission;
     }
 
     /**
      * @return \Submission
      */
-    public function getSubmission()
-    {
+    public function getSubmission () {
         return $this->submission;
     }
 }

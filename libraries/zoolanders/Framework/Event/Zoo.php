@@ -4,8 +4,7 @@ namespace Zoolanders\Framework\Event;
 
 use Zoolanders\Framework\Container\Container;
 
-class Zoo
-{
+class Zoo {
     /**
      * @var \EventHelper
      */
@@ -14,8 +13,7 @@ class Zoo
     /**
      * Event constructor.
      */
-    public function __construct(Dispatcher $dispatcher, \Zoolanders\Framework\Service\Zoo $zoo)
-    {
+    public function __construct (Dispatcher $dispatcher, \Zoolanders\Framework\Service\Zoo $zoo) {
         $this->dispatcher = $dispatcher;
         $this->zoo = $zoo->event;
         $this->proxyAllZooEvents();
@@ -24,11 +22,10 @@ class Zoo
     /**
      * Proxy any zoo event to a zoolanders event
      */
-    protected function proxyAllZooEvents()
-    {
+    protected function proxyAllZooEvents () {
         // first, get any know zoo event
         $zooDispatcher = new \ReflectionClass($this->zoo->dispatcher);
-        $property =  $zooDispatcher->getProperty('listeners');
+        $property = $zooDispatcher->getProperty('listeners');
         $property->setAccessible(true);
         $listeners = $property->getValue($this->zoo->dispatcher);
 
@@ -74,8 +71,7 @@ class Zoo
      * @param $eventName
      * @return string
      */
-    protected function getEventObjectClass($eventName)
-    {
+    protected function getEventObjectClass ($eventName) {
         // Separate resource from method
         $parts = explode(":", $eventName);
         $resource = @$parts[0];
@@ -93,8 +89,7 @@ class Zoo
      * @param \AppEvent $zooEvent The event itself
      * @return \Zoolanders\Framework\Event\Event
      */
-    protected function createEventObject($eventClass, \AppEvent $zooEvent)
-    {
+    protected function createEventObject ($eventClass, \AppEvent $zooEvent) {
         $r = new \ReflectionClass($eventClass);
 
         // Create the list of the constructor arguments for the event class
@@ -118,8 +113,7 @@ class Zoo
      * @param $arguments
      * @return mixed
      */
-    public function __call($name, $arguments)
-    {
+    public function __call ($name, $arguments) {
         return call_user_func_array([$this->zoo->dispatcher, $name], $arguments);
     }
 
@@ -127,8 +121,7 @@ class Zoo
      * @param $name
      * @return mixed
      */
-    public function __get($name)
-    {
+    public function __get ($name) {
         if ($name == 'dispatcher') {
             return $this->zoo->$name;
         } else {

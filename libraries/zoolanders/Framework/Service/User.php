@@ -18,16 +18,14 @@ use Zoolanders\Framework\Request\Request;
  *
  * @package Framework.Helpers
  */
-class User
-{
+class User {
     protected $queriedUsers = array();
 
     /**
      * User constructor.
      * @param Database $db
      */
-    public function __construct(Database $db, Request $request, Session $session)
-    {
+    public function __construct (Database $db, Request $request, Session $session) {
         $this->db = $db;
         $this->session = $session;
         $this->request = $request;
@@ -42,8 +40,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function get($id = null)
-    {
+    public function get ($id = null) {
         // get database
         $db = $this->db;
 
@@ -72,8 +69,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function getByUsername($username)
-    {
+    public function getByUsername ($username) {
         // get database
         $db = $this->db;
 
@@ -94,8 +90,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function getByEmail($email)
-    {
+    public function getByEmail ($email) {
         // get database
         $db = $this->db;
 
@@ -116,8 +111,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function getState($key)
-    {
+    public function getState ($key) {
         $registry = $this->session->get('registry');
 
         if (!is_null($registry)) {
@@ -137,8 +131,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function setState($key, $value)
-    {
+    public function setState ($key, $value) {
         $registry = $this->session->get('registry');
 
         if (!is_null($registry)) {
@@ -160,8 +153,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function getStateFromRequest($key, $request, $default = null, $type = 'none')
-    {
+    public function getStateFromRequest ($key, $request, $default = null, $type = 'none') {
 
         $old = $this->getState($key);
         $cur = (!is_null($old)) ? $old : $default;
@@ -186,8 +178,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function checkUsernameExists($username, $id = 0)
-    {
+    public function checkUsernameExists ($username, $id = 0) {
         $user = $this->getByUsername($username);
         return $user && $user->id != intval($id);
     }
@@ -202,8 +193,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function checkEmailExists($email, $id = 0)
-    {
+    public function checkEmailExists ($email, $id = 0) {
         $user = $this->getByEmail($email);
         return $user && $user->id != intval($id);
     }
@@ -217,8 +207,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function isJoomlaAdmin(\JUser $user)
-    {
+    public function isJoomlaAdmin (\JUser $user) {
         return $user->authorise('core.login.admin', 'root.1');
     }
 
@@ -231,8 +220,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function isJoomlaSuperAdmin(\JUser $user)
-    {
+    public function isJoomlaSuperAdmin (\JUser $user) {
         return $user->authorise('core.admin', 'root.1');
     }
 
@@ -243,8 +231,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function getBrowserDefaultLanguage()
-    {
+    public function getBrowserDefaultLanguage () {
         $langs = array();
 
         if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
@@ -277,8 +264,7 @@ class User
      *
      * @since 1.0.0
      */
-    public function canAccess($user = null, $access = 0)
-    {
+    public function canAccess ($user = null, $access = 0) {
 
         if (is_null($user)) {
             $user = $this->get();
@@ -299,8 +285,7 @@ class User
      *
      * @since 3.2
      */
-    public function canEdit($user = null, $asset_id = 0, $created_by = 0)
-    {
+    public function canEdit ($user = null, $asset_id = 0, $created_by = 0) {
         if (is_null($user)) {
             $user = $this->get();
         }
@@ -317,8 +302,7 @@ class User
      *
      * @since 3.2
      */
-    public function canEditState($user = null, $asset_id = 0)
-    {
+    public function canEditState ($user = null, $asset_id = 0) {
         return $this->isAdmin($user, $asset_id) || $this->authorise($user, 'core.edit.state', $asset_id);
     }
 
@@ -332,8 +316,7 @@ class User
      *
      * @since 3.2
      */
-    public function canCreate($user = null, $asset_id = 0)
-    {
+    public function canCreate ($user = null, $asset_id = 0) {
         return $this->isAdmin($user, $asset_id) || $this->authorise($user, 'core.create', $asset_id);
     }
 
@@ -347,8 +330,7 @@ class User
      *
      * @since 3.2
      */
-    public function canDelete($user = null, $asset_id = 0)
-    {
+    public function canDelete ($user = null, $asset_id = 0) {
         return $this->isAdmin($user, $asset_id) || $this->authorise($user, 'core.delete', $asset_id);
     }
 
@@ -362,8 +344,7 @@ class User
      *
      * @since 3.2
      */
-    public function canManage($user = null, $asset_id = 0)
-    {
+    public function canManage ($user = null, $asset_id = 0) {
         return $this->isAdmin($user, $asset_id) || $this->authorise($user, 'core.manage', $asset_id);
     }
 
@@ -377,8 +358,7 @@ class User
      *
      * @since 3.2
      */
-    public function isAdmin($user = null, $asset_id = 0)
-    {
+    public function isAdmin ($user = null, $asset_id = 0) {
         return $this->authorise($user, 'core.admin', $asset_id);
     }
 
@@ -392,8 +372,7 @@ class User
      *
      * @since 3.2
      */
-    public function canManageCategories($user = null, $asset_id = 0)
-    {
+    public function canManageCategories ($user = null, $asset_id = 0) {
         return $this->isAdmin($user, $asset_id) || $this->authorise($user, 'zoo.categories.manage', $asset_id);
     }
 
@@ -407,8 +386,7 @@ class User
      *
      * @since 3.2
      */
-    public function canManageComments($user = null, $asset_id = 0)
-    {
+    public function canManageComments ($user = null, $asset_id = 0) {
         return $this->isAdmin($user, $asset_id) || $this->authorise($user, 'zoo.comments.manage', $asset_id);
     }
 
@@ -422,8 +400,7 @@ class User
      *
      * @since 3.2
      */
-    public function canManageFrontpage($user = null, $asset_id = 0)
-    {
+    public function canManageFrontpage ($user = null, $asset_id = 0) {
         return $this->isAdmin($user, $asset_id) || $this->authorise($user, 'zoo.frontpage.manage', $asset_id);
     }
 
@@ -437,8 +414,7 @@ class User
      *
      * @since 3.2
      */
-    public function canManageTags($user = null, $asset_id = 0)
-    {
+    public function canManageTags ($user = null, $asset_id = 0) {
         return $this->isAdmin($user, $asset_id) || $this->authorise($user, 'zoo.tags.manage', $asset_id);
     }
 
@@ -453,8 +429,7 @@ class User
      *
      * @since 3.2
      */
-    protected function authorise($user, $action, $asset_id)
-    {
+    protected function authorise ($user, $action, $asset_id) {
         if (!$asset_id) {
             $asset_id = 'com_zoo';
         }

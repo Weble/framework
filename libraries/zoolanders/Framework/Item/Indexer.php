@@ -4,8 +4,7 @@ namespace Zoolanders\Framework\Item;
 
 use Zoolanders\Framework\Container\Container;
 
-class Indexer
-{
+class Indexer {
 
 
     /**
@@ -23,8 +22,7 @@ class Indexer
      * @param \Zoolanders\Framework\Service\Database $db
      * @param \Zoolanders\Framework\Element\Indexer $elementIndexer
      */
-    public function __construct(\Zoolanders\Framework\Service\Database $db, \Zoolanders\Framework\Element\Indexer $elementIndexer )
-    {
+    public function __construct (\Zoolanders\Framework\Service\Database $db, \Zoolanders\Framework\Element\Indexer $elementIndexer) {
         $this->db = $db;
         $this->elementIndexer = $elementIndexer;
     }
@@ -32,8 +30,7 @@ class Indexer
     /**
      * @param \Item $item
      */
-    public function index(\Item $item)
-    {
+    public function index (\Item $item) {
         $this->cleanSearchIndex($item);
 
         $dataToSave = [];
@@ -70,8 +67,7 @@ class Indexer
      * @param \Item $item
      * @param array|null $dataTypes
      */
-    public function cleanSearchIndex(\Item $item, $dataTypes = null)
-    {
+    public function cleanSearchIndex (\Item $item, $dataTypes = null) {
         if (!$dataTypes) {
             $dataTypes = \Zoolanders\Framework\Element\Indexer::getAvailableDataTypes();
         }

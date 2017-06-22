@@ -1,14 +1,4 @@
 <?php
-/**
-
-
-
-
- */
-
-
-
- 
 
 defined('_JEXEC') or die();
 
@@ -16,11 +6,11 @@ defined('_JEXEC') or die();
 	$settings   = $widget->settings;
 	$navigation = array();
 	$captions   = array();
-	
+
 	// ZL integration
 	$items = $this->getRenderedValues($params, $widget->mode);
 	$items = $items['result'];
-	
+
 	// if separator tag present wrap each item
 	if(preg_match('/(^tag|\stag)=\[(.*)\]/U', $separator, $separated_by)){
 		foreach($items as &$item) {
@@ -38,7 +28,7 @@ defined('_JEXEC') or die();
 			<?php
 				$navigation[] = '<li><span></span></li>';
 				$captions[]   = '<li>'.(isset($item['caption']) ? $item['caption']:"").'</li>';
-			
+
 				/* Lazy Loading */
 				$item["content"] = ($i==$settings['index']) ? $item["content"] : $widgetkit['image']->prepareLazyload($item["content"]);
 			?>

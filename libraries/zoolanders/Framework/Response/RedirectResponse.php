@@ -6,16 +6,14 @@ namespace Zoolanders\Framework\Response;
  * Class RedirectResponse
  * @package Zoolanders\Framework\Response
  */
-class RedirectResponse extends Response
-{
+class RedirectResponse extends Response {
     /**
      * RedirectResponse constructor
      *
      * @param   $location
      * @param   int $code
      */
-    public function __construct($location = '/', $code = 301)
-    {
+    public function __construct ($location = '/', $code = 301) {
         $this->code = $code;
         $this->location = $location;
     }
@@ -23,8 +21,7 @@ class RedirectResponse extends Response
     /**
      * @inheritdoc
      */
-    protected function sendHeaders()
-    {
+    protected function sendHeaders () {
         header($_SERVER["SERVER_PROTOCOL"] . " $this->code " . @self::$status_codes[$this->code]);
         $this->setHeader('Location', @$this->location);
 
@@ -38,7 +35,7 @@ class RedirectResponse extends Response
     /**
      * @inheritdoc
      */
-    protected function sendContent(){
+    protected function sendContent () {
         // Do nothing. It's redirect
         return;
     }

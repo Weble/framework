@@ -8,13 +8,12 @@ namespace ZFTests\Classes\Providers;
  *
  * @package ZFTests\Classes\Providers
  */
-trait SimpleDataSetProvider
-{
+trait SimpleDataSetProvider {
     /**
      * Simple Key-Value data set provider
      * Can be used for most of simple unit tests
      */
-    public function simpleKeyValueProvider(){
+    public function simpleKeyValueProvider () {
         return [
             ['a', 'alpha'],
             ['b', 'bravo'],

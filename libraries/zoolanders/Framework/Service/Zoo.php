@@ -8,8 +8,7 @@ use Zoolanders\Framework\Table;
 
 defined('_JEXEC') or die;
 
-class Zoo
-{
+class Zoo {
     /**
      * @var App
      */
@@ -23,14 +22,12 @@ class Zoo
     /**
      * Zoo constructor.
      */
-    public function __construct()
-    {
+    public function __construct () {
         // Autoload zoo
         $this->load();
     }
 
-    public function addOverrides()
-    {
+    public function addOverrides () {
         $zooHelper = $this->app->table;
         $helper = new Table\Helper($this->app);
         $this->app->addHelper($helper, 'table');
@@ -42,8 +39,7 @@ class Zoo
      * @param $arguments
      * @return mixed
      */
-    public function __call($name, $arguments)
-    {
+    public function __call ($name, $arguments) {
         return call_user_func_array([$this->app, $name], $arguments);
     }
 
@@ -52,8 +48,7 @@ class Zoo
      * @param $name
      * @return mixed
      */
-    public function __get($name)
-    {
+    public function __get ($name) {
         return $this->app->$name;
     }
 
@@ -61,8 +56,7 @@ class Zoo
      * Get the main zoo App class
      * @return App
      */
-    public function getApp()
-    {
+    public function getApp () {
         return $this->app;
     }
 
@@ -70,16 +64,14 @@ class Zoo
      * Check if zoo is loaded
      * @return boolean
      */
-    public function isLoaded()
-    {
+    public function isLoaded () {
         return $this->loaded;
     }
 
     /**
      * Load ZOO and its dependencies
      */
-    public function load()
-    {
+    public function load () {
         if ($this->isLoaded()) {
             return;
         }
@@ -109,7 +101,7 @@ class Zoo
 
         // Zoo version too old
         if (!version_compare($this->app->zoo->version(), '2.5', '>=')) {
-             return;
+            return;
         }
 
         $this->register();
@@ -120,8 +112,7 @@ class Zoo
     /**
      * Register all the needed stuff
      */
-    protected function register()
-    {
+    protected function register () {
         $this->registerPaths();
         $this->registerClasses();
         $this->addOverrides();
@@ -130,8 +121,7 @@ class Zoo
     /**
      * Register the new paths within zoo
      */
-    protected function registerPaths()
-    {
+    protected function registerPaths () {
         // start up the framework stuff
         $path = JPATH_ROOT . '/plugins/system/zlframework/zlframework';
         $media = JPATH_ROOT . '/media/com_zoolanders';
@@ -191,8 +181,7 @@ class Zoo
     /**
      * Register the new classes within zoo
      */
-    protected function registerClasses()
-    {
+    protected function registerClasses () {
         // register helpers
         if ($path = $this->app->path->path('zlpath:helpers')) {
             $this->app->path->register($path, 'helpers');

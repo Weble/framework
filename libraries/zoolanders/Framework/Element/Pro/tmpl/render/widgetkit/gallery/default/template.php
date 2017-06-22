@@ -1,17 +1,11 @@
 <?php
-/**
-
-
-
-
- */
 
 defined('_JEXEC') or die();
 
 	$widget_id = $widget->id.'-'.uniqid();
 	$settings  = $widget->settings;
 	$i = 0;
-	
+
 	// get lightbox settings and remove them
 	$lbsettings	= $settings['lightbox_settings'];
 	unset($settings['lightbox_settings']);
@@ -35,7 +29,7 @@ defined('_JEXEC') or die();
 	$settings->set('width', empty($width) ? 'auto' : $width);
 	$height = $params->find('specific._height');
 	$settings->set('height', empty($height) ? 'auto' : $height);
-	
+
 	$lightbox_options = '';
 	if(isset($lbsettings['lightbox_overide'])) foreach($lbsettings as $name => $value){
 		$lightbox_options .= "$name:$value;";
@@ -53,9 +47,9 @@ defined('_JEXEC') or die();
 		<ul class="slides">
 
 			<?php foreach ($images as $key => $image) : ?>
-            
+
 				<?php
-				
+
 					$navigation[] = '<li><span></span></li>';
 
 					/* Prepare Captions */
@@ -68,11 +62,11 @@ defined('_JEXEC') or die();
 						$caption = $image['filename'];
 					}
 					$captions[]   = "<li>$caption</li>";
-					
+
 					/* Prepare Image */
 					$content = '<img src="'.$image['fileurl'].'" width="'.$image['width'].'" height="'.$image['height'].'" alt="'.$image['filename'].'" />';
-					
-					/* Lazy Loading */				
+
+					/* Lazy Loading */
 					$content = ($i==$settings['index']) ? $content : $widgetkit['image']->prepareLazyload($content);
 
 					/* Separator - if separator tag present wrap each item */
@@ -89,7 +83,7 @@ defined('_JEXEC') or die();
 					}
 
 					// lightbox integration
-					elseif ($settings->get('lightbox')) 
+					elseif ($settings->get('lightbox'))
 					{
 						// set dimensions
 						$lightbox_options .= $settings->get('width') && $settings->get('width') != 'auto' ? 'width:'.$settings->get('width').';' : '';
@@ -105,21 +99,21 @@ defined('_JEXEC') or die();
 						$caption = strlen($caption) ? ' title="'.$caption.'"' : '';
 						$content = '<a '.$rel.'href="'.$link.'" data-lightbox="group:'.$widget_id.';'.$lightbox_options.'"'.$caption.'>'.$content.'</a>';
 					}
-					
+
 				?>
 
 				<li><?php echo $content; ?></li>
-				
+
 				<?php $i=$i+1;?>
 			<?php endforeach; ?>
-			
+
 		</ul>
         <?php if ($settings['buttons']): ?><div class="next"></div><div class="prev"></div><?php endif; ?>
 		<?php if ($settings->get('zl_captions')) : ?><div class="caption"></div><ul class="captions"><?php echo implode('', $captions);?></ul><?php endif; ?>
 	</div>
 	<?php echo ($settings['navigation'] && count($navigation)) ? '<ul class="nav">'.implode('', $navigation).'</ul>' : '';?>
 </div>
-	
+
 <?php else : ?>
 	<?php echo "No images found."; ?>
 <?php endif; ?>

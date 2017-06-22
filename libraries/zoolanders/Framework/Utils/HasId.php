@@ -6,10 +6,9 @@ namespace Zoolanders\Framework\Utils;
  * Interface HasId
  * @package Zoolanders\Framework\Utils
  */
-interface HasId
-{
+interface HasId {
     /**
      * @return mixed
      */
-    public function getId();
+    public function getId ();
 }

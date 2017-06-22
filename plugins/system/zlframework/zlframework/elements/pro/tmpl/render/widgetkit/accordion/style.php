@@ -5,8 +5,8 @@ defined('_JEXEC') or die();
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-	return
-	'{"fields": {
+return
+    '{"fields": {
 
 		"widget_separator":{
 			"type": "separator",
@@ -26,7 +26,7 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
 					"_style_settings": {
 						"type":"subfield",
-						"path":"elements:'.$element->getElementType().'\/tmpl\/render\/widgetkit\/accordion\/{value}\/params.php"
+						"path":"elements:' . $element->getElementType() . '\/tmpl\/render\/widgetkit\/accordion\/{value}\/params.php"
 					}
 
 				}

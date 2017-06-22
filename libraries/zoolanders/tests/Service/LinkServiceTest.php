@@ -10,8 +10,7 @@ use Zoolanders\Framework\Service\Link;
  *
  * @package ZFTests\Service
  */
-class LinkServiceTest extends ServiceTest
-{
+class LinkServiceTest extends ServiceTest {
     /**
      * Test link build method
      *
@@ -19,7 +18,7 @@ class LinkServiceTest extends ServiceTest
      *
      * @dataProvider    validLinksDataSet
      */
-    public function testLink($params, $expected){
+    public function testLink ($params, $expected) {
         $lnk = new Link(self::$container);
         $_SERVER['HTTP_HOST'] = 'test.com';
 
@@ -34,7 +33,7 @@ class LinkServiceTest extends ServiceTest
      *
      * @dataProvider    validLinksDataSet
      */
-    public function testRoute($params, $expected){
+    public function testRoute ($params, $expected) {
         $lnk = new Link(self::$container);
         // Mocking env variables:
         $_SERVER['HTTP_HOST'] = 'test.com';
@@ -49,11 +48,11 @@ class LinkServiceTest extends ServiceTest
     /**
      * Links testing data provider
      */
-    public function validLinksDataSet(){
+    public function validLinksDataSet () {
         return [
-            [ ['component' => 'com_zoo', 'view' => 'item', 'id' => 123], '?component=com_zoo&view=item&id=123'],
-            [ ['task' => 'edit', 'id' => 123], '?task=edit&id=123'],
-            [ ['view' => 'frontpage', 'application_id' => 1], '?view=frontpage&application_id=1'],
+            [['component' => 'com_zoo', 'view' => 'item', 'id' => 123], '?component=com_zoo&view=item&id=123'],
+            [['task' => 'edit', 'id' => 123], '?task=edit&id=123'],
+            [['view' => 'frontpage', 'application_id' => 1], '?view=frontpage&application_id=1'],
         ];
     }
 }

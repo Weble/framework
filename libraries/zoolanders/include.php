@@ -7,8 +7,7 @@ use Composer\Autoload\ClassLoader;
 // Register utility functions
 require_once __DIR__ . '/Framework/Utils/ArrayUtils.php';
 
-class Autoloader
-{
+class Autoloader {
     /**
      * @var ClassLoader
      */
@@ -20,8 +19,7 @@ class Autoloader
      * Autoloader constructor. Private!!! Just use getInstance
      * @param ClassLoader $composerAutoloader
      */
-    private function __construct(ClassLoader $composerAutoloader = null)
-    {
+    private function __construct (ClassLoader $composerAutoloader = null) {
         if ($composerAutoloader) {
             self::$composerAutoloader = $composerAutoloader;
         }
@@ -33,8 +31,7 @@ class Autoloader
      * @param $arguments
      * @return mixed
      */
-    public function __call($name, $arguments = [])
-    {
+    public function __call ($name, $arguments = []) {
         return call_user_func_array([self::$composerAutoloader, $name], $arguments);
     }
 
@@ -43,8 +40,7 @@ class Autoloader
      * @param ClassLoader $composerAutoloader
      * @return Autoloader
      */
-    public static function &getInstance(ClassLoader $composerAutoloader = null)
-    {
+    public static function &getInstance (ClassLoader $composerAutoloader = null) {
         if (self::$loader !== null) {
             return self::$loader;
         }
@@ -55,7 +51,7 @@ class Autoloader
     }
 }
 
-if (!defined('ZF_TEST')){
+if (!defined('ZF_TEST')) {
     define('ZF_TEST', false);
 }
 

@@ -1,10 +1,4 @@
 <?php
-/**
-
-
-
-
- */
 
 namespace Zoolanders\Framework\Element\Pro;
 

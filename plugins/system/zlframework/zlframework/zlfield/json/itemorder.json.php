@@ -1,6 +1,5 @@
 <?php
 
-
 defined('_JEXEC') or die();
 
 	// avaible when integrated trough json as subfield
