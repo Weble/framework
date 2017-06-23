@@ -5,21 +5,31 @@ buildPackage()
 
 async function buildPackage () {
 
-  /*
-    1) pre tasks, create a clean temp folder
-    2) copy over all files without vendor|tests|node
-    3) add banners
-    4) install dependencies
-    5) prepack cleanup
-    6) package
-    7) post tasks, remove tmp files
-  */
+  // create a clean temp folder
+  await preFlight()
+  // copy over all files without vendor|tests|node
+  await copyFiles()
+  // add banners
+  await addBanners()
+  // install dependencies
+  await installDependencies()
+  // prepack cleanup
+  await cleanupVendor()
+  // package
+  await package()
+  // post tasks, remove tmp files
+  await postFlight()
 
-  // 1
+  // required when using composer
+  process.exit()
+}
+
+async function preFlight () {
   build.log('Getting ready')
   await build.del('dist/tmp/build')
+}
 
-  // 2
+async function copyFiles () {
   build.log('Copy files')
   await build.copyFolder({
     src: './',
@@ -37,8 +47,9 @@ async function buildPackage () {
       '!libraries/zoolanders/vendor{,/**/*}'
     ]
   })
+}
 
-  // 3
+async function addBanners () {
   build.log('Add banners')
   await build.banner({
     files: [
@@ -49,8 +60,9 @@ async function buildPackage () {
     version: pkg.version,
     license: 'GPL'
   })
+}
 
-  // 4
+async function installDependencies () {
   build.log('Install Composer')
 
   // change cwd for composer
@@ -59,8 +71,9 @@ async function buildPackage () {
 
   await build.composer('install', ['--no-dev', '--optimize-autoloader'])
   process.chdir(cwd) // revert cwd
+}
 
-  // 5
+async function cleanupVendor () {
   build.log('Cleanup vendor')
   const vendorPath = 'dist/tmp/build/libraries/zoolanders/vendor'
 
@@ -102,13 +115,17 @@ async function buildPackage () {
     `${vendorPath}/**/unitTests{,/**}`,
     `${vendorPath}/**/phpunit*`
   ])
+}
 
-  // 6
+async function package () {
   build.log('Package')
 
   await build.copy({
-    files: 'build/pkg_zoolanders.xml',
-    dest: 'dist/tmp/pkg'
+    files: 'build/pkg.xml',
+    dest: 'dist/tmp/pkg',
+    options: {
+      rename: name => `${name.replace('.xml', '')}_zoolanders_framework.xml`
+    }
   })
 
   await Promise.all([
@@ -126,11 +143,9 @@ async function buildPackage () {
     patterns: ['dist/tmp/pkg'],
     dest: `dist/ZOOlanders_${pkg.version}.zip`
   })
+}
 
-  // 7
+async function postFlight () {
   build.log('Post Cleanup')
   await build.del('dist/tmp')
-
-  // required when using composer
-  process.exit()
 }
