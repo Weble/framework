@@ -35,7 +35,6 @@ class plgSystemZlframework extends JPlugin {
             $this->app->path->register($path, 'zoomailing');
             require_once($path . '/init.php');
         }
-
     }
 
     public function onBeforeRender () {
