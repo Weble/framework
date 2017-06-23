@@ -6,12 +6,13 @@ buildPackage()
 async function buildPackage () {
 
   /*
-    1) pre tasks, create a clean temp folder, change cwd
+    1) pre tasks, create a clean temp folder
     2) copy over all files without vendor|tests|node
     3) add banners
     4) install dependencies
     5) prepack cleanup
     6) package
+    7) post tasks, remove tmp files
   */
 
   // 1
@@ -99,7 +100,7 @@ async function buildPackage () {
     `${vendorPath}/**/tests{,/**}`,
     `${vendorPath}/**/Tests{,/**}`,
     `${vendorPath}/**/unitTests{,/**}`,
-    `${vendorPath}/**/phpunit*`,
+    `${vendorPath}/**/phpunit*`
   ])
 
   // 6
