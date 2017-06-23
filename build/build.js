@@ -128,6 +128,14 @@ async function package () {
     }
   })
 
+  await build.copy({
+    files: [
+      'dist/tmp/build/administrator/language/en-GB/en-GB.plg_system_zlframework.ini',
+      'dist/tmp/build/administrator/language/en-GB/en-GB.plg_system_zlframework.sys.ini'
+    ],
+    dest: 'dist/tmp/pkg/language'
+  })
+
   await Promise.all([
     build.zip({
       patterns: ['dist/tmp/build/libraries/zoolanders/'],
