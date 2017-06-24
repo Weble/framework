@@ -5,52 +5,52 @@ buildPackage()
 
 async function buildPackage () {
 
-  // create a clean temp folder
-  await preFlight()
-  // copy over all files without vendor|tests|node
+  // 1) create a clean temp folder
+  build.log('Getting ready')
+  await build.del('dist/tmp/build')
+  // 2) copy over all files without vendor|tests|node
+  build.log('Copy files')
   await copyFiles()
-  // add banners
+  // 3) add banners
+  build.log('Add banners')
   await addBanners()
-  // install dependencies
+  // 4) install dependencies
+  build.log('Install Composer')
   await installDependencies()
-  // prepack cleanup
+  // 5) prepack cleanup
+  build.log('Cleanup vendor')
   await cleanupVendor()
-  // package
+  // 6) package
+  build.log('Package')
   await package()
-  // post tasks, remove tmp files
-  await postFlight()
+  // 7 post tasks, remove tmp files
+  build.log('Post Cleanup')
+  await build.del('dist/tmp')
 
   // required when using composer
   process.exit()
 }
 
-async function preFlight () {
-  build.log('Getting ready')
-  await build.del('dist/tmp/build')
-}
-
 async function copyFiles () {
-  build.log('Copy files')
   await build.copyFolder({
     src: './',
     dest: 'dist/tmp/build',
     filter: [
       '!.*',
-      '!.md',
-      '!.xml',
-      '!.lock',
-      '!dist{,/**/*}',
-      '!build{,/**/*}',
-      '!phpStorm{,/**/*}',
-      '!node_modules{,/**/*}',
-      '!libraries/zoolanders/tests{,/**/*}',
-      '!libraries/zoolanders/vendor{,/**/*}'
+      '!*.md',
+      '!*.xml',
+      '!*.lock',
+      '!dist{,/**}',
+      '!build{,/**}',
+      '!phpStorm{,/**}',
+      '!node_modules{,/**}'
+      '!libraries/zoolanders/tests{,/**}',
+      '!libraries/zoolanders/vendor{,/**}'
     ]
   })
 }
 
 async function addBanners () {
-  build.log('Add banners')
   await build.banner({
     files: [
       'dist/tmp/build/libraries/**/*.php',
@@ -63,8 +63,6 @@ async function addBanners () {
 }
 
 async function installDependencies () {
-  build.log('Install Composer')
-
   // change cwd for composer
   const cwd = process.cwd()
   process.chdir('dist/tmp/build')
@@ -74,7 +72,6 @@ async function installDependencies () {
 }
 
 async function cleanupVendor () {
-  build.log('Cleanup vendor')
   const vendorPath = 'dist/tmp/build/libraries/zoolanders/vendor'
 
   await build.del([
@@ -118,8 +115,6 @@ async function cleanupVendor () {
 }
 
 async function package () {
-  build.log('Package')
-
   await build.copy({
     files: 'build/pkg.xml',
     dest: 'dist/tmp/pkg',
@@ -151,9 +146,4 @@ async function package () {
     patterns: ['dist/tmp/pkg'],
     dest: `dist/ZOOlanders_${pkg.version}.zip`
   })
-}
-
-async function postFlight () {
-  build.log('Post Cleanup')
-  await build.del('dist/tmp')
 }
