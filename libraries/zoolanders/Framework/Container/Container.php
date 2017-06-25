@@ -3,11 +3,11 @@
 namespace Zoolanders\Framework\Container;
 
 use Auryn\Injector;
-use Zoolanders\Framework\Autoloader;
 use Joomla\Registry\Registry;
+use Zoolanders\Framework\Autoloader;
+use Zoolanders\Framework\Factory\Factory;
 use Zoolanders\Framework\Dispatcher\Dispatcher;
 use Zoolanders\Framework\Dispatcher\Exception;
-use Zoolanders\Framework\Factory\Factory;
 use Zoolanders\Framework\Response\ResponseInterface;
 
 defined('_JEXEC') or die;
