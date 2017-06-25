@@ -529,7 +529,7 @@ abstract class Database extends Model {
      * @return bool
      */
     public function delete ($key) {
-        $query = $this->database->getQuery(true);
+        $query = $this->db->getQuery(true);
 
         $query->delete()
             ->from($query->qn($this->tableName))
