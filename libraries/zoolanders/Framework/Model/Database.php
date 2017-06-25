@@ -227,6 +227,24 @@ abstract class Database extends Model {
     }
 
     /**
+     * @param $object
+     * @param $data
+     * @return bool
+     */
+    public function bind($object, $data)
+    {
+        if (!is_array($data)) {
+            return $object;
+        }
+
+        foreach ($data as $key => $value) {
+            $object->$key = $value;
+        }
+
+        return $object;
+    }
+
+    /**
      * @param $key
      * @param $value
      * @return mixed
