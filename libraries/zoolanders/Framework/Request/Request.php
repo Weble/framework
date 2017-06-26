@@ -80,4 +80,21 @@ class Request extends \JInput
 
         return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
     }
+
+    /**
+     * Determines the CRUD task to use based on the view name and HTTP verb used in the request.
+     * @credits https://github.com/akeeba/fof/blob/development/fof/Controller/DataController.php
+     *
+     * @return  string  The CRUD task (browse, read, edit, delete)
+     */
+    public function getHttpVerb ()
+    {
+        // Get the request HTTP verb
+        $requestMethod = 'GET';
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            $requestMethod = strtoupper($_SERVER['REQUEST_METHOD']);
+        }
+
+        return $requestMethod;
+    }
 }

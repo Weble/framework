@@ -18,11 +18,24 @@ class Controller
     use Triggerable, NameFromClass;
 
     /**
+     * Default task names
+     */
+    const TASK_INDEX = 'index';
+    const TASK_READ = 'read';
+    const TASK_SAVE = 'save';
+    const TASK_DELETE = 'remove';
+
+    /**
+     * Default id field parameter
+     */
+    CONST PARAM_ID = 'id';
+
+    /**
      * defaultTask
      *
      * @var    string
      */
-    protected $defaultTask = 'index';
+    protected $defaultTask = Controller::TASK_INDEX;
 
     /**
      * The current view name; you can override it in the configuration
@@ -94,7 +107,7 @@ class Controller
      * @param   string  Layout name: "viewname:tmplname"
      * @param   mixed   Playload data
      *
-     * @return  Response
+     * @return  ResponseInterface
      */
     protected function render ($layout, $data = array())
     {

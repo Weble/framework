@@ -54,7 +54,8 @@ class Dispatcher
             throw new Exception\ControllerNotFound();
         }
 
-        $response = $this->container->execute([$controller, $request->getCmd('task', $controller->getDefaultTask())]);
+        $crudTask = $this->getCrudTask($controller, $request->getHttpVerb(), $request->getVar(Controller::PARAM_ID, false));
+        $response = $this->container->execute([$controller, $request->getCmd('task', $crudTask)]);
 
         if ($response instanceof ResponseInterface) {
             return $response;
@@ -67,5 +68,37 @@ class Dispatcher
         $response->setContent($view->render($content));
 
         return $response;
+    }
+
+    /**
+     * Determines the CRUD task to use based on the view name and HTTP verb used in the request.
+     * @credits https://github.com/akeeba/fof/blob/development/fof/Controller/DataController.php
+     *
+     * @return  string  The CRUD task (browse, read, edit, delete)
+     */
+    public function getCrudTask (Controller $controller, $httpVerb, $id = false)
+    {
+        $task = $controller->getDefaultTask();
+
+        // Alter the task based on the verb
+        switch ($httpVerb) {
+            case 'POST':
+            case 'PUT':
+                $task = Controller::TASK_SAVE;
+                break;
+            case 'DELETE':
+                if ($id) {
+                    $task = Controller::TASK_DELETE;
+                }
+                break;
+            case 'GET':
+            default:
+                if ($id) {
+                    $task = Controller::TASK_READ;
+                }
+                break;
+        }
+
+        return $task;
     }
 }
