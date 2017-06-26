@@ -16,7 +16,8 @@ use Zoolanders\Framework\Utils\NameFromClass;
 
 defined('_JEXEC') or die;
 
-class Model {
+class Model
+{
     use Triggerable, NameFromClass;
 
     /**
@@ -29,12 +30,13 @@ class Model {
     /**
      * Model constructor.
      */
-    public function __construct () {
+    public function __construct()
+    {
         $this->getName();
         $this->state = new Json();
     }
 
-    /**arra
+    /**
      * Get a filtered state variable
      *
      * @param   string $key The state variable's name
@@ -43,7 +45,8 @@ class Model {
      *
      * @return  mixed  The state variable's contents
      */
-    public function getState ($key = null, $default = null, $filter_type = 'raw') {
+    public function getState($key = null, $default = null, $filter_type = 'raw')
+    {
         if (empty($key)) {
             return $this->state;
         }
@@ -66,7 +69,8 @@ class Model {
      *
      * @return  mixed  The previous value of the property or null if not set.
      */
-    public function setState ($property, $value = null) {
+    public function setState($property, $value = null)
+    {
         $this->state->set($property, $value);
         return $this;
     }
@@ -78,7 +82,8 @@ class Model {
      *
      * @return  static
      */
-    public function clearState () {
+    public function clearState()
+    {
         $this->state = new Json();
 
         return $this;
@@ -92,7 +97,8 @@ class Model {
      *
      * @return  static
      */
-    public function __get ($name) {
+    public function __get($name)
+    {
         return $this->getState($name);
     }
 
@@ -104,7 +110,8 @@ class Model {
      *
      * @return  static
      */
-    public function __set ($name, $value) {
+    public function __set($name, $value)
+    {
         return $this->setState($name, $value);
     }
 
@@ -117,7 +124,8 @@ class Model {
      *
      * @return  static
      */
-    public function __call ($name, $arguments) {
+    public function __call($name, $arguments)
+    {
         // filterAt, filterPublished, filterWhatever
         $filter = 'filter' . ucfirst($name);
         if (method_exists($this, $filter)) {

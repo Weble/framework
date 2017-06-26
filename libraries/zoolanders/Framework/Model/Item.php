@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Model;
 
-use Zoolanders\Framework\Model\Database\Date;
 use Zoolanders\Framework\Model\Database\UniqueAlias;
 use Zoolanders\Framework\Model\Item\Basics;
 use Zoolanders\Framework\Model\Item\Categories;
@@ -11,7 +10,8 @@ use Zoolanders\Framework\Model\Item\Tags;
 
 defined('_JEXEC') or die();
 
-class Item extends Database {
+class Item extends Database
+{
     use Basics, Tags, Categories, Elements, UniqueAlias;
 
     protected $tablePrefix = 'a';
@@ -21,13 +21,15 @@ class Item extends Database {
 
     protected $cast = [
         'elements' => 'json',
-        'params' => 'json'
+        'params' => 'json',
+        'state' => 'int'
     ];
 
     /**
      * Create and returns a nested array of App->Type->Elements
      */
-    protected function getNestedArrayFilter () {
+    protected function getNestedArrayFilter()
+    {
         // init vars
         $this->apps = $this->getState('application', array());
         $this->types = $this->getState('type', array());
@@ -94,7 +96,8 @@ class Item extends Database {
     /**
      * Get the multiple values search sql
      */
-    protected function getElementMultipleSearch ($identifier, $values, $mode, $k, $is_select = true) {
+    protected function getElementMultipleSearch($identifier, $values, $mode, $k, $is_select = true)
+    {
         $el_where = "b$k.element_id = " . $this->_db->Quote($identifier);
 
         // lets be sure mode is set
@@ -133,7 +136,8 @@ class Item extends Database {
      * @param array $order Array of order params
      * Example:array(0 => '_itemcreated', 1 => '_reversed', 2 => '_random')
      */
-    protected function getItemOrder ($order) {
+    protected function getItemOrder($order)
+    {
         // if string, try to convert ordering
         if (is_string($order)) {
             $order = $this->app->itemorder->convert($order);
