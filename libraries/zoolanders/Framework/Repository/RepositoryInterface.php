@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Repository;
 
-interface RepositoryInterface {
+interface RepositoryInterface
+{
     public function create (array $data);
 
     public function all ();

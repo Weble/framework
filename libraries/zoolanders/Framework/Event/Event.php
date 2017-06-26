@@ -8,7 +8,8 @@ use Zoolanders\Framework\Container\Container;
  * Class Event
  * @package Zoolanders\Event
  */
-abstract class Event implements EventInterface {
+abstract class Event implements EventInterface
+{
     /**
      * @var
      */
@@ -19,7 +20,8 @@ abstract class Event implements EventInterface {
      *
      * @return string
      */
-    public function getName () {
+    public function getName ()
+    {
         $class = get_class($this);
         $parts = explode("\\", $class);
 
@@ -37,7 +39,8 @@ abstract class Event implements EventInterface {
      * Get the event properties set with the constructor
      * It assumes that  if you do new Event($config), you will set it to $this->config
      */
-    public function getProperties () {
+    public function getProperties ()
+    {
         $self = new \ReflectionClass($this);
         $constructor = $self->getConstructor();
 
@@ -55,11 +58,13 @@ abstract class Event implements EventInterface {
         return $properties;
     }
 
-    public function setReturnValue ($value) {
+    public function setReturnValue ($value)
+    {
         $this->value = $value;
     }
 
-    public function getReturnValue () {
+    public function getReturnValue ()
+    {
         return $this->value;
     }
 

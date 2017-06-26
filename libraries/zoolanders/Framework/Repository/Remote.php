@@ -6,7 +6,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Zoolanders\Framework\Cache\Cacheable;
 
-abstract class Remote extends Repository {
+abstract class Remote extends Repository
+{
     use Cacheable;
 
     protected $baseUrl = '';
@@ -15,11 +16,13 @@ abstract class Remote extends Repository {
 
     protected $isJsonData = true;
 
-    public function __construct (Client $client) {
+    public function __construct (Client $client)
+    {
         $this->client = $client;
     }
 
-    public function all ($force = false) {
+    public function all ($force = false)
+    {
         if ($this->force) {
             return $this->fetchFromRemote();
         }
@@ -27,7 +30,8 @@ abstract class Remote extends Repository {
         return $this->cache("list", [$this, "fetchFromRemote"]);
     }
 
-    public function fetchFromRemote ($data = []) {
+    public function fetchFromRemote ($data = [])
+    {
         try {
             $data = array_merge($this->getQuery(), $data);
 
@@ -48,7 +52,8 @@ abstract class Remote extends Repository {
         return $data;
     }
 
-    public function getRemoteUrl ($data = []) {
+    public function getRemoteUrl ($data = [])
+    {
         $host = $this->getUrl();
         $args = array_merge($this->getQuery(), $data);
 
@@ -58,11 +63,13 @@ abstract class Remote extends Repository {
         return $url->toString();
     }
 
-    public function getUrl () {
+    public function getUrl ()
+    {
         return $this->baseUrl;
     }
 
-    public function getQuery () {
+    public function getQuery ()
+    {
         return $this->baseQuery;
     }
 }

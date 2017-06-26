@@ -6,7 +6,8 @@ use Zoolanders\Framework\Container\Container;
 
 defined('_JEXEC') or die();
 
-abstract class Installer {
+abstract class Installer
+{
     /**
      * @var Container
      */
@@ -58,14 +59,16 @@ abstract class Installer {
     */
     protected $error;
 
-    public function __construct (Container $c) {
+    public function __construct (Container $c)
+    {
         $this->container = $c;
     }
 
     /**
      * Set initials vars
      */
-    public function initVars ($type, $parent) {
+    public function initVars ($type, $parent)
+    {
         $this->type = strtolower($type);
         $this->parent = $parent;
         $this->source = $parent->getParent()->getPath('source');
@@ -81,7 +84,8 @@ abstract class Installer {
      *
      * @return  boolean  True on success
      */
-    public function preflight ($type, $parent) {
+    public function preflight ($type, $parent)
+    {
     }
 
     /**
@@ -91,7 +95,8 @@ abstract class Installer {
      *
      * @return  boolean  True on success
      */
-    public function install ($parent) {
+    public function install ($parent)
+    {
     }
 
     /**
@@ -99,7 +104,8 @@ abstract class Installer {
      *
      * @return void
      */
-    public function update ($parent) {
+    public function update ($parent)
+    {
     }
 
     /**
@@ -109,7 +115,8 @@ abstract class Installer {
      *
      * @return  boolean  True on success
      */
-    public function uninstall ($parent) {
+    public function uninstall ($parent)
+    {
     }
 
     /**
@@ -120,7 +127,8 @@ abstract class Installer {
      *
      * @return  boolean  True on success
      */
-    public function postflight ($type, $parent) {
+    public function postflight ($type, $parent)
+    {
         // init vars
         $new_version = (string)$parent->get('manifest')->version;
 
@@ -154,7 +162,8 @@ abstract class Installer {
      *
      * @return  boolean  True on success
      */
-    protected function checkDependencies ($parent) {
+    protected function checkDependencies ($parent)
+    {
         // init vars
         $dependencies = $parent->get("manifest")->dependencies->attributes();
 
@@ -232,7 +241,8 @@ abstract class Installer {
      *
      * @return  string
      */
-    protected function langString ($string) {
+    protected function langString ($string)
+    {
         return $this->lng_prefix . $string;
     }
 
@@ -241,7 +251,8 @@ abstract class Installer {
      *
      * @return  string
      */
-    protected function getExtID () {
+    protected function getExtID ()
+    {
         if (!$this->ext_id) {
             $this->container->db->setQuery("SELECT `extension_id` FROM `#__extensions` WHERE `element` = '{$this->ext}'");
             if ($plg = $this->container->db->loadObject())
@@ -254,7 +265,8 @@ abstract class Installer {
     /**
      * Gets the current version from schema table
      */
-    public function getVersion () {
+    public function getVersion ()
+    {
         // set query
         $this->container->db->setQuery("SELECT `version_id` FROM `#__schemas` WHERE `extension_id` = '{$this->getExtID()}'");
 
@@ -271,7 +283,8 @@ abstract class Installer {
      *
      * @param string $version
      */
-    public function setVersion ($version = null) {
+    public function setVersion ($version = null)
+    {
         // init vars
         $version = $version ? $version : (string)$this->parent->get('manifest')->version;
         $version = str_replace(array(' ', '_'), '', $version);
@@ -301,7 +314,8 @@ abstract class Installer {
     /**
      * Removes the version from schema table
      */
-    protected function cleanVersion () {
+    protected function cleanVersion ()
+    {
         $this->container->db->setQuery("DELETE FROM `#__schemas` WHERE `extension_id` = '{$this->getExtID()}'")->execute();
     }
 
@@ -313,7 +327,8 @@ abstract class Installer {
      *
      * @return array versions of required updates
      */
-    public function getRequiredUpdates ($version, $path) {
+    public function getRequiredUpdates ($version, $path)
+    {
         if ($files = \JFolder::files($path, '^\d+.*\.php$')) {
             $files = array_map(create_function('$file', 'return basename($file, ".php");'), array_filter($files, create_function('$file', 'return version_compare("' . $version . '", basename($file, ".php")) < 0;')));
             usort($files, create_function('$a, $b', 'return version_compare($a, $b);'));
@@ -330,7 +345,8 @@ abstract class Installer {
      *
      * @return bool Result of the update
      */
-    public function runUpdates ($current_v, $path) {
+    public function runUpdates ($current_v, $path)
+    {
         // get required updates
         $updates = $this->getRequiredUpdates($current_v, $path);
 

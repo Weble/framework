@@ -10,11 +10,13 @@ use Zoolanders\Framework\Event\Event;
  *
  * @package ZFTests\Classes
  */
-class TestEvent extends Event {
+class TestEvent extends Event
+{
     /**
      * TestEvent constructor.
      */
-    public function __construct ($data = array()) {
+    public function __construct ($data = array())
+    {
         $this->data = $data;
     }
 }

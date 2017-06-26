@@ -2,12 +2,14 @@
 
 namespace Zoolanders\Framework\Table;
 
-class Item extends \ItemTable {
+class Item extends \ItemTable
+{
     /***
      * Item constructor.
      * @param \App $app
      */
-    public function __construct ($app) {
+    public function __construct ($app)
+    {
         parent::__construct($app);
 
         $this->class = '\Item';
@@ -24,7 +26,8 @@ class Item extends \ItemTable {
      * @param bool $ignore_order_priority
      * @return array
      */
-    public function getByCategory ($application_id, $category_id, $published = false, $user = null, $orderby = "", $offset = 0, $limit = 0, $ignore_order_priority = false) {
+    public function getByCategory ($application_id, $category_id, $published = false, $user = null, $orderby = "", $offset = 0, $limit = 0, $ignore_order_priority = false)
+    {
         if (\JFactory::getApplication()->isAdmin()) {
             return parent::getByCategory($application_id, $category_id, $published, $user, $orderby, $offset, $limit, $ignore_order_priority);
         }
@@ -70,7 +73,8 @@ class Item extends \ItemTable {
      * @param bool $ignore_order_priority
      * @return array
      */
-    public function getByIds ($ids, $published = false, $user = null, $orderby = '', $ignore_order_priority = false) {
+    public function getByIds ($ids, $published = false, $user = null, $orderby = '', $ignore_order_priority = false)
+    {
         if (\JFactory::getApplication()->isAdmin()) {
             return parent::getByIds($ids, $published, $user, $orderby, $ignore_order_priority);
         }
@@ -120,7 +124,8 @@ class Item extends \ItemTable {
      * @param bool $ignore_order_priority
      * @return array
      */
-    public function getByCharacter ($application_id, $char, $not_in = false, $published = false, $user = null, $orderby = "", $offset = 0, $limit = 0, $ignore_order_priority = false) {
+    public function getByCharacter ($application_id, $char, $not_in = false, $published = false, $user = null, $orderby = "", $offset = 0, $limit = 0, $ignore_order_priority = false)
+    {
         if (\JFactory::getApplication()->isAdmin()) {
             return parent::getByCharacter($application_id, $char, $not_in, $published, $user, $orderby, $offset, $limit, $ignore_order_priority);
         }
@@ -173,7 +178,8 @@ class Item extends \ItemTable {
      * @param bool $ignore_order_priority
      * @return array
      */
-    public function getByTag ($application_id, $tag, $published = false, $user = null, $orderby = "", $offset = 0, $limit = 0, $ignore_order_priority = false) {
+    public function getByTag ($application_id, $tag, $published = false, $user = null, $orderby = "", $offset = 0, $limit = 0, $ignore_order_priority = false)
+    {
         if (\JFactory::getApplication()->isAdmin()) {
             return parent::getByTag($application_id, $tag, $published, $user, $orderby, $offset, $limit, $ignore_order_priority);
         }
@@ -220,7 +226,8 @@ class Item extends \ItemTable {
      * @param bool $ignore_order_priority
      * @return array
      */
-    public function getByType ($type_id, $application_id = false, $published = false, $user = null, $orderby = "", $offset = 0, $limit = 0, $ignore_order_priority = false) {
+    public function getByType ($type_id, $application_id = false, $published = false, $user = null, $orderby = "", $offset = 0, $limit = 0, $ignore_order_priority = false)
+    {
         if (\JFactory::getApplication()->isAdmin()) {
             return parent::getByType($type_id, $application_id, $published, $user, $orderby, $offset, $limit, $ignore_order_priority);
         }

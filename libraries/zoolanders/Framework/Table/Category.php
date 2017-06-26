@@ -2,12 +2,14 @@
 
 namespace Zoolanders\Framework\Table;
 
-class Category extends \CategoryTable {
+class Category extends \CategoryTable
+{
     /***
      * Category constructor.
      * @param \App $app
      */
-    public function __construct ($app) {
+    public function __construct ($app)
+    {
         parent::__construct($app);
 
         $this->class = '\Category';
@@ -18,7 +20,8 @@ class Category extends \CategoryTable {
      * @param bool $published
      * @return array
      */
-    public function getById ($ids, $published = false) {
+    public function getById ($ids, $published = false)
+    {
         if (\JFactory::getApplication()->isAdmin()) {
             return parent::getById($ids, $published);
         }
@@ -48,7 +51,8 @@ class Category extends \CategoryTable {
      * @param null $user
      * @return array
      */
-    public function getAll ($application_id, $published = false, $item_count = false, $user = null) {
+    public function getAll ($application_id, $published = false, $item_count = false, $user = null)
+    {
         if (\JFactory::getApplication()->isAdmin()) {
             return parent::getAll($application_id, $published, $item_count, $user);
         }
@@ -134,7 +138,8 @@ class Category extends \CategoryTable {
      * @param bool $published
      * @return array
      */
-    public function getByItemId ($item_id, $published = false) {
+    public function getByItemId ($item_id, $published = false)
+    {
         if (\JFactory::getApplication()->isAdmin()) {
             return parent::getByItemId();
         }

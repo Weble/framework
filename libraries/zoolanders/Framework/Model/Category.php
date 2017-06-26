@@ -4,7 +4,8 @@ namespace Zoolanders\Framework\Model;
 
 use Zoolanders\Framework\Model\Database\UniqueAlias;
 
-class Category extends Database {
+class Category extends Database
+{
     use UniqueAlias;
 
     protected $tablePrefix = 'c';

@@ -12,13 +12,15 @@ use ZFTests\Classes\Dataset;
  *
  * @package ZFTests\Data
  */
-class DataTest extends ZFTestCase {
+class DataTest extends ZFTestCase
+{
     use Dataset;
 
     /**
      * Make dataset for forward testing:
      */
-    protected function makeDataSet ($dataset) {
+    protected function makeDataSet ($dataset)
+    {
 
         $this->object = new Data($dataset);
 
@@ -34,7 +36,8 @@ class DataTest extends ZFTestCase {
      * @covers       Data::has()
      * @dataProvider arrayDataSet
      */
-    public function testGetSetHas ($dataset, $control_value) {
+    public function testGetSetHas ($dataset, $control_value)
+    {
 
         $this->makeDataSet($dataset);
         $this->setGetHas($control_value);
@@ -47,7 +50,8 @@ class DataTest extends ZFTestCase {
      * @covers          Data::remove()
      * @dataProvider    arrayDataSet
      */
-    public function testRemove ($dataset, $control_value) {
+    public function testRemove ($dataset, $control_value)
+    {
 
         $this->makeDataSet($dataset);
         $this->removing($control_value);
@@ -59,7 +63,8 @@ class DataTest extends ZFTestCase {
      * @covers          Data::find()
      * @dataProvider    lookupDataSet
      */
-    public function testFind ($dataset, $needle, $expected) {
+    public function testFind ($dataset, $needle, $expected)
+    {
 
         $this->makeDataSet($dataset);
         $this->finding($needle, $expected);
@@ -71,7 +76,8 @@ class DataTest extends ZFTestCase {
      * @covers          Data::searchRecursive()
      * @dataProvider    lookupRecursiveDataSet
      */
-    public function testSearchRecursive ($dataset, $expected, $needle) {
+    public function testSearchRecursive ($dataset, $expected, $needle)
+    {
 
         $this->makeDataSet($dataset);
         $this->assertEquals($expected, $this->object->searchRecursive($needle));
@@ -83,7 +89,8 @@ class DataTest extends ZFTestCase {
      * @covers          Data::flattenRecursive()
      * @dataProvider    flatternDataSet
      */
-    public function testFlattern ($dataset, $expected) {
+    public function testFlattern ($dataset, $expected)
+    {
 
         $this->makeDataSet($dataset);
         $this->flatterning($expected);
@@ -92,7 +99,8 @@ class DataTest extends ZFTestCase {
     /**
      * Array Data provider
      */
-    public function arrayDataSet () {
+    public function arrayDataSet ()
+    {
         return [
             [
                 [1, 2, 3],
@@ -108,7 +116,8 @@ class DataTest extends ZFTestCase {
     /**
      * Data provider for search/find ops testing:
      */
-    public function lookupDataSet () {
+    public function lookupDataSet ()
+    {
         return [
             [
                 [1, 2, 3],
@@ -146,7 +155,8 @@ class DataTest extends ZFTestCase {
     /**
      * Data provider for recursive search/find ops testing:
      */
-    public function lookupRecursiveDataSet () {
+    public function lookupRecursiveDataSet ()
+    {
         return [
             [
                 [
@@ -179,7 +189,8 @@ class DataTest extends ZFTestCase {
     /**
      * Flattern methods testing data set
      */
-    public function flatternDataSet () {
+    public function flatternDataSet ()
+    {
         return [
             [
                 [

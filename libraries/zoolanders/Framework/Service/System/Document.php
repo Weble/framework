@@ -10,7 +10,8 @@ use Zoolanders\Framework\Service\System;
  * Class Document
  * @package Zoolanders\System
  */
-class Document extends System {
+class Document extends System
+{
     /**
      * Last modification date for the file. Used for prevent the browser to use the cached version of an older CSS file
      *
@@ -19,7 +20,8 @@ class Document extends System {
      */
     private $file_mod_date;
 
-    public function __construct (Path $path, Joomla $joomla, Application $application) {
+    public function __construct (Path $path, Joomla $joomla, Application $application)
+    {
         $this->path = $path;
         $this->application = $application;
         $this->joomla = $joomla;
@@ -33,7 +35,8 @@ class Document extends System {
      *
      * @since 1.0.0
      */
-    public function addStylesheet ($path, $version = null) {
+    public function addStylesheet ($path, $version = null)
+    {
         if ($file = $this->path->url($path)) {
             $this->getClass()->addStylesheet($file . $this->getVersion($version));
         }
@@ -49,7 +52,8 @@ class Document extends System {
      *
      * @since 1.0.0
      */
-    public function addScript ($path, $version = null) {
+    public function addScript ($path, $version = null)
+    {
         $version = $this->getVersion($version);
 
         // load jQuery, if not loaded before
@@ -76,7 +80,8 @@ class Document extends System {
      *
      * @return string The get parameter to append
      */
-    private function getVersion ($version = null) {
+    private function getVersion ($version = null)
+    {
 
         if ($version === null) {
             if (empty($this->file_mod_date)) {

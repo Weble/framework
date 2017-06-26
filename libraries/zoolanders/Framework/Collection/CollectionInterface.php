@@ -4,7 +4,8 @@ namespace Zoolanders\Framework\Collection;
 
 use Closure;
 
-interface CollectionInterface extends \ArrayAccess, \Countable, \IteratorAggregate, \JsonSerializable {
+interface CollectionInterface extends \ArrayAccess, \Countable, \IteratorAggregate, \JsonSerializable
+{
     /**
      * Get all of the items in the collection.
      *

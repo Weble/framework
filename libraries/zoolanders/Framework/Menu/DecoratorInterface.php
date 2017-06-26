@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Menu;
 
-interface DecoratorInterface {
+interface DecoratorInterface
+{
     /**
      * Add item index and level to class attribute
      *

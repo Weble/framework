@@ -11,12 +11,14 @@ use Zoolanders\Framework\View\ViewInterface;
  * Class Factory
  * @package Zoolanders\Framework\Factory
  */
-class Factory {
+class Factory
+{
     /**
      * Factory constructor.
      * @param Container $container
      */
-    public function __construct (Container $container) {
+    public function __construct (Container $container)
+    {
         $this->container = $container;
     }
 
@@ -27,7 +29,8 @@ class Factory {
      *
      * @return  ResponseInterface
      */
-    public function response ($input) {
+    public function response ($input)
+    {
         $type = $input->isAjax() ? 'Json' : 'Html';
 
         $responseClass = '\Zoolanders\Framework\Response\\' . $type . 'Response';
@@ -39,7 +42,8 @@ class Factory {
      * @param $input
      * @return bool|mixed
      */
-    public function controller ($input, $default_ctrl = null) {
+    public function controller ($input, $default_ctrl = null)
+    {
         $namespaces = [];
         $namespaces[] = Container::FRAMEWORK_NAMESPACE;
 
@@ -69,7 +73,8 @@ class Factory {
      *
      * @return  ViewInterface
      */
-    public function view ($input, $default = null) {
+    public function view ($input, $default = null)
+    {
         $type = $input->isAjax() ? 'Json' : 'Html';
         $name = $input->getCmd('view', $input->getCmd('controller', $default));
         $viewClass = '';

@@ -9,14 +9,16 @@ namespace Zoolanders\Framework\Model\Mixin;
  *
  * @package Zoolanders\Framework\Model\Mixin
  */
-trait ListOptions {
+trait ListOptions
+{
     /**
      * Set filter value:
      *
      * @param   string
      * @param   value
      */
-    public function setFilter ($param, $value) {
+    public function setFilter ($param, $value)
+    {
         $this->setState('filter_' . $param, $value);
     }
 
@@ -28,7 +30,8 @@ trait ListOptions {
      *
      * @return mixed
      */
-    public function getFilter ($param, $default = null) {
+    public function getFilter ($param, $default = null)
+    {
         return $this->getState('filter_' . $param, $default);
     }
 
@@ -37,7 +40,8 @@ trait ListOptions {
      *
      * @param   string FIlter name
      */
-    public function dropFilter ($param) {
+    public function dropFilter ($param)
+    {
         $this->setState('filter_' . $param, null);
     }
 
@@ -46,7 +50,8 @@ trait ListOptions {
      *
      * @return array
      */
-    public function getFilters () {
+    public function getFilters ()
+    {
         $state = array_filter($this->state->getArrayCopy(), function ($value, $key) {
             return preg_match('/^filter_/i', $key) && (null !== $value);
         }, ARRAY_FILTER_USE_BOTH);
@@ -60,7 +65,8 @@ trait ListOptions {
      * @param $field
      * @param string $order
      */
-    public function setSorting ($field, $order = 'asc') {
+    public function setSorting ($field, $order = 'asc')
+    {
         $sorting = $this->getState('sort', []);
         $sorting[$field] = $order;
         $this->setState('sort', $sorting);
@@ -71,7 +77,8 @@ trait ListOptions {
      *
      * @return array
      */
-    public function getSorting () {
+    public function getSorting ()
+    {
         return $this->getState('sort');
     }
 
@@ -80,7 +87,8 @@ trait ListOptions {
      *
      * @return  array
      */
-    public function listOptionsToArray () {
+    public function listOptionsToArray ()
+    {
         $perPage = $this->getState('limit', 30); //default items per page value
         $page = $this->getState('offset', 0);
         $page = $page ? floor($page / $perPage) + 1 : 1;

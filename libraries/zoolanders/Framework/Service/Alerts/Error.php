@@ -7,7 +7,8 @@ namespace Zoolanders\Framework\Service\Alerts;
  * System error instance class
  * @package Zoolanders\Framework\Service\Alerts
  */
-class Error {
+class Error
+{
     /**
      * @var string  Error message
      */
@@ -18,7 +19,8 @@ class Error {
      * @param $text
      * @param array $args
      */
-    public function __construct ($text, $args = []) {
+    public function __construct ($text, $args = [])
+    {
         $this->message = $text;
 
         if (!empty($args)) {
@@ -34,7 +36,8 @@ class Error {
      * @param $key
      * @param $value
      */
-    public function __set ($key, $value) {
+    public function __set ($key, $value)
+    {
         $this->{$key} = $value;
     }
 
@@ -44,7 +47,8 @@ class Error {
      * @param $key
      * @return null
      */
-    public function __get ($key) {
+    public function __get ($key)
+    {
         return isset($this->{$key}) ? $this->{$key} : null;
     }
 
@@ -53,7 +57,8 @@ class Error {
      *
      * @param \Exception $e
      */
-    public function fromException (\Exception $e) {
+    public function fromException (\Exception $e)
+    {
         $this->message = $e->getMessage();
     }
 
@@ -62,7 +67,8 @@ class Error {
      *
      * @return json
      */
-    public function toJson () {
+    public function toJson ()
+    {
 
         return json_encode($this);
     }

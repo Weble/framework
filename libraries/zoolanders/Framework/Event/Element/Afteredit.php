@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Event\Element;
 
-class Afteredit extends Element {
+class Afteredit extends Element
+{
     /**
      * @var array
      */
@@ -23,7 +24,8 @@ class Afteredit extends Element {
      * @param \Element $element
      * @param array $html
      */
-    public function __construct (\Element $element, &$html = [], $description = '', $name = '') {
+    public function __construct (\Element $element, &$html = [], $description = '', $name = '')
+    {
         parent::__construct($element);
 
         $this->html = &$html;
@@ -31,19 +33,23 @@ class Afteredit extends Element {
         $this->elementDescription = $description;
     }
 
-    public function getHtml () {
+    public function getHtml ()
+    {
         return $this->html;
     }
 
-    public function getElementDescription () {
+    public function getElementDescription ()
+    {
         return $this->elementDescription;
     }
 
-    public function getElementName () {
+    public function getElementName ()
+    {
         return $this->elementName;
     }
 
-    public function setHtml ($html) {
+    public function setHtml ($html)
+    {
         $this->html = $html;
     }
 }

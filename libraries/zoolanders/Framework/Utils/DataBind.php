@@ -7,13 +7,15 @@ namespace Zoolanders\Framework\Utils;
  * Data binding utilities
  * @package Zoolanders\Framework\Utils
  */
-trait DataBind {
+trait DataBind
+{
     /**
      * Bind data from the source to current object
      *
      * @param   mixed
      */
-    public function bindFrom ($src) {
+    public function bindFrom ($src)
+    {
         if (is_object($src)) {
             $src = get_object_vars($src);
         }

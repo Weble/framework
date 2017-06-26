@@ -5,7 +5,8 @@ defined('_JEXEC') or die();
 jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.folder');
 
-class plgSystemZlframeworkInstallerScript {
+class plgSystemZlframeworkInstallerScript
+{
     protected $_error;
     protected $_src;
     protected $_target;
@@ -100,7 +101,8 @@ class plgSystemZlframeworkInstallerScript {
      *
      * @return  boolean  True on success
      */
-    public function preflight ($type, $parent) {
+    public function preflight ($type, $parent)
+    {
         // init vars
         $db = JFactory::getDBO();
         $type = strtolower($type);
@@ -176,7 +178,8 @@ class plgSystemZlframeworkInstallerScript {
      *
      * @return  boolean  True on success
      */
-    public function install ($parent) {
+    public function install ($parent)
+    {
         // init vars
         $db = JFactory::getDBO();
 
@@ -190,7 +193,8 @@ class plgSystemZlframeworkInstallerScript {
      *
      * @return void
      */
-    public function update ($parent) {
+    public function update ($parent)
+    {
     }
 
     /**
@@ -200,7 +204,8 @@ class plgSystemZlframeworkInstallerScript {
      *
      * @return  boolean  True on success
      */
-    public function uninstall ($parent) {
+    public function uninstall ($parent)
+    {
         // show uninstall message
         echo JText::_($this->langString('_UNINSTALL'));
     }
@@ -213,7 +218,8 @@ class plgSystemZlframeworkInstallerScript {
      *
      * @return  boolean  True on success
      */
-    public function postflight ($type, $parent) {
+    public function postflight ($type, $parent)
+    {
         // init vars
         $type = strtolower($type);
         $release = $parent->get("manifest")->version;
@@ -234,7 +240,8 @@ class plgSystemZlframeworkInstallerScript {
      * Removes obsolete files and folders
      * @version 1.1
      */
-    private function removeObsolete () {
+    private function removeObsolete ()
+    {
         // Remove files
         if (!empty($this->_obsolete['files'])) foreach ($this->_obsolete['files'] as $file) {
             $f = JPATH_ROOT . '/' . $file;
@@ -256,7 +263,8 @@ class plgSystemZlframeworkInstallerScript {
      *
      * @return  string
      */
-    protected function langString ($string) {
+    protected function langString ($string)
+    {
         return $this->_lng_prefix . $string;
     }
 
@@ -266,7 +274,8 @@ class plgSystemZlframeworkInstallerScript {
      *
      * @return  boolean  True on success
      */
-    protected function checkDependencies ($parent) {
+    protected function checkDependencies ($parent)
+    {
         // init vars
         $dependencies = $parent->get("manifest")->dependencies->attributes();
 
@@ -326,7 +335,8 @@ class plgSystemZlframeworkInstallerScript {
      *
      * @return  boolean  true if all extensions are compatible
      */
-    protected function checkCompatibility ($file) {
+    protected function checkCompatibility ($file)
+    {
         // load config
         require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
@@ -366,7 +376,8 @@ class plgSystemZlframeworkInstallerScript {
         Returns:
             bool - true if all requirements are met
     */
-    protected function _dependencyCheck ($file, $extension = 'ZL Framework') {
+    protected function _dependencyCheck ($file, $extension = 'ZL Framework')
+    {
         // init vars
         $status = array('state' => true, 'extensions' => array());
         $groups = $this->app->path->path($file);
@@ -374,26 +385,28 @@ class plgSystemZlframeworkInstallerScript {
         // get the content from file
         if ($groups && $groups = json_decode(JFile::read($groups))) {
             // iterate over the groups
-            foreach ($groups as $group => $dependencies) foreach ($dependencies as $name => $dependency) {
-                if ($group == 'plugins') {
-                    // get plugin
-                    $folder = isset($dependency->folder) ? $dependency->folder : 'system';
-                    $plugin = JPluginHelper::getPlugin($folder, strtolower($name));
+            foreach ($groups as $group => $dependencies) {
+                foreach ($dependencies as $name => $dependency) {
+                    if ($group == 'plugins') {
+                        // get plugin
+                        $folder = isset($dependency->folder) ? $dependency->folder : 'system';
+                        $plugin = JPluginHelper::getPlugin($folder, strtolower($name));
 
-                    // if plugin disable, skip it
-                    if (empty($plugin)) continue;
-                }
-
-                $version = $dependency->version;
-                $manifest = $this->app->path->path('root:' . $dependency->manifest);
-                if ($version && is_file($manifest) && is_readable($manifest) && $xml = simplexml_load_file($manifest)) {
-
-                    // check if the extension is outdated
-                    if (version_compare($version, (string)$xml->version, 'g')) {
-                        $status['state'] = false;
-                        $status['extensions'][] = array('dependency' => $dependency, 'installed' => $xml);
+                        // if plugin disable, skip it
+                        if (empty($plugin)) continue;
                     }
 
+                    $version = $dependency->version;
+                    $manifest = $this->app->path->path('root:' . $dependency->manifest);
+                    if ($version && is_file($manifest) && is_readable($manifest) && $xml = simplexml_load_file($manifest)) {
+
+                        // check if the extension is outdated
+                        if (version_compare($version, (string)$xml->version, 'g')) {
+                            $status['state'] = false;
+                            $status['extensions'][] = array('dependency' => $dependency, 'installed' => $xml);
+                        }
+
+                    }
                 }
             }
         }

@@ -8,7 +8,8 @@ namespace ZFTests\Classes;
  *
  * @package ZFTests\Classes
  */
-trait CSVData {
+trait CSVData
+{
     /**
      * Load and parse CSV file with test cases
      *
@@ -16,7 +17,8 @@ trait CSVData {
      * @return mixed
      * @throws \Exception
      */
-    protected function loadTestDataCSV ($filePath) {
+    protected function loadTestDataCSV ($filePath)
+    {
         if (file_exists($filePath)) {
             $data = [];
             $content = file_get_contents($filePath);

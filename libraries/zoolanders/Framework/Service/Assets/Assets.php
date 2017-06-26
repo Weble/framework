@@ -12,7 +12,8 @@ use Zoolanders\Framework\Service\Path;
 use Zoolanders\Framework\Service\Service;
 use Zoolanders\Framework\Service\System\Document;
 
-abstract class Assets {
+abstract class Assets
+{
     /**
      * @var AssetManager
      */
@@ -42,7 +43,8 @@ abstract class Assets {
      * Assets constructor.
      * @param Container $c
      */
-    public function __construct (Document $document, Path $path, Filesystem $fs) {
+    public function __construct (Document $document, Path $path, Filesystem $fs)
+    {
         $this->assetManager = new AssetManager();
         $this->filterManager = new FilterManager();
         $this->factory = new AssetFactory(JPATH_SITE);
@@ -56,12 +58,14 @@ abstract class Assets {
         $this->filesystem = $fs;
     }
 
-    public function define ($name, $assets) {
+    public function define ($name, $assets)
+    {
         settype($assets, 'array');
         $this->assetManager->set($name, $this->factory->createAsset($assets));
     }
 
-    public function add ($assets) {
+    public function add ($assets)
+    {
         settype($assets, 'array');
 
         foreach ($assets as &$asset) {
@@ -71,7 +75,8 @@ abstract class Assets {
         $this->assets = array_unique(array_merge($this->assets, $assets));
     }
 
-    public function load ($filters = false) {
+    public function load ($filters = false)
+    {
         if (!$filters) {
             $filters = $this->filters;
         }

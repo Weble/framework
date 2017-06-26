@@ -2,11 +2,13 @@
 
 namespace Zoolanders\Framework\Migration;
 
-class Config extends \Phinx\Config\Config {
+class Config extends \Phinx\Config\Config
+{
     /**
      * {@inheritdoc}
      */
-    public function __construct (array $configArray = [], $configFilePath = null) {
+    public function __construct (array $configArray = [], $configFilePath = null)
+    {
         $type = \JFactory::getConfig()->get('dbtype');
 
         if ($type == 'mysqli') {

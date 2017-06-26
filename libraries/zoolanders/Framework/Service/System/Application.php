@@ -8,6 +8,7 @@ use Zoolanders\Framework\Service\System;
  * Class Application
  * @package Zoolanders\System
  */
-class Application extends System {
+class Application extends System
+{
 
 }

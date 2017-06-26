@@ -11,11 +11,13 @@ use ZFTests\Classes\TestRouter;
  *
  * @package ZFTests\Router
  */
-class RouterTest extends ZFTestCase {
+class RouterTest extends ZFTestCase
+{
     /**
      * Test router init
      */
-    public function testRouterInit () {
+    public function testRouterInit ()
+    {
         $container = self::$container;
         $container->params->set('cache_routes', true);
         $router = new TestRouter($container);

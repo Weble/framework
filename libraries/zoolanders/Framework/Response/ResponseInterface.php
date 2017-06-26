@@ -6,7 +6,8 @@ namespace Zoolanders\Framework\Response;
  * Interface ResponseInterface
  * @package Zoolanders\Framework\Response
  */
-interface ResponseInterface {
+interface ResponseInterface
+{
     /**
      * Set response header
      *

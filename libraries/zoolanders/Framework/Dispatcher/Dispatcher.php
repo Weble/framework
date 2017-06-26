@@ -12,7 +12,8 @@ use Zoolanders\Framework\Response\ResponseInterface;
 use Zoolanders\Framework\Service\Environment;
 use Zoolanders\Framework\Service\Event;
 
-class Dispatcher {
+class Dispatcher
+{
     /**
      * @var Container
      */
@@ -26,7 +27,8 @@ class Dispatcher {
     /**
      * Dispatcher constructor.
      */
-    public function __construct (Container $container) {
+    public function __construct (Container $container)
+    {
         $this->container = $container;
     }
 
@@ -35,7 +37,8 @@ class Dispatcher {
      *
      * @param $controller_name
      */
-    public function setDefaultController ($controller_name) {
+    public function setDefaultController ($controller_name)
+    {
 
         $this->default_ctrl = $controller_name;
     }
@@ -43,7 +46,8 @@ class Dispatcher {
     /**
      * @return ResponseInterface
      */
-    public function dispatch (Request $request) {
+    public function dispatch (Request $request)
+    {
         $controller = $this->container->factory->controller($request, $this->default_ctrl);
 
         if (!$controller) {

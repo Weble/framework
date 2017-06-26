@@ -6,7 +6,8 @@ namespace ZFTests\Classes;
  * Class EventNode
  * Describes event node in event stack
  */
-class EventNode {
+class EventNode
+{
 
     /**
      * @var string  Event name
@@ -24,7 +25,8 @@ class EventNode {
      * @param $name
      * @param null $event
      */
-    public function __construct ($name, $event = null) {
+    public function __construct ($name, $event = null)
+    {
         $this->name = $name;
         $this->event = $event;
     }

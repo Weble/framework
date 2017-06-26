@@ -11,13 +11,15 @@ use Zoolanders\Framework\Service\System\Language;
  *
  * @package ZFTests\Service\System
  */
-class LanguageServiceTest extends SystemServiceTestLayer {
+class LanguageServiceTest extends SystemServiceTestLayer
+{
     protected $serviceClassNames = ['JLanguage'];
 
     /**
      * Service class instance provider
      */
-    protected function getServiceInstance () {
+    protected function getServiceInstance ()
+    {
         return new Language(self::$container);
     }
 
@@ -26,7 +28,8 @@ class LanguageServiceTest extends SystemServiceTestLayer {
      *
      * @covers          Language::l()
      */
-    public function testTranslation () {
+    public function testTranslation ()
+    {
         $lng = $this->getServiceInstance();
         $resource = parse_ini_file(JOOMLA_ENV_PATH . '/language/en-GB/en-GB.test.ini');
 

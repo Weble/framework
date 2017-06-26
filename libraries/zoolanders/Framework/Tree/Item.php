@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Tree;
 
-class Item implements ItemInterface {
+class Item implements ItemInterface
+{
     /**
      * The parent item
      *
@@ -25,7 +26,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function getID () {
+    public function getID ()
+    {
         return spl_object_hash($this);
     }
 
@@ -36,14 +38,16 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function getParent () {
+    public function getParent ()
+    {
         return $this->parent;
     }
 
     /**
      * Drop parent node pointer
      */
-    public function disposeParent () {
+    public function disposeParent ()
+    {
         $this->parent = null;
     }
 
@@ -56,7 +60,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function setParent (ItemInterface $item) {
+    public function setParent (ItemInterface $item)
+    {
         $this->parent = $item;
 
         return $this;
@@ -69,7 +74,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function getChildren () {
+    public function getChildren ()
+    {
         return $this->children;
     }
 
@@ -83,7 +89,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function hasChild ($id, $recursive = false) {
+    public function hasChild ($id, $recursive = false)
+    {
         if (isset($this->children[$id])) {
             return true;
         }
@@ -104,7 +111,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function hasChildren () {
+    public function hasChildren ()
+    {
         return count($this->children);
     }
 
@@ -117,7 +125,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function addChild (ItemInterface $item) {
+    public function addChild (ItemInterface $item)
+    {
         $item->setParent($this);
         $this->children[$item->getID()] = $item;
 
@@ -133,7 +142,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function addChildren (array $children) {
+    public function addChildren (array $children)
+    {
         foreach ($children as $child) {
             $this->addChild($child);
         }
@@ -150,7 +160,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function removeChild (ItemInterface $item) {
+    public function removeChild (ItemInterface $item)
+    {
         $item->disposeParent();
         unset($this->children[$item->getID()]);
 
@@ -166,7 +177,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function removeChildById ($id) {
+    public function removeChildById ($id)
+    {
         if ($this->hasChild($id)) {
             $this->removeChild($this->children[$id]);
         }
@@ -181,7 +193,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function getPathway () {
+    public function getPathway ()
+    {
         $pathway = array();
 
         if ($this->parent !== null) {
@@ -201,7 +214,8 @@ class Item implements ItemInterface {
      *
      * @since 2.0
      */
-    public function filter ($callback, $args = array()) {
+    public function filter ($callback, $args = array())
+    {
         // call filter function
         call_user_func_array($callback, array_merge(array($this), $args));
 

@@ -4,7 +4,8 @@ namespace Zoolanders\Framework\Service;
 
 use Zoolanders\Framework\Service\System\Application;
 
-class Installation {
+class Installation
+{
     /**
      * @var Application
      */
@@ -40,7 +41,8 @@ class Installation {
         Dependencies $dependencies,
         Zoo $zoo,
         Database $db
-    ) {
+    )
+    {
         $this->application = $application;
         $this->environment = $environment;
         $this->dependencies = $dependencies;
@@ -51,7 +53,8 @@ class Installation {
     /**
      *  Check if the installation of the framework is ok
      */
-    public function checkInstallation () {
+    public function checkInstallation ()
+    {
         // if in admin views
         if ($this->application->isAdmin() && $this->environment->is('admin.com_zoo admin.com_installer admin.com_plugins')) {
             if ($this->checkDependencies()) {
@@ -72,7 +75,8 @@ class Installation {
     /**
      *  Check the Framework Dependencies
      */
-    public function checkDependencies () {
+    public function checkDependencies ()
+    {
         // prepare cache
         $cache = $this->zoo->getApp()->cache->create($this->zoo->getApp()->path->path('cache:') . '/zoolanders/framework', true, '86400', 'apc');
 
@@ -101,7 +105,8 @@ class Installation {
     /**
      * Fix plugins order
      */
-    public function checkPluginOrder ($plugin = '') {
+    public function checkPluginOrder ($plugin = '')
+    {
         // init vars
         $db = $this->db;
         $zf = $this->getPlugin('zlframework');
@@ -136,7 +141,8 @@ class Installation {
      *
      * @return Object The requested plugin
      */
-    public function getPlugin ($name, $type = 'system') {
+    public function getPlugin ($name, $type = 'system')
+    {
         $db = $this->db;
         $query = 'SELECT * FROM #__extensions WHERE element LIKE ' . $db->Quote($name) . ' AND folder LIKE ' . $db->Quote($type) . ' LIMIT 1';
 

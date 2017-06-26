@@ -9,7 +9,8 @@ if (!function_exists('array_add')) {
      * @param  mixed $value
      * @return array
      */
-    function array_add ($array, $key, $value) {
+    function array_add ($array, $key, $value)
+    {
         if (!isset($array[$key])) $array[$key] = $value;
 
         return $array;
@@ -24,7 +25,8 @@ if (!function_exists('array_build')) {
      * @param  \Closure $callback
      * @return array
      */
-    function array_build ($array, Closure $callback) {
+    function array_build ($array, Closure $callback)
+    {
         $results = array();
 
         foreach ($array as $key => $value) {
@@ -44,7 +46,8 @@ if (!function_exists('array_divide')) {
      * @param  array $array
      * @return array
      */
-    function array_divide ($array) {
+    function array_divide ($array)
+    {
         return array(array_keys($array), array_values($array));
     }
 }
@@ -57,7 +60,8 @@ if (!function_exists('array_dot')) {
      * @param  string $prepend
      * @return array
      */
-    function array_dot ($array, $prepend = '') {
+    function array_dot ($array, $prepend = '')
+    {
         $results = array();
 
         foreach ($array as $key => $value) {
@@ -80,7 +84,8 @@ if (!function_exists('array_except')) {
      * @param  array $keys
      * @return array
      */
-    function array_except ($array, $keys) {
+    function array_except ($array, $keys)
+    {
         return array_diff_key($array, array_flip((array)$keys));
     }
 }
@@ -93,7 +98,8 @@ if (!function_exists('array_fetch')) {
      * @param  string $key
      * @return array
      */
-    function array_fetch ($array, $key) {
+    function array_fetch ($array, $key)
+    {
         foreach (explode('.', $key) as $segment) {
             $results = array();
 
@@ -119,7 +125,8 @@ if (!function_exists('array_first')) {
      * @param  mixed $default
      * @return mixed
      */
-    function array_first ($array, $callback, $default = null) {
+    function array_first ($array, $callback, $default = null)
+    {
         foreach ($array as $key => $value) {
             if (call_user_func($callback, $key, $value)) return $value;
         }
@@ -137,7 +144,8 @@ if (!function_exists('array_last')) {
      * @param  mixed $default
      * @return mixed
      */
-    function array_last ($array, $callback, $default = null) {
+    function array_last ($array, $callback, $default = null)
+    {
         return array_first(array_reverse($array), $callback, $default);
     }
 }
@@ -149,7 +157,8 @@ if (!function_exists('array_flatten')) {
      * @param  array $array
      * @return array
      */
-    function array_flatten ($array) {
+    function array_flatten ($array)
+    {
         $return = array();
 
         array_walk_recursive($array, function ($x) use (&$return) {
@@ -168,7 +177,8 @@ if (!function_exists('array_forget')) {
      * @param  string $key
      * @return void
      */
-    function array_forget (&$array, $key) {
+    function array_forget (&$array, $key)
+    {
         $keys = explode('.', $key);
 
         while (count($keys) > 1) {
@@ -194,7 +204,8 @@ if (!function_exists('array_get')) {
      * @param  mixed $default
      * @return mixed
      */
-    function array_get ($array, $key, $default = null) {
+    function array_get ($array, $key, $default = null)
+    {
         if (is_null($key)) return $array;
 
         if (isset($array[$key])) return $array[$key];
@@ -219,7 +230,8 @@ if (!function_exists('array_only')) {
      * @param  array $keys
      * @return array
      */
-    function array_only ($array, $keys) {
+    function array_only ($array, $keys)
+    {
         return array_intersect_key($array, array_flip((array)$keys));
     }
 }
@@ -233,7 +245,8 @@ if (!function_exists('array_pluck')) {
      * @param  string $key
      * @return array
      */
-    function array_pluck ($array, $value, $key = null) {
+    function array_pluck ($array, $value, $key = null)
+    {
         $results = array();
 
         foreach ($array as $item) {
@@ -263,7 +276,8 @@ if (!function_exists('array_pull')) {
      * @param  string $key
      * @return mixed
      */
-    function array_pull (&$array, $key) {
+    function array_pull (&$array, $key)
+    {
         $value = array_get($array, $key);
 
         array_forget($array, $key);
@@ -283,7 +297,8 @@ if (!function_exists('array_set')) {
      * @param  mixed $value
      * @return array
      */
-    function array_set (&$array, $key, $value) {
+    function array_set (&$array, $key, $value)
+    {
         if (is_null($key)) return $array = $value;
 
         $keys = explode('.', $key);
@@ -315,7 +330,8 @@ if (!function_exists('array_sort')) {
      * @param  \Closure $callback
      * @return array
      */
-    function array_sort ($array, Closure $callback) {
+    function array_sort ($array, Closure $callback)
+    {
         return \Zoolanders\Framework\Collection\Collection::make($array)->sortBy($callback)->all();
     }
 }
@@ -328,7 +344,8 @@ if (!function_exists('array_where')) {
      * @param  \Closure $callback
      * @return array
      */
-    function array_where ($array, Closure $callback) {
+    function array_where ($array, Closure $callback)
+    {
         $filtered = array();
 
         foreach ($array as $key => $value) {
@@ -347,7 +364,8 @@ if (!function_exists('ends_with')) {
      * @param  string|array $needles
      * @return bool
      */
-    function ends_with ($haystack, $needles) {
+    function ends_with ($haystack, $needles)
+    {
         foreach ((array)$needles as $needle) {
             if ((string)$needle === substr($haystack, -strlen($needle))) return true;
         }
@@ -363,7 +381,8 @@ if (!function_exists('last')) {
      * @param  array $array
      * @return mixed
      */
-    function last ($array) {
+    function last ($array)
+    {
         return end($array);
     }
 }
@@ -377,7 +396,8 @@ if (!function_exists('object_get')) {
      * @param  mixed $default
      * @return mixed
      */
-    function object_get ($object, $key, $default = null) {
+    function object_get ($object, $key, $default = null)
+    {
         if (is_null($key) or trim($key) == '') return $object;
 
         foreach (explode('.', $key) as $segment) {
@@ -401,7 +421,8 @@ if (!function_exists('preg_replace_sub')) {
      * @param  string $subject
      * @return string
      */
-    function preg_replace_sub ($pattern, &$replacements, $subject) {
+    function preg_replace_sub ($pattern, &$replacements, $subject)
+    {
         return preg_replace_callback($pattern, function ($match) use (&$replacements) {
             return array_shift($replacements);
 
@@ -417,7 +438,8 @@ if (!function_exists('starts_with')) {
      * @param  string|array $needles
      * @return bool
      */
-    function starts_with ($haystack, $needles) {
+    function starts_with ($haystack, $needles)
+    {
         foreach ((array)$needles as $needle) {
             if ($needle != '' && strpos($haystack, $needle) === 0) return true;
         }
@@ -433,7 +455,8 @@ if (!function_exists('value')) {
      * @param  mixed $value
      * @return mixed
      */
-    function value ($value) {
+    function value ($value)
+    {
         return $value instanceof Closure ? $value() : $value;
     }
 }
@@ -445,7 +468,8 @@ if (!function_exists('with')) {
      * @param  mixed $object
      * @return mixed
      */
-    function with ($object) {
+    function with ($object)
+    {
         return $object;
     }
 }
@@ -473,7 +497,8 @@ if (!function_exists('array_column')) {
      *                        of the column, or it may be the string key name.
      * @return array
      */
-    function array_column ($input = null, $columnKey = null, $indexKey = null) {
+    function array_column ($input = null, $columnKey = null, $indexKey = null)
+    {
         // Using func_get_args() in order to check for proper number of
         // parameters and trigger errors exactly as the built-in array_column()
         // does in PHP 5.5.

@@ -11,13 +11,15 @@ defined('_JEXEC') or die;
  * Inspired by FOF3 Datacollection class by Nicholas K. Dionysopoulos / Akeeba Ltd (https://github.com/akeeba/fof/)
  * @package Zoolanders\Framework\Collection
  */
-class Resources extends Collection {
+class Resources extends Collection
+{
     /**
      * Create a new collection.
      *
      * @param  array $items
      */
-    public function __construct (array $items = array()) {
+    public function __construct (array $items = array())
+    {
         $this->items = [];
 
         foreach ($items as $item) {
@@ -32,7 +34,8 @@ class Resources extends Collection {
      *
      * @return static
      */
-    public static function make ($items) {
+    public static function make ($items)
+    {
         if (is_null($items)) {
             return new static;
         }
@@ -56,7 +59,8 @@ class Resources extends Collection {
      *
      * @return HasId
      */
-    public function find ($key, $default = null) {
+    public function find ($key, $default = null)
+    {
         return array_first($this->items, function ($itemKey, $item) use ($key) {
             /** @var HasId $item */
             return $this->getKey($item) == $key;
@@ -68,7 +72,8 @@ class Resources extends Collection {
      * @param $key
      * @return mixed
      */
-    protected function getKey ($key) {
+    protected function getKey ($key)
+    {
         if ($key instanceof HasId) {
             return $key->getId();
         }
@@ -90,7 +95,8 @@ class Resources extends Collection {
      *
      * @return void
      */
-    public function removeById ($key) {
+    public function removeById ($key)
+    {
         $key = $this->getKey($key);
 
         $index = array_search($key, $this->itemKeys());
@@ -107,7 +113,8 @@ class Resources extends Collection {
      *
      * @return Collection
      */
-    public function add ($item) {
+    public function add ($item)
+    {
         $this->items[] = $item;
 
         return $this;
@@ -120,7 +127,8 @@ class Resources extends Collection {
      *
      * @return bool
      */
-    public function contains ($key) {
+    public function contains ($key)
+    {
         return !is_null($this->find($key));
     }
 
@@ -131,7 +139,8 @@ class Resources extends Collection {
      *
      * @return Collection
      */
-    public function fetch ($key) {
+    public function fetch ($key)
+    {
         return new static(array_fetch($this->toArray(), $key));
     }
 
@@ -142,7 +151,8 @@ class Resources extends Collection {
      *
      * @return mixed
      */
-    public function max ($key) {
+    public function max ($key)
+    {
         return $this->reduce(function ($result, $item) use ($key) {
             return (is_null($result) || $item->{$key} > $result) ? $item->{$key} : $result;
         });
@@ -155,7 +165,8 @@ class Resources extends Collection {
      *
      * @return mixed
      */
-    public function min ($key) {
+    public function min ($key)
+    {
         return $this->reduce(function ($result, $item) use ($key) {
             return (is_null($result) || $item->{$key} < $result) ? $item->{$key} : $result;
         });
@@ -166,7 +177,8 @@ class Resources extends Collection {
      *
      * @return array
      */
-    public function itemKeys () {
+    public function itemKeys ()
+    {
         return array_map(
             function ($item) {
                 return $this->getKey($item);
@@ -180,7 +192,8 @@ class Resources extends Collection {
      * @param  Collection|array $collection
      * @return Collection
      */
-    public function merge ($collection) {
+    public function merge ($collection)
+    {
         $dictionary = $this->getDictionary($this);
 
         foreach ($collection as $item) {
@@ -196,7 +209,8 @@ class Resources extends Collection {
      * @param   Collection|array $collection
      * @return  Collection
      */
-    public function diff ($collection) {
+    public function diff ($collection)
+    {
         $diff = new static;
 
         $dictionary = $this->getDictionary($collection);
@@ -218,7 +232,8 @@ class Resources extends Collection {
      *
      * @return  Collection
      */
-    public function intersect ($collection) {
+    public function intersect ($collection)
+    {
         $intersect = new static;
 
         $dictionary = $this->getDictionary($collection);
@@ -237,7 +252,8 @@ class Resources extends Collection {
      *
      * @return Collection
      */
-    public function unique () {
+    public function unique ()
+    {
         $dictionary = $this->getDictionary($this);
 
         return new static(array_values($dictionary));
@@ -250,7 +266,8 @@ class Resources extends Collection {
      *
      * @return array
      */
-    protected function getDictionary ($collection) {
+    protected function getDictionary ($collection)
+    {
         $dictionary = array();
 
         foreach ($collection as $value) {
@@ -265,7 +282,8 @@ class Resources extends Collection {
      *
      * @return Collection
      */
-    public function toCollection () {
+    public function toCollection ()
+    {
         return new Collection($this->items);
     }
 
@@ -280,7 +298,8 @@ class Resources extends Collection {
      * @param string $name The method to call
      * @param array $arguments The arguments to the method
      */
-    public function __call ($name, $arguments) {
+    public function __call ($name, $arguments)
+    {
         if (!count($this)) {
             return;
         }

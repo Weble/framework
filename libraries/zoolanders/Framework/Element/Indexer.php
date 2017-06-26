@@ -19,7 +19,7 @@ class Indexer
      * @param \Element $element
      * @param array $items Can be both array of ids or array of Item
      */
-    public function index(\Element $element, $items = [])
+    public function index (\Element $element, $items = [])
     {
         $this->cleanSearchIndex($element);
 
@@ -59,7 +59,7 @@ class Indexer
     /**
      * @param \Element $element
      */
-    public function cleanSearchIndex(\Element $element)
+    public function cleanSearchIndex (\Element $element)
     {
         $db = $this->container->db;
 
@@ -75,7 +75,7 @@ class Indexer
     /**
      * @return array
      */
-    public static function getAvailableDataTypes()
+    public static function getAvailableDataTypes ()
     {
         $oClass = new \ReflectionClass(__CLASS__);
         $constants = $oClass->getConstants();
@@ -95,7 +95,7 @@ class Indexer
      * @param \Element $element
      * @return array
      */
-    public static function getValuesFromElement(\Element $element)
+    public static function getValuesFromElement (\Element $element)
     {
         if (self::isRepeatable($element)) {
             $values = explode("\n", $element->getSearchData());
@@ -109,7 +109,7 @@ class Indexer
      * @param \Element $element
      * @return bool
      */
-    public static function isRepeatable(\Element $element)
+    public static function isRepeatable (\Element $element)
     {
         if ($element instanceof \ElementRepeatable) {
             return true;
@@ -130,7 +130,7 @@ class Indexer
      * @param \Element $element
      * @return string
      */
-    public static function getDataTypeFromElement(\Element $element)
+    public static function getDataTypeFromElement (\Element $element)
     {
         $type = $element->getElementType();
 

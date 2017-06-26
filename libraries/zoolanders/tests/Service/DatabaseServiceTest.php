@@ -13,7 +13,8 @@ use ZFTests\Classes\Tag;
  *
  * @package ZFTests\Service
  */
-class DatabaseServiceTest extends ZFTestCaseFixtures {
+class DatabaseServiceTest extends ZFTestCaseFixtures
+{
     use CSVData;
 
     /**
@@ -24,7 +25,8 @@ class DatabaseServiceTest extends ZFTestCaseFixtures {
     /**
      * Test db init
      */
-    public function testDBInit () {
+    public function testDBInit ()
+    {
         $db = self::$container->db;
 
         $this->assertTrue(in_array($db->name, ['mysql', 'mysqli', 'postgresql', 'sqlite']));
@@ -35,7 +37,8 @@ class DatabaseServiceTest extends ZFTestCaseFixtures {
      *
      * @covers      Database::query()
      */
-    public function testDBQuery () {
+    public function testDBQuery ()
+    {
         $db = self::$container->db;
 
         $sql = "INSERT INTO `#__zoo_tag` (`item_id`, `name`) VALUES(1, 'test')";
@@ -56,7 +59,8 @@ class DatabaseServiceTest extends ZFTestCaseFixtures {
      *
      * @covers          Database::queryResult()
      */
-    public function testQuerying () {
+    public function testQuerying ()
+    {
 
         $data = $this->loadTestDataCSV(FIXTURES_PATH . $this->_data_source);
         if (!empty($data)) {
@@ -86,7 +90,8 @@ class DatabaseServiceTest extends ZFTestCaseFixtures {
      *
      * @covers          Database::replacePrefix()
      */
-    public function testPrefixReplace () {
+    public function testPrefixReplace ()
+    {
         $db = self::$container->db;
         $expected = $db->getPrefix() . 'zoo_item';
 

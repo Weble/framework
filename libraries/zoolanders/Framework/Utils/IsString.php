@@ -2,12 +2,14 @@
 
 namespace Zoolanders\Framework\Utils;
 
-trait IsString {
+trait IsString
+{
     /**
      * @param $item
      * @return bool
      */
-    public function isString ($item) {
+    public function isString ($item)
+    {
         if (
             (!is_array($item)) &&
             $item !== null &&

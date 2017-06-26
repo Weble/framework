@@ -6,7 +6,8 @@ namespace Zoolanders\Framework\View;
  * Interface ViewInterface
  * @package Zoolanders\Framework\View
  */
-interface ViewInterface {
+interface ViewInterface
+{
     /**
      * Render /perform  content method
      *

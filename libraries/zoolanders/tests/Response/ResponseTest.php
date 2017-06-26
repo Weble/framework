@@ -11,14 +11,16 @@ use Zoolanders\Framework\Response\Response;
  *
  * @package ZFTests\Response
  */
-class ResponseTest extends ZFTestCase {
+class ResponseTest extends ZFTestCase
+{
     /**
      * Response create test
      *
      * @covers          Response::create()
      * @dataProvider    statusCodesProvider
      */
-    public function testResponseCreating ($pass, $expect) {
+    public function testResponseCreating ($pass, $expect)
+    {
         if ($pass === null) {
             $response = new Response();
         } else {
@@ -36,7 +38,8 @@ class ResponseTest extends ZFTestCase {
      *
      * @dataProvider    bindingDataSet
      */
-    public function testSetGet ($key, $value) {
+    public function testSetGet ($key, $value)
+    {
         $response = new Response();
 
         $response->set($key, $value);
@@ -51,7 +54,8 @@ class ResponseTest extends ZFTestCase {
      *
      * @dataProvider    headersDataSet
      */
-    public function testSetHeader ($key, $value) {
+    public function testSetHeader ($key, $value)
+    {
         $response = new Response();
 
         $response->setHeader($key, $value);
@@ -65,7 +69,8 @@ class ResponseTest extends ZFTestCase {
      * @covers          Response::add()
      * @dataProvider    bindingDataSet
      */
-    public function testAdd ($key, $value) {
+    public function testAdd ($key, $value)
+    {
 
         $this->markTestSkipped("Move to JsonResponse test");
 
@@ -79,7 +84,8 @@ class ResponseTest extends ZFTestCase {
     /**
      * Status codes data provider
      */
-    public function statusCodesProvider () {
+    public function statusCodesProvider ()
+    {
         return [
             [null, 200],
             [200, 200],
@@ -93,7 +99,8 @@ class ResponseTest extends ZFTestCase {
     /**
      * Binding data set
      */
-    public function bindingDataSet () {
+    public function bindingDataSet ()
+    {
         return [
             ['alpha', 'A'],
             ['bravo', 'b'],
@@ -106,7 +113,8 @@ class ResponseTest extends ZFTestCase {
     /**
      * Headers data provider
      */
-    public function headersDataSet () {
+    public function headersDataSet ()
+    {
         return [
             ['Content-Type', 'application/pdf'],
             ['Location', 'http://example.com'],

@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Event\Element;
 
-class Configform extends Element {
+class Configform extends Element
+{
     /**
      * @var \JForm
      */
@@ -13,7 +14,8 @@ class Configform extends Element {
      * @param \Element $element
      * @param  $form
      */
-    public function __construct (\Element $element, $form = null) {
+    public function __construct (\Element $element, $form = null)
+    {
         parent::__construct($element);
 
         $this->form = $form;
@@ -22,14 +24,16 @@ class Configform extends Element {
     /**
      * @return \JForm|null
      */
-    public function getForm () {
+    public function getForm ()
+    {
         return $this->form;
     }
 
     /**
      * @param $form
      */
-    public function setForm ($form) {
+    public function setForm ($form)
+    {
         $this->form = $form;
     }
 }

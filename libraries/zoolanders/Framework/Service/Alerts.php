@@ -11,7 +11,8 @@ use Zoolanders\Framework\Service\Alerts\Error;
  *
  * @package Zoolanders\Framework\Service
  */
-class Alerts {
+class Alerts
+{
     /**
      * @var Notifications pool
      */
@@ -20,7 +21,8 @@ class Alerts {
     /**
      * Alerts constructor.
      */
-    public function __construct () {
+    public function __construct ()
+    {
         $this->notifications = new Collection();
     }
 
@@ -30,7 +32,8 @@ class Alerts {
      * @param   mixed
      * @param   string  Scope
      */
-    public function push ($error, $scope = 'default') {
+    public function push ($error, $scope = 'default')
+    {
         if (!($error instanceof Error)) {
             $error = new Error($error);
         }
@@ -49,7 +52,8 @@ class Alerts {
      *
      * @return mixed
      */
-    public function __call ($method, $args) {
+    public function __call ($method, $args)
+    {
         $reflection_class = new \ReflectionClass($this->notifications);
         if ($reflection_class->hasMethod($method)) {
             $reflection_method = $reflection_class->getMethod($method);
@@ -64,7 +68,8 @@ class Alerts {
      *
      * @return Collection
      */
-    public function get ($scope = null) {
+    public function get ($scope = null)
+    {
         return empty($scope) ? $this->notifications : $this->notifications->get($scope);
     }
 
@@ -73,7 +78,8 @@ class Alerts {
      *
      * @return json
      */
-    public function toJson () {
+    public function toJson ()
+    {
         return $this->notifications->toJson();
     }
 }

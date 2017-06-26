@@ -10,7 +10,8 @@ defined('_JEXEC') or die;
 /**
  * A helper class to quickly get the component parameters
  */
-class Params {
+class Params
+{
     /**
      * Params indexed by component
      *
@@ -21,7 +22,8 @@ class Params {
     /**
      * Public constructor for the params object
      */
-    public function __construct (Dbo $db, Registry $params, Data $data) {
+    public function __construct (Dbo $db, Registry $params, Data $data)
+    {
         $this->db = $db;
         $this->params = $params;
         $this->data = $data;
@@ -32,7 +34,8 @@ class Params {
     /**
      * Reload the params
      */
-    public function reload ($component = 'com_zoo') {
+    public function reload ($component = 'com_zoo')
+    {
         $db = $this->db;
 
         $sql = $db->getQuery(true);
@@ -54,7 +57,8 @@ class Params {
      *
      * @return  mixed
      */
-    public function get ($key, $default = null, $component = 'com_zoo') {
+    public function get ($key, $default = null, $component = 'com_zoo')
+    {
         if (!isset($this->params[$component])) {
             $this->reload($component);
         }
@@ -67,7 +71,8 @@ class Params {
      *
      * @return  array
      */
-    public function getParams ($component = 'com_zoo') {
+    public function getParams ($component = 'com_zoo')
+    {
         if (!isset($this->params[$component])) {
             $this->reload($component);
         }
@@ -83,7 +88,8 @@ class Params {
      *
      * @return  void
      */
-    public function set ($key, $value, $component = 'com_zoo') {
+    public function set ($key, $value, $component = 'com_zoo')
+    {
         $this->setParams(array($key => $value), $component);
     }
 
@@ -94,7 +100,8 @@ class Params {
      *
      * @return  void
      */
-    public function setParams (array $params, $component = 'com_zoo') {
+    public function setParams (array $params, $component = 'com_zoo')
+    {
         if (!isset($this->params[$component])) {
             $this->reload($component);
         }
@@ -107,7 +114,8 @@ class Params {
     /**
      * Actually Save the params into the db
      */
-    public function save () {
+    public function save ()
+    {
         $db = $this->db;
         foreach ($this->params as $component => $params) {
             $data = (string)$params;

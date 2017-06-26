@@ -4,7 +4,8 @@ namespace Zoolanders\Framework\Installer;
 
 use Zoolanders\Framework\Container\Container;
 
-abstract class Updater {
+abstract class Updater
+{
     /**
      * @var Container
      */
@@ -19,14 +20,16 @@ abstract class Updater {
      * Updater constructor.
      * @param Container $container
      */
-    public function __construct (Container $container) {
+    public function __construct (Container $container)
+    {
         $this->container = $container;
     }
 
     /**
      * Check if column exists in specified table
      */
-    function column_exists ($column, $table) {
+    function column_exists ($column, $table)
+    {
         $exists = false;
         $this->container->db->setQuery("SHOW columns FROM `{$table}`");
         $columns = $this->contaner->db->loadAssocList();
@@ -44,7 +47,8 @@ abstract class Updater {
     /**
      * Removes obsolete files and folders
      */
-    public function removeObsolete () {
+    public function removeObsolete ()
+    {
         // Remove files
         if (isset($this->obsolete['files']) && !empty($this->obsolete['files']))
             foreach ($this->obsolete['files'] as $file) {

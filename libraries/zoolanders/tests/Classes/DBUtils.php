@@ -3,7 +3,8 @@
 namespace ZFTests\Classes;
 
 
-trait DBUtils {
+trait DBUtils
+{
     /**
      * Build sql line ready to be executed
      *
@@ -12,7 +13,8 @@ trait DBUtils {
      *
      * @return string
      */
-    private function buildMatchQuery ($tablename, $params) {
+    private function buildMatchQuery ($tablename, $params)
+    {
         $sql = "SELECT * FROM #__$tablename ";
         if (!empty($params)) {
             $sql .= "WHERE ";
@@ -32,7 +34,8 @@ trait DBUtils {
      * @param $value
      * @return string
      */
-    private static function wrapParam ($value) {
+    private static function wrapParam ($value)
+    {
 
         if (is_string($value)) {
             $db = self::$container->db;

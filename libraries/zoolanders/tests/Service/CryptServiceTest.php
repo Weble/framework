@@ -11,7 +11,8 @@ use Zoolanders\Framework\Service\Crypt;
  *
  * @package ZFTests\Service
  */
-class CryptServiceTest extends ServiceTest {
+class CryptServiceTest extends ServiceTest
+{
     /**
      * Encrypt decrypt tests
      *
@@ -20,7 +21,8 @@ class CryptServiceTest extends ServiceTest {
      *
      * @dataProvider    phraseDataSet
      */
-    public function testEncryptDecrypt ($testPhrase) {
+    public function testEncryptDecrypt ($testPhrase)
+    {
         $crypt = self::$container->crypt;
         $encrypted = $crypt->encrypt($testPhrase);
 
@@ -37,7 +39,8 @@ class CryptServiceTest extends ServiceTest {
      *
      * @dataProvider    passwordDataSet
      */
-    public function testPasswordDecryption ($src, $expected) {
+    public function testPasswordDecryption ($src, $expected)
+    {
         $crypt = self::$container->crypt;
         $this->assertEquals($expected, $crypt->decryptPassword($src));
     }
@@ -45,7 +48,8 @@ class CryptServiceTest extends ServiceTest {
     /**
      * Test phrases data provider
      */
-    public function phraseDataSet () {
+    public function phraseDataSet ()
+    {
         return [
             ['alpha'],
             ['bravo'],
@@ -56,7 +60,8 @@ class CryptServiceTest extends ServiceTest {
     /**
      * Password encrypted data set
      */
-    public function passwordDataSet () {
+    public function passwordDataSet ()
+    {
         return [
             ['zl-encrypted[ 322191012]', 'alpha']
         ];

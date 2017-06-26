@@ -10,7 +10,8 @@ use Zoolanders\Framework\Cache\Cache;
  *
  * @package ZFTests\Classes
  */
-trait Cacheable {
+trait Cacheable
+{
     /**
      * @var Cache storage obj
      */
@@ -24,7 +25,8 @@ trait Cacheable {
     /**
      * Init cache file
      */
-    public function initCache () {
+    public function initCache ()
+    {
         $this->cache = new Cache($this->cache_file);
     }
 }

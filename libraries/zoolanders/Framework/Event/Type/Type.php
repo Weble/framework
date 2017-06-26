@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Event\Type;
 
-class Type extends \Zoolanders\Framework\Event\Event {
+class Type extends \Zoolanders\Framework\Event\Event
+{
     /**
      * @var \Type
      */
@@ -12,14 +13,16 @@ class Type extends \Zoolanders\Framework\Event\Event {
      * Beforesave constructor.
      * @param \Type $type
      */
-    public function __construct (\Type $type) {
+    public function __construct (\Type $type)
+    {
         $this->type = $type;
     }
 
     /**
      * @return \Type
      */
-    public function getType () {
+    public function getType ()
+    {
         return $this->type;
     }
 }

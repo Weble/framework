@@ -4,7 +4,8 @@ namespace Zoolanders\Framework\Model\Item;
 
 use Zoolanders\Framework\Element\Indexer;
 
-trait Elements {
+trait Elements
+{
     protected $elements = [];
 
     protected $types = [];
@@ -14,7 +15,8 @@ trait Elements {
     /**
      * @return array
      */
-    public function getTypes () {
+    public function getTypes ()
+    {
         if (!$this->types) {
             $groups = $this->zoo->getApp()->application->groups();
             foreach ($groups as $group) {
@@ -29,7 +31,8 @@ trait Elements {
      * @param $id
      * @return bool
      */
-    public function getElement ($id) {
+    public function getElement ($id)
+    {
         if (!isset($this->elements[$id])) {
             /** @var \Type $type */
             foreach ($this->getTypes() as $type) {
@@ -51,7 +54,8 @@ trait Elements {
      * @param $operator
      * @param $value
      */
-    public function whereElement ($id, $operator, $value, $convert = false) {
+    public function whereElement ($id, $operator, $value, $convert = false)
+    {
         // Normal search
         $value = $this->getQuery()->q($value);
         $alias = $this->getJoinElementAlias();
@@ -85,7 +89,8 @@ trait Elements {
      * @param $operator
      * @param $value
      */
-    public function whereAnyElement ($id, $operator, $value) {
+    public function whereAnyElement ($id, $operator, $value)
+    {
         // Normal search
         $value = $this->getQuery()->q($value);
         $alias = $this->getJoinElementAlias();
@@ -103,7 +108,8 @@ trait Elements {
      * @param $operator
      * @param $value
      */
-    public function orWhereAnyElement ($id, $operator, $value) {
+    public function orWhereAnyElement ($id, $operator, $value)
+    {
         // Normal search
         $value = $this->getQuery()->q($value);
         $alias = $this->getJoinElementAlias();
@@ -121,7 +127,8 @@ trait Elements {
      * @param $operator
      * @param $value
      */
-    public function orWhereElement ($id, $operator, $value) {
+    public function orWhereElement ($id, $operator, $value)
+    {
         // Normal search
         $value = $this->getQuery()->q($value);
         $alias = $this->getJoinElementAlias();
@@ -138,7 +145,8 @@ trait Elements {
      * @param $id
      * @param $values
      */
-    public function whereElementHasAll ($id, $values) {
+    public function whereElementHasAll ($id, $values)
+    {
         settype($values, 'array');
 
         $alias = $this->getJoinElementAlias();
@@ -158,7 +166,8 @@ trait Elements {
      * @param $id
      * @param $values
      */
-    public function whereElementHasAny ($id, $values) {
+    public function whereElementHasAny ($id, $values)
+    {
         settype($values, 'array');
 
         $alias = $this->getJoinElementAlias();
@@ -176,7 +185,8 @@ trait Elements {
     /**
      * @param $id
      */
-    public function joinElement ($id, $alias = null) {
+    public function joinElement ($id, $alias = null)
+    {
         if (!$alias) {
             $alias = $this->getJoinElementAlias();
         }
@@ -200,7 +210,8 @@ trait Elements {
     /**
      * @return string
      */
-    protected function getJoinElementAlias () {
+    protected function getJoinElementAlias ()
+    {
         return 'b' . $this->elementJoins;
     }
 
@@ -209,7 +220,8 @@ trait Elements {
      * @param $alias
      * @return array
      */
-    protected function getMultipleElementValues ($values, $alias) {
+    protected function getMultipleElementValues ($values, $alias)
+    {
         $multiples = [];
 
         // Normal selects / radio / etc (ElementOption)

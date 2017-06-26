@@ -6,7 +6,8 @@ namespace ZFTests\Classes;
  * Class EventStackService
  * @package ZFTests\Classes
  */
-class EventStackService {
+class EventStackService
+{
     // Event stack
     private $stack = null;
 
@@ -16,26 +17,30 @@ class EventStackService {
     /**
      * Class constructor
      */
-    private function __construct () {
+    private function __construct ()
+    {
         $this->stack = new \SplQueue();
     }
 
     /**
      * Clone method
      */
-    private final function __clone () {
+    private final function __clone ()
+    {
     }
 
     /**
      * Wakeup method
      */
-    private final function __wakeUp () {
+    private final function __wakeUp ()
+    {
     }
 
     /**
      * Get instance
      */
-    public static function getInstance () {
+    public static function getInstance ()
+    {
         if (empty(self::$instance)) {
             self::$instance = new self();
         }
@@ -49,7 +54,8 @@ class EventStackService {
      * @param $eventName
      * @param null $event
      */
-    public function push ($eventName, $event = null) {
+    public function push ($eventName, $event = null)
+    {
 
         $this->stack->enqueue(new EventNode($eventName, $event));
     }
@@ -57,7 +63,8 @@ class EventStackService {
     /**
      * Add event to the queue
      */
-    public function pop () {
+    public function pop ()
+    {
 
         return $this->stack->dequeue();
     }
@@ -67,7 +74,8 @@ class EventStackService {
      *
      * @return mixed
      */
-    public function find ($eventName) {
+    public function find ($eventName)
+    {
         $found = false;
 
         $this->stack->rewind();
@@ -89,7 +97,8 @@ class EventStackService {
      * @param   $index
      * @return  mixed
      */
-    public function get ($index) {
+    public function get ($index)
+    {
         $val = null;
 
         if ($this->stack->offsetExists($index)) {

@@ -9,8 +9,10 @@ use Zoolanders\Framework\Service\Link;
 use Zoolanders\Framework\Service\System\Document;
 use Zoolanders\Framework\Service\Zoo;
 
-class LoadFieldAssets extends Listener {
-    public function __construct (Document $document, Zoo $zoo, Link $link, Filesystem $fs, Data $data) {
+class LoadFieldAssets extends Listener
+{
+    public function __construct (Document $document, Zoo $zoo, Link $link, Filesystem $fs, Data $data)
+    {
         $this->document = $document;
         $this->zoo = $zoo;
         $this->link = $link;
@@ -21,7 +23,8 @@ class LoadFieldAssets extends Listener {
     /**
      * @param \Zoolanders\Framework\Event\Environment\Init $event
      */
-    public function handle (\Zoolanders\Framework\Event\Environment\Init $event) {
+    public function handle (\Zoolanders\Framework\Event\Environment\Init $event)
+    {
         // perform admin tasks
         if ($event->is('zoo-type-edit')) {
             // init vars

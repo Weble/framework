@@ -11,7 +11,8 @@ use Zoolanders\Framework\Collection\Collection;
  *
  * @package ZFTests\Collection
  */
-class CollectionTest extends ZFTestCase {
+class CollectionTest extends ZFTestCase
+{
     /**
      * Test creating collection from an array
      *
@@ -19,7 +20,8 @@ class CollectionTest extends ZFTestCase {
      * @covers          Collection::make()
      * @covers          Collection::all()
      */
-    public function testMakeCollection ($items) {
+    public function testMakeCollection ($items)
+    {
         $collection = Collection::make($items);
 
         //Check if all the items are present in the resulting collection:
@@ -33,7 +35,8 @@ class CollectionTest extends ZFTestCase {
      * @dataProvider    collapseDataSet
      * @covers          Collection::collapse()
      */
-    public function testCollapse ($src, $expected) {
+    public function testCollapse ($src, $expected)
+    {
         $collection = Collection::make($src);
 
         // Check if items array is transformed correct:
@@ -47,7 +50,8 @@ class CollectionTest extends ZFTestCase {
      * @dataProvider    diffDataSet
      * @covers          Collection::diff()
      */
-    public function testCollectionDiff ($cmp1, $cmp2, $expected) {
+    public function testCollectionDiff ($cmp1, $cmp2, $expected)
+    {
         $comparison_collection1 = new Collection($cmp1);
 
         $diff = $comparison_collection1->diff($cmp2);
@@ -62,7 +66,8 @@ class CollectionTest extends ZFTestCase {
      * @dataProvider    eachDataSet
      * @covers          Collection::each()
      */
-    public function testCollectionEach ($callback, $src, $expected) {
+    public function testCollectionEach ($callback, $src, $expected)
+    {
         $collection = Collection::make($src);
         $updated = $collection->each($callback);
 
@@ -72,7 +77,8 @@ class CollectionTest extends ZFTestCase {
     /**
      * Data provider for collection ops testing
      */
-    public function dataProvider () {
+    public function dataProvider ()
+    {
 
         return [
             [
@@ -87,7 +93,8 @@ class CollectionTest extends ZFTestCase {
     /**
      * Array data provider for collection ops testing
      */
-    public function collapseDataSet () {
+    public function collapseDataSet ()
+    {
 
         return [
             [
@@ -100,7 +107,8 @@ class CollectionTest extends ZFTestCase {
     /**
      * Diff data sets provider
      */
-    public function diffDataSet () {
+    public function diffDataSet ()
+    {
         return [
             [
                 [1, 2, 3],
@@ -118,7 +126,8 @@ class CollectionTest extends ZFTestCase {
     /**
      * Each function datasets
      */
-    public function eachDataSet () {
+    public function eachDataSet ()
+    {
         return [
             [
                 function ($arg) {

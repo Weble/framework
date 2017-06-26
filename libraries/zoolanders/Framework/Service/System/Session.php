@@ -8,6 +8,7 @@ use Zoolanders\Framework\Service\System;
  * Class Session
  * @package Zoolanders\System
  */
-class Session extends System {
+class Session extends System
+{
 
 }

@@ -12,7 +12,8 @@ use Zoolanders\Framework\Container\Container;
  *
  * @package ZFTests\Model
  */
-class ModelTest extends ZFTestCase {
+class ModelTest extends ZFTestCase
+{
     /**
      * Get Set state operations check
      *
@@ -21,7 +22,8 @@ class ModelTest extends ZFTestCase {
      * @covers          Model::__get()
      * @dataProvider    plainDataSet
      */
-    public function testGetSetState ($key, $value) {
+    public function testGetSetState ($key, $value)
+    {
 
         $model = new Model(self::$container);
         $model->setState($key, $value);
@@ -47,7 +49,8 @@ class ModelTest extends ZFTestCase {
      * @covers          Model::clearState()
      * @dataProvider    plainDataSet
      */
-    public function testClearState ($key, $value) {
+    public function testClearState ($key, $value)
+    {
         $model = new Model(self::$container);
         $model->{$key} = $value;
 
@@ -64,7 +67,8 @@ class ModelTest extends ZFTestCase {
      * @depends         testGetSetState
      * @dataProvider    filteringDataSet
      */
-    public function testGetStateFilter ($filter, $testset, $expected) {
+    public function testGetStateFilter ($filter, $testset, $expected)
+    {
         $model = new Model(self::$container);
 
         for ($i = 0; $i < count($testset); $i++) {
@@ -77,7 +81,8 @@ class ModelTest extends ZFTestCase {
     /**
      * KVP Data provider for model testing
      */
-    public function plainDataSet () {
+    public function plainDataSet ()
+    {
 
         return [
             ['a', 'alpha'],
@@ -91,7 +96,8 @@ class ModelTest extends ZFTestCase {
     /**
      * Testing set for testing getState filtering option
      */
-    public function filteringDataSet () {
+    public function filteringDataSet ()
+    {
         // Relying on Joomla\Filter\InputFilter
         return [
             ['INT', [1, '1', 'a'], [1, 1, 0]],

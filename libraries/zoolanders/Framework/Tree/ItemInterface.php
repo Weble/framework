@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Tree;
 
-interface ItemInterface {
+interface ItemInterface
+{
     public function getID ();
 
     public function getParent ();

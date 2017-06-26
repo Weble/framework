@@ -15,7 +15,8 @@ use ZFTests\Classes\DBUtils;
  *
  * @package Zoolanders\Framework\TestCases
  */
-class ZFTestCase extends TestCase {
+class ZFTestCase extends TestCase
+{
     use DBUtils;
 
     /**
@@ -23,7 +24,8 @@ class ZFTestCase extends TestCase {
      */
     protected static $container;
 
-    public static function setUpBeforeClass () {
+    public static function setUpBeforeClass ()
+    {
         parent::setUpBeforeClass();
 
         $config = new Registry();
@@ -36,7 +38,8 @@ class ZFTestCase extends TestCase {
         //self::$container['event'] = new Event(self::$container);
     }
 
-    public static function tearDownAfterClass () {
+    public static function tearDownAfterClass ()
+    {
         self::$container = null;
 
         parent::tearDownAfterClass();
@@ -49,7 +52,8 @@ class ZFTestCase extends TestCase {
      *
      * @return  mixed
      */
-    public function __get ($name) {
+    public function __get ($name)
+    {
         if ($name == 'container') {
             return self::$container;
         } else {
@@ -64,7 +68,8 @@ class ZFTestCase extends TestCase {
      * @param callable $callback
      * @param string $message
      */
-    public function assertEventTriggered ($eventName, callable $callback, $message = '') {
+    public function assertEventTriggered ($eventName, callable $callback, $message = '')
+    {
         $eventStack = self::$container->eventstack;
         $offset = $eventStack->find($eventName);
         $this->assertThat(($offset !== false), new \PHPUnit_Framework_Constraint_IsTrue, $message);
@@ -81,7 +86,8 @@ class ZFTestCase extends TestCase {
      * @param   $params
      * @param   string $message
      */
-    public function assertTableHasRow ($tablename, $params, $message = '') {
+    public function assertTableHasRow ($tablename, $params, $message = '')
+    {
         $sql = $this->buildMatchQuery($tablename, $params);
         $db = self::$container->db;
         $db->setQuery($sql);
@@ -104,7 +110,8 @@ class ZFTestCase extends TestCase {
      * @param   $params
      * @param   string $message
      */
-    public function assertTableHasNoRow ($tablename, $params, $message = '') {
+    public function assertTableHasNoRow ($tablename, $params, $message = '')
+    {
         $sql = $this->buildMatchQuery($tablename, $params);
         $db = self::$container->db;
         $db->setQuery($sql);

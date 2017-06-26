@@ -6,13 +6,15 @@ namespace Zoolanders\Framework\Table;
  * Overrides zoo's table helper to get zoolanders table classes if needed
  * @package Zoolanders\Framework\Table
  */
-class Helper extends \TableHelper {
+class Helper extends \TableHelper
+{
     /**
      * Class constructor
      *
      * @param \App $app A reference to an App Object
      */
-    public function __construct ($app) {
+    public function __construct ($app)
+    {
         parent::__construct($app);
 
         $this->_name = 'table';
@@ -28,7 +30,8 @@ class Helper extends \TableHelper {
      *
      * @since 1.0.0
      */
-    public function get ($name, $prefix = null) {
+    public function get ($name, $prefix = null)
+    {
         // Preload the zoo table class, probably we extend it
         $zooTable = parent::get($name, $prefix);
 

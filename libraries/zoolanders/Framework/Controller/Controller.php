@@ -13,7 +13,8 @@ use Zoolanders\Framework\View\ViewInterface;
  * Class Controller
  * Inspired by FOF3 Controller class by Nicholas K. Dionysopoulos / Akeeba Ltd (https://github.com/akeeba/fof/)
  */
-class Controller {
+class Controller
+{
     use Triggerable, NameFromClass;
 
     /**
@@ -40,14 +41,16 @@ class Controller {
     /**
      * Controller constructor.
      */
-    public function __construct () {
+    public function __construct ()
+    {
         $this->registerDefaultTask($this->defaultTask ? $this->defaultTask : 'index');
     }
 
     /**
      * @return string
      */
-    public function getDefaultTask () {
+    public function getDefaultTask ()
+    {
         return $this->defaultTask;
     }
 
@@ -59,7 +62,8 @@ class Controller {
      *
      * @return  ResponseInterface
      */
-    public function display ($tpl = null) {
+    public function display ($tpl = null)
+    {
         $layout = $tpl ? $tpl : $this->getName();
 
         // Set the layout
@@ -77,7 +81,8 @@ class Controller {
      *
      * @return  Controller  This object to support chaining.
      */
-    public function registerDefaultTask ($method) {
+    public function registerDefaultTask ($method)
+    {
         $this->defaultTask = $method;
 
         return $this;
@@ -91,7 +96,8 @@ class Controller {
      *
      * @return  Response
      */
-    protected function render ($layout, $data = array()) {
+    protected function render ($layout, $data = array())
+    {
         $buffer = explode(":", $layout);
         $viewName = array_shift($buffer);
         $tplName = @array_shift($buffer);

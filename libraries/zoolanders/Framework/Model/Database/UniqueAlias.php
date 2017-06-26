@@ -11,7 +11,8 @@ use Zoolanders\Framework\Collection\Resources;
  *
  * @package Zoolanders\Framework\Model\Database
  */
-trait UniqueAlias {
+trait UniqueAlias
+{
     /**
      * @var string  Alias column name (e.g. "alias", "slug")
      */
@@ -24,7 +25,8 @@ trait UniqueAlias {
      *
      * @return bool
      */
-    public function aliasExists ($alias) {
+    public function aliasExists ($alias)
+    {
 
         $query = $this->db->getQuery(true);
         $query->select('*')
@@ -43,7 +45,8 @@ trait UniqueAlias {
      *
      * @return  array alias, copy_number
      */
-    public function generateAlias ($alias) {
+    public function generateAlias ($alias)
+    {
         $copy_tail_pattern = '/(-copy)+(-(\d+))*$/';
         $start_index = 0;
 

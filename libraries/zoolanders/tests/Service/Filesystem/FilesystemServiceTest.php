@@ -11,13 +11,15 @@ use ZFTests\Classes\Filesystem;
  *
  * @package ZFTests\Service\Filesystem
  */
-class FilesystemServiceTest extends ZFTestCase {
+class FilesystemServiceTest extends ZFTestCase
+{
     /**
      * Test formating filesize
      *
      * @dataProvider    formatDataSet
      */
-    public function testFormatSize ($actual, $format, $expected) {
+    public function testFormatSize ($actual, $format, $expected)
+    {
         $file = self::$container->filesystem;
         $this->assertEquals($expected, $file->formatFilesize($actual, $format));
     }
@@ -28,7 +30,8 @@ class FilesystemServiceTest extends ZFTestCase {
      * @depends         testFormatSize
      * @dataProvider    precizeFilesizeSet
      */
-    public function testGetSize ($src, $format, $expected) {
+    public function testGetSize ($src, $format, $expected)
+    {
         $file = self::$container->filesystem;
         $this->assertEquals($expected, $file->getSourceSize($src, $format));
     }
@@ -38,7 +41,8 @@ class FilesystemServiceTest extends ZFTestCase {
      *
      * @dataProvider    difMimeTypesDataSet
      */
-    public function testGetMimeType ($src, $expected) {
+    public function testGetMimeType ($src, $expected)
+    {
         $file = self::$container->filesystem;
         $this->assertEquals($expected, $file->getContentType($src));
     }
@@ -48,7 +52,8 @@ class FilesystemServiceTest extends ZFTestCase {
      *
      * @dataProvider    filenamesProvider
      */
-    public function testMakeSafe ($filename, $expected) {
+    public function testMakeSafe ($filename, $expected)
+    {
         $file = self::$container->filesystem;
         $this->assertEquals($expected, $file->makeSafe($filename));
     }
@@ -58,7 +63,8 @@ class FilesystemServiceTest extends ZFTestCase {
      *
      * @dataProvider    filepathsProvider
      */
-    public function testPathCleanup ($src, $expected) {
+    public function testPathCleanup ($src, $expected)
+    {
         $file = self::$container->filesystem;
         $this->assertEquals($expected, $file->cleanPath($src));
     }
@@ -68,7 +74,8 @@ class FilesystemServiceTest extends ZFTestCase {
      *
      * @covers      Filesystem::readDirectoryFiles()
      */
-    public function testReadDirectoryFiles () {
+    public function testReadDirectoryFiles ()
+    {
 
         $filteredFS = ['test1.txt', 'test2.txt'];
         $internalFS = ['subdir/test3.txt'];
@@ -92,7 +99,8 @@ class FilesystemServiceTest extends ZFTestCase {
      *
      * @covers      Filesystem::readDirectory()
      */
-    public function testReadDirectory () {
+    public function testReadDirectory ()
+    {
         $file = self::$container->filesystem;
         $content = $file->readDirectory(JOOMLA_ENV_PATH . '/fixtures/filesystem');
 
@@ -110,7 +118,8 @@ class FilesystemServiceTest extends ZFTestCase {
      * @covers          Filesystem::getExtension()
      * @dataProvider    filesExtDataSet
      */
-    public function testGetExtension ($filename, $ext) {
+    public function testGetExtension ($filename, $ext)
+    {
         $file = self::$container->filesystem;
         $this->assertEquals($ext, $file->getExtension($filename));
     }
@@ -121,7 +130,8 @@ class FilesystemServiceTest extends ZFTestCase {
      * @covers          Filesystem::makePath()
      * @dataProvider    makepathDataSet
      */
-    public function testMakePath ($arg1, $arg2, $expected) {
+    public function testMakePath ($arg1, $arg2, $expected)
+    {
         $file = self::$container->filesystem;
         $this->assertEquals($expected, $file->makePath($arg1, $arg2));
     }
@@ -131,7 +141,8 @@ class FilesystemServiceTest extends ZFTestCase {
      *
      * @covers          Filesystem::folderCreate()
      */
-    public function testFolderCreate () {
+    public function testFolderCreate ()
+    {
         $file = self::$container->filesystem;
         $dirPath = FIXTURES_PATH . '/testdir';
         // Create:
@@ -154,7 +165,8 @@ class FilesystemServiceTest extends ZFTestCase {
      * @covers          Filesystem::returnBytes()
      * @dataProvider    sizeStringDataProvider
      */
-    public function testBytesOutput ($src, $expected) {
+    public function testBytesOutput ($src, $expected)
+    {
         $file = self::$container->filesystem;
         $this->assertEquals($expected, $file->returnBytes($src));
     }
@@ -162,7 +174,8 @@ class FilesystemServiceTest extends ZFTestCase {
     /**
      * Filesize data provider based on simple fixtured files
      */
-    public function precizeFilesizeSet () {
+    public function precizeFilesizeSet ()
+    {
         return [
             ['fixtures/filesystem/test1.txt', true, '13 B'],
             ['fixtures/filesystem/test1.txt', false, 13],
@@ -174,7 +187,8 @@ class FilesystemServiceTest extends ZFTestCase {
     /**
      * Provides pointers to files with different mimetypes
      */
-    public function difMimeTypesDataSet () {
+    public function difMimeTypesDataSet ()
+    {
         return [
             ['test1.txt', 'text/plain'],
             ['script.js', 'application/x-javascript'],
@@ -187,7 +201,8 @@ class FilesystemServiceTest extends ZFTestCase {
     /**
      * Format data provider
      */
-    public function formatDataSet () {
+    public function formatDataSet ()
+    {
         return [
             [10000, false, '9.77 KB'],
             [10000, 'KB', '9.77 KB'],
@@ -203,7 +218,8 @@ class FilesystemServiceTest extends ZFTestCase {
     /**
      * Filenames data provider
      */
-    public function filenamesProvider () {
+    public function filenamesProvider ()
+    {
         return [
             ['some filename.txt', 'some_filename.txt'],
             ['~some+=?weird!@#$%^&*()-_filename.php', '~someweird-_filename.php'],
@@ -214,7 +230,8 @@ class FilesystemServiceTest extends ZFTestCase {
     /**
      * Weird Filepaths data provider
      */
-    public function filepathsProvider () {
+    public function filepathsProvider ()
+    {
         return [
             ['/some/related/path/', '/some/related/path/'],
             ['/some/weird///path.txt', '/some/weird/path.txt'],
@@ -224,7 +241,8 @@ class FilesystemServiceTest extends ZFTestCase {
     /**
      * Files and ext dataset
      */
-    public function filesExtDataSet () {
+    public function filesExtDataSet ()
+    {
         return [
             ['index.html', 'html'],
             ['controller.php', 'php'],
@@ -238,7 +256,8 @@ class FilesystemServiceTest extends ZFTestCase {
     /**
      * Dataset for testing makepath func.
      */
-    public function makepathDataSet () {
+    public function makepathDataSet ()
+    {
         return [
             ['folder', 'container', 'folder/container'],
             ['folder/', 'container', 'folder/container'],
@@ -249,7 +268,8 @@ class FilesystemServiceTest extends ZFTestCase {
     /**
      * Byte string data provider
      */
-    public function sizeStringDataProvider () {
+    public function sizeStringDataProvider ()
+    {
         return [
             ['1 KB', 1024],
             ['1 MB', 1048576],

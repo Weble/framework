@@ -11,11 +11,13 @@ use Zoolanders\Framework\Listener\Listener;
  *
  * @package ZFTests\Listener
  */
-class ListenerTest extends ZFTestCase {
+class ListenerTest extends ZFTestCase
+{
     /**
      * Test listener
      */
-    public function testListener () {
+    public function testListener ()
+    {
         $this->markTestSkipped('Listener is abstract and have no any core logic for now');
     }
 }

@@ -4,7 +4,8 @@ namespace Zoolanders\Framework\Event;
 
 use Zoolanders\Framework\Container\Container;
 
-class Dispatcher {
+class Dispatcher
+{
     /**
      * @var Container
      */
@@ -26,7 +27,8 @@ class Dispatcher {
     /**
      * Event constructor.
      */
-    public function __construct (Container $c) {
+    public function __construct (Container $c)
+    {
         $this->container = $c;
         $this->zoo = new Zoo($this, $c->make('\Zoolanders\Framework\Service\Zoo'));
         $this->joomla = \JEventDispatcher::getInstance();
@@ -40,7 +42,8 @@ class Dispatcher {
      *
      * @since 1.0.0
      */
-    public function connect ($name, $listener) {
+    public function connect ($name, $listener)
+    {
         if (!isset($this->listeners[$name])) {
             $this->listeners[$name] = array();
         }
@@ -58,7 +61,8 @@ class Dispatcher {
      *
      * @since 1.0.0
      */
-    public function disconnect ($name, $listener) {
+    public function disconnect ($name, $listener)
+    {
         if (!isset($this->listeners[$name])) {
             return false;
         }
@@ -77,7 +81,8 @@ class Dispatcher {
      * @param $string
      * @return mixed
      */
-    public function create ($string) {
+    public function create ($string)
+    {
         $container = Container::getInstance();
         return $container->make(Container::FRAMEWORK_NAMESPACE . 'Event\\' . $string);
     }
@@ -86,7 +91,8 @@ class Dispatcher {
     /**
      * @see notify
      */
-    public function trigger (EventInterface &$event) {
+    public function trigger (EventInterface &$event)
+    {
         if (ZF_TEST) {
             // Test mode, notify event catcher service
             $this->container->eventstack->push($event->getName(), $event);
@@ -99,7 +105,8 @@ class Dispatcher {
      * @param EventInterface $event
      * @return void
      */
-    public function notify (EventInterface &$event) {
+    public function notify (EventInterface &$event)
+    {
         // @TODO: Add processing for non-encapsulated listeners (like closures, global func. etc.)
         foreach ($this->getListeners($event->getName()) as $listener) {
             $parts = explode("@", $listener);
@@ -131,7 +138,8 @@ class Dispatcher {
      *
      * @since 1.0.0
      */
-    public function hasListeners ($name) {
+    public function hasListeners ($name)
+    {
         if (!isset($this->listeners[$name])) {
             $this->listeners[$name] = array();
         }
@@ -149,7 +157,8 @@ class Dispatcher {
      *
      * @since 1.0.0
      */
-    public function getListeners ($name) {
+    public function getListeners ($name)
+    {
         if (!isset($this->listeners[$name])) {
             return array();
         }
@@ -161,7 +170,8 @@ class Dispatcher {
     /**
      * @param $events
      */
-    public function bindEvents ($events) {
+    public function bindEvents ($events)
+    {
         foreach ($events as $event => $listeners) {
             $listeners = (array)$listeners;
 

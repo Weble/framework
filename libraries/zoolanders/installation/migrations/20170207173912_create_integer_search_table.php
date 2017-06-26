@@ -2,7 +2,8 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateIntegerSearchTable extends AbstractMigration {
+class CreateIntegerSearchTable extends AbstractMigration
+{
     /**
      * Change Method.
      *
@@ -24,7 +25,8 @@ class CreateIntegerSearchTable extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change () {
+    public function change ()
+    {
         $table = $this->table('search_integer');
 
         if (!$table->exists()) {

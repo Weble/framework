@@ -4,7 +4,8 @@ namespace Zoolanders\Framework\Menu;
 
 use Zoolanders\Framework\Tree\Tree;
 
-class Menu extends Tree {
+class Menu extends Tree
+{
 
     /**
      * The name of the menu
@@ -19,7 +20,8 @@ class Menu extends Tree {
      * @param string $name
      * @param bool $hidden
      */
-    public function __construct ($name, $hidden = false) {
+    public function __construct ($name, $hidden = false)
+    {
         parent::__construct('\\Zoolanders\\Framework\\Menu\\Item');
 
         $this->name = $name;
@@ -34,7 +36,8 @@ class Menu extends Tree {
      *
      * @since 2.0
      */
-    public function render (array $decorators = []) {
+    public function render (array $decorators = [])
+    {
         // create html
         $html = '<ul>';
         foreach ($this->root->getChildren() as $child) {
@@ -66,7 +69,8 @@ class Menu extends Tree {
      *
      * @since 2.0
      */
-    protected function map (\SimpleXMLElement $xml, $decorator, $args = array()) {
+    protected function map (\SimpleXMLElement $xml, $decorator, $args = array())
+    {
         // init level
         if (!isset($args['level'])) {
             $args['level'] = 0;
@@ -91,7 +95,8 @@ class Menu extends Tree {
      * Renders a menu in json format
      * @return mixed|string
      */
-    public function renderJSON () {
+    public function renderJSON ()
+    {
         $menu = array();
         foreach ($this->getChildren() as $item) {
             $menu[] = array(

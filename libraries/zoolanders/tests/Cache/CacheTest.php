@@ -14,7 +14,8 @@ use Zoolanders\Framework\Cache\Cache;
  *
  * @package ZFTests\Cache
  */
-class CacheTest extends ZFTestCase {
+class CacheTest extends ZFTestCase
+{
     use Cacheable;
 
     /**
@@ -22,7 +23,8 @@ class CacheTest extends ZFTestCase {
      * write/read
      * @covers Cache::check()
      */
-    public function testCacheStorageIO () {
+    public function testCacheStorageIO ()
+    {
 
         $this->initCache();
         $this->assertTrue($this->cache->check());
@@ -42,7 +44,8 @@ class CacheTest extends ZFTestCase {
      * @covers  Cache::set()
      * @covers  Cache::get()
      */
-    public function testCacheSetRetrievement () {
+    public function testCacheSetRetrievement ()
+    {
 
         $this->initCache();
 
@@ -61,7 +64,8 @@ class CacheTest extends ZFTestCase {
      * @covers  Cache::clear()
      * @covers  Cache::save()
      */
-    public function testCacheCleanup () {
+    public function testCacheCleanup ()
+    {
 
         $this->initCache();
 

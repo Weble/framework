@@ -2,6 +2,7 @@
 
 namespace Zoolanders\Framework\Event\Item;
 
-class Saved extends Item {
+class Saved extends Item
+{
 
 }

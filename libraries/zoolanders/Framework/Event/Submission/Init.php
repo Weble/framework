@@ -2,6 +2,7 @@
 
 namespace Zoolanders\Framework\Event\Submission;
 
-class Init extends Submission {
+class Init extends Submission
+{
 
 }

@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Service\Filesystem;
 
-trait Clean {
+trait Clean
+{
     /**
      * Makes file name safe to use
      * @param mixed The name of the file (not full path)
@@ -16,7 +17,8 @@ trait Clean {
      * Adapted to ZOO (ZOOlanders.com)
      * Copyright 2011, ZOOlanders.com
      */
-    public function makeSafe ($subject, $mode = 'utf-8', $allowspaces = false) {
+    public function makeSafe ($subject, $mode = 'utf-8', $allowspaces = false)
+    {
         $search = array();
 
         // replace spaces with underscore
@@ -69,7 +71,8 @@ trait Clean {
         return preg_replace($search, '', $subject);
     }
 
-    private function utf8_latin_to_ascii ($subject) {
+    private function utf8_latin_to_ascii ($subject)
+    {
         static $CHARS = NULL;
 
         if (is_null($CHARS)) {
@@ -99,7 +102,8 @@ trait Clean {
         return str_replace(array_keys($CHARS), array_values($CHARS), $subject);
     }
 
-    private function utf8_cyrillic_to_ascii ($subject) {
+    private function utf8_cyrillic_to_ascii ($subject)
+    {
         static $CHARS = NULL;
 
         if (is_null($CHARS)) {
@@ -112,7 +116,8 @@ trait Clean {
         return str_replace(array_keys($CHARS), array_values($CHARS), $subject);
     }
 
-    public function cleanPath ($path, $ds = DIRECTORY_SEPARATOR, $prefix = '') {
+    public function cleanPath ($path, $ds = DIRECTORY_SEPARATOR, $prefix = '')
+    {
         $path = trim(urldecode($path));
 
         // check for UNC path on IIS and set prefix

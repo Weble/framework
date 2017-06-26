@@ -11,13 +11,15 @@ use Zoolanders\Framework\Service\System\Config;
  *
  * @package ZFTests\Service\System
  */
-class ConfigServiceTest extends SystemServiceTestLayer {
+class ConfigServiceTest extends SystemServiceTestLayer
+{
     protected $serviceClassNames = ['JConfig', 'Joomla\Registry\Registry'];
 
     /**
      * Service class instance provider
      */
-    protected function getServiceInstance () {
+    protected function getServiceInstance ()
+    {
         return new Config(self::$container);
     }
 }

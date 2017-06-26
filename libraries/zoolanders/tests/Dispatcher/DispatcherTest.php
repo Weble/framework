@@ -10,13 +10,15 @@ use Zoolanders\Framework\Request\Request;
  * Class DispatcherTest
  * Test dispatching workflow
  */
-class DispatcherTest extends ZFTestCase {
+class DispatcherTest extends ZFTestCase
+{
     /**
      * Test dispatching front controller
      *
      * @covers      Dispatcher::dispatch()
      */
-    public function testInvalidControllerException () {
+    public function testInvalidControllerException ()
+    {
 
         $this->expectException(ControllerNotFound::class);
 

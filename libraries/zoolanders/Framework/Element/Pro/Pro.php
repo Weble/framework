@@ -21,7 +21,7 @@ abstract class Pro extends \Element
     /*
        Function: Constructor
     */
-    public function __construct()
+    public function __construct ()
     {
         // call parent constructor
         parent::__construct();
@@ -49,7 +49,7 @@ abstract class Pro extends \Element
         Returns:
             Void
     */
-    public function setType($type)
+    public function setType ($type)
     {
         parent::setType($type);
 
@@ -64,7 +64,7 @@ abstract class Pro extends \Element
         Returns:
             Void
     */
-    protected function checkInstallation()
+    protected function checkInstallation ()
     {
 
     }
@@ -76,7 +76,7 @@ abstract class Pro extends \Element
         Returns:
             String - Layout path
     */
-    public function getLayout($layout = null)
+    public function getLayout ($layout = null)
     {
 
         // init vars
@@ -100,7 +100,7 @@ abstract class Pro extends \Element
         Function: returnData
             Renders the element data - use for ajax requests
     */
-    public function returnData($layout, $separator = '', $filter = '', $specific = '')
+    public function returnData ($layout, $separator = '', $filter = '', $specific = '')
     {
         $layout = json_decode($layout, true);
         $separator = json_decode($separator, true);
@@ -120,7 +120,7 @@ abstract class Pro extends \Element
         Returns:
             String - html
     */
-    public function render($params = array())
+    public function render ($params = array())
     {
         $params = $this->app->data->create($params);
 

@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Service;
 
-class Inflector {
+class Inflector
+{
     /**
      * @var \Joomla\String\Inflector
      */
@@ -11,7 +12,8 @@ class Inflector {
     /**
      * Constructor
      */
-    public function __construct () {
+    public function __construct ()
+    {
         $this->inflector = \Joomla\String\Inflector::getInstance();
     }
 
@@ -19,7 +21,8 @@ class Inflector {
      * @param $word
      * @return mixed
      */
-    public function camelize ($word) {
+    public function camelize ($word)
+    {
         $word = preg_replace('/[^a-zA-Z0-9\s]/', ' ', $word);
         $word = str_replace(' ', '', ucwords(strtolower(str_replace('_', ' ', $word))));
 
@@ -31,7 +34,8 @@ class Inflector {
      * @param $arguments
      * @return mixed
      */
-    public function __call ($name, $arguments) {
+    public function __call ($name, $arguments)
+    {
         return call_user_func_array([$this->inflector, $name], $arguments);
     }
 
@@ -39,7 +43,8 @@ class Inflector {
      * @param $name
      * @return mixed
      */
-    public function __get ($name) {
+    public function __get ($name)
+    {
         return $this->inflector->$name;
     }
 }

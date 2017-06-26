@@ -11,7 +11,8 @@ use Zoolanders\Framework\Utils\IsString;
 
 defined('_JEXEC') or die;
 
-abstract class Database extends Model {
+abstract class Database extends Model
+{
     use Date, IsString;
 
     /**
@@ -102,7 +103,8 @@ abstract class Database extends Model {
      * Database constructor.
      * @param \Zoolanders\Framework\Service\Database service
      */
-    public function __construct (\Zoolanders\Framework\Service\Database $db, Zoo $zoo) {
+    public function __construct (\Zoolanders\Framework\Service\Database $db, Zoo $zoo)
+    {
         parent::__construct();
 
         $this->db = $db;
@@ -117,14 +119,16 @@ abstract class Database extends Model {
     /**
      * @return \AppTable
      */
-    public function getTable () {
+    public function getTable ()
+    {
         return $this->table;
     }
 
     /**
      * Get list of columns to be selected
      */
-    protected function getColumns () {
+    protected function getColumns ()
+    {
         return empty($this->columns) ? [$this->getPrefix() . '*'] : $this->columns;
     }
 
@@ -132,7 +136,8 @@ abstract class Database extends Model {
      * @param array $fields
      * @param null $prefix
      */
-    public function fields ($fields = ['*'], $prefix = null) {
+    public function fields ($fields = ['*'], $prefix = null)
+    {
         $prefix = $prefix ? $prefix : $this->tablePrefix;
 
         $fields = array_map(function ($item) use ($prefix) {
@@ -150,14 +155,16 @@ abstract class Database extends Model {
     /**
      * @return \JDatabaseQuery
      */
-    public function getQuery () {
+    public function getQuery ()
+    {
         return $this->query;
     }
 
     /**
      * @return \JDatabaseQuery
      */
-    public function buildQuery () {
+    public function buildQuery ()
+    {
         $query = $this->getQuery();
 
         // Prefix the table if necessary
@@ -202,7 +209,8 @@ abstract class Database extends Model {
      *
      * @return Resources
      */
-    public function get () {
+    public function get ()
+    {
         $query = $this->buildQuery();
 
         $models = $this->db->queryObjectList($query, $this->primary_key, $this->entityClass, $this->getState('offset', 0), $this->getState('limit', 0));
@@ -218,7 +226,8 @@ abstract class Database extends Model {
      * @param $item
      * @return mixed
      */
-    protected function castAttributes ($item) {
+    protected function castAttributes ($item)
+    {
         foreach ($item as $key => &$value) {
             $value = $this->castAttribute($key, $value);
         }
@@ -231,7 +240,7 @@ abstract class Database extends Model {
      * @param $data
      * @return bool
      */
-    public function bind($object, $data)
+    public function bind ($object, $data)
     {
         if (!is_array($data)) {
             return $object;
@@ -249,7 +258,8 @@ abstract class Database extends Model {
      * @param $value
      * @return mixed
      */
-    protected function castAttribute ($key, $value) {
+    protected function castAttribute ($key, $value)
+    {
         $columns = $this->getTable()->getTableColumns();
         $columns = array_merge($columns, $this->cast);
 
@@ -293,7 +303,8 @@ abstract class Database extends Model {
      * @param $value
      * @return $this
      */
-    public function where ($fieldOrCallable, $operator, $value) {
+    public function where ($fieldOrCallable, $operator, $value)
+    {
         if (is_callable($fieldOrCallable)) {
             call_user_func_array($fieldOrCallable, [&$this->query]);
             return $this;
@@ -312,7 +323,8 @@ abstract class Database extends Model {
      * @param $value
      * @return $this
      */
-    public function orWhere ($fieldOrCallable, $operator, $value) {
+    public function orWhere ($fieldOrCallable, $operator, $value)
+    {
         if (is_callable($fieldOrCallable)) {
             call_user_func_array($fieldOrCallable, [&$this->query]);
             return $this;
@@ -329,7 +341,8 @@ abstract class Database extends Model {
      * @param $to
      * @return $this
      */
-    public function whereBetween ($field, $from, $to) {
+    public function whereBetween ($field, $from, $to)
+    {
         $this->wheres[] = $this->getPrefix() . $this->query->qn($field) . " BETWEEN " . $this->query->q($from) . " AND " . $this->query->q($to);
 
         return $this;
@@ -341,7 +354,8 @@ abstract class Database extends Model {
      * @param $to
      * @return $this
      */
-    public function orWhereBetween ($field, $from, $to) {
+    public function orWhereBetween ($field, $from, $to)
+    {
         $this->orWheres[] = $this->getPrefix() . $this->query->qn($field) . " BETWEEN " . $this->query->q($from) . " AND " . $this->query->q($to);
 
         return $this;
@@ -353,7 +367,8 @@ abstract class Database extends Model {
      * @param $value
      * @return $this
      */
-    public function whereAny ($field, $operator, $value) {
+    public function whereAny ($field, $operator, $value)
+    {
         if ($this->isString($value)) {
             $value = explode(" ", $value);
         }
@@ -377,7 +392,8 @@ abstract class Database extends Model {
      * @param $value
      * @return $this
      */
-    public function orWhereAny ($field, $operator, $value) {
+    public function orWhereAny ($field, $operator, $value)
+    {
         if ($this->isString($value)) {
             $value = explode(" ", $value);
         }
@@ -399,7 +415,8 @@ abstract class Database extends Model {
      * @param $sql
      * @return $this
      */
-    public function whereRaw ($sql) {
+    public function whereRaw ($sql)
+    {
         $this->wheres[] = $sql;
         return $this;
     }
@@ -408,7 +425,8 @@ abstract class Database extends Model {
      * @param $sql
      * @return $this
      */
-    public function orWhereRaw ($sql) {
+    public function orWhereRaw ($sql)
+    {
         $this->orWheres[] = $sql;
         return $this;
     }
@@ -417,14 +435,16 @@ abstract class Database extends Model {
      * Add prefix to the where statement given
      * @param $sql
      */
-    public function wherePrefix ($sql) {
+    public function wherePrefix ($sql)
+    {
         $this->wheres[] = $this->getPrefix() . $sql;
     }
 
     /**
      * @param $sql
      */
-    public function orWherePrefix ($sql) {
+    public function orWherePrefix ($sql)
+    {
         $this->orWheres[] = $this->getPrefix() . $sql;
     }
 
@@ -434,7 +454,8 @@ abstract class Database extends Model {
      * @param bool $alias
      * @param $type
      */
-    public function join ($table, $condition, $alias = false, $type = 'LEFT') {
+    public function join ($table, $condition, $alias = false, $type = 'LEFT')
+    {
         $type = strtoupper($type);
 
         if (!$type) {
@@ -459,7 +480,8 @@ abstract class Database extends Model {
      * @param $ids
      * @return $this
      */
-    public function filterIn ($field, $ids) {
+    public function filterIn ($field, $ids)
+    {
         settype($ids, 'array');
 
         if (count($ids)) {
@@ -472,21 +494,24 @@ abstract class Database extends Model {
     /**
      * @return string
      */
-    public function getTablePrefix () {
+    public function getTablePrefix ()
+    {
         return $this->tablePrefix;
     }
 
     /**
      * @param string $tablePrefix
      */
-    public function setTablePrefix ($tablePrefix) {
+    public function setTablePrefix ($tablePrefix)
+    {
         $this->tablePrefix = $tablePrefix;
     }
 
     /**
      * @return string
      */
-    protected function getPrefix () {
+    protected function getPrefix ()
+    {
         $prefix = (isset($this->tablePrefix) && strlen($this->tablePrefix) > 0) ? $this->query->qn($this->tablePrefix) . '.' : '';
         return $prefix;
     }
@@ -495,7 +520,8 @@ abstract class Database extends Model {
      * @param $operator
      * @param $value
      */
-    protected function setupOperatorAndValue (&$operator, &$value) {
+    protected function setupOperatorAndValue (&$operator, &$value)
+    {
         switch (strtolower($operator)) {
             case 'in':
                 $value = $this->query->q($value);
@@ -517,7 +543,8 @@ abstract class Database extends Model {
      *
      * @return mixed
      */
-    public function find ($key) {
+    public function find ($key)
+    {
         return $this->table->get($key);
     }
 
@@ -528,7 +555,8 @@ abstract class Database extends Model {
      *
      * @return bool
      */
-    public function delete ($key) {
+    public function delete ($key)
+    {
         $query = $this->db->getQuery(true);
 
         $query->delete()
@@ -545,7 +573,8 @@ abstract class Database extends Model {
      *
      * @return bool True on success
      */
-    public function save ($record) {
+    public function save ($record)
+    {
         $success = false;
 
         if ($record instanceof $this->entityClass) {
@@ -560,7 +589,8 @@ abstract class Database extends Model {
      *
      * @param $ordering
      */
-    public function orderBy ($ordering) {
+    public function orderBy ($ordering)
+    {
         $this->ordering = array_merge($this->ordering, (array)$ordering);
     }
 
@@ -572,7 +602,8 @@ abstract class Database extends Model {
      *
      * @return self
      */
-    public function paginate ($page, $per_page) {
+    public function paginate ($page, $per_page)
+    {
 
         $this->setState('limit', $per_page);
         $offset = ($page - 1) * $per_page;
@@ -587,7 +618,8 @@ abstract class Database extends Model {
      * @param object $object The object to init
      * @return object The object with an app property referencing the gobal app object
      */
-    protected function initObject ($object) {
+    protected function initObject ($object)
+    {
 
         // add reference to related app instance
         if (property_exists($object, 'app')) {
@@ -602,7 +634,8 @@ abstract class Database extends Model {
      *
      * @return mixed
      */
-    public function createEntity () {
+    public function createEntity ()
+    {
 
         return $this->zoo->object->create($this->entityClass);
     }

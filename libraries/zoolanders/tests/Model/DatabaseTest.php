@@ -13,7 +13,8 @@ use ZFTests\Classes\CSVData;
  *
  * @package ZFTests\Model
  */
-class DatabaseTest extends ZFTestCaseFixtures {
+class DatabaseTest extends ZFTestCaseFixtures
+{
     use CSVData;
 
     /**
@@ -24,7 +25,8 @@ class DatabaseTest extends ZFTestCaseFixtures {
     /**
      * Creates and returns instance of testing class
      */
-    protected function getTestInstance () {
+    protected function getTestInstance ()
+    {
 
         return new DatabaseModel(self::$container->db, self::$container->zoo);
     }
@@ -35,7 +37,8 @@ class DatabaseTest extends ZFTestCaseFixtures {
      * @covers          Database::fields()
      * @dataProvider    fieldsetProvider
      */
-    public function testFields ($fieldset, $expected) {
+    public function testFields ($fieldset, $expected)
+    {
         $dbm = $this->getTestInstance();
         $dbm->fields($fieldset);
         $dbm->buildQuery();
@@ -46,7 +49,8 @@ class DatabaseTest extends ZFTestCaseFixtures {
     /**
      * Test query building methods, using test cases from data file
      */
-    public function testQuerying () {
+    public function testQuerying ()
+    {
         $data = $this->loadTestDataCSV(FIXTURES_PATH . $this->_data_source);
         if (!empty($data)) {
             foreach ($data as $case) {
@@ -87,7 +91,8 @@ class DatabaseTest extends ZFTestCaseFixtures {
      *
      * @dataProvider    prefixDataProvider
      */
-    public function testGetSetPrefix ($prefix, $expected) {
+    public function testGetSetPrefix ($prefix, $expected)
+    {
         $dbm = $this->getTestInstance();
 
         // Get set operations:
@@ -104,7 +109,8 @@ class DatabaseTest extends ZFTestCaseFixtures {
     /**
      * Fieldset provider
      */
-    public function fieldsetProvider () {
+    public function fieldsetProvider ()
+    {
         return [
             [['id'], "SELECT `id`FROM ``"],
             [['id', 'alias'], "SELECT `id`,`alias`FROM ``"]
@@ -114,7 +120,8 @@ class DatabaseTest extends ZFTestCaseFixtures {
     /**
      * Test prefix data provider
      */
-    public function prefixDataProvider () {
+    public function prefixDataProvider ()
+    {
         return [
             ['a', 'SELECT `a`.*FROM `` AS `a`WHERE `a`.`id` = 1'],
             ['b', 'SELECT `b`.*FROM `` AS `b`WHERE `b`.`id` = 1'],

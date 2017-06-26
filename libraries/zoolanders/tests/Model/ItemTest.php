@@ -10,7 +10,8 @@ use Zoolanders\Framework\Model\Item;
  *
  * @package ZFTests\Model
  */
-class ItemTest extends DatabaseTest {
+class ItemTest extends DatabaseTest
+{
     /**
      * @var string  Test cases source relative path
      */
@@ -19,7 +20,8 @@ class ItemTest extends DatabaseTest {
     /**
      * Creates and returns instance of testing class
      */
-    protected function getTestInstance () {
+    protected function getTestInstance ()
+    {
 
         return new Item(self::$container->db, self::$container->zoo);
     }
@@ -27,7 +29,8 @@ class ItemTest extends DatabaseTest {
     /**
      * Test database selecting records from fixture set using query builder
      */
-    public function testSelectingItem () {
+    public function testSelectingItem ()
+    {
 
         $dbm = $this->getTestInstance();
         $dbm->where('alias', 'LIKE', 'test-item-fixture');
@@ -42,7 +45,8 @@ class ItemTest extends DatabaseTest {
     /**
      * Fieldset provider
      */
-    public function fieldsetProvider () {
+    public function fieldsetProvider ()
+    {
         return [
             [['id'], "SELECT `a`.`id`FROM `#__zoo_item` AS `a`"],
             [['id', 'alias'], "SELECT `a`.`id`,`a`.`alias`FROM `#__zoo_item` AS `a`"]
@@ -52,7 +56,8 @@ class ItemTest extends DatabaseTest {
     /**
      * Test prefix data provider
      */
-    public function prefixDataProvider () {
+    public function prefixDataProvider ()
+    {
         return [
             ['a', 'SELECT `a`.*FROM `#__zoo_item` AS `a`WHERE `a`.`id` = 1'],
             ['b', 'SELECT `b`.*FROM `#__zoo_item` AS `b`WHERE `b`.`id` = 1'],

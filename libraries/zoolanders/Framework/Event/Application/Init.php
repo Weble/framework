@@ -2,6 +2,7 @@
 
 namespace Zoolanders\Framework\Event\Application;
 
-class Init extends Application {
+class Init extends Application
+{
 
 }

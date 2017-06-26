@@ -5,7 +5,8 @@ namespace Zoolanders\Framework\Service;
 use Zoolanders\Framework\Service\System\Application;
 use Zoolanders\Framework\Service\System\Config;
 
-class Joomla {
+class Joomla
+{
     /**
      * The current joomla version
      *
@@ -19,7 +20,8 @@ class Joomla {
      *
      * @param App $app A reference to the global app object
      */
-    public function __construct (Config $config, Application $application, \JVersion $version) {
+    public function __construct (Config $config, Application $application, \JVersion $version)
+    {
         \JLoader::import('joomla.version');
 
         $this->config = $config;
@@ -34,7 +36,8 @@ class Joomla {
      *
      * @since 1.0.0
      */
-    public function getVersion () {
+    public function getVersion ()
+    {
         return $this->version->getShortVersion();
     }
 
@@ -48,7 +51,8 @@ class Joomla {
      *
      * @since 1.0.0
      */
-    public function isVersion ($version, $release = true) {
+    public function isVersion ($version, $release = true)
+    {
         return $release ? $this->version->RELEASE == $version : $this->getVersion() == $version;
     }
 
@@ -59,14 +63,16 @@ class Joomla {
      *
      * @since 1.0.0
      */
-    public function getDefaultAccess () {
+    public function getDefaultAccess ()
+    {
         return $this->config->get('access');
     }
 
     /**
      * @return \JMenu
      */
-    public function getMenu () {
+    public function getMenu ()
+    {
         return $this->application->getMenu('site');
     }
 }

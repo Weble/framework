@@ -2,7 +2,8 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateDatetimeSearchTable extends AbstractMigration {
+class CreateDatetimeSearchTable extends AbstractMigration
+{
     /**
      * Change Method.
      *
@@ -24,7 +25,8 @@ class CreateDatetimeSearchTable extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change () {
+    public function change ()
+    {
         $table = $this->table('search_datetime');
 
         if (!$table->exists()) {

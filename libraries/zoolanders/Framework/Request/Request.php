@@ -8,7 +8,8 @@ use Zoolanders\Framework\Data\Data;
  * Class Request
  * @package Zoolanders\Framework\Request
  */
-class Request extends \JInput {
+class Request extends \JInput
+{
     /**
      * @var array|false Request headers
      */
@@ -17,7 +18,8 @@ class Request extends \JInput {
     /**
      * Request constructor.
      */
-    public function __construct () {
+    public function __construct ()
+    {
         parent::__construct();
 
         // Capture HTTP Request headers:
@@ -39,7 +41,8 @@ class Request extends \JInput {
      *
      * @return array
      */
-    public function getHeaders () {
+    public function getHeaders ()
+    {
 
         if (empty($this->headers)) {
             $headers = [];
@@ -68,7 +71,8 @@ class Request extends \JInput {
      *
      * @return bool True if an ajax call is being made
      */
-    public function isAjax () {
+    public function isAjax ()
+    {
         // Joomla way
         if (in_array($this->getCmd('format'), ['json', 'raw'])) {
             return true;

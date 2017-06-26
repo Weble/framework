@@ -2,6 +2,7 @@
 
 namespace Zoolanders\Framework\Event\Dispatcher;
 
-class BeforeDispatch extends Dispatcher {
+class BeforeDispatch extends Dispatcher
+{
 
 }

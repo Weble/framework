@@ -9,7 +9,8 @@ use Zoolanders\Framework\Service\Alerts\Error;
  * Class HasAlerts
  * @package Zoolanders\Framework\Controller\Mixin
  */
-trait HasAlerts {
+trait HasAlerts
+{
     /**
      * @var Errors collection
      */
@@ -23,7 +24,8 @@ trait HasAlerts {
     /**
      * Return true if error pool not empty
      */
-    protected function hasErrors () {
+    protected function hasErrors ()
+    {
         return !empty($this->errors) && $this->errors->has($this->scope) && !$this->errors->get($this->scope)->isEmpty();
     }
 
@@ -33,7 +35,8 @@ trait HasAlerts {
      * @param   subkey
      * @param   message
      */
-    public function setError ($subkey, $message, $params = []) {
+    public function setError ($subkey, $message, $params = [])
+    {
         if (empty($this->errors)) {
             $this->errors = new Collection();
         }
@@ -59,7 +62,8 @@ trait HasAlerts {
      *
      * @return mixed
      */
-    public function getErrors () {
+    public function getErrors ()
+    {
 
         return $this->errors->get($this->scope);
     }

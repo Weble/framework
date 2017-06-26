@@ -12,14 +12,16 @@ use ZFTests\Classes\TestEvent;
  *
  * @package ZFTests\Event
  */
-class EventTest extends ZFTestCase {
+class EventTest extends ZFTestCase
+{
     /**
      * Test get name func
      *
      * @covers          Event::getName()
      * @dataProvider    eventDataSet
      */
-    public function testGetName ($instance, $expected) {
+    public function testGetName ($instance, $expected)
+    {
         if ($instance instanceof Event) {
             $this->assertEquals($expected, $instance->getName());
         } else {
@@ -34,7 +36,8 @@ class EventTest extends ZFTestCase {
      * @covers          Event::getReturnValue()
      * @dataProvider    valuesDataSet
      */
-    public function testGetSetValue ($control_value) {
+    public function testGetSetValue ($control_value)
+    {
         $event = new TestEvent();
         $event->setReturnValue($control_value);
 
@@ -46,7 +49,8 @@ class EventTest extends ZFTestCase {
      *
      * @covers          Event::getProperties()
      */
-    public function testGetProperties () {
+    public function testGetProperties ()
+    {
         $event = new TestEvent(['alpha']);
         $properties = $event->getProperties();
 
@@ -57,7 +61,8 @@ class EventTest extends ZFTestCase {
     /**
      * Provides event classes instances
      */
-    public function eventDataSet () {
+    public function eventDataSet ()
+    {
         return [
             [new TestEvent(), 'classes:testevent']
         ];
@@ -66,7 +71,8 @@ class EventTest extends ZFTestCase {
     /**
      * Provides control values
      */
-    public function valuesDataSet () {
+    public function valuesDataSet ()
+    {
         return [
             [1],
             ['alpha'],

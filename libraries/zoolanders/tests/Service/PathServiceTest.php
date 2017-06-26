@@ -12,11 +12,13 @@ use ZFTests\Classes\Filesystem;
  *
  * @package ZFTests\Service
  */
-class PathServiceTest extends ServiceTest {
+class PathServiceTest extends ServiceTest
+{
     /**
      * Get Path service instance
      */
-    private function getServiceInstance () {
+    private function getServiceInstance ()
+    {
         return self::$container->path;
     }
 
@@ -27,7 +29,8 @@ class PathServiceTest extends ServiceTest {
      * @covers          Path::path()
      * @covers          Path::paths()
      */
-    public function testRegister () {
+    public function testRegister ()
+    {
         $path = $this->getServiceInstance();
         $path->register(FIXTURES_PATH, 'fixtures');
         // Check if registered:
@@ -43,7 +46,8 @@ class PathServiceTest extends ServiceTest {
      * @covers          Path::dirs()
      * @covers          Path::ls()
      */
-    public function testFilesDirs () {
+    public function testFilesDirs ()
+    {
         $filteredFS = ['test1.txt', 'test2.txt'];
         $innerFS = ['subdir/test3.txt'];
         $dirsFS = ['subdir'];
@@ -70,7 +74,8 @@ class PathServiceTest extends ServiceTest {
      * @covers          Path::parse()
      * @dataProvider    parsingDataSet
      */
-    public function testParse ($src, $expected) {
+    public function testParse ($src, $expected)
+    {
         $path = $this->getServiceInstance();
         $path->register(JOOMLA_ENV_PATH . '/fixtures', 'jfixtures');
         $parsed = $path->parse($src);
@@ -85,7 +90,8 @@ class PathServiceTest extends ServiceTest {
      * @covers          Path::relative()
      * @dataProvider    relativePathDataSet
      */
-    public function testRelativePath ($src, $expected) {
+    public function testRelativePath ($src, $expected)
+    {
         $path = $this->getServiceInstance();
         $path->register(JOOMLA_ENV_PATH . '/fixtures', 'jfixtures');
 
@@ -95,7 +101,8 @@ class PathServiceTest extends ServiceTest {
     /**
      * Parsing function test dataset
      */
-    public function parsingDataSet () {
+    public function parsingDataSet ()
+    {
         return [
             ['jfixtures:filesystem/test1.txt', ['namespace' => 'jfixtures',
                 'path' => 'filesystem/test1.txt']
@@ -112,7 +119,8 @@ class PathServiceTest extends ServiceTest {
     /**
      * Relative path test set
      */
-    public function relativePathDataSet () {
+    public function relativePathDataSet ()
+    {
         return [
             [JOOMLA_ENV_PATH . '/fixtures/filesystem/test1.txt', 'fixtures/filesystem/test1.txt'],
             [JOOMLA_ENV_PATH . '/index.php', 'index.php']

@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Repository;
 
-abstract class Database extends Repository {
+abstract class Database extends Repository
+{
     /**
      * @var Database
      */
@@ -11,7 +12,8 @@ abstract class Database extends Repository {
     /**
      * Database constructor.
      */
-    public function __construct () {
+    public function __construct ()
+    {
         $this->db = $this->container->db;
     }
 }

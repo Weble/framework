@@ -10,7 +10,8 @@ use Zoolanders\Framework\Controller\Mixin\NeedsCsrfProtection;
  * Class TestController
  * @package ZFTests\Classes
  */
-class TestController extends Controller {
+class TestController extends Controller
+{
     use HasRedirects, NeedsCsrfProtection;
 
     /**
@@ -18,7 +19,8 @@ class TestController extends Controller {
      *
      * @return string
      */
-    public function ping () {
+    public function ping ()
+    {
 
         return 'test';
     }
@@ -28,7 +30,8 @@ class TestController extends Controller {
      *
      * @return string
      */
-    public function _default () {
+    public function _default ()
+    {
 
         return 'default';
     }

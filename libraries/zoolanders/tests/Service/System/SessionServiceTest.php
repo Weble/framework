@@ -11,13 +11,15 @@ use Zoolanders\Framework\Service\System\Session;
  *
  * @package ZFTests\Service\System
  */
-class SessionServiceTest extends SystemServiceTestLayer {
+class SessionServiceTest extends SystemServiceTestLayer
+{
     protected $serviceClassNames = ['JSession'];
 
     /**
      * Service class instance provider
      */
-    protected function getServiceInstance () {
+    protected function getServiceInstance ()
+    {
         return new Session(self::$container);
     }
 }

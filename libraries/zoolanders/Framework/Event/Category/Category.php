@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Event\Category;
 
-class Category extends \Zoolanders\Framework\Event\Event {
+class Category extends \Zoolanders\Framework\Event\Event
+{
     /**
      * @var \Category
      */
@@ -12,14 +13,16 @@ class Category extends \Zoolanders\Framework\Event\Event {
      * Beforesave constructor.
      * @param \Category $category
      */
-    public function __construct (\Category $category) {
+    public function __construct (\Category $category)
+    {
         $this->category = $category;
     }
 
     /**
      * @return \Category
      */
-    public function getCategory () {
+    public function getCategory ()
+    {
         return $this->category;
     }
 }

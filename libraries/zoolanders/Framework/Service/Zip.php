@@ -5,8 +5,10 @@ namespace Zoolanders\Framework\Service;
 use League\Flysystem\Filesystem;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 
-class Zip {
-    function __construct (Filesystem $fs) {
+class Zip
+{
+    function __construct (Filesystem $fs)
+    {
         $this->filesystem = $fs;
     }
 
@@ -14,11 +16,13 @@ class Zip {
      * @param $file
      * @return Filesystem
      */
-    public function open ($file) {
+    public function open ($file)
+    {
         return new Filesystem(new ZipArchiveAdapter($file));
     }
 
-    public function create ($file, $files = []) {
+    public function create ($file, $files = [])
+    {
         $zip = $this->open($file);
 
         settype($files, 'array');

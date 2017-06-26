@@ -2,8 +2,10 @@
 
 namespace Zoolanders\Framework\Model\Item;
 
-trait Categories {
-    public function filterCategories ($categories) {
+trait Categories
+{
+    public function filterCategories ($categories)
+    {
         settype($categories, 'array');
 
         // it's heavy query but the only way for AND mode
@@ -23,7 +25,8 @@ trait Categories {
         }
     }
 
-    public function filterCategoriesIn ($categories) {
+    public function filterCategoriesIn ($categories)
+    {
         settype($categories, 'array');
 
         $this->join(ZOO_TABLE_CATEGORY_ITEM, $this->getTablePrefix() . '.id = c.item_id', "c");

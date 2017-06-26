@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Event\Type;
 
-class Coreconfig extends Type {
+class Coreconfig extends Type
+{
     /**
      * @var array
      */
@@ -13,18 +14,21 @@ class Coreconfig extends Type {
      * @param \Type $type
      * @param array $config
      */
-    public function __construct (\Type $type) {
+    public function __construct (\Type $type)
+    {
         parent::__construct($type);
     }
 
     /**
      * @return array
      */
-    public function getConfig () {
+    public function getConfig ()
+    {
         return $this->value;
     }
 
-    public function setConfig ($config) {
+    public function setConfig ($config)
+    {
         $this->value = $config;
     }
 }

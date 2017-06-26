@@ -2,6 +2,7 @@
 
 namespace Zoolanders\Framework\Renderer;
 
-interface RendererInterface {
+interface RendererInterface
+{
 
 }

@@ -9,7 +9,8 @@ use Zoolanders\Framework\Container\Container;
  *
  * @author
  */
-class Apc implements CacheInterface {
+class Apc implements CacheInterface
+{
 
     /**
      * @var string $prefix
@@ -31,14 +32,16 @@ class Apc implements CacheInterface {
      *
      * @param string $prefix The prefix for cache index keys.
      */
-    public function __construct ($prefix = null, $lifetime = null) {
+    public function __construct ($prefix = null, $lifetime = null)
+    {
         $this->container = Container::getInstance();
 
         $this->prefix = $prefix === null ? md5(__FILE__) : $prefix;
         $this->lifetime = $lifetime;
     }
 
-    public function get ($id) {
+    public function get ($id)
+    {
         if ($data = apc_fetch(sprintf('%s-%s', $this->prefix, $id))) {
             if ($entry = @unserialize($data) and is_array($entry)) {
                 if ($this->lifetime && (time() - $entry['time']) > $this->lifetime) {
@@ -51,12 +54,14 @@ class Apc implements CacheInterface {
         return null;
     }
 
-    public function set ($id, $data) {
+    public function set ($id, $data)
+    {
         apc_store(sprintf('%s-%s', $this->prefix, $id), serialize(array('data' => $data, 'time' => time())));
         return $this;
     }
 
-    public function clear () {
+    public function clear ()
+    {
         $cache = new \APCIterator('user', '/^' . preg_quote($this->prefix, '/') . '-/');
 
         foreach ($cache as $entry) {
@@ -66,11 +71,13 @@ class Apc implements CacheInterface {
         return $this;
     }
 
-    public function check () {
+    public function check ()
+    {
         return true;
     }
 
-    public function save () {
+    public function save ()
+    {
         return $this;
     }
 }

@@ -2,13 +2,15 @@
 
 namespace Zoolanders\Framework\Data;
 
-class Data extends \ArrayObject {
+class Data extends \ArrayObject
+{
     /**
      * Class constructor
      *
      * @param array $data The data array
      */
-    public function __construct ($data = array()) {
+    public function __construct ($data = array())
+    {
         parent::__construct($data ? $data : array());
     }
 
@@ -21,7 +23,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function has ($name) {
+    public function has ($name)
+    {
         return $this->offsetExists($name);
     }
 
@@ -35,7 +38,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function get ($key, $default = null) {
+    public function get ($key, $default = null)
+    {
         if ($this->offsetExists($key)) {
             return $this->offsetGet($key);
         }
@@ -53,7 +57,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function set ($name, $value) {
+    public function set ($name, $value)
+    {
         $this->offsetSet($name, $value);
         return $this;
     }
@@ -67,7 +72,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function remove ($name) {
+    public function remove ($name)
+    {
         $this->offsetUnset($name);
         return $this;
     }
@@ -81,7 +87,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function __isset ($name) {
+    public function __isset ($name)
+    {
         return $this->offsetExists($name);
     }
 
@@ -94,7 +101,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function __get ($name) {
+    public function __get ($name)
+    {
         return $this->offsetGet($name);
     }
 
@@ -106,7 +114,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function __set ($name, $value) {
+    public function __set ($name, $value)
+    {
         $this->offsetSet($name, $value);
     }
 
@@ -117,7 +126,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function __unset ($name) {
+    public function __unset ($name)
+    {
         $this->offsetUnset($name);
     }
 
@@ -131,7 +141,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function __toString () {
+    public function __toString ()
+    {
         return empty($this) ? '' : $this->write($this->getArrayCopy());
     }
 
@@ -144,7 +155,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    protected function write ($data) {
+    protected function write ($data)
+    {
         return serialize($data);
     }
 
@@ -167,7 +179,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function find ($key, $default = null, $separator = '.') {
+    public function find ($key, $default = null, $separator = '.')
+    {
 
         $key = (string)$key;
         $value = $this->get($key);
@@ -221,7 +234,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function searchRecursive ($needle) {
+    public function searchRecursive ($needle)
+    {
         $aIt = new \RecursiveArrayIterator($this);
         $it = new \RecursiveIteratorIterator($aIt);
 
@@ -243,7 +257,8 @@ class Data extends \ArrayObject {
      *
      * @since 1.0.0
      */
-    public function flattenRecursive () {
+    public function flattenRecursive ()
+    {
         $flat = array();
         foreach (new \RecursiveIteratorIterator(new \RecursiveArrayIterator($this)) as $value) {
             $flat[] = $value;

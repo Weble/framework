@@ -2,6 +2,7 @@
 
 namespace Zoolanders\Framework\Listener;
 
-interface ListenerInterface {
+interface ListenerInterface
+{
     public function handle (\Zoolanders\Framework\Event\EventInterface $event);
 }

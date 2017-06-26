@@ -5,7 +5,8 @@ namespace Zoolanders\Framework\Service;
 use Zoolanders\Framework\Request\Request;
 use Zoolanders\Framework\Service\System\Application;
 
-class Environment {
+class Environment
+{
     /**
      * @var
      */
@@ -24,7 +25,8 @@ class Environment {
     /**
      * Environment constructor.
      */
-    public function __construct (Request $input, Application $application, Zoo $zoo) {
+    public function __construct (Request $input, Application $application, Zoo $zoo)
+    {
         // set params as DATA class
         $this->zoo = $zoo;
         $this->params = $zoo->getApp()->data->create(array());
@@ -42,7 +44,8 @@ class Environment {
      *
      * @return string
      */
-    public function get () {
+    public function get ()
+    {
         if (!$this->environment) {
             // init vars
             $environment = array();
@@ -113,7 +116,8 @@ class Environment {
      * @param $environments        string|array    array of or string separated by space of environments to check
      * @return boolean
      */
-    public function is ($environments = []) {
+    public function is ($environments = [])
+    {
         if (!is_array($environments)) {
             // multiple environments posible
             $environments = explode(' ', $environments);
@@ -135,7 +139,8 @@ class Environment {
      *
      * @return mixed|string
      */
-    public function currentExtension () {
+    public function currentExtension ()
+    {
 
         if (empty($this->extension)) {
             $jinput = $this->input;

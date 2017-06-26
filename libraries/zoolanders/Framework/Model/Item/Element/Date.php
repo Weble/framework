@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Model\Item\Element;
 
-trait Date {
+trait Date
+{
     abstract public function getContainer ();
 
     abstract public function whereRaw ($sql);
@@ -23,7 +24,8 @@ trait Date {
      *
      * @return $this
      */
-    public function whereElementDate ($field, $value) {
+    public function whereElementDate ($field, $value)
+    {
         $wheres = $this->getWhereElementDate($field, $value);
 
         $this->whereRaw("(" . implode(" OR ", $wheres) . ")");
@@ -37,7 +39,8 @@ trait Date {
      *
      * @return $this
      */
-    public function orWhereElementDate ($field, $value) {
+    public function orWhereElementDate ($field, $value)
+    {
         $wheres = $this->getWhereElementDate($field, $value);
 
         $this->orWhereRaw("(" . implode(" OR ", $wheres) . ")");
@@ -51,7 +54,8 @@ trait Date {
      *
      * @return $this
      */
-    public function whereElementDateTime ($field, $value) {
+    public function whereElementDateTime ($field, $value)
+    {
         $wheres = $this->getWhereElementDateTime($field, $value);
 
         $this->whereRaw("(" . implode(" OR ", $wheres) . ")");
@@ -65,7 +69,8 @@ trait Date {
      *
      * @return $this
      */
-    public function orWhereElementDateTime ($field, $value) {
+    public function orWhereElementDateTime ($field, $value)
+    {
         $wheres = $this->getWhereElementDateTime($field, $value);
 
         $this->orWhereRaw("(" . implode(" OR ", $wheres) . ")");
@@ -78,7 +83,8 @@ trait Date {
      * @param $value
      * @return $this
      */
-    public function whereElementDateFrom ($field, $value) {
+    public function whereElementDateFrom ($field, $value)
+    {
         $from = $this->getContainer()->date->getDayStart($value);
 
         $field = $this->getQuery()->qn($field);
@@ -94,7 +100,8 @@ trait Date {
      * @param $value
      * @return $this
      */
-    public function orWhereElementDateFrom ($field, $value) {
+    public function orWhereElementDateFrom ($field, $value)
+    {
         $from = $this->getContainer()->date->getDayStart($value);
 
         $field = $this->getQuery()->qn($field);
@@ -110,7 +117,8 @@ trait Date {
      * @param $value
      * @return $this
      */
-    public function whereElementDateTo ($field, $value) {
+    public function whereElementDateTo ($field, $value)
+    {
         $to = $this->getContainer()->date->getDayEnd($value);
 
         $field = $this->getQuery()->qn($field);
@@ -126,7 +134,8 @@ trait Date {
      * @param $value
      * @return $this
      */
-    public function orWhereElementDateTo ($field, $value) {
+    public function orWhereElementDateTo ($field, $value)
+    {
         $to = $this->getContainer()->date->getDayEnd($value);
 
         $field = $this->getQuery()->qn($field);
@@ -143,7 +152,8 @@ trait Date {
      * @param $valueTo
      * @return $this
      */
-    public function whereElementDateBetween ($field, $valueFrom, $valueTo) {
+    public function whereElementDateBetween ($field, $valueFrom, $valueTo)
+    {
         $wheres = $this->getWhereElementDateBetween($field, $valueFrom, $valueTo);
 
         $this->whereRaw("(" . implode(" OR ", $wheres) . ")");
@@ -157,7 +167,8 @@ trait Date {
      * @param $valueTo
      * @return $this
      */
-    public function orWhereElementDateBetween ($field, $valueFrom, $valueTo) {
+    public function orWhereElementDateBetween ($field, $valueFrom, $valueTo)
+    {
         $wheres = $this->getWhereElementDateBetween($field, $valueFrom, $valueTo);
 
         $this->orWhereRaw("(" . implode(" OR ", $wheres) . ")");
@@ -170,7 +181,8 @@ trait Date {
      * @param $value
      * @return array
      */
-    protected function getWhereElementDate ($field, $value) {
+    protected function getWhereElementDate ($field, $value)
+    {
         $date = $this->getContainer()->date->getDateOnly($value);
         $from = $this->getContainer()->date->getDayStart($value);
         $to = $this->getContainer()->date->getDayEnd($value);
@@ -201,7 +213,8 @@ trait Date {
      * @param $value
      * @return array
      */
-    protected function getWhereElementDateTime ($field, $value) {
+    protected function getWhereElementDateTime ($field, $value)
+    {
         $date = $this->getContainer()->date->getDateOnly($value);
         $field = $this->getQuery()->qn($field);
 
@@ -220,7 +233,8 @@ trait Date {
      * @param $valueTo
      * @return array
      */
-    protected function getWhereElementDateBetween ($field, $valueFrom, $valueTo) {
+    protected function getWhereElementDateBetween ($field, $valueFrom, $valueTo)
+    {
         $from = $this->getContainer()->date->getDayStart($valueFrom);
         $to = $this->getContainer()->date->getDayEnd($valueTo);
 

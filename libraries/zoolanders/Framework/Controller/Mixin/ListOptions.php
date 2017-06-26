@@ -25,7 +25,8 @@ use Zoolanders\Framework\Utils\ListFilterState;
  *
  * @package Zoolanders\Framework\Controller\Mixin
  */
-trait ListOptions {
+trait ListOptions
+{
     /**
      * @var Config that describes filtering params validation and sefault values
      */
@@ -36,7 +37,8 @@ trait ListOptions {
      *
      * @param array $cfg
      */
-    public function setFilterConfig ($cfg = []) {
+    public function setFilterConfig ($cfg = [])
+    {
         $this->filters_config = $cfg;
     }
 
@@ -45,7 +47,8 @@ trait ListOptions {
      *
      * @return array
      */
-    public function getFilterConfig () {
+    public function getFilterConfig ()
+    {
         return $this->filters_config;
     }
 
@@ -54,7 +57,8 @@ trait ListOptions {
      *
      * @return array
      */
-    public function getListOptions () {
+    public function getListOptions ()
+    {
         // ?
     }
 
@@ -65,7 +69,8 @@ trait ListOptions {
      *
      * @return void
      */
-    public function getListStateFromRequest (Request $request) {
+    public function getListStateFromRequest (Request $request)
+    {
         $this->getListOptions();
 
         if (!empty($this->filters_config)) {

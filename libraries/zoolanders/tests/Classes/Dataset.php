@@ -6,7 +6,8 @@ namespace ZFTests\Classes;
  * Class Dataset
  * @package ZFTests\Classes
  */
-trait Dataset {
+trait Dataset
+{
     /**
      * @var Testable data object
      */
@@ -17,7 +18,8 @@ trait Dataset {
      *
      * @param $control_value
      */
-    public function setGetHas ($control_value) {
+    public function setGetHas ($control_value)
+    {
 
         $this->assertTrue($this->object->has($control_value));
 
@@ -37,7 +39,8 @@ trait Dataset {
      *
      * @param $control_value
      */
-    public function removing ($control_value) {
+    public function removing ($control_value)
+    {
 
         $this->assertTrue($this->object->has($control_value));
 
@@ -52,7 +55,8 @@ trait Dataset {
      * @param $needle
      * @param $expected
      */
-    public function finding ($needle, $expected) {
+    public function finding ($needle, $expected)
+    {
 
         // Check if we found expected value:
         $this->assertEquals($expected, $this->object->find($needle, 'zulu'));
@@ -63,7 +67,8 @@ trait Dataset {
      *
      * @param $expected
      */
-    public function flatterning ($expected) {
+    public function flatterning ($expected)
+    {
 
         // Check if transformation was correct:
         $this->assertEquals($expected, $this->object->flattenRecursive());

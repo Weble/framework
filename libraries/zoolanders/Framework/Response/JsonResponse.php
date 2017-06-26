@@ -8,7 +8,8 @@ use Zoolanders\Framework\Data\Json;
  * Class JsonResponse
  * @package Zoolanders\Framework\Response
  */
-class JsonResponse extends Response {
+class JsonResponse extends Response
+{
     /**
      * @var string  Content type
      */
@@ -20,7 +21,8 @@ class JsonResponse extends Response {
      * @param   int $code
      * @param   $data
      */
-    public function __construct ($data = array(), $code = 200) {
+    public function __construct ($data = array(), $code = 200)
+    {
         $this->code = $code;
         $this->data = new Json($data);
     }
@@ -28,7 +30,8 @@ class JsonResponse extends Response {
     /**
      * @inheritdoc
      */
-    public function setContent ($content) {
+    public function setContent ($content)
+    {
 
         $this->data = new Json($content);
         return $this;
@@ -42,7 +45,8 @@ class JsonResponse extends Response {
      *
      * @return  object
      */
-    public function __set ($varname, $value) {
+    public function __set ($varname, $value)
+    {
         if (null === $this->data) {
             $this->data = new Json();
         }
@@ -59,7 +63,8 @@ class JsonResponse extends Response {
      *
      * @return  mixed
      */
-    public function __get ($varname) {
+    public function __get ($varname)
+    {
         return $this->data->get($varname);
     }
 
@@ -71,7 +76,8 @@ class JsonResponse extends Response {
      *
      * @return object
      */
-    public function add ($varname, $value) {
+    public function add ($varname, $value)
+    {
         $node = $this->{$varname};
 
         if (empty($node)) {

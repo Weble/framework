@@ -2,7 +2,8 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateCategoryLanguagesTable extends AbstractMigration {
+class CreateCategoryLanguagesTable extends AbstractMigration
+{
     /**
      * Change Method.
      *
@@ -24,7 +25,8 @@ class CreateCategoryLanguagesTable extends AbstractMigration {
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change () {
+    public function change ()
+    {
         $table = $this->table('category_languages');
 
         if (!$table->exists()) {

@@ -22,7 +22,8 @@ use Zoolanders\Framework\Response\Response;
 /**
  * Class View
  */
-abstract class View implements ViewInterface {
+abstract class View implements ViewInterface
+{
     use Triggerable;
 
     /**
@@ -47,7 +48,8 @@ abstract class View implements ViewInterface {
     /**
      * Constructor.
      */
-    public function __construct (Dispatcher $event) {
+    public function __construct (Dispatcher $event)
+    {
         $this->event = $event;
         $this->getName();
     }
@@ -56,7 +58,8 @@ abstract class View implements ViewInterface {
      * Method to get the model name
      * @return  string  The name of the model
      */
-    public function getName () {
+    public function getName ()
+    {
         if (empty($this->name)) {
             $class = explode("\\", get_class($this));
             // it's not the last part (format) but the second-to-last (view name) here
@@ -70,7 +73,8 @@ abstract class View implements ViewInterface {
     /**
      * Magic method to bind rendering data
      */
-    public function __set ($varname, $value) {
+    public function __set ($varname, $value)
+    {
         $this->data[$varname] = $value;
     }
 
@@ -84,7 +88,8 @@ abstract class View implements ViewInterface {
      *
      * @return  mixed  The return value of the method
      */
-    public function get ($property, $default = null, $modelName = null) {
+    public function get ($property, $default = null, $modelName = null)
+    {
         if (@isset($this->$property)) {
             return $this->$property;
         } else {
@@ -103,7 +108,8 @@ abstract class View implements ViewInterface {
      *
      * @throws  \Exception  When the layout file is not found
      */
-    public function display ($tpl = null, $data = []) {
+    public function display ($tpl = null, $data = [])
+    {
         $this->triggerEvent(new BeforeDisplay($this, $tpl, $data));
 
         $result = $this->render($tpl, $data);
@@ -116,7 +122,8 @@ abstract class View implements ViewInterface {
     /**
      * @inheritdoc
      */
-    public function getType () {
+    public function getType ()
+    {
         return $this->type;
     }
 

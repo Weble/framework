@@ -2,7 +2,8 @@
 
 namespace Zoolanders\Framework\Event\Controller;
 
-class AfterExecute extends Controller {
+class AfterExecute extends Controller
+{
     /**
      * @var string
      */
@@ -13,7 +14,8 @@ class AfterExecute extends Controller {
      * @param \Zoolanders\Framework\Controller\Controller $controller
      * @param $task
      */
-    public function __construct (\Zoolanders\Framework\Controller\Controller $controller, $task) {
+    public function __construct (\Zoolanders\Framework\Controller\Controller $controller, $task)
+    {
         $this->controller = $controller;
         $this->task = $task;
     }
@@ -21,7 +23,8 @@ class AfterExecute extends Controller {
     /**
      * @return string
      */
-    public function getTask () {
+    public function getTask ()
+    {
         return $this->task;
     }
 }

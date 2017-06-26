@@ -4,7 +4,8 @@ namespace Zoolanders\Framework\Controller\Mixin;
 
 use Zoolanders\Framework\Controller\Exception\AccessForbidden;
 
-trait NeedsCsrfProtection {
+trait NeedsCsrfProtection
+{
     /**
      * Provides CSRF protection through the forced use of a secure token. If the token doesn't match the one in the
      * session we return false.
@@ -13,7 +14,8 @@ trait NeedsCsrfProtection {
      *
      * @throws  \Exception
      */
-    protected function csrfProtection () {
+    protected function csrfProtection ()
+    {
         $hasToken = false;
         $session = $this->container->system->getSession();
 
