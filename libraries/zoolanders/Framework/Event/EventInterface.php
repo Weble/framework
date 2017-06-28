@@ -4,6 +4,8 @@ namespace Zoolanders\Framework\Event;
 
 interface EventInterface
 {
+    public function getClassName ();
+
     public function getName ();
 
     public function getProperties ();

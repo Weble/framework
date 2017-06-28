@@ -2,11 +2,12 @@
 
 namespace Zoolanders\Framework\Dispatcher\Exception;
 
-class ControllerNotFound extends NotFound
+class NotFound extends DispatcherException
 {
     public function __construct ($message = "", $code = 0, \Throwable $previous = null)
     {
-        $message = $message ? $message : 'Controller Not Found';
+        $code = 404;
+        $message = $message ? $message : 'Not Found';
 
         parent::__construct($message, $code, $previous);
     }

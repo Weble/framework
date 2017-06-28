@@ -48,11 +48,11 @@ class User
         $db = $this->db;
 
         // check if user id exists
-        if (!is_null($id) && !in_array($id, $this->queriesUsers) && !$db->queryResult('SELECT id FROM #__users WHERE id = ' . $db->escape($id))) {
+        if (!is_null($id) && !in_array($id, $this->queriedUsers) && !$db->queryResult('SELECT id FROM #__users WHERE id = ' . $db->escape($id))) {
             return null;
         }
 
-        $this->queriesUsers[$id] = $id;
+        $this->queriedUsers[$id] = $id;
 
         // get user
         $user = \JFactory::getUser($id);
@@ -462,6 +462,6 @@ class User
             $user = $this->get();
         }
 
-        return (bool)$user->authorise($action, $asset_id);
+        return (bool) $user->authorise($action, $asset_id);
     }
 }

@@ -10,14 +10,10 @@
 
 namespace Zoolanders\Framework\View;
 
-use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Event\Dispatcher;
 use Zoolanders\Framework\Event\Triggerable;
 use Zoolanders\Framework\Event\View\AfterDisplay;
 use Zoolanders\Framework\Event\View\BeforeDisplay;
-use Zoolanders\Framework\Event\View\GetTemplatePath;
-use Zoolanders\Framework\Utils\NameFromClass;
-use Zoolanders\Framework\Response\Response;
 
 /**
  * Class View
@@ -101,20 +97,19 @@ abstract class View implements ViewInterface
      * Overrides the default method to execute and display a template script.
      * Instead of loadTemplate is uses loadAnyTemplate.
      *
-     * @param   string $tpl The name of the template file to parse
      * @param   mixed $data Data to be rendered
      *
      * @return  string  Rendered content
      *
      * @throws  \Exception  When the layout file is not found
      */
-    public function display ($tpl = null, $data = [])
+    public function display ($data = [])
     {
-        $this->triggerEvent(new BeforeDisplay($this, $tpl, $data));
+        $this->triggerEvent(new BeforeDisplay($this, $data));
 
-        $result = $this->render($tpl, $data);
+        $result = $this->render($data);
 
-        $this->triggerEvent(new AfterDisplay($this, $tpl, $result));
+        $this->triggerEvent(new AfterDisplay($this, $result));
 
         return $result;
     }
@@ -128,6 +123,7 @@ abstract class View implements ViewInterface
     }
 
     /**
+     * @param array $data
      * @return mixed
      */
     abstract function render ($data = []);

@@ -140,3 +140,70 @@ If for some reason the autoloader needs to be re-generated:
 ```
 composer dump-autoload
 ```
+
+## Controllers
+
+Controllers need to extend the base class `Zoolanders\Framework\Controller\Controller`. 
+Any public method can be used as a task, triggered in the url by the `task` variable
+Any method of the controller (as well as the constructor itself) supports Dependecy Injection.
+Therefore you can "ask" for any class / service known to the container and expect it to be given to you.
+
+```php
+public function index(Request $request, Response $response, Filesystem $filesystem) {
+   ....
+}
+```
+
+Before and after each task several events are fired:
+- `onBeforeExecute`
+- `onAfterExecute`
+- 'onBefore{Task}'
+- 'onAfter{Task}'
+
+The easiest way to use these events is to implement a ***public*** method with the same name of the event
+
+```php
+public function onBeforeSave(BeforeExecute $event) 
+{
+    // For example, deal with acl stuff
+    if ($cannotSave) {
+        throw new \Zoolanders\Framework\Dispatcher\Exception\AccessForbidden();   
+    }
+    
+    // change the task name maybe?
+    $event->setTask('similarTask');
+}
+
+public function onAfterSave(AftereExecute $event) 
+{
+    // change the response?
+    $response = $event->getResponse();
+    
+    ....
+    
+    
+    $event->setResponse($response);
+}
+```
+
+Another way is to use the core event system. You would need to create an event class for your event
+```php
+class \Zoolanders\ExtensionName\ViewName\BeforeTaskName extends BeforeExecute {
+
+}
+```
+
+and listen to it with a listener that you will have to attach to it at some point
+
+```php
+class DoSomethingBeforeWhatever extends Listener {
+
+    public function handle(BeforeTaskName $event) {
+  
+    }
+}
+
+....
+
+$container->event->connect('\Zoolanders\ExtensionName\ViewName\BeforeTaskName', 'DoSomethingBeforeWhatever@handle');
+```

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zoolanders\Framework\Listener\Type;
+namespace Zoolanders\Framework\Listener\View;
 
 use Zoolanders\Framework\Listener\Listener;
 

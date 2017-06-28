@@ -14,16 +14,17 @@ class BeforeExecute extends Controller
      * @param \Zoolanders\Framework\Controller\Controller $controller
      * @param $task
      */
-    public function __construct (\Zoolanders\Framework\Controller\Controller $controller, &$task)
+    public function __construct (\Zoolanders\Framework\Controller\Controller $controller, $task)
     {
-        $this->controller = $controller;
-        $this->task = &$task;
+        parent::__construct($controller);
+
+        $this->task = $task;
     }
 
     /**
      * @return string
      */
-    public function &getTask ()
+    public function getTask ()
     {
         return $this->task;
     }

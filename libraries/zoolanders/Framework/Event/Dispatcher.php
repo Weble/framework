@@ -79,12 +79,20 @@ class Dispatcher
 
     /**
      * @param $string
+     * @param array $args
+     * @param null $namespace
      * @return mixed
      */
-    public function create ($string)
+    public function create ($string, $args = [], $namespace = null)
     {
         $container = Container::getInstance();
-        return $container->make(Container::FRAMEWORK_NAMESPACE . 'Event\\' . $string);
+
+        // Prefix generic namespace?
+        if (!$namespace) {
+            $namespace = Container::FRAMEWORK_NAMESPACE . 'Event\\';
+        }
+
+        return $container->make($namespace . $string, $args);
     }
 
 
@@ -98,7 +106,7 @@ class Dispatcher
             $this->container->eventstack->push($event->getName(), $event);
         }
 
-        return $this->notify($event);
+        $this->notify($event);
     }
 
     /**

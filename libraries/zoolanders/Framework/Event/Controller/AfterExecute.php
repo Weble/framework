@@ -10,14 +10,23 @@ class AfterExecute extends Controller
     protected $task;
 
     /**
+     * @var mixed
+     */
+    protected $response;
+
+    /**
      * AfterExecute constructor.
      * @param \Zoolanders\Framework\Controller\Controller $controller
      * @param $task
+     * @param $response
      */
-    public function __construct (\Zoolanders\Framework\Controller\Controller $controller, $task)
+    public function __construct (\Zoolanders\Framework\Controller\Controller $controller, $task, $response)
     {
-        $this->controller = $controller;
+        parent::__construct($controller);
+
         $this->task = $task;
+
+        $this->response = $response;
     }
 
     /**
@@ -26,5 +35,21 @@ class AfterExecute extends Controller
     public function getTask ()
     {
         return $this->task;
+    }
+
+    /**
+     * @param $response
+     */
+    public function setResponse ($response)
+    {
+        $this->response = $response;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResponse ()
+    {
+        return $this->response;
     }
 }

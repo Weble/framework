@@ -59,6 +59,12 @@
         ],
         "environment:beforerender": [
             "\\Zoolanders\\Framework\\Listener\\Environment\\IncludeAssets"
+        ],
+        "controller:beforeexecute" : [
+            "\\Zoolanders\\Framework\\Listener\\Controller\\TriggerOnBeforeTaskMethods"
+        ],
+        "controller:afterexecute" : [
+            "\\Zoolanders\\Framework\\Listener\\Controller\\TriggerOnAfterTaskMethods"
         ]
     }
 }

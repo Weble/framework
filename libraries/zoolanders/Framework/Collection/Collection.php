@@ -12,7 +12,6 @@ namespace Zoolanders\Framework\Collection;
 use Closure;
 use ArrayIterator;
 use CachingIterator;
-use JsonSerializable;
 
 class Collection implements CollectionInterface
 {

@@ -2,12 +2,8 @@
 
 namespace Zoolanders\Framework\View;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Zoolanders\Framework\Event\Dispatcher;
 use Zoolanders\Framework\Event\View\GetTemplatePath;
-use Zoolanders\Framework\Request\Request;
-use Zoolanders\Framework\Service\Assets\Css;
-use Zoolanders\Framework\Service\Assets\Js;
 use Zoolanders\Framework\Service\System;
 
 /**
@@ -26,7 +22,12 @@ class Html extends View
      *
      * @var    string
      */
-    protected $layout;
+    protected $layout = 'default';
+
+    /**
+     * @var string
+     */
+    protected $layoutTemplate;
 
     /**
      * List of paths where to find templates
@@ -36,22 +37,29 @@ class Html extends View
     protected $templatePaths = [];
 
     /**
-     * @var Asset mgr
+     * @var System\Document mgr
      */
     public $document;
 
     /**
-     * HtmlView constructor.
+     * @var System
      */
-    public function __construct (Dispatcher $event, System $system, System\Document $document, Request $request)
+    protected $system;
+
+    /**
+     *  Html View constructor.
+     *
+     * @param Dispatcher $event
+     * @param System $system
+     * @param System\Document $document
+     */
+    public function __construct (Dispatcher $event, System $system, System\Document $document)
     {
         parent::__construct($event);
 
         $this->system = $system;
 
         $this->document = $document;
-
-        $this->layout = $request->getCmd('task', 'default');
 
         $this->addTemplatePath(JPATH_COMPONENT . '/View/' . ucfirst($this->getName()) . '/tmpl');
     }
@@ -174,23 +182,16 @@ class Html extends View
 
         // Extract forced parameters
         if (!empty($this->data)) {
-            if ($this->data instanceof Arrayable) {
-                extract($this->data->toArray());
-            } else {
-                extract($this->data);
-            }
+            extract($this->data);
         }
 
-        // @TODO: Add fallback to default if assumed tpl does not exist
         include($this->templatePaths[0] . $tpl . '.php');
 
         return ob_get_clean();
     }
 
     /**
-     * @param null $tpl
-     * @param array $data
-     * @return string
+     * @inheritdoc
      */
     public function render ($data = [])
     {

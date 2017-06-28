@@ -3,15 +3,14 @@
 namespace Zoolanders\Framework\Controller;
 
 use Zoolanders\Framework\Container\Container;
+use Zoolanders\Framework\Event\Controller\AfterExecute;
+use Zoolanders\Framework\Event\Controller\BeforeExecute;
+use Zoolanders\Framework\Event\Exception\EventNotFound;
 use Zoolanders\Framework\Event\Triggerable;
-use Zoolanders\Framework\Response\ResponseInterface;
 use Zoolanders\Framework\Utils\NameFromClass;
-use Zoolanders\Framework\Response\Response;
-use Zoolanders\Framework\View\ViewInterface;
 
 /**
- * Class Controller
- * Inspired by FOF3 Controller class by Nicholas K. Dionysopoulos / Akeeba Ltd (https://github.com/akeeba/fof/)
+ * Basic Controller Class
  */
 class Controller
 {
@@ -49,7 +48,7 @@ class Controller
      *
      * @var string
      */
-    protected $layout = null;
+    protected $layout = 'default';
 
     /**
      * Controller constructor.
@@ -68,26 +67,6 @@ class Controller
     }
 
     /**
-     * Default task. Assigns a model to the view and asks the view to render
-     * itself.
-     *
-     * @param   string $tpl The name of the template file to parse
-     *
-     * @return  ResponseInterface
-     */
-    public function display ($tpl = null)
-    {
-        $layout = $tpl ? $tpl : $this->getName();
-
-        // Set the layout
-        if (!is_null($this->layout)) {
-            $layout .= ':' . $this->layout;
-        }
-
-        return $this->render($layout);
-    }
-
-    /**
      * Register the default task to perform if a mapping is not found.
      *
      * @param   string $method The name of the method in the derived class to perform if a named task is not found.
@@ -102,25 +81,49 @@ class Controller
     }
 
     /**
-     * Render view with provided data
-     *
-     * @param   string  Layout name: "viewname:tmplname"
-     * @param   mixed   Playload data
-     *
-     * @return  ResponseInterface
+     * @param BeforeExecute $event
      */
-    protected function render ($layout, $data = array())
+    protected function onBeforeExecute(BeforeExecute $event)
     {
-        $buffer = explode(":", $layout);
-        $viewName = array_shift($buffer);
-        $tplName = @array_shift($buffer);
+        // Event will be \Extension\Namespace\ControllerName\BeforeTask (\Zoolanders\Zooadmin\Extensions\BeforeSave)
+        $eventName = $this->getName() . '\\Before' . ucfirst($event->getTask());
 
-        $viewName = empty($viewName) ? $this->getName() : $viewName;
-        $response = $this->container->factory->response($this->input);
+        try {
+            $this->createAndTriggerEvent($this->getControllerNameSpace() . $eventName, [], 'onBefore' . ucfirst($event->getTask()));
+        } catch (EventNotFound $e) {
+            // Ignore, event doesn't exist
+        }
+    }
 
-        $view = $this->getView($viewName);
-        $response->setContent($view->display($tplName, $data));
+    /**
+     * @param AfterExecute $event
+     */
+    protected function onAfterExecute(AfterExecute $event)
+    {
+        // Event will be \Extension\Namespace\ControllerName\AfterTask (\Zoolanders\Zooadmin\Extensions\AfterIndex)
+        $eventName = __NAMESPACE__ . '\\' . $this->getName() . '\\After' . ucfirst($event->getTask());
 
-        return $response;
+        try {
+            $controllerEvent = $this->createAndTriggerEvent($eventName, [$event->getResponse()], $this->getControllerNameSpace());
+
+            if ($controllerEvent instanceof \Zoolanders\Framework\Event\Controller\Controller) {
+                $event->setResponse($controllerEvent->getResponse());
+            }
+
+        } catch (EventNotFound $e) {
+            // Ignore, event doesn't exist
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getControllerNameSpace()
+    {
+        $namespace = explode("\\", get_class($this));
+        array_pop($namespace);
+        array_pop($namespace);
+
+        return '\\' . implode("\\", $namespace) . '\\';
     }
 }

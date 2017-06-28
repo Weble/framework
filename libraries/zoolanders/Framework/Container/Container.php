@@ -123,6 +123,7 @@ class Container
     /**
      * @param $callable
      * @param array $args
+     * @return mixed
      */
     public function execute ($callable, $args = [])
     {
@@ -246,7 +247,7 @@ class Container
     }
 
     /**
-     * @param string $default controller name
+     * @param string $default_controller
      * @throws Exception\BadResponseType
      * @throws Exception\ControllerNotFound
      */

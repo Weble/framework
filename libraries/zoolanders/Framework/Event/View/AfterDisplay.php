@@ -2,29 +2,24 @@
 
 namespace Zoolanders\Framework\Event\View;
 
+use Zoolanders\Framework\View\ViewInterface;
+
 class AfterDisplay extends View
 {
-    protected $tpl;
-
+    /**
+     * @var string
+     */
     protected $templateResult;
 
     /**
      * GetTemplatePath constructor.
      * @param $view
      */
-    public function __construct (\Zoolanders\Framework\View\View $view, $tpl, &$templateResult)
+    public function __construct (ViewInterface $view, &$templateResult)
     {
-        $this->view = $view;
-        $this->tpl = $tpl;
-        $this->templateResult = &$templateResult;
-    }
+        parent::__construct($view);
 
-    /**
-     * @return mixed
-     */
-    public function getTpl ()
-    {
-        return $this->tpl;
+        $this->templateResult = &$templateResult;
     }
 
     /**
@@ -33,13 +28,5 @@ class AfterDisplay extends View
     public function &getTemplateResult ()
     {
         return $this->templateResult;
-    }
-
-    /**
-     * @return View
-     */
-    public function getView ()
-    {
-        return $this->view;
     }
 }

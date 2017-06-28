@@ -4,6 +4,7 @@ namespace Zoolanders\Framework\Factory;
 
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Controller\Controller;
+use Zoolanders\Framework\Request\Request;
 use Zoolanders\Framework\Response\ResponseInterface;
 use Zoolanders\Framework\View\ViewInterface;
 
@@ -24,12 +25,10 @@ class Factory
 
     /**
      * Make response
-     *
-     * @param   Request
-     *
-     * @return  ResponseInterface
+     * @param Request $input
+     * @return ResponseInterface
      */
-    public function response ($input)
+    public function response (Request $input)
     {
         $type = $input->isAjax() ? 'Json' : 'Html';
 
@@ -39,10 +38,11 @@ class Factory
     }
 
     /**
-     * @param $input
-     * @return bool|mixed
+     * @param Request $input
+     * @param null $default_ctrl
+     * @return bool|Controller
      */
-    public function controller ($input, $default_ctrl = null)
+    public function controller (Request $input, $default_ctrl = null)
     {
         $namespaces = [];
         $namespaces[] = Container::FRAMEWORK_NAMESPACE;
@@ -69,15 +69,14 @@ class Factory
     /**
      * Make response
      *
-     * @param   Input
-     *
-     * @return  ViewInterface
+     * @param Request $input
+     * @param null $default
+     * @return ViewInterface
      */
-    public function view ($input, $default = null)
+    public function view (Request $input, $default = null)
     {
         $type = $input->isAjax() ? 'Json' : 'Html';
         $name = $input->getCmd('view', $input->getCmd('controller', $default));
-        $viewClass = '';
 
         $component = $this->container->environment->currentExtension();
         $namespaces = $this->container->getRegisteredExtensionNamespaces($component);

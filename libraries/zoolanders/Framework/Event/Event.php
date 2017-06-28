@@ -26,13 +26,26 @@ abstract class Event implements EventInterface
         $parts = explode("\\", $class);
 
         if (count($parts) < 2) {
-            return array_pop($parts);
+            $this->getClassName();
         }
 
         $name = array_pop($parts);
         $name = array_pop($parts) . ':' . $name;
 
         return strtolower($name);
+    }
+
+    /**
+     * Get the name of the event class
+     *
+     * @return string
+     */
+    public function getClassName ()
+    {
+        $class = get_class($this);
+        $parts = explode("\\", $class);
+
+        return array_pop($parts);
     }
 
     /**

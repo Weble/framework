@@ -4,6 +4,8 @@ namespace Zoolanders\Framework\Dispatcher;
 
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Controller\Controller;
+use Zoolanders\Framework\Event\Controller\AfterExecute;
+use Zoolanders\Framework\Event\Controller\BeforeExecute;
 use Zoolanders\Framework\Event\Dispatcher\AfterDispatch;
 use Zoolanders\Framework\Event\Dispatcher\BeforeDispatch;
 use Zoolanders\Framework\Event\Triggerable;
@@ -14,6 +16,11 @@ use Zoolanders\Framework\Service\Event;
 
 class Dispatcher
 {
+    /**
+     * Trigger Events
+     */
+    use Triggerable;
+
     /**
      * @var Container
      */
@@ -26,6 +33,7 @@ class Dispatcher
 
     /**
      * Dispatcher constructor.
+     * @param Container $container
      */
     public function __construct (Container $container)
     {
@@ -44,7 +52,8 @@ class Dispatcher
     }
 
     /**
-     * @return ResponseInterface
+     * @param Request $request
+     * @return mixed|ResponseInterface
      */
     public function dispatch (Request $request)
     {
@@ -55,7 +64,23 @@ class Dispatcher
         }
 
         $crudTask = $this->getCrudTask($controller, $request->getHttpVerb(), $request->getVar(Controller::PARAM_ID, false));
-        $response = $this->container->execute([$controller, $request->getCmd('task', $crudTask)]);
+        $task = $request->getCmd('task', $crudTask);
+
+        /** @var BeforeExecute $event */
+        $event = $controller->createAndTriggerEvent('Controller\BeforeExecute', [$controller, $task]);
+        $this->triggerEvent($event);
+
+        // Task was maybe overridden by event listeners?
+        $task = $event->getTask();
+
+        $response = $this->container->execute([$controller, $task]);
+
+        /** @var AfterExecute $event */
+        $event = $controller->createAndTriggerEvent('Controller\AfterExecute', [$controller, $task, $response]);
+        $this->triggerEvent($event);
+
+        // Response was maybe overridden by event listeners?
+        $response = $event->getResponse();
 
         if ($response instanceof ResponseInterface) {
             return $response;
@@ -65,7 +90,7 @@ class Dispatcher
         $view = $this->container->factory->view($request, $this->default_ctrl);
 
         $response = $this->container->factory->response($request);
-        $response->setContent($view->render($content));
+        $response->setContent($view->display($content));
 
         return $response;
     }
