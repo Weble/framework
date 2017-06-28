@@ -64,54 +64,6 @@ class Filesystem
     }
 
     /**
-     * Output a file to the browser
-     *
-     * @param string $file The file to output
-     *
-     * @since 1.0.0
-     */
-    public function output ($file)
-    {
-        @error_reporting(E_ERROR);
-
-        $name = basename($file);
-        $type = $this->getContentType($name);
-        $size = @filesize($file);
-        $mod = date('r', filemtime($file));
-
-        while (@ob_end_clean()) {
-            ;
-        }
-
-        // required for IE, otherwise Content-disposition is ignored
-        if (ini_get('zlib.output_compression')) {
-            ini_set('zlib.output_compression', 'Off');
-        }
-
-        // set header
-        header("Pragma: public");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Expires: 0");
-        header("Content-Transfer-Encoding: binary");
-        header('Content-Type: ' . $type);
-        header('Content-Disposition: attachment;'
-            . ' filename="' . $name . '";'
-            . ' modification-date="' . $mod . '";'
-            . ' size=' . $size . ';');
-        header("Content-Length: " . $size);
-
-        // set_time_limit doesn't work in safe mode
-        if (!ini_get('safe_mode')) {
-            @set_time_limit(0);
-        }
-
-        // output file
-        $handle = fopen($file, 'rb');
-        fpassthru($handle);
-        fclose($handle);
-    }
-
-    /**
      * Get a list of directories from the given directory
      *
      * @param string $path The path of the directory
