@@ -36,7 +36,9 @@ trait Cacheable
         }
 
         $cached = call_user_func_array($fallback, $args);
-        $this->getCache()->set($key, $cached);
+        $this->getCache()
+            ->set($key, $cached)
+            ->save();
 
         return $cached;
     }
