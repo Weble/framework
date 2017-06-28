@@ -19,6 +19,6 @@ class Json extends View
             $this->data = $data;
         }
 
-        return $this->data;
+        return json_encode($this->data);
     }
 }
