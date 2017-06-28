@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // init vars
 $placeholder = $fld->find('settings.placeholder');
 

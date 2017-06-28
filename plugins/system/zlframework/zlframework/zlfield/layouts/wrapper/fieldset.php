@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // prepare label
 if ($label = $fld->find('specific.toggle.label')) {
     $vars = explode('||', $label);

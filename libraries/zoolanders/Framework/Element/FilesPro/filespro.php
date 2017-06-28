@@ -6,8 +6,6 @@ use Zoolanders\Framework\Element\FilesInterface;
 use Zoolanders\Framework\Element\Pro\RepeatablePro;
 use Zoolanders\Framework\Service\Filesystem;
 
-defined('_JEXEC') or die();
-
 /*
 	Class: ElementFilesPro
 		The files pro element class
@@ -672,8 +670,6 @@ class AppValidatorFilepro extends AppValidatorFile
      * @return mixed        The cleaned value
      *
      * @see AppValidator::clean()
-     *
-     * @since 2.0
      */
     public function clean ($value)
     {

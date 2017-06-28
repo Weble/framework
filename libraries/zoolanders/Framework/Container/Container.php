@@ -10,8 +10,6 @@ use Zoolanders\Framework\Dispatcher\Dispatcher;
 use Zoolanders\Framework\Dispatcher\Exception;
 use Zoolanders\Framework\Response\ResponseInterface;
 
-defined('_JEXEC') or die;
-
 /**
  * Class Container
  * @package Zoolanders\Framework\Container

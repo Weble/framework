@@ -2,8 +2,6 @@
 
 namespace Zoolanders\Framework\Element\Pro;
 
-defined('_JEXEC') or die();
-
 /*
    Class: ElementRepeatablePro
        The repeatable element class

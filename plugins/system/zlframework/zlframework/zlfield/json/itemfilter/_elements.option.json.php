@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 	// get options
 	$element_options = array();
 	if ($element->getElementType() == 'country'){

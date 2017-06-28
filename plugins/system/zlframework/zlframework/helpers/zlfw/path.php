@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // register FilesystemHelper class
 App::getInstance('zoo')->loader->register('PathHelper', 'helpers:path.php');
 

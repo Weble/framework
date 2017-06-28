@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // register ElementRepeatablePro class
 App::getInstance('zoo')->loader->register('ElementRepeatablePro', 'elements:repeatablepro/repeatablepro.php');
 
@@ -658,8 +656,6 @@ class AppValidatorFilepro extends AppValidatorFile {
      * @return mixed        The cleaned value
      *
      * @see AppValidator::clean()
-     *
-     * @since 2.0
      */
     public function clean ($value) {
         if (!is_array($value) || !isset($value['tmp_name'])) {

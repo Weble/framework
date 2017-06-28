@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // init vars
 $attrs = '';
 $preoptions = $fld->find('settings.options') ? $fld->find('settings.options') : array('JYES' => '1', 'JNO' => '0');

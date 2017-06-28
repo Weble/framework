@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /**
  * Class zlfwHelperCheck
  * Diagnistic helper for checking required system settings or server settings

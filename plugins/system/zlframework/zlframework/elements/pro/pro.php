@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // register Element class
 App::getInstance('zoo')->loader->register('Element', 'elements:element/element.php');
 

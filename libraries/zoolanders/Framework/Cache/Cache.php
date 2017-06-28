@@ -15,7 +15,6 @@ class Cache implements CacheInterface
      * Path to cache file
      *
      * @var string
-     * @since 2.0
      */
     protected $file = 'config.txt';
 
@@ -23,7 +22,6 @@ class Cache implements CacheInterface
      * Path to cache file
      *
      * @var array
-     * @since 2.0
      */
     protected $items = array();
 
@@ -31,7 +29,6 @@ class Cache implements CacheInterface
      * marks cache dirty
      *
      * @var boolean
-     * @since 2.0
      */
     protected $dirty = false;
 
@@ -39,7 +36,6 @@ class Cache implements CacheInterface
      * The cached items
      *
      * @var boolean
-     * @since 2.0
      */
     protected $hash = true;
 
@@ -54,7 +50,6 @@ class Cache implements CacheInterface
      * @param string $file Path to cache file
      * @param boolean $hash Wether the key should be hashed
      * @param int $lifetime The values lifetime
-     * @since 2.0
      */
     public function __construct ($file, $hash = true, $lifetime = null)
     {
@@ -89,8 +84,6 @@ class Cache implements CacheInterface
      * Check if the cache file is writable and readable
      *
      * @return boolean If the cache can be used
-     *
-     * @since 2.0
      */
     public function check ()
     {
@@ -103,8 +96,6 @@ class Cache implements CacheInterface
      * @param  string $key The key
      *
      * @return mixed      The cache content
-     *
-     * @since 2.0
      */
     public function get ($key)
     {
@@ -125,8 +116,6 @@ class Cache implements CacheInterface
      * @param mixed $value The value
      *
      * @return Cache $this for chaining support
-     *
-     * @since 2.0
      */
     public function set ($key, $value)
     {
@@ -148,8 +137,6 @@ class Cache implements CacheInterface
      * Parse the cache file
      *
      * @return Cache $this for chaining support
-     *
-     * @since 2.0
      */
     protected function parse ()
     {
@@ -170,8 +157,6 @@ class Cache implements CacheInterface
      * Save the cache file if it was changed
      *
      * @return Cache $this for chaining support
-     *
-     * @since 2.0
      */
     public function save ()
     {

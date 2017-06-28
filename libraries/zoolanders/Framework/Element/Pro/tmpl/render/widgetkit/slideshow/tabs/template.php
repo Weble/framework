@@ -10,8 +10,6 @@
 
  
 
-defined('_JEXEC') or die();
-
 	$widget_id = $widget->id.'-'.uniqid();
 	$settings  = $widget->settings;
 	$content   = array();

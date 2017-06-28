@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 	$widget_id = $widget->id.'-'.uniqid();
 	$settings  = $widget->settings;
 

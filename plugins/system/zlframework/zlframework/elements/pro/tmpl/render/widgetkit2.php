@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // init vars
 $settings = json_decode($params->find('layout._widget'), true);
 

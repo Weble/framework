@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // load assets
 $this->app->zlfw->loadLibrary('qtip');
 

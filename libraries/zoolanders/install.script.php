@@ -1,6 +1,6 @@
 <?php
 
-defined('_JEXEC') or die();
+
 
 /**
  * Heavily taken from FOF installer script (https://github.com/akeeba/fof)

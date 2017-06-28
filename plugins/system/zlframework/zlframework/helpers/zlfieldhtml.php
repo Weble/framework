@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
    Class: HTMLHelper
 	  A class that contains zlfield html functions

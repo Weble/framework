@@ -9,8 +9,6 @@ use Zoolanders\Framework\Model\Item\Categories;
 use Zoolanders\Framework\Model\Item\Elements;
 use Zoolanders\Framework\Model\Item\Tags;
 
-defined('_JEXEC') or die();
-
 class Item extends Database
 {
     use Basics, Tags, Categories, Elements, UniqueAlias;

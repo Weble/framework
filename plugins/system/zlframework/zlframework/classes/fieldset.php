@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
 	Class: Fieldset
 		The Fieldset abstract class

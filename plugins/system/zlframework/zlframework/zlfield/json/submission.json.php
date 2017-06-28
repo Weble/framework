@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 	// return json string
 	return
 	'{

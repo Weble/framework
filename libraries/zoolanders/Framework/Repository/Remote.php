@@ -27,7 +27,7 @@ abstract class Remote extends Repository
             return $this->fetchFromRemote();
         }
 
-        return $this->cache("list", [$this, "fetchFromRemote"]);
+        return $this->cache('list', [$this, 'fetchFromRemote']);
     }
 
     public function fetchFromRemote ($data = [])

@@ -5,8 +5,6 @@ namespace Zoolanders\Framework\Service;
 use Joomla\Registry\Registry;
 use Zoolanders\Framework\Service\System\Dbo;
 
-defined('_JEXEC') or die;
-
 /**
  * A helper class to quickly get the component parameters
  */

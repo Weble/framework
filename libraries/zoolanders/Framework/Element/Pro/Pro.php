@@ -4,8 +4,6 @@ namespace Zoolanders\Framework\Element\Pro;
 
 use Zoolanders\Framework\Container\Container;
 
-defined('_JEXEC') or die();
-
 /*
 	Class: ElementPro
 		The Element Pro abstract class

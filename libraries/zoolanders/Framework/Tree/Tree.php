@@ -7,12 +7,10 @@ namespace Zoolanders\Framework\Tree;
  */
 class Tree
 {
-
     /**
      * The root node for the tree
      *
      * @var object
-     * @since 2.0
      */
     protected $root;
 
@@ -20,7 +18,6 @@ class Tree
      * The class name
      *
      * @var string
-     * @since 2.0
      */
     protected $itemClass;
 
@@ -28,7 +25,6 @@ class Tree
      * A list of filter methods to filter the tree
      *
      * @var array
-     * @since 2.0
      */
     protected $filters = array();
 
@@ -36,7 +32,6 @@ class Tree
      * Class Constructor
      *
      * @param string $itemClass The name of the class we're dealing with
-     * @since 2.0
      */
     public function __construct ($itemClass = null)
     {
@@ -55,8 +50,6 @@ class Tree
      * @param array $args The list of arguments for the method
      *
      * @return Tree $this for chaining support
-     *
-     * @since 2.0
      */
     public function addFilter ($filter, $args = array())
     {
@@ -69,8 +62,6 @@ class Tree
      * Execute the filters on all the tree
      *
      * @return AppTree $this for chaining support
-     *
-     * @since 2.0
      */
     public function applyFilter ()
     {
@@ -88,9 +79,7 @@ class Tree
      * @param  string $method Method name
      * @param  array $args List of arguments
      *
-     * @return mixed        Result of the method
-     *
-     * @since 2.0
+     * @return mixed Result of the method
      */
     public function __call ($method, $args)
     {

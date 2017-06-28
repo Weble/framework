@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /**
  * Original Credits
  * AkeebaBackupPro AEAbstractObject \backend\akeeba\abstract\object.php

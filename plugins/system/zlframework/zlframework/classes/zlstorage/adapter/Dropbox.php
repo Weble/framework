@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // register necesary classes
 App::getInstance('zoo')->loader->register('AEUtilDropbox', 'classes:dropbox.php');
 

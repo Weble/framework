@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
 	Class: ZlframeworkController
 		The controller class for zoolanders extensions

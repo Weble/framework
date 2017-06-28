@@ -6,8 +6,6 @@ use App;
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Table;
 
-defined('_JEXEC') or die;
-
 class Zoo
 {
     /**

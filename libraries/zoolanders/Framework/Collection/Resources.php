@@ -4,8 +4,6 @@ namespace Zoolanders\Framework\Collection;
 
 use Zoolanders\Framework\Utils\HasId;
 
-defined('_JEXEC') or die;
-
 /**
  * Class Resources
  * Inspired by FOF3 Datacollection class by Nicholas K. Dionysopoulos / Akeeba Ltd (https://github.com/akeeba/fof/)

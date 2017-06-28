@@ -9,8 +9,6 @@ use Zoolanders\Framework\Model\Database\Date;
 use Zoolanders\Framework\Service\Zoo;
 use Zoolanders\Framework\Utils\IsString;
 
-defined('_JEXEC') or die;
-
 abstract class Database extends Model
 {
     use Date, IsString;

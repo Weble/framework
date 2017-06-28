@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // prepare title
 if ($title = $field->find('specific.title')) {
     $vars = explode('||', $title);

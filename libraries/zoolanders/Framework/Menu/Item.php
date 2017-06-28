@@ -16,7 +16,6 @@ class Item extends Tree\Item
      * Id of the menu item
      *
      * @var int
-     * @since 2.0
      */
     protected $id;
 
@@ -24,7 +23,6 @@ class Item extends Tree\Item
      * Name of the menu item
      *
      * @var string
-     * @since 2.0
      */
     protected $name;
 
@@ -32,7 +30,6 @@ class Item extends Tree\Item
      * Url of the menu item
      *
      * @var string
-     * @since 2.0
      */
     protected $link;
 
@@ -40,7 +37,6 @@ class Item extends Tree\Item
      * Attributes to apply to the item
      *
      * @var array
-     * @since 2.0
      */
     protected $attributes;
 
@@ -97,8 +93,6 @@ class Item extends Tree\Item
      * Get the name of the menu Item
      *
      * @return string The name of the meu item
-     *
-     * @since 2.0
      */
     public function getName ()
     {
@@ -111,8 +105,6 @@ class Item extends Tree\Item
      * @param string $name The name
      * Item
      * @return Item $this for chaining support
-     *
-     * @since 2.0
      */
     public function setName ($name)
     {
@@ -124,8 +116,6 @@ class Item extends Tree\Item
      * Get the id of the menu item
      *
      * @return int The menu item id
-     *
-     * @since 2.0
      */
     public function getID ()
     {
@@ -138,8 +128,6 @@ class Item extends Tree\Item
      * @param  string $key The key to fetch
      *
      * @return string      The value for the attribute
-     *
-     * @since 2.0
      */
     public function getAttribute ($key)
     {
@@ -157,8 +145,6 @@ class Item extends Tree\Item
      * @param string $value The value
      *
      * @return Item $this for chaining support
-     *
-     * @since 2.0
      */
     public function setAttribute ($key, $value)
     {

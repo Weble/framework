@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // init var
 $node_atr = (array)$node->attributes();
 $node_atr = $node_atr['@attributes'];

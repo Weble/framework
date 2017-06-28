@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // load libraries
 jimport('joomla.plugin.plugin');
 

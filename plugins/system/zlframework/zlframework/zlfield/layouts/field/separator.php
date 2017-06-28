@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // init vars
 $final_ctrl = $params->get('final_ctrl');
 $init_state = true;

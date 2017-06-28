@@ -11,7 +11,6 @@ class Menu extends Tree
      * The name of the menu
      *
      * @var string
-     * @since 2.0
      */
     protected $name;
 
@@ -33,8 +32,6 @@ class Menu extends Tree
      * Render the menu
      * @param   array $decorators an eventual list of decorators to call
      * @return string The html code for the menu
-     *
-     * @since 2.0
      */
     public function render (array $decorators = [])
     {
@@ -66,8 +63,6 @@ class Menu extends Tree
      * @param  \SimpleXMLElement $xml The xml to traverse
      * @param  DecoratorInterface $decorator The decorator to call on each child
      * @param  array $args The arguments to pass on to the callback
-     *
-     * @since 2.0
      */
     protected function map (\SimpleXMLElement $xml, $decorator, $args = array())
     {

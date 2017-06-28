@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 jimport('joomla.form.formfield');
 
 // load config

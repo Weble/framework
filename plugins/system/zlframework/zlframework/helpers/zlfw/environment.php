@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
 	Class: zlfwHelperEnvironment
 		The ZLFW environment helper class

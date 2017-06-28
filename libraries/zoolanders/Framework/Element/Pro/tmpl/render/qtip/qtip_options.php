@@ -1,10 +1,5 @@
 <?php
-/**
- */
 
-defined('_JEXEC') or die();
-
-// load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
 $positions = array('Top left' => 'top left', 'Top center' => 'top center', 'Top right' => 'top right', 'Right top' => 'right top', 'Right center' => 'right center', 'Right bottom' => 'right bottom', 'Bottom right' => 'bottom right', 'Bottom center' => 'bottom center', 'Bottom left' => 'bottom left', 'Left bottom' => 'left bottom', 'Left center' => 'left center', 'Left top' => 'left top', 'Center' => 'center');
@@ -74,7 +69,7 @@ return
 				"help": "PLG_ZLFRAMEWORK_QTIP_SHOW_SOLO_DESC",
 				"default":"0"
 			},
-			
+
 			"wrapper_hide":{
 				"type": "wrapper",
 				"fields": {
@@ -101,11 +96,11 @@ return
 					}
 				}
 			},
-	
+
 		"sep-content":{
 			"type": "separator",
 			"text": "PLG_ZLFRAMEWORK_QTIP_CONTENT"
-		},				
+		},
 			"_class":{
 				"type": "text",
 				"label": "PLG_ZLFRAMEWORK_QTIP_CUSTOM_CLASS",
@@ -144,13 +139,13 @@ return
 				"type": "text",
 				"label": "PLG_ZLFRAMEWORK_HEIGHT"
 			},
-			
-		
+
+
 		"sep_trigger":{
 			"type": "separator",
 			"text": "Trigger"
 		},
-			
+
 			"_trigger_render":{
 				"type": "select",
 				"label": "Render",
@@ -164,7 +159,7 @@ return
 				},
 				"default": "1"
 			},
-			
+
 			"_trigger_content":{
 				"type": "select",
 				"label": "PLG_ZLFRAMEWORK_QTIP_TRIGGER",
@@ -190,7 +185,7 @@ return
 				"label": "PLG_ZLFRAMEWORK_QTIP_TRIGGER_TEXT",
 				"help": "PLG_ZLFRAMEWORK_QTIP_TRIGGER_TEXT_DESC"
 			},
-			
+
 			"_trigger_title":{
 				"type": "select",
 				"label": "Title",

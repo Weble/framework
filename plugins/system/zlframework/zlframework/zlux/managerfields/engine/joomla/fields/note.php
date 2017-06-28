@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 if (!$fld->get('label') && !$fld->get('desc'))
 {
 	return;

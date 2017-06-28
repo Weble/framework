@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 $toggle = JText::_($fld->get('toggle'));
 ?>
 

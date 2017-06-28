@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // init vars
 $attrs = '';
 $attrs .= $fld->get('dependent') ? " data-dependent='{$fld->get('dependent')}'" : '';

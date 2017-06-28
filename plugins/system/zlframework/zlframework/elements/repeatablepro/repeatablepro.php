@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 App::getInstance('zoo')->loader->register('ElementRepeatable', 'elements:repeatable/repeatable.php');
 
 /*

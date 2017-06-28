@@ -14,8 +14,6 @@ use Zoolanders\Framework\Data\Json;
 use Zoolanders\Framework\Event\Triggerable;
 use Zoolanders\Framework\Utils\NameFromClass;
 
-defined('_JEXEC') or die;
-
 class Model
 {
     use Triggerable, NameFromClass;

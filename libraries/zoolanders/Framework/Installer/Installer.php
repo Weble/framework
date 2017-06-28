@@ -4,8 +4,6 @@ namespace Zoolanders\Framework\Installer;
 
 use Zoolanders\Framework\Container\Container;
 
-defined('_JEXEC') or die();
-
 abstract class Installer
 {
     /**

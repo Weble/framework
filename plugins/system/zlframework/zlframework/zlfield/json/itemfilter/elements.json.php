@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 	$node = $this->data->create($node);
 	$psv  = $this->data->create($psv);
 

@@ -15,7 +15,6 @@ class Item implements ItemInterface
      * List of children
      *
      * @var array
-     * @since 2.0
      */
     protected $children = array();
 
@@ -23,8 +22,6 @@ class Item implements ItemInterface
      * Get the item unique id (object hash)
      *
      * @return string Unique id
-     *
-     * @since 2.0
      */
     public function getID ()
     {
@@ -35,8 +32,6 @@ class Item implements ItemInterface
      * Get the item parent
      *
      * @return Item The parent item
-     *
-     * @since 2.0
      */
     public function getParent ()
     {
@@ -57,8 +52,6 @@ class Item implements ItemInterface
      * @param ItemInterface $item The menu item
      *
      * @return Item $this for chaining support
-     *
-     * @since 2.0
      */
     public function setParent (ItemInterface $item)
     {
@@ -71,8 +64,6 @@ class Item implements ItemInterface
      * Get the children list
      *
      * @return array The list of children
-     *
-     * @since 2.0
      */
     public function getChildren ()
     {
@@ -86,8 +77,6 @@ class Item implements ItemInterface
      * @param  boolean $recursive If the search should go also through the children recursively (default: false)
      *
      * @return boolean            True if the item is a children
-     *
-     * @since 2.0
      */
     public function hasChild ($id, $recursive = false)
     {
@@ -108,8 +97,6 @@ class Item implements ItemInterface
      * Count the children of the item
      *
      * @return int The number of children
-     *
-     * @since 2.0
      */
     public function hasChildren ()
     {
@@ -122,8 +109,6 @@ class Item implements ItemInterface
      * @param ItemInterface $item The item to add
      *
      * @return Item $this for chaining support
-     *
-     * @since 2.0
      */
     public function addChild (ItemInterface $item)
     {
@@ -139,8 +124,6 @@ class Item implements ItemInterface
      * @param array $children The list of items to add
      *
      * @return Item $this for chaining support
-     *
-     * @since 2.0
      */
     public function addChildren (array $children)
     {
@@ -157,8 +140,6 @@ class Item implements ItemInterface
      * @param  ItemInterface $item The child to remove
      *
      * @return Item            $this for chaining support
-     *
-     * @since 2.0
      */
     public function removeChild (ItemInterface $item)
     {
@@ -174,8 +155,6 @@ class Item implements ItemInterface
      * @param  string $id The id of the item to remove
      *
      * @return Item     $this for chaining support
-     *
-     * @since 2.0
      */
     public function removeChildById ($id)
     {
@@ -190,8 +169,6 @@ class Item implements ItemInterface
      * Get the path from the current item to the root of the tree
      *
      * @return array The pathway
-     *
-     * @since 2.0
      */
     public function getPathway ()
     {
@@ -211,8 +188,6 @@ class Item implements ItemInterface
      *
      * @param  Callable $callback A function to call
      * @param  array $args A list of arguments to pass
-     *
-     * @since 2.0
      */
     public function filter ($callback, $args = array())
     {

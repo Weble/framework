@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
 	Class: ModelHelper
 		Helper for models

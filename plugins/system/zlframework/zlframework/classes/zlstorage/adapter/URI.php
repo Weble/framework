@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // import library dependencies
 jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.path');

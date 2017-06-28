@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 	// init vars
 	$id   = $params->find('layout.id', '_layout');
 	$mode = $params->find('layout.mode', 'files');

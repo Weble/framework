@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
    Class: zlfwHelperHTML
    	  A class that contains zoo html functions

@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 // register and load (necessary) the main pagination class
 JLoader::register('AppPagination', App::getInstance('zoo')->path->path('component.admin:framework/classes/pagination.php'));
 JLoader::load('AppPagination');

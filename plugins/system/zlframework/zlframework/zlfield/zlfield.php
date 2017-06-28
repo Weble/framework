@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
    Class: ZlfieldHelper
          ZL Field class for all params fields around Joomla!

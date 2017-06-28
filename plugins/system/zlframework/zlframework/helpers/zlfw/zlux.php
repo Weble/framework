@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
 	Class: zlfwHelperZlux
 		A class that contains ZLUX functions

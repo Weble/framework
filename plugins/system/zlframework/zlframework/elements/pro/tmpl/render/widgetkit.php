@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 if ($this->app->zlfw->checkExt('com_widgetkit')) {
     // load widgetkit
     require_once(JPATH_ADMINISTRATOR . '/components/com_widgetkit/widgetkit.php');

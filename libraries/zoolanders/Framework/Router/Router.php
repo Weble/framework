@@ -5,8 +5,6 @@ namespace Zoolanders\Framework\Router;
 use Zoolanders\Framework\Cache\CacheInterface;
 use Zoolanders\Framework\Container\Container;
 
-defined('_JEXEC') or die();
-
 /**
  * The ZL router class
  */

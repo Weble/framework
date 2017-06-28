@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 	/* Prepare Spotlight */
 	if ($settings->get('spotlight'))
 	{

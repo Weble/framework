@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
  Transition workaround to the new ZLFW Helpers
 */

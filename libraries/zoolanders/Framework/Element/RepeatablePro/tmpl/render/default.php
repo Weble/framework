@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 	// render values
 	$result = $this->getRenderedValues($params);
 

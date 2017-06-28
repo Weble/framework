@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /*
 	Class: zlfwHelperXml
 		The ZLFW xml helper class

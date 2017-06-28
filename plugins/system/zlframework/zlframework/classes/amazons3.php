@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 /**
  * Original Credits
  * AkeebaBackupPro AEUtilAmazons3 \backend\akeeba\plugins\utils\amazons3.php

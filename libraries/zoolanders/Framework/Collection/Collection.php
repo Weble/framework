@@ -14,8 +14,6 @@ use ArrayIterator;
 use CachingIterator;
 use JsonSerializable;
 
-defined('_JEXEC') or die;
-
 class Collection implements CollectionInterface
 {
     /**

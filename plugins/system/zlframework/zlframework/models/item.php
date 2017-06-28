@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die();
-
 class ZLModelItem extends ZLModel {
     protected $join_cats = false;
     protected $join_frontpage = false;
