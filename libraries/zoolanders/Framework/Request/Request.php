@@ -26,14 +26,13 @@ class Request extends \JInput
         $this->getHeaders();
 
         // Parse raw json data:
-        $isApplicationJson = strpos($this->headers->get('Content-Type'), 'application/json') !== false;
+        $isApplicationJson = strpos($this->headers->get('Accept'), 'application/json') !== false;
         $isFormatJson = $this->getCmd('format') === 'json';
 
         if ($isApplicationJson || $isFormatJson) {
             $json = json_decode(@file_get_contents('php://input'), true);
             $this->data = array_merge($this->data, (array)$json);
         }
-
     }
 
     /**
