@@ -41,20 +41,76 @@ class Response extends JHttpResponse implements ResponseInterface
     {
         $this->code = $code;
         $this->data = $data;
+
+        if ($this->type) {
+            $this->setHeader('Content-Type', $this->type);
+        }
     }
 
     /**
-     * Set response header
-     *
-     * @param   $key
-     * @param   $value
-     *
-     * @return  Response
+     * @inheritdoc
+     */
+    public function send()
+    {
+        $this->sendHeaders();
+        $this->sendContent();
+    }
+
+    /**
+     * @inheritdoc
      */
     public function setHeader ($key, $value)
     {
         $this->headers[$key] = $value;
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setContent ($content)
+    {
+        $this->data = $content;
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setHeaders ($headers)
+    {
+        $headers = (array) $headers;
+        $this->headers = $headers;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHeaders ()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContent ()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHeader ($key)
+    {
+        if (!isset($this->headers[$key])) {
+            return null;
+        }
+
+        return $this->headers[$key];
     }
 
     /**
@@ -65,25 +121,12 @@ class Response extends JHttpResponse implements ResponseInterface
     protected function sendHeaders ()
     {
         header($_SERVER["SERVER_PROTOCOL"] . " $this->code " . @self::$status_codes[$this->code]);
-        $this->setHeader('Content-Type', $this->type);
 
         if (!empty($this->headers)) {
             foreach ($this->headers as $key => $value) {
                 header(sprintf("%s: %s", $key, $value));
             }
         }
-    }
-
-    /**
-     * Set content
-     *
-     * @param   $content
-     * @return  Response
-     */
-    public function setContent ($content)
-    {
-        $this->data = $content;
-        return $this;
     }
 
     /**
@@ -98,32 +141,5 @@ class Response extends JHttpResponse implements ResponseInterface
         } else if (@self::$status_codes[$this->code]) {
             echo @self::$status_codes[$this->code];
         }
-    }
-
-    /**
-     * Set a root value
-     *
-     * @param $varname
-     * @param $value
-     *
-     * @return object
-     */
-    public function set ($varname, $value)
-    {
-        $this->{$varname} = $value;
-        return $this;
-    }
-
-    /**
-     * Send prepared response to user agent
-     *
-     * @return  mixed
-     */
-    public function send ()
-    {
-        $this->sendHeaders();
-        $this->sendContent();
-
-        exit();
     }
 }

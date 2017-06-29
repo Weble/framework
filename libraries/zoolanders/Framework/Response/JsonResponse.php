@@ -23,8 +23,9 @@ class JsonResponse extends Response
      */
     public function __construct ($data = array(), $code = 200)
     {
-        $this->code = $code;
-        $this->data = new Json($data);
+        $data = new Json($data);
+
+        parent::__construct($data, $code);
     }
 
     /**
@@ -32,7 +33,6 @@ class JsonResponse extends Response
      */
     public function setContent ($content)
     {
-
         $this->data = new Json($content);
         return $this;
     }
@@ -40,18 +40,18 @@ class JsonResponse extends Response
     /**
      * Bind variable to data
      *
-     * @param   string  Varname
-     * @param   mixed   Value
+     * @param   string  $key
+     * @param   mixed   $value
      *
      * @return  object
      */
-    public function __set ($varname, $value)
+    public function __set ($key, $value)
     {
         if (null === $this->data) {
             $this->data = new Json();
         }
 
-        $this->data->set($varname, $value);
+        $this->data->set($key, $value);
 
         return $this;
     }
@@ -59,36 +59,12 @@ class JsonResponse extends Response
     /**
      * Get variable from data
      *
-     * @param   string  Varname
+     * @param   string  $key
      *
      * @return  mixed
      */
-    public function __get ($varname)
+    public function __get ($key)
     {
-        return $this->data->get($varname);
-    }
-
-    /**
-     * Add a value to subarray (for example for errors)
-     *
-     * @param $varname
-     * @param $value
-     *
-     * @return object
-     */
-    public function add ($varname, $value)
-    {
-        $node = $this->{$varname};
-
-        if (empty($node)) {
-            $this->{$varname} = array();
-            $node = array();
-        }
-
-        array_push($node, $value);
-
-        $this->{$varname} = $node;
-
-        return $this;
+        return $this->data->get($key);
     }
 }

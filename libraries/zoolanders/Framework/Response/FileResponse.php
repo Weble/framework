@@ -1,9 +1,6 @@
 <?php
 
 namespace Zoolanders\Framework\Response;
-
-use Zoolanders\Framework\Data\Json;
-
 /**
  * Class FileResponse
  * @package Zoolanders\Framework\Response
@@ -32,13 +29,13 @@ class FileResponse extends Response
 
         parent::__construct($fileContents, $code);
 
-        $this->setHeaders($file);
+        $this->setHeadersFromFile($file);
     }
 
     /**
      * @param $file
      */
-    protected function setHeaders ($file)
+    protected function setHeadersFromFile ($file)
     {
         $name = basename($file);
         $type = $this->getContentType($name);

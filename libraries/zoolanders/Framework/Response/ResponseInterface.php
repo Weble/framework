@@ -19,18 +19,44 @@ interface ResponseInterface
     public function setHeader ($key, $value);
 
     /**
+     * Override all response headers
+     *
+     * @param   array
+     *
+     * @return  Response
+     */
+    public function setHeaders ($headers);
+
+    /**
+     * @return array
+     */
+    public function getHeaders();
+
+    /**
+     * @param $key string
+     * @return string
+     */
+    public function getHeader($key);
+
+    /**
      * Set content
      *
      * @param   Content
      *
-     * @return  void
+     * @return  Response
      */
     public function setContent ($content);
 
     /**
+     * Get the current Content
+     * @return mixed
+     */
+    public function getContent();
+
+    /**
      * Send prepared response to user agent
      *
-     * @return  mixed
+     * @return  void
      */
     public function send ();
 }

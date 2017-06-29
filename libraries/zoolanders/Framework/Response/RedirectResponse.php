@@ -9,6 +9,11 @@ namespace Zoolanders\Framework\Response;
 class RedirectResponse extends Response
 {
     /**
+     * @var bool
+     */
+    public $type = false;
+
+    /**
      * RedirectResponse constructor
      *
      * @param   $location
@@ -16,23 +21,9 @@ class RedirectResponse extends Response
      */
     public function __construct ($location = '/', $code = 301)
     {
-        $this->code = $code;
-        $this->location = $location;
-    }
+        parent::__construct($location, $code);
 
-    /**
-     * @inheritdoc
-     */
-    protected function sendHeaders ()
-    {
-        header($_SERVER["SERVER_PROTOCOL"] . " $this->code " . @self::$status_codes[$this->code]);
-        $this->setHeader('Location', @$this->location);
-
-        if (!empty($this->headers)) {
-            foreach ($this->headers as $key => $value) {
-                header(sprintf("%s: %s", $key, $value));
-            }
-        }
+        $this->setHeader('Location', $this->data);
     }
 
     /**

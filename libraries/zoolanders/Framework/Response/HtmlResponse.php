@@ -8,14 +8,5 @@ namespace Zoolanders\Framework\Response;
  */
 class HtmlResponse extends Response
 {
-    /**
-     * @inheritdoc
-     */
-    public function send ()
-    {
-        $this->sendHeaders();
-        $this->sendContent();
 
-        return;
-    }
 }
