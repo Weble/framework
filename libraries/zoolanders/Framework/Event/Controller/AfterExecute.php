@@ -2,6 +2,8 @@
 
 namespace Zoolanders\Framework\Event\Controller;
 
+use Zoolanders\Framework\Controller\ControllerInterface;
+
 class AfterExecute extends Controller
 {
     /**
@@ -16,11 +18,11 @@ class AfterExecute extends Controller
 
     /**
      * AfterExecute constructor.
-     * @param \Zoolanders\Framework\Controller\Controller $controller
+     * @param ControllerInterface $controller
      * @param $task
      * @param $response
      */
-    public function __construct (\Zoolanders\Framework\Controller\Controller $controller, $task, $response)
+    public function __construct (ControllerInterface $controller, $task, $response)
     {
         parent::__construct($controller);
 

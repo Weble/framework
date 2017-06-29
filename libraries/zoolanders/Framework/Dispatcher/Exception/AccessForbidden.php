@@ -6,7 +6,7 @@ use Throwable;
 
 class AccessForbidden extends DispatcherException
 {
-    public function __construct ($message = "", $code = 0, Throwable $previous = null)
+    public function __construct ($message = '', $code = 0, Throwable $previous = null)
     {
         $code = 403;
         $message = $message ? $message : 'Access Denied';

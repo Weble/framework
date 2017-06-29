@@ -9,6 +9,12 @@ namespace Zoolanders\Framework\Response;
 interface ResponseInterface
 {
     /**
+     * Response Types
+     */
+    const TYPE_JSON = 'application/json';
+    const TYPE_HTML = 'text/html';
+
+    /**
      * Set response header
      *
      * @param   $key

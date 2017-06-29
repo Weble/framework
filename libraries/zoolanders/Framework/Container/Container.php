@@ -3,12 +3,19 @@
 namespace Zoolanders\Framework\Container;
 
 use Auryn\Injector;
+use Auryn\InjectorException;
 use Joomla\Registry\Registry;
 use Zoolanders\Framework\Autoloader;
+use Zoolanders\Framework\Controller\ControllerInterface;
+use Zoolanders\Framework\Event\Controller\AfterExecute;
+use Zoolanders\Framework\Event\Controller\BeforeExecute;
 use Zoolanders\Framework\Factory\Factory;
 use Zoolanders\Framework\Dispatcher\Dispatcher;
 use Zoolanders\Framework\Dispatcher\Exception;
+use Zoolanders\Framework\Response\Error\ErrorResponseInterface;
 use Zoolanders\Framework\Response\ResponseInterface;
+use Zoolanders\Framework\Service\Alerts\Error;
+use Zoolanders\Framework\View\ViewInterface;
 
 /**
  * Class Container
@@ -17,8 +24,8 @@ use Zoolanders\Framework\Response\ResponseInterface;
  * @property-read   \Zoolanders\Framework\Service\Inflector $inflector
  * @property-read   \Zoolanders\Framework\Service\Filesystem $filesystem
  * @property-read   \Zoolanders\Framework\Service\Path $path
- * @property-read   \Zoolanders\Framework\Container\Nested\System $system
- * @property-read   \Zoolanders\Framework\Container\Nested\Assets $assets
+ * @property-read   \Zoolanders\Framework\Service\System $system
+ * @property-read   \Zoolanders\Framework\Service\Assets $assets
  * @property-read   \Zoolanders\Framework\Factory\Factory $factory
  * @property-read   \Zoolanders\Framework\Service\Zoo $zoo
  * @property-read   \Zoolanders\Framework\Service\Database $db
@@ -99,6 +106,8 @@ class Container
         $this->injector = new Injector();
         $this->factory = new Factory($this);
         $this->event = new \Zoolanders\Framework\Event\Dispatcher($this);
+
+        $this->registerFactoryDelegates();
     }
 
     /**
@@ -247,28 +256,81 @@ class Container
     }
 
     /**
-     * @param string $default_controller
+     * @param null $defaultController
+     * @return void
      * @throws Exception\BadResponseType
      * @throws Exception\ControllerNotFound
      */
-    public function dispatch ($default_controller = null)
+    public function dispatch ($defaultController = null)
     {
-        $event = $this->event->create('Dispatcher\BeforeDispatch');
-        $this->event->trigger($event);
+        try {
+            $this->injector->defineParam('defaultController', $defaultController);
 
-        $dispatcher = new Dispatcher($this);
-        $dispatcher->setDefaultController($default_controller);
+            $event = $this->event->create('Dispatcher\BeforeDispatch');
+            $this->event->trigger($event);
 
-        $response = $this->injector->execute([$dispatcher, 'dispatch']);
+            /** @var Dispatcher $dispatcher */
+            $dispatcher = $this->make(Dispatcher::class);
 
-        $event = $this->event->create('Dispatcher\AfterDispatch');
-        $this->event->trigger($event);
+            try {
+                /** @var ControllerInterface $controller */
+                $controller = $this->execute([$dispatcher, 'getController']);
+            } catch (InjectorException $e) {
+                throw new Exception\ControllerNotFound($e->getMessage());
+            }
 
-        if ($response instanceof ResponseInterface) {
+            /** @var string $task */
+            $task = $this->execute([$dispatcher, 'getTask']);
+
+            /** @var BeforeExecute $event */
+            $event = $this->event->createAndTrigger('Controller\BeforeExecute', [$controller, $task]);
+
+            // Task was maybe overridden by event listeners?
+            $task = $event->getTask();
+
+            $response = $this->execute([$controller, $task]);
+
+            /** @var AfterExecute $event */
+            $event = $controller->createAndTriggerEvent('Controller\AfterExecute', [$controller, $task, $response]);
+
+            // Response was maybe overridden by event listeners?
+            $response = $event->getResponse();
+
+            if ($response instanceof ResponseInterface) {
+                $response->send();
+                return;
+            }
+
+            $content = $response;
+            $view = $this->make(ViewInterface::class);
+
+            $response = $this->make(ResponseInterface::class);
+            $response->setContent($view->display($content));
+
+            $this->event->createAndTrigger('Dispatcher\AfterDispatch');
+
+            if ($response instanceof ResponseInterface) {
+                $response->send();
+                return;
+            }
+
+            throw new Exception\BadResponseType();
+        } catch (Exception\DispatcherException $e) {
+            /** @var ErrorResponseInterface $response */
+            $response = $this->make(ErrorResponseInterface::class);
+            $response->setException($e);
             $response->send();
-            return;
         }
+    }
 
-        throw new Exception\BadResponseType();
+    /**
+     * Register delegates for classes that needs to be built with a specific factory method
+     */
+    protected function registerFactoryDelegates ()
+    {
+        $this->injector->delegate(ResponseInterface::class, [$this->factory, 'response']);
+        $this->injector->delegate(ErrorResponseInterface::class, [$this->factory, 'errorResponse']);
+        $this->injector->delegate(ControllerInterface::class, [$this->factory, 'controller']);
+        $this->injector->delegate(ViewInterface::class, [$this->factory, 'view']);
     }
 }

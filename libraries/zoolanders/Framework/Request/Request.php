@@ -3,6 +3,7 @@
 namespace Zoolanders\Framework\Request;
 
 use Zoolanders\Framework\Data\Data;
+use Zoolanders\Framework\Response\ResponseInterface;
 
 /**
  * Class Request
@@ -16,6 +17,11 @@ class Request extends \JInput
     protected $headers;
 
     /**
+     * @var boolean
+     */
+    protected $isJson;
+
+    /**
      * Request constructor.
      */
     public function __construct ()
@@ -25,11 +31,7 @@ class Request extends \JInput
         // Capture HTTP Request headers:
         $this->getHeaders();
 
-        // Parse raw json data:
-        $isApplicationJson = strpos($this->headers->get('Accept'), 'application/json') !== false;
-        $isFormatJson = $this->getCmd('format') === 'json';
-
-        if ($isApplicationJson || $isFormatJson) {
+        if ($this->isJson()) {
             $json = json_decode(@file_get_contents('php://input'), true);
             $this->data = array_merge($this->data, (array)$json);
         }
@@ -38,14 +40,13 @@ class Request extends \JInput
     /**
      * Get http request headers
      *
-     * @return array
+     * @return Data
      */
     public function getHeaders ()
     {
+        $headers = [];
 
         if (empty($this->headers)) {
-            $headers = [];
-
             if (function_exists('getallheaders')) {
                 $headers = getallheaders();
             } else {
@@ -58,9 +59,9 @@ class Request extends \JInput
                     }
                 }
             }
-
-            $this->headers = new Data($headers);
         }
+
+        $this->headers = new Data($headers);
 
         return $this->headers;
     }
@@ -78,6 +79,42 @@ class Request extends \JInput
         }
 
         return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+    }
+
+    /**
+     * if the request is in json format
+     *
+     * @return bool True if an ajax call is being made
+     */
+    public function isJson ()
+    {
+        // Accept json in the header
+        if (strpos($this->getHeaders()->get('Content-Type'), 'application/json') !== false) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * get the expected response format
+     * @return bool
+     */
+    public function getExpectedResponse ()
+    {
+        // Joomla way
+        if (in_array($this->getCmd('format'), ['json', 'raw'])) {
+            return ResponseInterface::TYPE_JSON;
+        }
+
+        // header based
+        $acceptHeader = $this->getHeaders()->get('Accept');
+
+        if (strpos($acceptHeader, ResponseInterface::TYPE_JSON) !== false) {
+            return ResponseInterface::TYPE_JSON;
+        }
+
+        return ResponseInterface::TYPE_HTML;
     }
 
     /**

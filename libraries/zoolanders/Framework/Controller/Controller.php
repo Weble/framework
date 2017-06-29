@@ -12,29 +12,16 @@ use Zoolanders\Framework\Utils\NameFromClass;
 /**
  * Basic Controller Class
  */
-class Controller
+class Controller implements ControllerInterface
 {
     use Triggerable, NameFromClass;
-
-    /**
-     * Default task names
-     */
-    const TASK_INDEX = 'index';
-    const TASK_READ = 'read';
-    const TASK_SAVE = 'save';
-    const TASK_DELETE = 'remove';
-
-    /**
-     * Default id field parameter
-     */
-    CONST PARAM_ID = 'id';
 
     /**
      * defaultTask
      *
      * @var    string
      */
-    protected $defaultTask = Controller::TASK_INDEX;
+    protected $defaultTask = ControllerInterface::TASK_INDEX;
 
     /**
      * The current view name; you can override it in the configuration
@@ -71,7 +58,7 @@ class Controller
      *
      * @param   string $method The name of the method in the derived class to perform if a named task is not found.
      *
-     * @return  Controller  This object to support chaining.
+     * @return  ControllerInterface  This object to support chaining.
      */
     public function registerDefaultTask ($method)
     {

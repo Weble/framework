@@ -2,6 +2,8 @@
 
 namespace Zoolanders\Framework\Event\Controller;
 
+use Zoolanders\Framework\Controller\ControllerInterface;
+
 class BeforeExecute extends Controller
 {
     /**
@@ -11,10 +13,10 @@ class BeforeExecute extends Controller
 
     /**
      * BeforeExecute constructor.
-     * @param \Zoolanders\Framework\Controller\Controller $controller
+     * @param ControllerInterface $controller
      * @param $task
      */
-    public function __construct (\Zoolanders\Framework\Controller\Controller $controller, $task)
+    public function __construct (ControllerInterface $controller, $task)
     {
         parent::__construct($controller);
 

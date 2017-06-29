@@ -3,7 +3,7 @@
 namespace Zoolanders\Framework\Factory;
 
 use Zoolanders\Framework\Container\Container;
-use Zoolanders\Framework\Controller\Controller;
+use Zoolanders\Framework\Controller\ControllerInterface;
 use Zoolanders\Framework\Request\Request;
 use Zoolanders\Framework\Response\ResponseInterface;
 use Zoolanders\Framework\View\ViewInterface;
@@ -30,7 +30,17 @@ class Factory
      */
     public function response (Request $input)
     {
-        $type = $input->isAjax() ? 'Json' : 'Html';
+        $type = $input->getExpectedResponse();
+
+        switch ($type) {
+            case ResponseInterface::TYPE_JSON:
+                $type = 'Json';
+                break;
+            case ResponseInterface::TYPE_HTML:
+            default:
+                $type = 'Html';
+                break;
+        }
 
         $responseClass = '\Zoolanders\Framework\Response\\' . $type . 'Response';
 
@@ -38,16 +48,42 @@ class Factory
     }
 
     /**
+     * Make response
      * @param Request $input
-     * @param null $default_ctrl
-     * @return bool|Controller
+     * @return ResponseInterface
      */
-    public function controller (Request $input, $default_ctrl = null)
+    public function errorResponse (Request $input, \Exception $e = null)
+    {
+        $type = $input->getExpectedResponse();
+
+        switch ($type) {
+            case ResponseInterface::TYPE_JSON:
+                $type = 'Json';
+                break;
+            case ResponseInterface::TYPE_HTML:
+            default:
+                $type = 'Html';
+                break;
+        }
+
+        $responseClass = '\Zoolanders\Framework\Response\Error\\' . $type . 'Response';
+
+        return $this->container->make($responseClass, [
+
+        ]);
+    }
+
+    /**
+     * @param Request $input
+     * @param null $defaultController
+     * @return null|ControllerInterface
+     */
+    public function controller (Request $input, $defaultController = null)
     {
         $namespaces = [];
         $namespaces[] = Container::FRAMEWORK_NAMESPACE;
 
-        $controller = $input->getCmd('controller', $input->getCmd('view', $default_ctrl));
+        $controller = $input->getCmd('controller', $input->getCmd('view', $defaultController));
 
         if ($extension = $this->container->environment->currentExtension()) {
             $namespaces = array_merge($this->container->getRegisteredExtensionNamespaces($extension), $namespaces);
@@ -58,25 +94,36 @@ class Factory
 
             if (class_exists($class)) {
                 // perform the request task
-                /** @var Controller $ctrl */
+                /** @var ControllerInterface $ctrl */
                 return $this->container->make($class);
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
      * Make response
      *
      * @param Request $input
-     * @param null $default
+     * @param null $defaultController
      * @return ViewInterface
      */
-    public function view (Request $input, $default = null)
+    public function view (Request $input, $defaultController = null)
     {
-        $type = $input->isAjax() ? 'Json' : 'Html';
-        $name = $input->getCmd('view', $input->getCmd('controller', $default));
+        $type = $input->getExpectedResponse();
+
+        switch ($type) {
+            case ResponseInterface::TYPE_JSON:
+                $type = 'Json';
+                break;
+            case ResponseInterface::TYPE_HTML:
+            default:
+                $type = 'Html';
+                break;
+        }
+
+        $name = $input->getCmd('view', $input->getCmd('controller', $defaultController));
 
         $component = $this->container->environment->currentExtension();
         $namespaces = $this->container->getRegisteredExtensionNamespaces($component);

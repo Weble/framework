@@ -2,26 +2,27 @@
 
 namespace Zoolanders\Framework\Event\Controller;
 
+use Zoolanders\Framework\Controller\ControllerInterface;
 use Zoolanders\Framework\Event\Event;
 
 abstract class Controller extends Event
 {
     /**
-     * @var \Zoolanders\Framework\Controller\Controller
+     * @var ControllerInterface
      */
     protected $controller;
 
     /**
      * BeforeExecute constructor.
-     * @param \Zoolanders\Framework\Controller\Controller $controller
+     * @param ControllerInterface $controller
      */
-    public function __construct (\Zoolanders\Framework\Controller\Controller $controller)
+    public function __construct (ControllerInterface $controller)
     {
         $this->controller = $controller;
     }
 
     /**
-     * @return \Zoolanders\Framework\Controller\Controller
+     * @return ControllerInterface
      */
     public function getController ()
     {

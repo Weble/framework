@@ -2,98 +2,18 @@
 
 namespace Zoolanders\Framework\Dispatcher;
 
-use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Controller\Controller;
-use Zoolanders\Framework\Event\Controller\AfterExecute;
-use Zoolanders\Framework\Event\Controller\BeforeExecute;
-use Zoolanders\Framework\Event\Dispatcher\AfterDispatch;
-use Zoolanders\Framework\Event\Dispatcher\BeforeDispatch;
+use Zoolanders\Framework\Controller\ControllerInterface;
 use Zoolanders\Framework\Event\Triggerable;
 use Zoolanders\Framework\Request\Request;
-use Zoolanders\Framework\Response\ResponseInterface;
-use Zoolanders\Framework\Service\Environment;
 use Zoolanders\Framework\Service\Event;
 
 class Dispatcher
 {
     /**
-     * Trigger Events
+     * Default id field parameter
      */
-    use Triggerable;
-
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * @var string  Default controller
-     */
-    protected $default_ctrl = '';
-
-    /**
-     * Dispatcher constructor.
-     * @param Container $container
-     */
-    public function __construct (Container $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * Set default controller
-     *
-     * @param $controller_name
-     */
-    public function setDefaultController ($controller_name)
-    {
-
-        $this->default_ctrl = $controller_name;
-    }
-
-    /**
-     * @param Request $request
-     * @return mixed|ResponseInterface
-     */
-    public function dispatch (Request $request)
-    {
-        $controller = $this->container->factory->controller($request, $this->default_ctrl);
-
-        if (!$controller) {
-            throw new Exception\ControllerNotFound();
-        }
-
-        $crudTask = $this->getCrudTask($controller, $request->getHttpVerb(), $request->getVar(Controller::PARAM_ID, false));
-        $task = $request->getCmd('task', $crudTask);
-
-        /** @var BeforeExecute $event */
-        $event = $controller->createAndTriggerEvent('Controller\BeforeExecute', [$controller, $task]);
-        $this->triggerEvent($event);
-
-        // Task was maybe overridden by event listeners?
-        $task = $event->getTask();
-
-        $response = $this->container->execute([$controller, $task]);
-
-        /** @var AfterExecute $event */
-        $event = $controller->createAndTriggerEvent('Controller\AfterExecute', [$controller, $task, $response]);
-        $this->triggerEvent($event);
-
-        // Response was maybe overridden by event listeners?
-        $response = $event->getResponse();
-
-        if ($response instanceof ResponseInterface) {
-            return $response;
-        }
-
-        $content = $response;
-        $view = $this->container->factory->view($request, $this->default_ctrl);
-
-        $response = $this->container->factory->response($request);
-        $response->setContent($view->display($content));
-
-        return $response;
-    }
+    CONST PARAM_ID = 'id';
 
     /**
      * Determines the CRUD task to use based on the view name and HTTP verb used in the request.
@@ -101,29 +21,51 @@ class Dispatcher
      *
      * @return  string  The CRUD task (browse, read, edit, delete)
      */
-    public function getCrudTask (Controller $controller, $httpVerb, $id = false)
+    public function getCrudTask (ControllerInterface $controller, Request $request)
     {
         $task = $controller->getDefaultTask();
+        $id = $request->get(self::PARAM_ID);
 
         // Alter the task based on the verb
-        switch ($httpVerb) {
+        switch ($request->getHttpVerb()) {
             case 'POST':
             case 'PUT':
-                $task = Controller::TASK_SAVE;
+                $task = ControllerInterface::TASK_SAVE;
                 break;
             case 'DELETE':
                 if ($id) {
-                    $task = Controller::TASK_DELETE;
+                    $task = ControllerInterface::TASK_DELETE;
                 }
                 break;
             case 'GET':
             default:
                 if ($id) {
-                    $task = Controller::TASK_READ;
+                    $task = ControllerInterface::TASK_READ;
                 }
                 break;
         }
 
         return $task;
+    }
+
+    /**
+     * @param ControllerInterface $controller
+     * @return ControllerInterface
+     */
+    public function getController(ControllerInterface $controller)
+    {
+        return $controller;
+    }
+
+    /**
+     * @param ControllerInterface $controller
+     * @param Request $request
+     * @return string
+     */
+    public function getTask(ControllerInterface $controller, Request $request)
+    {
+        $crudTask = $this->getCrudTask($controller, $request);
+
+        return $request->getCmd('task', $crudTask);
     }
 }

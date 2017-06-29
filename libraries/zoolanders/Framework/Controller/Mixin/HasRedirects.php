@@ -2,7 +2,7 @@
 
 namespace Zoolanders\Framework\Controller\Mixin;
 
-use Zoolanders\Framework\Controller\Controller;
+use Zoolanders\Framework\Controller\ControllerInterface;
 use Zoolanders\Framework\Response\RedirectResponse;
 
 /**
@@ -88,7 +88,7 @@ trait HasRedirects
      * @param   string $msg Message to display on redirect. Optional, defaults to value set internally by controller, if any.
      * @param   string $type Message type. Optional, defaults to 'message' or the type set by a previous call to setMessage.
      *
-     * @return  Controller   This object to support chaining.
+     * @return  ControllerInterface   This object to support chaining.
      */
     public function setRedirect ($url, $msg = null, $type = null)
     {

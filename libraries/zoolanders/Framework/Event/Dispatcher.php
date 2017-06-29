@@ -110,6 +110,19 @@ class Dispatcher
     }
 
     /**
+     * @param $name
+     * @param array $args
+     * @param null $namespace
+     */
+    public function createAndTrigger($name, $args = [], $namespace = null)
+    {
+        $event = $this->create($name, $args, $namespace);
+        $this->trigger($event);
+
+        return $event;
+    }
+
+    /**
      * @param EventInterface $event
      * @return void
      */
