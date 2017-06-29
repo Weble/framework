@@ -1,4 +1,4 @@
-const build = require('z4-build')
+const build = require('@zoolanders/build')
 const pkg = require('../package.json')
 
 buildPackage()
@@ -43,7 +43,7 @@ async function copyFiles () {
       '!dist{,/**}',
       '!build{,/**}',
       '!phpStorm{,/**}',
-      '!node_modules{,/**}'
+      '!node_modules{,/**}',
       '!libraries/zoolanders/tests{,/**}',
       '!libraries/zoolanders/vendor{,/**}'
     ]

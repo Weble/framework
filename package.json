@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "ZOOlanders-Framework",
+  "name": "@zoolanders/framework",
   "version": "4.0.1-beta14",
   "description": "ZOOlanders Framework",
   "copyright": "Copyright (C) 2017 Joolanders, SL",
@@ -13,7 +13,6 @@
     "build": "node build/build.js"
   },
   "devDependencies": {
-    "z4-build": "git+https://github.com/joolanders/z4-build.git#master"
-  },
-  "dependencies": {}
+    "@zoolanders/build": "^1.0.0"
+  }
 }
