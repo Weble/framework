@@ -97,7 +97,6 @@ class zlfwHelperHTML extends AppHelper {
      * @param string $category The category id to build the select list for
      *
      * @return string category select list html
-     * @since 3.0.13
      */
     public function categoryList ($application, $type = null, $root_cat = 0, $maxLevel = 9999, $hide_empty = false, $prefix = '-&nbsp;', $spacer = '.&nbsp;&nbsp;&nbsp;') {
         // get tree list

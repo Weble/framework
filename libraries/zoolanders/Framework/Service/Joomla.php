@@ -11,7 +11,6 @@ class Joomla
      * The current joomla version
      *
      * @var \JVersion
-     * @since 1.0.0
      */
     public $version;
 
@@ -33,8 +32,6 @@ class Joomla
      * Get the current Joomla installation short version (i.e: 2.5.3)
      *
      * @return string The short version of joomla (ie: 2.5.3)
-     *
-     * @since 1.0.0
      */
     public function getVersion ()
     {
@@ -48,8 +45,6 @@ class Joomla
      * @param boolean $release Compare only release versions (2.5 vs 2.5 even if 2.5.6 != 2.5.3)
      *
      * @return boolean If the version of Joomla is equal of the one passed
-     *
-     * @since 1.0.0
      */
     public function isVersion ($version, $release = true)
     {
@@ -60,8 +55,6 @@ class Joomla
      * Get the default access group
      *
      * @return int The default group id
-     *
-     * @since 1.0.0
      */
     public function getDefaultAccess ()
     {

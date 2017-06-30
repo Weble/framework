@@ -4,12 +4,10 @@ namespace Zoolanders\Framework\Data;
 
 class Json extends Data
 {
-
     /**
      * If the returned object will be an associative array (default :true)
      *
      * @var boolean
-     * @since 1.0.0
      */
     protected $assoc = true;
 
@@ -17,8 +15,6 @@ class Json extends Data
      * Class Constructor
      *
      * @param string|array $data The data to read. Could be either an array or a json string
-     *
-     * @since 1.0.0
      */
     public function __construct ($data = array())
     {
@@ -36,8 +32,6 @@ class Json extends Data
      * @param array|object $data The data to encode
      *
      * @return string The json encoded string
-     *
-     * @since 1.0.0
      */
     protected function write ($data)
     {

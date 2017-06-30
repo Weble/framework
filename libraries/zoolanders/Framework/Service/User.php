@@ -39,8 +39,6 @@ class User
      * @param int The id of the user to retrieve (default: the current user)
      *
      * @return \JUser The \JUser object
-     *
-     * @since 1.0.0
      */
     public function get ($id = null)
     {
@@ -69,8 +67,6 @@ class User
      * @param string $username The username
      *
      * @return \JUser The \JUser object
-     *
-     * @since 1.0.0
      */
     public function getByUsername ($username)
     {
@@ -91,8 +87,6 @@ class User
      * @param string $email The email
      *
      * @return \JUser The \JUser object
-     *
-     * @since 1.0.0
      */
     public function getByEmail ($email)
     {
@@ -113,8 +107,6 @@ class User
      * @param string $key The name of the variable to retrieve
      *
      * @return mixed The value of the variable
-     *
-     * @since 1.0.0
      */
     public function getState ($key)
     {
@@ -134,8 +126,6 @@ class User
      * @param mixed $value The value to set
      *
      * @return mixed The value of the variable
-     *
-     * @since 1.0.0
      */
     public function setState ($key, $value)
     {
@@ -157,8 +147,6 @@ class User
      * @param string $type The type of the variable
      *
      * @return mixed The value of the variable
-     *
-     * @since 1.0.0
      */
     public function getStateFromRequest ($key, $request, $default = null, $type = 'none')
     {
@@ -183,8 +171,6 @@ class User
      * @param int $id A id to confront with the loaded user id (default: 0)
      *
      * @return boolean If the username exists
-     *
-     * @since 1.0.0
      */
     public function checkUsernameExists ($username, $id = 0)
     {
@@ -199,8 +185,6 @@ class User
      * @param int $id A id to confront with the loaded user id (default: 0)
      *
      * @return boolean If the email exists
-     *
-     * @since 1.0.0
      */
     public function checkEmailExists ($email, $id = 0)
     {
@@ -214,8 +198,6 @@ class User
      * @param \JUser $user The user to check
      *
      * @return boolean if the user is an administrator
-     *
-     * @since 1.0.0
      */
     public function isJoomlaAdmin (\JUser $user)
     {
@@ -228,8 +210,6 @@ class User
      * @param \JUser $user The user to check
      *
      * @return boolean If the user is a super administrator
-     *
-     * @since 1.0.0
      */
     public function isJoomlaSuperAdmin (\JUser $user)
     {
@@ -240,8 +220,6 @@ class User
      * Get the user's browser default language
      *
      * @return string The language code
-     *
-     * @since 1.0.0
      */
     public function getBrowserDefaultLanguage ()
     {
@@ -274,8 +252,6 @@ class User
      * @param int $access The access level to check against
      *
      * @return boolean If the user have the rights to access that level
-     *
-     * @since 1.0.0
      */
     public function canAccess ($user = null, $access = 0)
     {
@@ -296,8 +272,6 @@ class User
      * @param int $created_by
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canEdit ($user = null, $asset_id = 0, $created_by = 0)
     {
@@ -314,8 +288,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canEditState ($user = null, $asset_id = 0)
     {
@@ -329,8 +301,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canCreate ($user = null, $asset_id = 0)
     {
@@ -344,8 +314,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canDelete ($user = null, $asset_id = 0)
     {
@@ -359,8 +327,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canManage ($user = null, $asset_id = 0)
     {
@@ -374,8 +340,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function isAdmin ($user = null, $asset_id = 0)
     {
@@ -389,8 +353,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canManageCategories ($user = null, $asset_id = 0)
     {
@@ -404,8 +366,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canManageComments ($user = null, $asset_id = 0)
     {
@@ -419,8 +379,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canManageFrontpage ($user = null, $asset_id = 0)
     {
@@ -434,8 +392,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     public function canManageTags ($user = null, $asset_id = 0)
     {
@@ -450,8 +406,6 @@ class User
      * @param int $asset_id
      *
      * @return boolean True if user has permission
-     *
-     * @since 3.2
      */
     protected function authorise ($user, $action, $asset_id)
     {

@@ -20,7 +20,6 @@ class Dispatcher
      * The listeners for the events
      *
      * @var array
-     * @since 1.0.0
      */
     protected $listeners = array();
 
@@ -39,8 +38,6 @@ class Dispatcher
      *
      * @param string $name An event name
      * @param mixed $listener A PHP callable
-     *
-     * @since 1.0.0
      */
     public function connect ($name, $listener)
     {
@@ -58,8 +55,6 @@ class Dispatcher
      * @param mixed $listener A PHP callable
      *
      * @return mixed false if listener does not exist, null otherwise
-     *
-     * @since 1.0.0
      */
     public function disconnect ($name, $listener)
     {
@@ -156,8 +151,6 @@ class Dispatcher
      * @param string $name The event name
      *
      * @return boolean true if some listeners are connected, false otherwise
-     *
-     * @since 1.0.0
      */
     public function hasListeners ($name)
     {
@@ -175,8 +168,6 @@ class Dispatcher
      * @param string $name The event name
      *
      * @return array An array of listeners
-     *
-     * @since 1.0.0
      */
     public function getListeners ($name)
     {

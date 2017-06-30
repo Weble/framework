@@ -14,8 +14,6 @@ trait Mime
      * @param string $filename The file name
      *
      * @return string The content type
-     *
-     * @since 1.0.0
      */
     public function getContentType ($filename)
     {
@@ -47,8 +45,6 @@ trait Mime
      * Get the mapping from extension to mime type
      *
      * @return array The associative array of extension => mime type mapping
-     *
-     * @since 1.0.0
      */
     public static function getMimeMapping ()
     {

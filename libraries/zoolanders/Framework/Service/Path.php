@@ -57,8 +57,6 @@ class Path
      * @param string $resource The resource with a namespace (ie: "assets:js/app.js")
      *
      * @return array|string The path(s) to the resource
-     *
-     * @since 1.0.0
      */
     public function path ($resource)
     {
@@ -71,8 +69,6 @@ class Path
      * @param string $resource The resource with a namespace (ex: "assets:js/app.js")
      *
      * @return array The list of paths
-     *
-     * @since 1.0.0
      */
     public function paths ($resource)
     {
@@ -85,8 +81,6 @@ class Path
      * @param string $resource The resource with a namespace (ex: "assets:js/app.js")
      *
      * @return string The absolute url
-     *
-     * @since 1.0.0
      */
     public function url ($resource)
     {
@@ -118,8 +112,6 @@ class Path
      * @param string $filter A regex filter for the search
      *
      * @return array The list of files
-     *
-     * @since 1.0.0
      */
     public function files ($resource, $recursive = false, $filter = null)
     {
@@ -134,8 +126,6 @@ class Path
      * @param string $filter A regex filter for the search
      *
      * @return array The list of directories
-     *
-     * @since 1.0.0
      */
     public function dirs ($resource, $recursive = false, $filter = null)
     {
@@ -211,8 +201,6 @@ class Path
      * @param string $filter A regex filter to use
      *
      * @return array A list of files or directories
-     *
-     * @since 1.0.0
      */
     protected function _list ($path, $prefix = '', $mode = 'file', $recursive = false, $filter = null)
     {
@@ -272,8 +260,6 @@ class Path
      * @param string $path The absolute path
      *
      * @return string The relative path
-     *
-     * @since 1.0.0
      */
     public function relative ($path)
     {
@@ -292,8 +278,6 @@ class Path
      *
      * @param  string $path
      * @return string
-     *
-     * @since 3.3.8
      */
     protected function normalizePath ($path)
     {

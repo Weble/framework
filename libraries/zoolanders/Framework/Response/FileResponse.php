@@ -1,6 +1,7 @@
 <?php
 
 namespace Zoolanders\Framework\Response;
+
 /**
  * Class FileResponse
  * @package Zoolanders\Framework\Response

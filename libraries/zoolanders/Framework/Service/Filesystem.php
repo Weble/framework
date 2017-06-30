@@ -72,8 +72,6 @@ class Filesystem
      * @param boolean $recursive If the search should be recursive (default: true)
      *
      * @return array The list of subdirectories
-     *
-     * @since 1.0.0
      */
     public function readDirectory ($path, $prefix = '', $filter = false, $recursive = true)
     {
@@ -122,8 +120,6 @@ class Filesystem
      * @param boolean $recursive If the search should be recursive (default: true)
      *
      * @return array The list of files
-     *
-     * @since 1.0.0
      */
     public function readDirectoryFiles ($path, $prefix = '', $filter = false, $recursive = true)
     {
@@ -170,8 +166,6 @@ class Filesystem
      * @param string $filename The file name
      *
      * @return string The file extension
-     *
-     * @since 1.0.0
      */
     public function getExtension ($filename)
     {

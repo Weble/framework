@@ -13,8 +13,6 @@ class JFormFieldZlux extends JFormField {
      * Method to get the field label markup.
      *
      * @return  string  The field label markup.
-     *
-     * @since   11.1
      */
     protected function getLabel () {
         // get zoo app
@@ -50,8 +48,6 @@ class JFormFieldZlux extends JFormField {
      * Method to get the field input markup.
      *
      * @return  string  The field input markup.
-     *
-     * @since   11.1
      */
     protected function getInput () {
         return '';

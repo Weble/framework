@@ -16,7 +16,6 @@ class Database
      * The name of the database driver we're using
      *
      * @var string
-     * @since 1.0.0
      */
     public $name;
 
@@ -24,7 +23,6 @@ class Database
      * The database driver we're using to interact with the database
      *
      * @var \JDatabaseDriver
-     * @since 1.0.0
      */
     protected $_database;
 
@@ -50,8 +48,6 @@ class Database
      * @return mixed The result of the query
      *
      * @throws \RuntimeException
-     *
-     * @since 1.0.0
      */
     public function query ($query)
     {
@@ -73,8 +69,6 @@ class Database
      * @return mixed The result of the query
      *
      * @throws \RuntimeException
-     *
-     * @since 1.0.0
      */
     public function queryResult ($query)
     {
@@ -98,8 +92,6 @@ class Database
      * @return object The result of the query
      *
      * @throws \RuntimeException
-     *
-     * @since 1.0.0
      */
     public function queryObject ($query, $class = 'stdClass')
     {
@@ -124,8 +116,6 @@ class Database
      * @return array The results of the query
      *
      * @throws \RuntimeException
-     *
-     * @since 1.0.0
      */
     public function queryObjectList ($query, $key = '', $class = 'stdClass', $offset = 0, $limit = 0)
     {
@@ -148,8 +138,6 @@ class Database
      * @return mixed The result of the query
      *
      * @throws \RuntimeException
-     *
-     * @since 1.0.0
      */
     public function queryResultArray ($query, $numinarray = 0)
     {
@@ -171,8 +159,6 @@ class Database
      * @return array The first row of the result of the query
      *
      * @throws \RuntimeException
-     *
-     * @since 1.0.0
      */
     public function queryAssoc ($query)
     {
@@ -197,8 +183,6 @@ class Database
      * @return array The results of the query
      *
      * @throws RuntimeException
-     *
-     * @since 1.0.0
      */
     public function queryAssocList ($query, $key = '', $offset = 0, $limit = 0)
     {
@@ -218,8 +202,6 @@ class Database
      * @return boolean If the operation was successful
      *
      * @throws RuntimeException
-     *
-     * @since 1.0.0
      */
     public function insertObject ($table, $object, $key = null)
     {
@@ -240,8 +222,6 @@ class Database
      * @return boolean If the operation was successful
      *
      * @throws \RuntimeException
-     *
-     * @since 1.0.0
      */
     public function updateObject ($table, &$object, $key, $updatenulls = true)
     {
@@ -257,8 +237,6 @@ class Database
      * @param resource $result The resource pointing to the query result
      *
      * @return mixed The first row of the result
-     *
-     * @since 1.0.0
      */
     public function fetchRow ($result)
     {
@@ -277,8 +255,6 @@ class Database
      * @param constant $type The fetching type to be used (default: MYSQL_BOTH)
      *
      * @return array The list of rows
-     *
-     * @since 1.0.0
      */
     public function fetchArray ($result, $type = MYSQL_BOTH)
     {
@@ -297,8 +273,6 @@ class Database
      * @param string $class The class to be used to build the object
      *
      * @return object The first row of the result as an object
-     *
-     * @since 1.0.0
      */
     public function fetchObject ($result, $class = 'stdClass')
     {
@@ -316,8 +290,6 @@ class Database
      * @param resource $result The resource pointing to the query result
      *
      * @return boolean If the operation was successful
-     *
-     * @since 1.0.0
      */
     public function freeResult ($result)
     {
@@ -340,8 +312,6 @@ class Database
      * @param array $args The list of arguments to pass on to the JDatabase class
      *
      * @return mixed The result of the method
-     *
-     * @since 1.0.0
      */
     public function __call ($method, $args)
     {
@@ -355,8 +325,6 @@ class Database
      * @param string $prefix The prefix to search for (default: #__)
      *
      * @return string The query with the real prefix
-     *
-     * @since 1.0.0
      */
     public function replacePrefix ($sql, $prefix = '#__')
     {

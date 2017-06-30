@@ -12,8 +12,6 @@ class Link
      * @param boolean $ssl If the link should be forced to be ssl
      *
      * @return string The url requested
-     *
-     * @since 1.0.0
      */
     public static function link ($query = array(), $xhtml = false, $ssl = null)
     {

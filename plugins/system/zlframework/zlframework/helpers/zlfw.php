@@ -103,8 +103,6 @@ class zlfwHelper extends AppHelper {
      * get Enviroment
      *
      * @return @object The enviroment parameters
-     *
-     * @since 3.0.6
      */
     public function getEnviroment () {
         $obj = new stdClass;
@@ -128,8 +126,6 @@ class zlfwHelper extends AppHelper {
      * get The Enviroment
      *
      * @return @string An known enviroment in simple string
-     *
-     * @since 3.0.6
      */
     public function getTheEnviroment () {
         // init vars
@@ -178,8 +174,6 @@ class zlfwHelper extends AppHelper {
      * output json content
      *
      * @return @json The JSON string with application/json content type
-     *
-     * @since 3.0.10
      */
     public function outputJSON ($json) {
         header("Pragma: public");
@@ -197,8 +191,6 @@ class zlfwHelper extends AppHelper {
      * is the Enviroment
      *
      * @return @boolean True if enviroment match
-     *
-     * @since 3.0.6
      */
     public function isTheEnviroment ($enviroment) {
         return (strpos($this->getTheEnviroment(), $enviroment) === 0);
@@ -471,8 +463,6 @@ class zlfwHelper extends AppHelper {
      * @param  string $action Posible values are 'encrypt' or 'decrypt'
      *
      * @return string The encrypted/decrypted text
-     *
-     * @since 3.0.3
      */
     public function crypt ($text, $action) {
         $secret = $this->app->system->config->get('secret');
@@ -488,8 +478,6 @@ class zlfwHelper extends AppHelper {
      * @param  string $pass The encrypted password to decrypt
      *
      * @return string The decrypted password
-     *
-     * @since 3.0.3
      */
     public function decryptPassword ($pass) {
         $matches = array();

@@ -1,6 +1,7 @@
 <?php
 
 namespace Zoolanders\Framework\Response\Error;
+
 use Zoolanders\Framework\Response\Response;
 
 /**

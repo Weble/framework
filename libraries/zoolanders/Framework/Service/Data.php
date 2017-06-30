@@ -11,8 +11,6 @@ class Data
      * @param string $format The data format (default: json)
      *
      * @return Data The class representing the data
-     *
-     * @since 1.0.0
      */
     public function create ($data = array(), $format = 'json')
     {

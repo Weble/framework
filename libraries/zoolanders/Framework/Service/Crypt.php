@@ -47,8 +47,6 @@ class Crypt
      * @param  string $pass The encrypted password to decrypt
      *
      * @return string The decrypted password
-     *
-     * @since 3.0.3
      */
     public function decryptPassword ($pass)
     {

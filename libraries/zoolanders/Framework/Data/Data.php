@@ -20,8 +20,6 @@ class Data extends \ArrayObject
      * @param string $name The key to check
      *
      * @return boolean If the key was found
-     *
-     * @since 1.0.0
      */
     public function has ($name)
     {
@@ -35,8 +33,6 @@ class Data extends \ArrayObject
      * @param mixed $default The default value
      *
      * @return mixed The fetched value
-     *
-     * @since 1.0.0
      */
     public function get ($key, $default = null)
     {
@@ -54,8 +50,6 @@ class Data extends \ArrayObject
      * @param mixed $value The value to set
      *
      * @return AppData The AppData object itself to allow chaining
-     *
-     * @since 1.0.0
      */
     public function set ($name, $value)
     {
@@ -69,8 +63,6 @@ class Data extends \ArrayObject
      * @param string $name The key of the data to remove
      *
      * @return AppData The AppData object itself to allow chaining
-     *
-     * @since 1.0.0
      */
     public function remove ($name)
     {
@@ -84,8 +76,6 @@ class Data extends \ArrayObject
      * @param string $name The key to search for
      *
      * @return boolean If the value was found
-     *
-     * @since 1.0.0
      */
     public function __isset ($name)
     {
@@ -98,8 +88,6 @@ class Data extends \ArrayObject
      * @param string $name The key of the data to fetch
      *
      * @return mixed The value for the given key
-     *
-     * @since 1.0.0
      */
     public function __get ($name)
     {
@@ -111,8 +99,6 @@ class Data extends \ArrayObject
      *
      * @param string $name The key of the data to set
      * @param mixed $value The value to set
-     *
-     * @since 1.0.0
      */
     public function __set ($name, $value)
     {
@@ -123,8 +109,6 @@ class Data extends \ArrayObject
      * Magic method to unset values using unset()
      *
      * @param string $name The key of the data to set
-     *
-     * @since 1.0.0
      */
     public function __unset ($name)
     {
@@ -138,8 +122,6 @@ class Data extends \ArrayObject
      * the data object using serialize()
      *
      * @return string A serialized version of the data
-     *
-     * @since 1.0.0
      */
     public function __toString ()
     {
@@ -152,8 +134,6 @@ class Data extends \ArrayObject
      * @param mixed $data The data to serialize
      *
      * @return string The serialized data
-     *
-     * @since 1.0.0
      */
     protected function write ($data)
     {
@@ -176,8 +156,6 @@ class Data extends \ArrayObject
      * @param string $separator The separator to use when searching for subkeys. Default is '.'
      *
      * @return mixed The searched value
-     *
-     * @since 1.0.0
      */
     public function find ($key, $default = null, $separator = '.')
     {
@@ -231,8 +209,6 @@ class Data extends \ArrayObject
      * @param mixed $needle The value to search for
      *
      * @return string The key of that value
-     *
-     * @since 1.0.0
      */
     public function searchRecursive ($needle)
     {
@@ -254,8 +230,6 @@ class Data extends \ArrayObject
      * Return flattened array copy. Keys are <b>NOT</b> preserved.
      *
      * @return array The flattened array copy
-     *
-     * @since 1.0.0
      */
     public function flattenRecursive ()
     {

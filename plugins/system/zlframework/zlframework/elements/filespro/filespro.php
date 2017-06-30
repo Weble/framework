@@ -752,7 +752,6 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Reference to the global App object
      *
      * @var App
-     * @since 3.0.5
      */
     public $app;
 
@@ -778,8 +777,6 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Gets the file extension
      *
      * @return string The file extension or empty if the file has no extension
-     *
-     * @since 3.0.4
      */
     public function getExtension () {
         if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
@@ -793,8 +790,6 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Get the file content type
      *
      * @return string The content type
-     *
-     * @since 3.0.5
      */
     public function getContentType () {
         return $this->app->filesystem->getContentType($this->getPathname());
@@ -804,8 +799,6 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Get the absolute url to a file
      *
      * @return string The absolute url
-     *
-     * @since 3.0.5
      */
     public function getURL () {
         if ($this->element->config->find('files._s3', 0)) // Amazon S3
@@ -823,8 +816,6 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Gets the file title
      *
      * @return string The file title
-     *
-     * @since 3.0.5
      */
     public function getTitle ($title = null) {
         $title = $title ? $title : $this->getBasename('.' . $this->getExtension());

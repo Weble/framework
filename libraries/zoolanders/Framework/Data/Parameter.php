@@ -8,8 +8,6 @@ class Parameter extends Json
      * Class Constructor
      *
      * @param array|object $data The data to be converted to JRegistry format
-     *
-     * @since 1.0.0
      */
     public function __construct ($data = array())
     {
@@ -29,8 +27,6 @@ class Parameter extends Json
      * @param mixed $default The default value of the parameter
      *
      * @return mixed The value of the parameter
-     *
-     * @since 1.0.0
      */
     public function get ($name, $default = null)
     {
@@ -64,8 +60,6 @@ class Parameter extends Json
      * @param mixed $value The value of the parameter to set
      *
      * @return Parameter return $this for chaining support
-     *
-     * @since 1.0.0
      */
     public function set ($name, $value)
     {
@@ -92,8 +86,6 @@ class Parameter extends Json
      * @param string $name The name of the parameter
      *
      * @return Parameter return $this for chaining support
-     *
-     * @since 1.0.0
      */
     public function remove ($name)
     {
@@ -126,8 +118,6 @@ class Parameter extends Json
      * @param array $array The values
      *
      * @return Parameter return $this for chaining support
-     *
-     * @since 1.0.0
      */
     public function loadArray ($array)
     {
@@ -145,8 +135,6 @@ class Parameter extends Json
      * @param object $object The object be to loaded
      *
      * @return ParameterData return $this for chaining support
-     *
-     * @since 1.0.0
      */
     public function loadObject ($object)
     {

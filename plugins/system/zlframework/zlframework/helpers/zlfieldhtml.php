@@ -58,8 +58,6 @@ class ZLFieldHTMLHelper extends AppHelper {
      * @param   boolean $returnRawValue If true the field will return it's current value
      *
      * @return  string HTML
-     *
-     * @since  3.0.8
      */
     public function infoField ($id, $name, $value, $spec, $attrs, $returnRawValue) {
         $info = explode('||', $spec->get('text'));

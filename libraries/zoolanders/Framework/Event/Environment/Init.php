@@ -66,8 +66,6 @@ class Init extends \Zoolanders\Framework\Event\Event
      * get The Enviroment
      *
      * @return @string An known enviroment in simple string
-     *
-     * @since 3.0.6
      */
     public function get ()
     {

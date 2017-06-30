@@ -16,7 +16,6 @@ class Document extends System
      * Last modification date for the file. Used for prevent the browser to use the cached version of an older CSS file
      *
      * @var string
-     * @since 1.0.0
      */
     private $file_mod_date;
 
@@ -32,8 +31,6 @@ class Document extends System
      *
      * @param string $path The path to the css file
      * @param string $version A version to add to the url to prevent caching (default: last modification date of the file)
-     *
-     * @since 1.0.0
      */
     public function addStylesheet ($path, $version = null)
     {
@@ -49,8 +46,6 @@ class Document extends System
      *
      * @param string $path The path to the javascript file
      * @param string $version A version to add to the url to prevent caching (default: last modification date of the file)
-     *
-     * @since 1.0.0
      */
     public function addScript ($path, $version = null)
     {

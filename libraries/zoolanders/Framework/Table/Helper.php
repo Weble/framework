@@ -27,8 +27,6 @@ class Helper extends \TableHelper
      * @param string $prefix An alternative prefix
      *
      * @return \AppTable The table object
-     *
-     * @since 1.0.0
      */
     public function get ($name, $prefix = null)
     {
