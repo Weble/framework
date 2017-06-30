@@ -13,6 +13,6 @@
     "build": "node build/build.js"
   },
   "devDependencies": {
-    "@zoolanders/build": "^1.0.1"
+    "@zoolanders/build": "^1.0.2"
   }
 }
