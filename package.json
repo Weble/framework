@@ -4,7 +4,7 @@
   "version": "4.0.1-beta14",
   "description": "ZOOlanders Framework",
   "copyright": "Copyright (C) 2017 Joolanders, SL",
-  "license": "GNU General Public License v2 or later",
+  "license": "GPL",
   "author": {
     "name": "ZOOlanders",
     "homepage": "http://zoolanders.com"
@@ -13,6 +13,6 @@
     "build": "node build/build.js"
   },
   "devDependencies": {
-    "@zoolanders/build": "^1.0.0"
+    "@zoolanders/build": "^1.0.1"
   }
 }

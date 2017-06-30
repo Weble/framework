@@ -5,25 +5,28 @@ buildPackage()
 
 async function buildPackage () {
 
-  // 1) create a clean temp folder
+  // create a clean temp folder
   build.log('Getting ready')
   await build.del('dist/tmp/build')
-  // 2) copy over all files without vendor|tests|node
+  // copy over all files without vendor|tests|node
   build.log('Copy files')
   await copyFiles()
-  // 3) add banners
+  // add JEXEC
+  build.log('Add JEXEC')
+  await addJexec()
+  // add banners
   build.log('Add banners')
   await addBanners()
-  // 4) install dependencies
+  // install dependencies
   build.log('Install Composer')
   await installDependencies()
-  // 5) prepack cleanup
+  // prepack cleanup
   build.log('Cleanup vendor')
   await cleanupVendor()
-  // 6) package
+  // package
   build.log('Package')
   await package()
-  // 7 post tasks, remove tmp files
+  // post tasks, remove tmp files
   build.log('Post Cleanup')
   await build.del('dist/tmp')
 
@@ -50,15 +53,23 @@ async function copyFiles () {
   })
 }
 
+async function addJexec () {
+  await build.jexec({
+    src: [
+      'dist/tmp/build/**/*.php'
+    ]
+  })
+}
+
 async function addBanners () {
   await build.banner({
-    files: [
+    src: [
       'dist/tmp/build/libraries/**/*.php',
       'dist/tmp/build/plugins/**/*.php'
     ],
-    product: 'ZOOlanders Framework',
+    product: pkg.description,
     version: pkg.version,
-    license: 'GPL'
+    license: pkg.license
   })
 }
 
@@ -67,7 +78,7 @@ async function installDependencies () {
   const cwd = process.cwd()
   process.chdir('dist/tmp/build')
 
-  await build.composer('install', ['--no-dev', '--optimize-autoloader'])
+  await build.composer('install', ['--no-dev', '--optimize-autoloader', '--no-plugins'])
   process.chdir(cwd) // revert cwd
 }
 
@@ -77,16 +88,19 @@ async function cleanupVendor () {
   await build.del([
     // remove common unnecessary files
     `${vendorPath}/**/.*`,
-    `${vendorPath}/**/Makefile`,
-    `${vendorPath}/**/Dockerfile*`,
-    `${vendorPath}/**/build.xml`,
-    `${vendorPath}/**/travis-ci.xml`,
-    `${vendorPath}/**/appveyor.yml`,
     `${vendorPath}/**/*.md`,
     `${vendorPath}/**/*.txt`,
     `${vendorPath}/**/*.pdf`,
+    `${vendorPath}/**/Gemfile`,
+    `${vendorPath}/**/Makefile`,
+    `${vendorPath}/**/Dockerfile*`,
+    `${vendorPath}/**/package.json`,
+    `${vendorPath}/**/build.xml`,
+    `${vendorPath}/**/travis-ci.xml`,
+    `${vendorPath}/**/appveyor.yml`,
     `${vendorPath}/**/README*`,
     `${vendorPath}/**/LICENSE*`,
+    `${vendorPath}/**/LICENCE*`,
     `${vendorPath}/**/CHANGES*`,
     `${vendorPath}/**/VERSION*`,
     `${vendorPath}/**/AUTHORS*`,
@@ -116,7 +130,7 @@ async function cleanupVendor () {
 
 async function package () {
   await build.copy({
-    files: 'build/pkg.xml',
+    src: 'build/pkg.xml',
     dest: 'dist/tmp/pkg',
     options: {
       rename: name => `${name.replace('.xml', '')}_zoolanders_framework.xml`
@@ -124,7 +138,7 @@ async function package () {
   })
 
   await build.copy({
-    files: [
+    src: [
       'dist/tmp/build/administrator/language/en-GB/en-GB.plg_system_zlframework.ini',
       'dist/tmp/build/administrator/language/en-GB/en-GB.plg_system_zlframework.sys.ini'
     ],
@@ -133,17 +147,17 @@ async function package () {
 
   await Promise.all([
     build.zip({
-      patterns: ['dist/tmp/build/libraries/zoolanders/'],
+      src: ['dist/tmp/build/libraries/zoolanders/'],
       dest: 'dist/tmp/pkg/packages/lib_zoolanders.zip'
     }),
     build.zip({
-      patterns: ['dist/tmp/build/plugins/system/zlframework/'],
+      src: ['dist/tmp/build/plugins/system/zlframework/'],
       dest: 'dist/tmp/pkg/packages/plg_zlframework.zip'
     })
   ])
 
   await build.zip({
-    patterns: ['dist/tmp/pkg'],
+    src: ['dist/tmp/pkg'],
     dest: `dist/ZOOlanders_${pkg.version}.zip`
   })
 }

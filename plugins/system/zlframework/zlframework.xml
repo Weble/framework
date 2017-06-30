@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="system" method="upgrade" version="3.1">
     <name>ZOOlanders Framework</name>
-    <version>3.3.16</version>
+    <version>4.0.0-beta1</version>
     <creationDate>April 2016</creationDate>
     <copyright>Copyright (C) Joolanders, SL</copyright>
     <license>GNU General Public License v2 or later</license>

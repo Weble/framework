@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * Heavily taken from FOF installer script (https://github.com/akeeba/fof)
  * Credits and copyright of FOF installer script are © 2010-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
