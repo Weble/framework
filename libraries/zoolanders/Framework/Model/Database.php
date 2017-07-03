@@ -172,7 +172,6 @@ abstract class Database extends Model
         $query->select($this->getColumns());
         $query->from($this->query->qn($this->tableName) . $prefix);
 
-
         if (count($this->joins)) {
             foreach ($this->joins as $type => $tables) {
                 foreach ($tables as $sql) {
@@ -602,7 +601,6 @@ abstract class Database extends Model
      */
     public function paginate ($page, $per_page)
     {
-
         $this->setState('limit', $per_page);
         $offset = ($page - 1) * $per_page;
         $this->setState('offset', ($offset >= 0) ? $offset : 0);
@@ -618,7 +616,6 @@ abstract class Database extends Model
      */
     protected function initObject ($object)
     {
-
         // add reference to related app instance
         if (property_exists($object, 'app')) {
             $object->app = $this->zoo->getApp();
@@ -634,7 +631,6 @@ abstract class Database extends Model
      */
     public function createEntity ()
     {
-
         return $this->zoo->object->create($this->entityClass);
     }
 }
