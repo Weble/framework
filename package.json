@@ -13,6 +13,10 @@
     "build": "node build/build.js"
   },
   "devDependencies": {
-    "@zoolanders/build": "^1.0.2"
+    "@zoolanders/build": "^1.0.3"
+  },
+  "engines": {
+    "node": ">= 7.8.0",
+    "npm": ">= 3.0.0"
   }
 }

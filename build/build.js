@@ -1,6 +1,8 @@
 const build = require('@zoolanders/build')
 const pkg = require('../package.json')
 
+build.util.checkEnvironment(pkg.engines);
+
 build.run(async _ => {
 
   // create a clean temp folder
