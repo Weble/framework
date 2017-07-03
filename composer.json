@@ -21,7 +21,9 @@
     "guzzlehttp/guzzle": "^6.2",
     "natxet/cssmin": "^3.0",
     "linkorb/jsmin-php": "^1.0",
-    "robmorgan/phinx": "^0.6.6"
+    "robmorgan/phinx": "^0.6.6",
+    "league/json-guard": "^1.0",
+    "league/json-reference": "^1.0"
   },
   "repositories": [
     {
