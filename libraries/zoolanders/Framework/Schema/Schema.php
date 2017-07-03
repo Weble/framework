@@ -1,7 +1,8 @@
 <?php
 
-namespace Zoolanders\Framework\Request\Schema;
+namespace Zoolanders\Framework\Schema;
 
+use League\JsonGuard\Validator;
 use League\JsonReference\Dereferencer;
 
 class Schema
@@ -144,5 +145,16 @@ class Schema
         if (isset($this->schema->$name)) {
             return $this->schema->$name;
         }
+    }
+
+    /**
+     * @param $data
+     * @return Validator
+     */
+    public function validate($data)
+    {
+        $data = (object) $data;
+
+        return new Validator($data, $this->getSchemaDefinition());
     }
 }

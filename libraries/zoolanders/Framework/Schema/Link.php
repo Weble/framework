@@ -1,15 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: skullbock
- * Date: 03/07/17
- * Time: 14:53
- */
 
-namespace Zoolanders\Framework\Request\Schema;
-
-
-use League\JsonGuard\Validator;
+namespace Zoolanders\Framework\Schema;
 
 class Link extends Schema
 {
@@ -89,14 +80,4 @@ class Link extends Schema
         return $this->targetSchema;
     }
 
-    /**
-     * @param $data
-     * @return Validator
-     */
-    public function validate($data)
-    {
-        $data = (object) $data;
-
-        return new Validator($data, $this->getSchemaDefinition());
-    }
 }
