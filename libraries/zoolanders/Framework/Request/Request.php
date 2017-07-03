@@ -9,7 +9,7 @@ use Zoolanders\Framework\Response\ResponseInterface;
  * Class Request
  * @package Zoolanders\Framework\Request
  */
-class Request extends \JInput
+class Request extends \JInput implements RequestInterface
 {
     /**
      * @var array|false Request headers
@@ -94,6 +94,16 @@ class Request extends \JInput
         }
 
         return false;
+    }
+
+    /**
+     * if the request is in json format
+     *
+     * @return bool True if an ajax call is being made
+     */
+    public function expectsJson ()
+    {
+        return ($this->getExpectedResponse() == ResponseInterface::TYPE_JSON);
     }
 
     /**

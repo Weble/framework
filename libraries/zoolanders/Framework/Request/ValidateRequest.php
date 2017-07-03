@@ -11,7 +11,7 @@ trait ValidateRequest
      * @param Link $schema
      * @return \League\JsonGuard\Validator
      */
-    public static function validateRequest (Request $request, Link $schema)
+    public static function validateJsonRequest (Request $request, Link $schema)
     {
         $data = new \stdClass();
 

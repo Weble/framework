@@ -11,7 +11,7 @@ trait ValidateResponse
      * @param Link $schema
      * @return \League\JsonGuard\Validator
      */
-    public static function validateResponse ($response, Link $schema)
+    public static function validateJsonResponse ($response, Link $schema)
     {
         if ($response instanceof ResponseInterface) {
             $response = $response->getContent();
