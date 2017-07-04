@@ -96,7 +96,8 @@ trait ListOptions
         $state = [
             'filters' => $this->getFilters(),
             'page' => $page,
-            'perPage' => $perPage
+            'perPage' => $perPage,
+            'sort' => $this->getSorting() ? $this->getSorting() : new \stdClass()
         ];
 
         $sorting = $this->getSorting();
