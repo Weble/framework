@@ -18,6 +18,11 @@ class Schema
     protected $links = [];
 
     /**
+     * @var array
+     */
+    protected $properties = [];
+
+    /**
      * @var Dereferencer
      */
     protected $dereferencer;
@@ -54,19 +59,40 @@ class Schema
     }
 
     /**
-     * @return object
+     * @return Property[]
      */
     public function getProperties ()
     {
         if (!$this->isLoaded()) {
-            return new \stdClass();
+            return [];
         }
 
-        if (!isset($this->schema->properties)) {
-            return new \stdClass();
+        if (!$this->properties) {
+            $this->properties = [];
+
+            if (!isset($this->schema->properties)) {
+                return [];
+            }
+
+            $required = $this->getRequiredProperties();
+            foreach ($this->schema->properties as $key => $schema) {
+                $this->properties[$key] = new Property($key, new Schema($schema));
+
+                if (in_array($key, $required)) {
+                    $this->properties[$key]->required = true;
+                }
+            }
         }
 
-        return $this->schema->properties;
+        return $this->properties;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->schema->type;
     }
 
     /**

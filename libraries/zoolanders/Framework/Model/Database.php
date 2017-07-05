@@ -161,9 +161,32 @@ abstract class Database extends Model
     /**
      * @return \JDatabaseQuery
      */
+    public function buildQueryTotal()
+    {
+        $query = $this->buildQuery();
+
+        $query->clear('select');
+        $query->select('COUNT(*)');
+
+        return $query;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotal()
+    {
+        $query = $this->buildQueryTotal();
+
+        return (int) $this->db->queryResult($query);
+    }
+
+    /**
+     * @return \JDatabaseQuery
+     */
     public function buildQuery ()
     {
-        $query = $this->getQuery();
+        $query = $this->db->getQuery(true);
 
         // Prefix the table if necessary
         $prefix = (strlen($this->tablePrefix) > 0) ? ' AS ' . $this->query->qn($this->tablePrefix) : '';
@@ -284,10 +307,14 @@ abstract class Database extends Model
                 return Collection::make($value);
             case 'json':
                 return new Json($value);
-            /** case 'date':
-             * case 'datetime':
-             * case 'timestamp':
-             * return \Zoolanders\Framework\Service\Date::create($value);**/
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                if ($this->db->getNullDate() == $value || !$value) {
+                    return $value;
+                }
+
+                return \JFactory::getDate($value)->toSql();
 
             default:
                 return $value;
@@ -509,7 +536,7 @@ abstract class Database extends Model
      */
     protected function getPrefix ()
     {
-        $prefix = (isset($this->tablePrefix) && strlen($this->tablePrefix) > 0) ? $this->query->qn($this->tablePrefix) . '.' : '';
+        $prefix = (isset($this->tablePrefix) && strlen($this->tablePrefix) > 0) ? $this->tablePrefix . '.' : '';
         return $prefix;
     }
 
@@ -589,6 +616,14 @@ abstract class Database extends Model
     public function orderBy ($ordering)
     {
         $this->ordering = array_merge($this->ordering, (array)$ordering);
+    }
+
+    /**
+     * @return array
+     */
+    public function getOrder ()
+    {
+        return $this->ordering;
     }
 
     /**
