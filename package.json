@@ -10,10 +10,11 @@
     "homepage": "http://zoolanders.com"
   },
   "scripts": {
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "bump": "node build/bump.js"
   },
   "devDependencies": {
-    "@zoolanders/build": "^1.0.3"
+    "@zoolanders/build": "^1.1.0"
   },
   "engines": {
     "node": ">= 7.8.0",
