@@ -2,7 +2,6 @@
 
 namespace Zoolanders\Framework\Model;
 
-use Zoolanders\Framework\Model\Database\Date;
 use Zoolanders\Framework\Model\Database\UniqueAlias;
 use Zoolanders\Framework\Model\Item\Basics;
 use Zoolanders\Framework\Model\Item\Categories;

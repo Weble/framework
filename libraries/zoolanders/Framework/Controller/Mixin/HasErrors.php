@@ -6,15 +6,15 @@ use Zoolanders\Framework\Collection\Collection;
 use Zoolanders\Framework\Service\Alerts\Error;
 
 /**
- * Class HasAlerts
+ * Class HasErrors
  * @package Zoolanders\Framework\Controller\Mixin
  */
-trait HasAlerts
+trait HasErrors
 {
     /**
-     * @var Errors collection
+     * @var Collection collection
      */
-    protected $errors = null;
+    protected $errors;
 
     /**
      * @var string  Errors scope name
@@ -26,6 +26,10 @@ trait HasAlerts
      */
     protected function hasErrors ()
     {
+        if (empty($this->errors)) {
+            $this->errors = new Collection();
+        }
+
         return !empty($this->errors) && $this->errors->has($this->scope) && !$this->errors->get($this->scope)->isEmpty();
     }
 
@@ -40,6 +44,7 @@ trait HasAlerts
         if (empty($this->errors)) {
             $this->errors = new Collection();
         }
+
         if (!$this->errors->has($this->scope)) {
             $set = new Collection();
             $this->errors->put($this->scope, $set);
@@ -64,6 +69,9 @@ trait HasAlerts
      */
     public function getErrors ()
     {
+        if (empty($this->errors)) {
+            $this->errors = new Collection();
+        }
 
         return $this->errors->get($this->scope);
     }

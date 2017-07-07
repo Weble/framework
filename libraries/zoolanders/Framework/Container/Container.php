@@ -12,6 +12,7 @@ use Zoolanders\Framework\Event\Controller\BeforeExecute;
 use Zoolanders\Framework\Factory\Factory;
 use Zoolanders\Framework\Dispatcher\Dispatcher;
 use Zoolanders\Framework\Dispatcher\Exception;
+use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Response\Error\ErrorResponseInterface;
 use Zoolanders\Framework\Response\ResponseInterface;
 use Zoolanders\Framework\Service\Alerts\Error;
@@ -328,6 +329,7 @@ class Container
      */
     protected function registerFactoryDelegates ()
     {
+        $this->injector->delegate(RequestInterface::class, [$this->factory, 'request']);
         $this->injector->delegate(ResponseInterface::class, [$this->factory, 'response']);
         $this->injector->delegate(ErrorResponseInterface::class, [$this->factory, 'errorResponse']);
         $this->injector->delegate(ControllerInterface::class, [$this->factory, 'controller']);

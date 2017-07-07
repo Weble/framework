@@ -1,12 +1,4 @@
 <?php
-/**
- * Base stuff for the FOF3 Model
- * @package     FOF
- * @copyright   2010-2016 Nicholas K. Dionysopoulos / Akeeba Ltd
- * @license     GNU GPL version 2 or later
- *
- * Refactored by ZOOlanders
- */
 
 namespace Zoolanders\Framework\Model;
 
@@ -34,7 +26,7 @@ class Model
         $this->state = new Json();
     }
 
-    /**arra
+    /**
      * Get a filtered state variable
      *
      * @param   string $key The state variable's name

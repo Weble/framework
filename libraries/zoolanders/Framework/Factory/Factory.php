@@ -4,7 +4,9 @@ namespace Zoolanders\Framework\Factory;
 
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Controller\ControllerInterface;
+use Zoolanders\Framework\Request\JsonRequest;
 use Zoolanders\Framework\Request\Request;
+use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Response\ResponseInterface;
 use Zoolanders\Framework\View\ViewInterface;
 
@@ -45,6 +47,23 @@ class Factory
         $responseClass = '\Zoolanders\Framework\Response\\' . $type . 'Response';
 
         return $this->container->make($responseClass);
+    }
+
+    /**
+     * Make response
+     * @param Request $input
+     * @return RequestInterface
+     */
+    public function request (Request $input)
+    {
+        $type = '';
+
+        if ($type == ResponseInterface::TYPE_JSON) {
+            $requestClass = '\Zoolanders\Framework\Request\JsonRequest';
+            return $this->container->make($requestClass);
+        }
+
+        return $input;
     }
 
     /**

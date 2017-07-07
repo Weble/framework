@@ -16,6 +16,11 @@ class JsonResponse extends Response
     public $type = 'application/json';
 
     /**
+     * @var Json
+     */
+    public $data;
+
+    /**
      * JsonResponse constructor
      *
      * @param   int $code
