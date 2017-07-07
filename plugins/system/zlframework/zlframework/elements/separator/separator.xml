@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<element type="separator" group="ZOOlanders Extensions" norender="true">
+	<name>Separator</name>
+	<author>ZOOlanders</author>
+	<creationDate>April 2016</creationDate>
+	<copyright>Copyright (C) 2011 JOOlanders, SL</copyright>
+	<authorEmail>info@zoolanders.com</authorEmail>
+	<authorUrl>http://www.zoolanders.com</authorUrl>
+	<version>3.3.16</version>
+	<description>Organize your Elements</description>
+	<params>
+		<param name="basic" type="hidden" />
+		<param name="layout" type="zlfield" addctrl="layout" toggle="true">
+			<loadfield type="layout">
+				<layout label="PLG_ZLFRAMEWORK_MAIN_LAYOUT" help="PLG_ZLFRAMEWORK_MAIN_LAYOUT_DESC" path="elements:separator/tmpl/edit" />
+			</loadfield>
+		</param>
+	</params>
+</element>
