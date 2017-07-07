@@ -18,6 +18,11 @@ trait ValidateRequest
         foreach ($schema->getProperties() as $key => $property) {
             $type = self::getValidateRequestType($property->type);
             $value = $request->get($key, false, $type);
+
+            if ($type == 'object' && is_array($value)) {
+                $value = (object) $value;
+            }
+
             if ($value !== false) {
                 $data->$key = $value;
             }
@@ -47,8 +52,10 @@ trait ValidateRequest
                 $type = 'bool';
                 break;
             case 'array':
-            case 'object':
                 $type = 'array';
+                break;
+            case 'object':
+                $type = 'object';
                 break;
             case 'string':
             default:
