@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@zoolanders/framework",
-  "version": "4.0.1-beta14",
+  "version": "4.1.0",
   "description": "ZOOlanders Framework",
   "copyright": "Copyright (C) 2017 Joolanders, SL",
   "license": "GPL",
