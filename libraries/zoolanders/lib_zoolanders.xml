@@ -7,13 +7,13 @@
         ZOOlanders Framework - Library
         ]]>
     </description>
-    <creationDate>02/0217</creationDate>
+    <creationDate>July 2017</creationDate>
     <author>ZOOlanders</author>
     <authorEmail>info@zoolanders.com</authorEmail>
     <authorUrl>https://www.zoolanders.com</authorUrl>
     <copyright>(C)2017 JOOlanders, SL</copyright>
     <license>GNU GPLv2 or later</license>
-    <version>4.0.0-beta1</version>
+    <version>4.1.0</version>
     <packager>JOOlanders, SL</packager>
     <packagerurl>https://www.zoolanders.com</packagerurl>
 
