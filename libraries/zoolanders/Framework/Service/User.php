@@ -1,5 +1,10 @@
 <?php
 
+namespace Zoolanders\Framework\Service;
+
+use Zoolanders\Framework\Service\System\Session;
+use Zoolanders\Framework\Request\Request;
+
 /**
  * Mostly taken from ZOO
  * @package   com_zoo
@@ -7,11 +12,6 @@
  * @copyright Copyright (C) YOOtheme GmbH
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
-namespace Zoolanders\Framework\Service;
-
-use Zoolanders\Framework\Service\System\Session;
-use Zoolanders\Framework\Request\Request;
 
 /**
  * Helper to deal with user and user operations

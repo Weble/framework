@@ -1,5 +1,9 @@
 <?php
 
+namespace Zoolanders\Framework\Service;
+
+use Zoolanders\Framework\Utils\IsString;
+
 /**
  * Ported from original ZOO class
  * @package   com_zoo
@@ -9,10 +13,6 @@
  *
  * Reworked by ZOOlanders
  */
-
-namespace Zoolanders\Framework\Service;
-
-use Zoolanders\Framework\Utils\IsString;
 
 class Date
 {

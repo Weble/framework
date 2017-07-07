@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die('Restricted access');
-
 // load zoo
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 

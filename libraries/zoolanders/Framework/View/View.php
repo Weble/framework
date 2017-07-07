@@ -1,5 +1,12 @@
 <?php
 
+namespace Zoolanders\Framework\View;
+
+use Zoolanders\Framework\Event\Dispatcher;
+use Zoolanders\Framework\Event\Triggerable;
+use Zoolanders\Framework\Event\View\AfterDisplay;
+use Zoolanders\Framework\Event\View\BeforeDisplay;
+
 /**
  * Mostly taken from FOF3 View class
  * @copyright   2010-2016 Nicholas K. Dionysopoulos / Akeeba Ltd
@@ -7,13 +14,6 @@
  *
  * Extended by ZOOlanders
  */
-
-namespace Zoolanders\Framework\View;
-
-use Zoolanders\Framework\Event\Dispatcher;
-use Zoolanders\Framework\Event\Triggerable;
-use Zoolanders\Framework\Event\View\AfterDisplay;
-use Zoolanders\Framework\Event\View\BeforeDisplay;
 
 /**
  * Class View

@@ -2,7 +2,6 @@
 
 jimport('joomla.form.formfield');
 
-// load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
 class JFormFieldZlux extends JFormField {

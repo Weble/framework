@@ -1,4 +1,11 @@
 <?php
+
+namespace Zoolanders\Framework\Collection;
+
+use Closure;
+use ArrayIterator;
+use CachingIterator;
+
 /**
  * @package     FOF
  * @copyright   2010-2016 Nicholas K. Dionysopoulos / Akeeba Ltd
@@ -6,12 +13,6 @@
  *
  * Moved to the Zoolanders Package As-Is, plus the abstracting interface
  */
-
-namespace Zoolanders\Framework\Collection;
-
-use Closure;
-use ArrayIterator;
-use CachingIterator;
 
 class Collection implements CollectionInterface
 {

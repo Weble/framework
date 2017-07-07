@@ -1,8 +1,5 @@
 <?php
 
-defined('_JEXEC') or die('Restricted access');
-
-// load assets
 $this->app->document->addStylesheet('elements:separator/tmpl/edit/subsection/style.css');
 $this->app->document->addScript('elements:separator/tmpl/edit/subsection/script.min.js');
 

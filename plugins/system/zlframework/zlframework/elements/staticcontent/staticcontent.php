@@ -1,7 +1,5 @@
 <?php
 
-defined('_JEXEC') or die('Restricted access');
-
 /*
 	Class: ElementStaticContent
 		The Static Content element class

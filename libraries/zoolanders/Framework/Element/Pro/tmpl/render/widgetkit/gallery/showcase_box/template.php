@@ -1,4 +1,5 @@
 <?php
+
 $widget_id      = $widget->id.'-'.uniqid();
 $settings       = $widget->settings;
 $captions       = array();
