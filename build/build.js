@@ -145,7 +145,7 @@ build.run(async _ => {
 
       await build.zip({
         src: ['dist/tmp/pkg'],
-        dest: `dist/ZOOlanders_${pkg.version}.zip`
+        dest: `dist/ZOOlanders_Framework_${pkg.version}.zip`
       })
     }
   })
