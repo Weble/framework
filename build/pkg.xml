@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="package" method="upgrade" version="2.5">
-    <name>ZOOlanders Framework Package</name>
+    <name>ZOOlanders Framework</name>
     <version>4.1.0</version>
     <creationDate>July 2017</creationDate>
     <copyright>Copyright (C) Joolanders, SL</copyright>
