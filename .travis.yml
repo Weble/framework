@@ -1,0 +1,35 @@
+language: php
+php:
+- '5.6'
+- '7.0'
+install:
+- composer update
+services:
+- mysql
+dist: trusty
+sudo: required
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
+before_script:
+- sudo apt-get install apache2 libapache2-mod-fastcgi
+- sudo service apache2 restart
+- mysql -uroot -e "create database IF NOT EXISTS joomla;"
+- mysql -uroot joomla < zoolanders/vendor/joolanders/framework-test-env/db/joomla.sql
+before_deploy:
+- nvm install node
+- npm install
+- composer update
+- node ./node_modules/gulp/bin/gulp.js
+deploy:
+  provider: releases
+  api_key:
+    secure: qxp8IhmM9AziVHFzmKG7djDWJM1kBWlUkEVikOVhlwFR5ZxK4u1PNJASFMFs24PercDjcYHT1mmkWRj62Uj2uoYbKGemAPYdSTBrUTwdBRM9Vojkun+t9jPAL9Tg8hKsK3Kuhhl3W1vr637eVd1/zWDg+8wM9p5lmuQUuIafH+UdLgmQPjFIfv1iexiWGU+cL61mqG4rmbrC5agRl4b1bszbVYOlK6gX+mixF+9cwVkdYpjgjL3HKkr+D4M1r6JkBYGx1gmGM+F0e7PGPFGOnKJTl2g2RQQK/+cDhyzeZ6qkrA5T0iHy3RTFOVn5v3u242oZQdpmUrHQ2IGDJyb/ic2MFCvg2M+F8nF97db7c45c5Sk8oWGrLRxnV06cJ4zvsWJSfh8KOybrRHpQwMmGRsnfJ11jXFom3TCcbETzhtKp7fvXgmOtN5hvNTQLGngLvJcO8cIeoSaUYGhmtOQ2xmUBnRXN4M1MOz21rMscMgqC4ri4j6jxlAoxX9XqJ+n/Ny5dIGfP3yaDgAXStipUtRLXIqawunOCY5U0hIxsH0RGkdsi9tngSUEUr4Ol3HwuJvZSCAAqniD5MtbGBjiJRbeIYM1MTMfrfkKU1hoa5CQ6YpoRvHpvbBfvXAE1+EkUeGgYQlf+nUTqjTufPlFLsaKYC7iWEc/2TfyKNY3hMMQ=
+  file: "dist/pkg_zoolanders.zip"
+  skip_cleanup: true
+  on:
+    repo: joolanders/Framework
+    tags: true

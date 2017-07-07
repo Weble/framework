@@ -1,0 +1,70 @@
+{
+    "services": {
+        "filesystem": "\\Zoolanders\\Framework\\Service\\Filesystem",
+        "path": "\\Zoolanders\\Framework\\Service\\Path",
+        "language": "\\Zoolanders\\Framework\\Service\\System\\Language",
+        "application": "\\Zoolanders\\Framework\\Service\\System\\Application",
+        "session": "\\Zoolanders\\Framework\\Service\\System\\Session",
+        "dbo": "\\Zoolanders\\Framework\\Service\\System\\Dbo",
+        "config": "\\Zoolanders\\Framework\\Service\\System\\Config",
+        "css": "\\Zoolanders\\Framework\\Service\\Assets\\Css",
+        "js": "\\Zoolanders\\Framework\\Service\\Assets\\Js",
+        "inflector": "\\Zoolanders\\Framework\\Service\\Inflector",
+        "factory": "\\Zoolanders\\Framework\\Service\\Factory",
+        "zoo": "\\Zoolanders\\Framework\\Service\\Zoo",
+        "db": "\\Zoolanders\\Framework\\Service\\Database",
+        "date": "\\Zoolanders\\Framework\\Service\\Date",
+        "request": "\\Zoolanders\\Framework\\Request\\Request",
+        "input": "\\Zoolanders\\Framework\\Request\\Request",
+        "params": "\\Zoolanders\\Framework\\Service\\Params",
+        "joomla": "\\Zoolanders\\Framework\\Service\\Joomla",
+        "document": "\\Zoolanders\\Framework\\Service\\System\\Document",
+        "environment": "\\Zoolanders\\Framework\\Service\\Environment",
+        "enviroment": "\\Zoolanders\\Framework\\Service\\Environment",
+        "installation": "\\Zoolanders\\Framework\\Service\\Installation",
+        "dependencies": "\\Zoolanders\\Framework\\Service\\Dependencies",
+        "route": "\\Zoolanders\\Framework\\Service\\Route",
+        "crypt": "\\Zoolanders\\Framework\\Service\\Crypt",
+        "data": "\\Zoolanders\\Framework\\Service\\Data",
+        "link": "\\Zoolanders\\Framework\\Service\\Link",
+        "cache": "\\Zoolanders\\Framework\\Service\\Cache",
+        "user": "\\Zoolanders\\Framework\\Service\\User",
+        "zip": "\\Zoolanders\\Framework\\Service\\Zip",
+        "alerts": "\\Zoolanders\\Framework\\Service\\Alerts"
+    },
+    "events": {
+        "item:saved": [
+            "\\Zoolanders\\Framework\\Listener\\Item\\IndexSearchValues",
+            "\\Zoolanders\\Framework\\Listener\\Item\\SaveTranslations"
+        ],
+        "item:beforecopy": [
+            "\\Zoolanders\\Framework\\Listener\\Item\\CreateAlias"
+        ],
+        "category:saved": [
+            "\\Zoolanders\\Framework\\Listener\\Category\\SaveTranslations"
+        ],
+        "category:beforecopy": [
+            "\\Zoolanders\\Framework\\Listener\\Category\\CreateAlias"
+        ],
+        "type:beforesave" : [
+            "\\Zoolanders\\Framework\\Listener\\Type\\EncryptPasswords"
+        ],
+        "type:coreconfig": [
+            "\\Zoolanders\\Framework\\Listener\\Type\\AddCoreElements"
+        ],
+        "environment:init": [
+            "\\Zoolanders\\Framework\\Listener\\Environment\\LoadCss",
+            "\\Zoolanders\\Framework\\Listener\\Environment\\LoadFieldAssets",
+            "\\Zoolanders\\Framework\\Listener\\Environment\\LoadSeparatorAssets"
+        ],
+        "environment:beforerender": [
+            "\\Zoolanders\\Framework\\Listener\\Environment\\IncludeAssets"
+        ],
+        "controller:beforeexecute" : [
+            "\\Zoolanders\\Framework\\Listener\\Controller\\TriggerOnBeforeTaskMethods"
+        ],
+        "controller:afterexecute" : [
+            "\\Zoolanders\\Framework\\Listener\\Controller\\TriggerOnAfterTaskMethods"
+        ]
+    }
+}

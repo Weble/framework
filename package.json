@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "@zoolanders/framework",
+  "version": "4.1.0",
+  "description": "ZOOlanders Framework",
+  "copyright": "Copyright (C) 2017 Joolanders, SL",
+  "license": "GPL",
+  "author": {
+    "name": "ZOOlanders",
+    "homepage": "http://zoolanders.com"
+  },
+  "scripts": {
+    "build": "node build/build.js",
+    "bump": "node build/bump.js"
+  },
+  "devDependencies": {
+    "@zoolanders/build": "^1.1.0"
+  },
+  "engines": {
+    "node": ">= 7.8.0",
+    "npm": ">= 3.0.0"
+  }
+}

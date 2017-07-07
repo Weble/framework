@@ -1,0 +1,6 @@
+result,"SELECT `alias` FROM `#__zoo_item` WHERE `alias` LIKE ('%fixture%')","'test-item-fixture'"
+object,"SELECT `alias` FROM `#__zoo_item` WHERE `alias` LIKE ('%fixture%')","call_user_func(function(){$a=new \stdClass();$a->alias='test-item-fixture';return $a;})"
+objectList,"SELECT `alias` FROM `#__zoo_item` WHERE `alias` LIKE ('%fixture%')","[call_user_func(function(){$a=new \stdClass();$a->alias='test-item-fixture';return $a;})]"
+resultArray,"SELECT `alias` FROM `#__zoo_item` WHERE `alias` LIKE ('%fixture%')","['test-item-fixture']"
+assoc,"SELECT `alias` FROM `#__zoo_item` WHERE `alias` LIKE ('%fixture%')","['alias'=>'test-item-fixture']"
+assocList,"SELECT `alias` FROM `#__zoo_item` WHERE `alias` LIKE ('%fixture%')","[['alias'=>'test-item-fixture']]"
