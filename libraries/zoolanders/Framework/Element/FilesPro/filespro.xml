@@ -2,11 +2,11 @@
 <element type="file" group="Core" hidden="true">
     <name>Files Pro</name>
     <author>ZOOlanders</author>
-    <creationDate>April 2016</creationDate>
+    <creationDate>July 2017</creationDate>
     <copyright>Copyright (C) JOOlanders, SL</copyright>
     <authorEmail>info@zoolanders.com</authorEmail>
     <authorUrl>http://www.zoolanders.com</authorUrl>
-    <version>3.3.19</version>
+    <version>4.1.0</version>
     <description>File Pro Core System</description>
     <params>
     </params>
