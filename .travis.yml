@@ -33,3 +33,9 @@ deploy:
   on:
     repo: joolanders/Framework
     tags: true
+notifications:
+  email: false
+branches:
+  only:
+  - master
+  - develop
