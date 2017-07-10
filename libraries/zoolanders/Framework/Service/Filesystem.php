@@ -34,7 +34,7 @@ class Filesystem
     public function __construct (\League\Flysystem\Filesystem $fs = null, Zoo $zoo)
     {
         if (!$fs) {
-            $adapter = new Local('/');
+            $adapter = new Local(JPATH_ROOT);
             $fs = new \League\Flysystem\Filesystem($adapter);
         }
 
