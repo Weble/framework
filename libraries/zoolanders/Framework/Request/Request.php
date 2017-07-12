@@ -31,6 +31,9 @@ class Request extends \JInput implements RequestInterface
         // Capture HTTP Request headers:
         $this->getHeaders();
 
+        $manager = new \Zoolanders\Framework\Migration\Manager();
+        $manager->run();
+
         if ($this->isJson()) {
             $json = json_decode(@file_get_contents('php://input'), true);
             $this->data = array_merge($this->data, (array)$json);
@@ -44,9 +47,9 @@ class Request extends \JInput implements RequestInterface
      */
     public function getHeaders ()
     {
-        $headers = [];
-
         if (empty($this->headers)) {
+            $headers = [];
+
             if (function_exists('getallheaders')) {
                 $headers = getallheaders();
             } else {
@@ -59,9 +62,14 @@ class Request extends \JInput implements RequestInterface
                     }
                 }
             }
-        }
 
-        $this->headers = new Data($headers);
+            // add lowercase version
+            foreach ($headers as $key => $value) {
+                $headers[strtolower($key)] = $value;
+            }
+
+            $this->headers = new Data($headers);
+        }
 
         return $this->headers;
     }
@@ -89,7 +97,7 @@ class Request extends \JInput implements RequestInterface
     public function isJson ()
     {
         // Accept json in the header
-        if (strpos($this->getHeaders()->get('Content-Type'), 'application/json') !== false) {
+        if (strpos($this->getHeaders()->get('content-type'), 'application/json') !== false) {
             return true;
         }
 

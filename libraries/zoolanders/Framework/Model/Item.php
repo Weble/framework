@@ -19,7 +19,8 @@ class Item extends Database
 
     protected $cast = [
         'elements' => 'json',
-        'params' => 'json'
+        'params' => 'json',
+        'state' => 'integer'
     ];
 
     /**
