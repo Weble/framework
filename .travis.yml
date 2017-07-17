@@ -19,24 +19,21 @@ before_script:
 - sudo service apache2 restart
 - mysql -uroot -e "create database IF NOT EXISTS joomla;"
 - mysql -uroot joomla < libraries/zoolanders/vendor/zoolanders/framework-test-env/db/joomla.sql
-before_deploy:
+script:
 - nvm install node
 - npm install
 - composer install
 - npm run build
-deploy:
-  provider: releases
-  api_key:
-    secure: qxp8IhmM9AziVHFzmKG7djDWJM1kBWlUkEVikOVhlwFR5ZxK4u1PNJASFMFs24PercDjcYHT1mmkWRj62Uj2uoYbKGemAPYdSTBrUTwdBRM9Vojkun+t9jPAL9Tg8hKsK3Kuhhl3W1vr637eVd1/zWDg+8wM9p5lmuQUuIafH+UdLgmQPjFIfv1iexiWGU+cL61mqG4rmbrC5agRl4b1bszbVYOlK6gX+mixF+9cwVkdYpjgjL3HKkr+D4M1r6JkBYGx1gmGM+F0e7PGPFGOnKJTl2g2RQQK/+cDhyzeZ6qkrA5T0iHy3RTFOVn5v3u242oZQdpmUrHQ2IGDJyb/ic2MFCvg2M+F8nF97db7c45c5Sk8oWGrLRxnV06cJ4zvsWJSfh8KOybrRHpQwMmGRsnfJ11jXFom3TCcbETzhtKp7fvXgmOtN5hvNTQLGngLvJcO8cIeoSaUYGhmtOQ2xmUBnRXN4M1MOz21rMscMgqC4ri4j6jxlAoxX9XqJ+n/Ny5dIGfP3yaDgAXStipUtRLXIqawunOCY5U0hIxsH0RGkdsi9tngSUEUr4Ol3HwuJvZSCAAqniD5MtbGBjiJRbeIYM1MTMfrfkKU1hoa5CQ6YpoRvHpvbBfvXAE1+EkUeGgYQlf+nUTqjTufPlFLsaKYC7iWEc/2TfyKNY3hMMQ=
-  file_glob: true
+after_success:
+    "curl -T dist/*.zip -u $FTP_USER:$FTP_PASSWORD ftp://www.zoolanders.com/framework/"
   file: "dist/*.zip"
-  skip_cleanup: true
-  on:
-    repo: joolanders/framework
-    branch: develop
 notifications:
   email: false
 branches:
   only:
   - master
   - develop
+env:
+  global:
+    - secure: aumWyo+Yt1S/FjRbyNg4LwEDLpp7SaBMf2S9bjclvZPB45mSJ602Em8T6If8hJk447mBILyxtu8nSyKdmpkLawj4rOgyf2Iplvd4LPmWAeacFogZFkVhwaTihwx6kbmpSruICEQtXYOZeNJjwP6O0+HQoRwxu906otAz++ABRP4vfyMrj6ILXqffWi16AyuLvmYH8r0lEoVXDEMjD9kGupMBnxUMls1uBSiG1g2xInsbNHODsgoL7/qGgI+2AjuN2vfENOeSnAjZBFcNwAgVTONBZk7qnu/2vc2ELJ9biiM+906sKIP/c7UrrFmxiDZYNloOdPTUMl+hX5KGxryc95uo7K+MvSoYFot3FJFmuHVm3Uvec7y48gQw+ka99ezCIdvysvQiGigdtWzAOq+1fL7F8LFEVejb+nbfYiWUhta7zv/gcnFrEaWlnH0L/6PJKiMDxgZQlTslZ31t/ImxwITHv+pAoLz2AnoCWEGUl3OiZlNYWDoRU53wFBJNyBpMkWhd8roBUnA975W1Cw5MVuEfuoW1zyU4erxkuVu1IJvjWCVkYcbuyohNo4pvlDoC/9LeznuJs2ZgFt6yjdFdHYH/bzYCYjllWO7Tg66ajSPV/QL7KAteUd+VocBGoUnQfMoXs+gTjaO5t6Zhx9hMUEr3FlVFxSaKf2Wf/MQsEVc=
+    - secure: mTeqNYaMB7OGuDlix/w9eLf+rR46MRcr3Pm2EcN9kZmKRKsZm/iSz0Dy4N4yAfdqC+w8w0PND/F+mS45G6sUMvsgt7Rf8UPLPgTO7IRr/4Xn+iGTqkJiN5d8UaAdRrk27srm/DNl8gVZ3Yw1Pq1+77lQZ3GlLOddp/c4HxG6ZfC51rucx8AkdmTldmOQD+P6rB9cZbTZUssghh0sWAnLIjHwxWM0PksjzcloDOROVj6/He2mCffMrzEqQg0SOOQxwVZdo/ZW+lLuQ3+8i0dMk/D6qq8vY4WqKnlbWv0mdqE6WDk4xA641NF3UVKg8SG4jrySE1P6GvnTlG/edAz3ENQ4E60WoaBRnmd9n3JLhn+Ynj/AmVd6VUxj238xBDo5Ou4pNl3pjS2Fhjw3kgYyo+ljrsYQdG/mNW1qhw8zIbABEV3uMRtbdCxRjtF6xyFvM+NhHOVpXZRhMsYddRPdZXLIDNsTm8/uXDK7tQ20tTaZaUzVdNMC2Q71nZhKUAnc6Dwhn5oaZ+956po8QNOIGZmMrMaU5x1H3+oKAt0OBPKl99EXtfimPybF8rXiPw0XthQFY04Y41f0mUmEvBSJPYWi6Zlr5GEFP+3P277D1blKmBb/nl6vrdxLJy9UyiKx9WNX/h6Y8AusMI4uu4RPy65CKuqEvKnP3b2lSSAQeP0=
