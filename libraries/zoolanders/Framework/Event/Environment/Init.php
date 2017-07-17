@@ -2,7 +2,7 @@
 
 namespace Zoolanders\Framework\Event\Environment;
 
-use Zoolanders\Framework\Request\Request;
+use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Service\System\Application;
 
 class Init extends \Zoolanders\Framework\Event\Event
@@ -33,7 +33,7 @@ class Init extends \Zoolanders\Framework\Event\Event
     protected $task;
 
     /**
-     * @var Request
+     * @var RequestInterface
      */
     protected $request;
 
@@ -41,7 +41,7 @@ class Init extends \Zoolanders\Framework\Event\Event
      * Init constructor.
      *
      */
-    public function __construct (Request $request, Application $application)
+    public function __construct (RequestInterface $request, Application $application)
     {
         $this->request = $request;
         $this->application = $application;
@@ -109,7 +109,7 @@ class Init extends \Zoolanders\Framework\Event\Event
     }
 
     /**
-     * @return Request
+     * @return RequestInterface
      */
     public function getRequest ()
     {
