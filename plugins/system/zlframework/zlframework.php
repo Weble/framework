@@ -21,7 +21,6 @@ class plgSystemZlframework extends JPlugin
         $this->container = \Zoolanders\Framework\Container\Container::getInstance();
         $this->app = $this->container->zoo->getApp();
 
-        // check and perform installation tasks
         if (!$this->container->installation->checkInstallation()) return; // must go after language, elements path and helpers
 
         // trigger a Environment/Init event

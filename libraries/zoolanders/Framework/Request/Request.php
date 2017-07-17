@@ -31,9 +31,6 @@ class Request extends \JInput implements RequestInterface
         // Capture HTTP Request headers:
         $this->getHeaders();
 
-        $manager = new \Zoolanders\Framework\Migration\Manager();
-        $manager->run();
-
         if ($this->isJson()) {
             $json = json_decode(@file_get_contents('php://input'), true);
             $this->data = array_merge($this->data, (array)$json);

@@ -343,10 +343,8 @@ class Container
     {
         $this->share(RequestInterface::class);
 
-        $this->injector->delegate(Request::class, [$this->factory, 'request']);
         $this->injector->delegate(RequestInterface::class, [$this->factory, 'request']);
         $this->injector->delegate(ResponseInterface::class, [$this->factory, 'response']);
-        $this->injector->delegate(Response::class, [$this->factory, 'response']);
         $this->injector->delegate(ErrorResponseInterface::class, [$this->factory, 'errorResponse']);
         $this->injector->delegate(ControllerInterface::class, [$this->factory, 'controller']);
         $this->injector->delegate(ViewInterface::class, [$this->factory, 'view']);

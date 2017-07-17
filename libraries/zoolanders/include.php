@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ZL_TEST')) {
+    define('ZL_TEST', false);
+}
+
 require_once dirname(__FILE__) . '/Framework/Autoloader/Autoloader.php';
 $composerAutoloader = require_once dirname(__FILE__) . '/vendor/autoload.php';
 
