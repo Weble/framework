@@ -18,7 +18,7 @@ before_script:
 - sudo apt-get install apache2 libapache2-mod-fastcgi
 - sudo service apache2 restart
 - mysql -uroot -e "create database IF NOT EXISTS joomla;"
-- mysql -uroot joomla < libraries/zoolanders/vendor/joolanders/framework-test-env/db/joomla.sql
+- mysql -uroot joomla < libraries/zoolanders/vendor/zoolanders/framework-test-env/db/joomla.sql
 before_deploy:
 - nvm install node
 - npm install
