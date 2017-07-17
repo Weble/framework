@@ -33,11 +33,6 @@ trait HasRedirects
     protected $redirectMessageType;
 
     /**
-     * @var App instance
-     */
-    protected $app;
-
-    /**
      * Returns true if there is a redirect set in the controller
      *
      * @return  boolean
