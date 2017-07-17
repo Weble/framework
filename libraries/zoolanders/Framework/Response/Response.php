@@ -120,7 +120,7 @@ class Response extends JHttpResponse implements ResponseInterface
      */
     protected function sendHeaders ()
     {
-        header($_SERVER["SERVER_PROTOCOL"] . " $this->code " . @self::$status_codes[$this->code]);
+        header(@$_SERVER["SERVER_PROTOCOL"] . " $this->code " . @self::$status_codes[$this->code]);
 
         if (!empty($this->headers)) {
             foreach ($this->headers as $key => $value) {

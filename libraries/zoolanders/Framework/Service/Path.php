@@ -274,6 +274,21 @@ class Path
     }
 
     /**
+     * Check if a path is relative or absolute
+     *
+     * @param $path
+     * @return bool
+     */
+    public function isRelative($path)
+    {
+        if (substr($path, 0, 1) === DIRECTORY_SEPARATOR) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Normalizes the given path
      *
      * @param  string $path

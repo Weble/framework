@@ -11,7 +11,7 @@
     stopOnFailure="false">
     <testsuites>
         <testsuite name="Zoolanders Framework Test Suite">
-            <directory suffix="Test.php">./zoolanders/tests</directory>
+            <directory suffix="Test.php">./libraries/zoolanders/tests</directory>
         </testsuite>
     </testsuites>
     <filter></filter>

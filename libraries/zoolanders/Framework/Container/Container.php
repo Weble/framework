@@ -5,17 +5,18 @@ namespace Zoolanders\Framework\Container;
 use Auryn\Injector;
 use Auryn\InjectorException;
 use Joomla\Registry\Registry;
-use Zoolanders\Framework\Autoloader;
+use Zoolanders\Framework\Autoloader\Autoloader;
 use Zoolanders\Framework\Controller\ControllerInterface;
 use Zoolanders\Framework\Event\Controller\AfterExecute;
 use Zoolanders\Framework\Event\Controller\BeforeExecute;
 use Zoolanders\Framework\Factory\Factory;
 use Zoolanders\Framework\Dispatcher\Dispatcher;
 use Zoolanders\Framework\Dispatcher\Exception;
+use Zoolanders\Framework\Request\Request;
 use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Response\Error\ErrorResponseInterface;
+use Zoolanders\Framework\Response\Response;
 use Zoolanders\Framework\Response\ResponseInterface;
-use Zoolanders\Framework\Service\Alerts\Error;
 use Zoolanders\Framework\View\ViewInterface;
 
 /**
@@ -128,6 +129,16 @@ class Container
     public function share ($name)
     {
         return $this->injector->share($name);
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     * @return Injector
+     */
+    public function defineParam ($name, $value)
+    {
+        return $this->injector->defineParam($name, $value);
     }
 
     /**
@@ -264,6 +275,7 @@ class Container
      */
     public function dispatch ($defaultController = null)
     {
+
         try {
             $this->injector->defineParam('defaultController', $defaultController);
 
@@ -329,8 +341,12 @@ class Container
      */
     protected function registerFactoryDelegates ()
     {
+        $this->share(RequestInterface::class);
+
+        $this->injector->delegate(Request::class, [$this->factory, 'request']);
         $this->injector->delegate(RequestInterface::class, [$this->factory, 'request']);
         $this->injector->delegate(ResponseInterface::class, [$this->factory, 'response']);
+        $this->injector->delegate(Response::class, [$this->factory, 'response']);
         $this->injector->delegate(ErrorResponseInterface::class, [$this->factory, 'errorResponse']);
         $this->injector->delegate(ControllerInterface::class, [$this->factory, 'controller']);
         $this->injector->delegate(ViewInterface::class, [$this->factory, 'view']);

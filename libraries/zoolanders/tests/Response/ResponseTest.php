@@ -31,22 +31,6 @@ class ResponseTest extends ZFTestCase
     }
 
     /**
-     * Test get set ops
-     *
-     * @covers          Response::get()
-     * @covers          Response::set()
-     *
-     * @dataProvider    bindingDataSet
-     */
-    public function testSetGet ($key, $value)
-    {
-        $response = new Response();
-
-        $response->set($key, $value);
-        $this->assertEquals($value, $response->{$key});
-    }
-
-    /**
      * Test set get header ops
      *
      * @covers          Response::setHeader()

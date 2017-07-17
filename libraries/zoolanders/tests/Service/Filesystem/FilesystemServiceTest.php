@@ -113,6 +113,30 @@ class FilesystemServiceTest extends ZFTestCase
     }
 
     /**
+     * Test that relative paths work correctly
+     */
+    public function testRelativePaths()
+    {
+        /** @var \League\Flysystem\Filesystem $file */
+        $file = self::$container->filesystem;
+
+        $content = $file->read('fixtures/filesystem/test1.txt');
+        $this->assertStringEndsWith('RANDOM_STRING', $content);
+    }
+
+    /**
+     * Test that absolute paths work correctly
+     */
+    public function testAbsolutePaths()
+    {
+        /** @var \League\Flysystem\Filesystem $file */
+        $file = self::$container->filesystem;
+
+        $content = $file->read(JOOMLA_ENV_PATH . '/fixtures/filesystem/test1.txt');
+        $this->assertStringEndsWith('RANDOM_STRING', $content);
+    }
+
+    /**
      * Test get ext function
      *
      * @covers          Filesystem::getExtension()

@@ -29,8 +29,11 @@ class Dispatcher
     public function __construct (Container $c)
     {
         $this->container = $c;
-        $this->zoo = new Zoo($this, $c->make('\Zoolanders\Framework\Service\Zoo'));
-        $this->joomla = \JEventDispatcher::getInstance();
+
+        if (!ZF_TEST) {
+            $this->zoo = new Zoo($this, $c->make('\Zoolanders\Framework\Service\Zoo'));
+            $this->joomla = \JEventDispatcher::getInstance();
+        }
     }
 
     /**
@@ -99,6 +102,7 @@ class Dispatcher
         if (ZF_TEST) {
             // Test mode, notify event catcher service
             $this->container->eventstack->push($event->getName(), $event);
+            return;
         }
 
         $this->notify($event);

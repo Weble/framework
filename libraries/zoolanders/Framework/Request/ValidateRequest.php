@@ -7,11 +7,11 @@ use Zoolanders\Framework\Schema\Link;
 trait ValidateRequest
 {
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      * @param Link $schema
      * @return \League\JsonGuard\Validator
      */
-    public static function validateJsonRequest (Request $request, Link $schema)
+    public static function validateJsonRequest (RequestInterface $request, Link $schema)
     {
         $data = new \stdClass();
 

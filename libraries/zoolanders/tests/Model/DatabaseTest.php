@@ -27,8 +27,7 @@ class DatabaseTest extends ZFTestCaseFixtures
      */
     protected function getTestInstance ()
     {
-
-        return new DatabaseModel(self::$container->db, self::$container->zoo);
+        return self::$container->make('\Zoolanders\Framework\Model\Database');
     }
 
     /**
@@ -41,9 +40,8 @@ class DatabaseTest extends ZFTestCaseFixtures
     {
         $dbm = $this->getTestInstance();
         $dbm->fields($fieldset);
-        $dbm->buildQuery();
 
-        $this->assertEquals($expected, str_replace("\n", '', $dbm->getQuery()->__toString()));
+        $this->assertEquals($expected, trim(str_replace("\n", ' ', (string) $dbm->buildQuery())));
     }
 
     /**
@@ -74,9 +72,8 @@ class DatabaseTest extends ZFTestCaseFixtures
                     if ($reflection->hasMethod($methodName)) {
                         $methodReflection = $reflection->getMethod($methodName);
                         $methodReflection->invokeArgs($dbm, $args);
-                        $dbm->buildQuery();
 
-                        $this->assertEquals($expected, str_replace("\n", '', $dbm->getQuery()->__toString()), sprintf('Calling %s with provided params assertion failed', $methodName));
+                        $this->assertEquals($expected, trim(str_replace("\n", ' ', (string) $dbm->buildQuery()), sprintf('Calling %s with provided params assertion failed', $methodName)));
                     }
                 }
             }
@@ -100,10 +97,9 @@ class DatabaseTest extends ZFTestCaseFixtures
         $this->assertEquals($prefix, $dbm->getTablePrefix($prefix));
 
         $dbm->where('id', '=', '1');
-        $dbm->buildQuery();
 
         // Check if affects queries
-        $this->assertEquals($expected, str_replace("\n", '', $dbm->getQuery()->__toString()));
+        $this->assertEquals($expected, trim(str_replace("\n", ' ', $dbm->buildQuery()->__toString())));
     }
 
     /**
@@ -112,8 +108,8 @@ class DatabaseTest extends ZFTestCaseFixtures
     public function fieldsetProvider ()
     {
         return [
-            [['id'], "SELECT `id`FROM ``"],
-            [['id', 'alias'], "SELECT `id`,`alias`FROM ``"]
+            [['id'], "SELECT `id` FROM ``"],
+            [['id', 'alias'], "SELECT `id`,`alias` FROM ``"]
         ];
     }
 
@@ -123,9 +119,9 @@ class DatabaseTest extends ZFTestCaseFixtures
     public function prefixDataProvider ()
     {
         return [
-            ['a', 'SELECT `a`.*FROM `` AS `a`WHERE `a`.`id` = 1'],
-            ['b', 'SELECT `b`.*FROM `` AS `b`WHERE `b`.`id` = 1'],
-            ['c', 'SELECT `c`.*FROM `` AS `c`WHERE `c`.`id` = 1']
+            ['a', 'SELECT `a`.* FROM `` AS `a` WHERE `a`.`id` = 1'],
+            ['b', 'SELECT `b`.* FROM `` AS `b` WHERE `b`.`id` = 1'],
+            ['c', 'SELECT `c`.* FROM `` AS `c` WHERE `c`.`id` = 1']
         ];
     }
 

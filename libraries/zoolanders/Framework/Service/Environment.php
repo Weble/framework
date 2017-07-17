@@ -2,7 +2,7 @@
 
 namespace Zoolanders\Framework\Service;
 
-use Zoolanders\Framework\Request\Request;
+use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Service\System\Application;
 
 class Environment
@@ -25,7 +25,7 @@ class Environment
     /**
      * Environment constructor.
      */
-    public function __construct (Request $input, Application $application, Zoo $zoo)
+    public function __construct (RequestInterface $input, Application $application, Zoo $zoo)
     {
         // set params as DATA class
         $this->zoo = $zoo;

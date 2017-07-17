@@ -9,7 +9,7 @@ use Zoolanders\Framework\Model\Database\Date;
 use Zoolanders\Framework\Service\Zoo;
 use Zoolanders\Framework\Utils\IsString;
 
-abstract class Database extends Model
+class Database extends Model
 {
     use Date, IsString;
 
@@ -127,7 +127,7 @@ abstract class Database extends Model
      */
     protected function getColumns ()
     {
-        return empty($this->columns) ? [$this->getPrefix() . '*'] : $this->columns;
+        return empty($this->columns) ? [$this->getPrefix(true) . '*'] : $this->query->qn($this->columns);
     }
 
     /**
@@ -143,7 +143,7 @@ abstract class Database extends Model
             if ($prefix) {
                 $cell .= $this->getPrefix();
             }
-            return $cell . ($item !== '*' ? $this->query->qn($item) : $item);
+            return $cell . $item;
         }, $fields);
 
         $this->columns = array_merge($this->columns, $fields);
@@ -336,7 +336,7 @@ abstract class Database extends Model
 
         $this->setupOperatorAndValue($operator, $value);
 
-        $this->wheres[] = $this->getPrefix() . $this->query->qn($fieldOrCallable) . " " . $operator . " " . $value;
+        $this->wheres[] = $this->getPrefix(true) . $this->query->qn($fieldOrCallable) . " " . $operator . " " . $value;
 
         return $this;
     }
@@ -354,7 +354,7 @@ abstract class Database extends Model
             return $this;
         }
 
-        $this->orWheres[] = $this->getPrefix() . $this->query->qn($fieldOrCallable) . " " . $operator . " " . $this->query->q($value);
+        $this->orWheres[] = $this->getPrefix(true) . $this->query->qn($fieldOrCallable) . " " . $operator . " " . $this->query->q($value);
 
         return $this;
     }
@@ -367,7 +367,7 @@ abstract class Database extends Model
      */
     public function whereBetween ($field, $from, $to)
     {
-        $this->wheres[] = $this->getPrefix() . $this->query->qn($field) . " BETWEEN " . $this->query->q($from) . " AND " . $this->query->q($to);
+        $this->wheres[] = $this->getPrefix(true) . $this->query->qn($field) . " BETWEEN " . $this->query->q($from) . " AND " . $this->query->q($to);
 
         return $this;
     }
@@ -380,7 +380,8 @@ abstract class Database extends Model
      */
     public function orWhereBetween ($field, $from, $to)
     {
-        $this->orWheres[] = $this->getPrefix() . $this->query->qn($field) . " BETWEEN " . $this->query->q($from) . " AND " . $this->query->q($to);
+
+        $this->orWheres[] = $this->getPrefix(true) . $this->query->qn($field) . " BETWEEN " . $this->query->q($from) . " AND " . $this->query->q($to);
 
         return $this;
     }
@@ -402,7 +403,7 @@ abstract class Database extends Model
         $wheres = [];
         foreach ($value as $v) {
             $this->setupOperatorAndValue($operator, $v);
-            $wheres[] = $this->getPrefix() . $this->query->qn($field) . " " . $operator . " " . $v;
+            $wheres[] = $this->getPrefix(true) . $this->query->qn($field) . " " . $operator . " " . $v;
         }
 
         $this->wheres[] = '(' . implode(" OR ", $wheres) . ')';
@@ -427,7 +428,7 @@ abstract class Database extends Model
         $wheres = [];
         foreach ($value as $v) {
             $this->setupOperatorAndValue($operator, $v);
-            $wheres[] = $this->getPrefix() . $this->query->qn($field) . " " . $operator . " " . $v;
+            $wheres[] = $this->getPrefix(true) . $this->query->qn($field) . " " . $operator . " " . $v;
         }
 
         $this->orWheres[] = '(' . implode(" OR ", $wheres) . ')';
@@ -461,7 +462,7 @@ abstract class Database extends Model
      */
     public function wherePrefix ($sql)
     {
-        $this->wheres[] = $this->getPrefix() . $sql;
+        $this->wheres[] = $this->getPrefix(true) . $sql;
     }
 
     /**
@@ -469,7 +470,8 @@ abstract class Database extends Model
      */
     public function orWherePrefix ($sql)
     {
-        $this->orWheres[] = $this->getPrefix() . $sql;
+
+        $this->orWheres[] = $this->getPrefix(true) . $sql;
     }
 
     /**
@@ -532,11 +534,12 @@ abstract class Database extends Model
     }
 
     /**
+     * @param  boolean $qn
      * @return string
      */
-    protected function getPrefix ()
+    protected function getPrefix ($qn = false)
     {
-        $prefix = (isset($this->tablePrefix) && strlen($this->tablePrefix) > 0) ? $this->tablePrefix . '.' : '';
+        $prefix = (isset($this->tablePrefix) && strlen($this->tablePrefix) > 0) ? ($qn ? $this->query->qn($this->tablePrefix) : $this->tablePrefix) . '.' : '';
         return $prefix;
     }
 

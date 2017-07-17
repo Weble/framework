@@ -6,6 +6,7 @@ use Zoolanders\Framework\Controller\Controller;
 use Zoolanders\Framework\Controller\ControllerInterface;
 use Zoolanders\Framework\Event\Triggerable;
 use Zoolanders\Framework\Request\Request;
+use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Service\Event;
 
 class Dispatcher
@@ -21,7 +22,7 @@ class Dispatcher
      *
      * @return  string  The CRUD task (browse, read, edit, delete)
      */
-    public function getCrudTask (ControllerInterface $controller, Request $request)
+    public function getCrudTask (ControllerInterface $controller, RequestInterface $request)
     {
         $task = $controller->getDefaultTask();
         $id = $request->get(self::PARAM_ID);
@@ -59,10 +60,10 @@ class Dispatcher
 
     /**
      * @param ControllerInterface $controller
-     * @param Request $request
+     * @param RequestInterface $request
      * @return string
      */
-    public function getTask(ControllerInterface $controller, Request $request)
+    public function getTask(ControllerInterface $controller, RequestInterface $request)
     {
         $crudTask = $this->getCrudTask($controller, $request);
 

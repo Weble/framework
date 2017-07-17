@@ -60,8 +60,16 @@ interface RequestInterface
      * @param   string $filter Filter to apply to the value.
      *
      * @return  mixed  The filtered input value.
-     *
-     * @since   11.1
      */
     public function get ($name, $default = null, $filter = 'cmd');
+
+    /**
+     * Sets a value
+     *
+     * @param   string  $name   Name of the value to set.
+     * @param   mixed   $value  Value to assign to the input.
+     *
+     * @return  void
+     */
+    public function set($name, $value);
 }

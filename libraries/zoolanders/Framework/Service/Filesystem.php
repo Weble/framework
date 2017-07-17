@@ -28,6 +28,11 @@ class Filesystem
     protected $filesystem;
 
     /**
+     * @var Zoo
+     */
+    protected $app;
+
+    /**
      * Filesystem constructor.
      * @param \League\Flysystem\Filesystem|null $fs
      */
@@ -50,6 +55,17 @@ class Filesystem
      */
     public function __call ($name, $arguments)
     {
+        // do we have a path in the first argument?
+        if ($arguments && count($arguments) > 0) {
+            // make path absolute!
+            $arguments[0] = $this->makePathAbsolute($arguments[0]);
+
+            // make path absolute for the second argument too, if needed
+            if (count($arguments) > 1 && in_array($name, ['copy', 'forceCopy', 'rename', 'forceRename'])) {
+                $arguments[0] = $this->makePathAbsolute($arguments[0]);
+            }
+        }
+
         return call_user_func_array([$this->filesystem, $name], $arguments);
     }
 
@@ -116,7 +132,7 @@ class Filesystem
      *
      * @param string $path The path to search in
      * @param string $prefix A prefix to prepend
-     * @param string $filter A regex to filter the files
+     * @param string|bool $filter A regex to filter the files
      * @param boolean $recursive If the search should be recursive (default: true)
      *
      * @return array The list of files
@@ -263,5 +279,20 @@ class Filesystem
             default:
                 return $size_str;
         }
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    protected function makePathAbsolute ($path)
+    {
+        if (is_string($path)) {
+            // is it relative? Convert it into absolute
+            if (substr($path, 0, 1) !== DIRECTORY_SEPARATOR) {
+                $path = JPATH_ROOT . '/' . $path;
+            }
+        }
+        return $path;
     }
 }

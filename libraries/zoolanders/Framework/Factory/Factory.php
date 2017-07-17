@@ -4,7 +4,6 @@ namespace Zoolanders\Framework\Factory;
 
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Controller\ControllerInterface;
-use Zoolanders\Framework\Request\JsonRequest;
 use Zoolanders\Framework\Request\Request;
 use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Response\ResponseInterface;
@@ -27,11 +26,15 @@ class Factory
 
     /**
      * Make response
-     * @param Request $input
+     * @param RequestInterface $input
      * @return ResponseInterface
      */
-    public function response (Request $input)
+    public function response (RequestInterface $input)
     {
+        if (ZL_TEST) {
+            return $this->container->make(\Zoolanders\Framework\Response\MockResponse::class);
+        }
+
         $type = $input->getExpectedResponse();
 
         switch ($type) {
@@ -51,16 +54,19 @@ class Factory
 
     /**
      * Make response
-     * @param Request $input
      * @return RequestInterface
      */
-    public function request (Request $input)
+    public function request ()
     {
+        if (ZL_TEST) {
+            return $this->container->make(\Zoolanders\Framework\Request\MockRequest::class);
+        }
+
         $type = '';
+        $input = $this->container->make(Request::class);
 
         if ($type == ResponseInterface::TYPE_JSON) {
-            $requestClass = '\Zoolanders\Framework\Request\JsonRequest';
-            return $this->container->make($requestClass);
+            return $this->container->make(\Zoolanders\Framework\Request\JsonRequest::class);
         }
 
         return $input;
@@ -68,10 +74,10 @@ class Factory
 
     /**
      * Make response
-     * @param Request $input
+     * @param RequestInterface $input
      * @return ResponseInterface
      */
-    public function errorResponse (Request $input, \Exception $e = null)
+    public function errorResponse (RequestInterface $input, \Exception $e = null)
     {
         $type = $input->getExpectedResponse();
 
@@ -93,11 +99,11 @@ class Factory
     }
 
     /**
-     * @param Request $input
+     * @param RequestInterface $input
      * @param null $defaultController
      * @return null|ControllerInterface
      */
-    public function controller (Request $input, $defaultController = null)
+    public function controller (RequestInterface $input, $defaultController = null)
     {
         $namespaces = [];
         $namespaces[] = Container::FRAMEWORK_NAMESPACE;
@@ -124,11 +130,11 @@ class Factory
     /**
      * Make response
      *
-     * @param Request $input
+     * @param RequestInterface $input
      * @param null $defaultController
      * @return ViewInterface
      */
-    public function view (Request $input, $defaultController = null)
+    public function view (RequestInterface $input, $defaultController = null)
     {
         $type = $input->getExpectedResponse();
 

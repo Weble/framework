@@ -37,7 +37,7 @@ class ItemTest extends DatabaseTest
         $dbm->buildQuery();
 
         $db = self::$container->db;
-        $db->setQuery($dbm->getQuery());
+        $db->setQuery($dbm->buildQuery());
 
         $this->assertArraySubset(['alias' => 'test-item-fixture', 'type' => 'article'], $db->loadAssoc());
     }
@@ -48,8 +48,8 @@ class ItemTest extends DatabaseTest
     public function fieldsetProvider ()
     {
         return [
-            [['id'], "SELECT `a`.`id`FROM `#__zoo_item` AS `a`"],
-            [['id', 'alias'], "SELECT `a`.`id`,`a`.`alias`FROM `#__zoo_item` AS `a`"]
+            [['id'], "SELECT `a`.`id` FROM `#__zoo_item` AS `a`"],
+            [['id', 'alias'], "SELECT `a`.`id`,`a`.`alias` FROM `#__zoo_item` AS `a`"]
         ];
     }
 
@@ -59,9 +59,9 @@ class ItemTest extends DatabaseTest
     public function prefixDataProvider ()
     {
         return [
-            ['a', 'SELECT `a`.*FROM `#__zoo_item` AS `a`WHERE `a`.`id` = 1'],
-            ['b', 'SELECT `b`.*FROM `#__zoo_item` AS `b`WHERE `b`.`id` = 1'],
-            ['c', 'SELECT `c`.*FROM `#__zoo_item` AS `c`WHERE `c`.`id` = 1']
+            ['a', 'SELECT `a`.* FROM `#__zoo_item` AS `a` WHERE `a`.`id` = 1'],
+            ['b', 'SELECT `b`.* FROM `#__zoo_item` AS `b` WHERE `b`.`id` = 1'],
+            ['c', 'SELECT `c`.* FROM `#__zoo_item` AS `c` WHERE `c`.`id` = 1']
         ];
     }
 }
