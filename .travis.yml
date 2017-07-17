@@ -26,7 +26,6 @@ script:
 - npm run build
 after_success:
     "curl -T dist/*.zip -u $FTP_USER:$FTP_PASSWORD ftp://www.zoolanders.com/framework/"
-  file: "dist/*.zip"
 notifications:
   email: false
 branches:
