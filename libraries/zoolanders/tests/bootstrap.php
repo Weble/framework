@@ -8,7 +8,7 @@ define('ZF_TEST', true);
 // Bootstrap Joomla env:
 
 // Path to prepared joomla environment:
-define('JOOMLA_ENV_PATH', VENDOR_DIR . 'joolanders/framework-test-env');
+define('JOOMLA_ENV_PATH', VENDOR_DIR . 'zoolanders/framework-test-env');
 
 require_once JOOMLA_ENV_PATH . '/joomla-env-bootstrap.php';
 
