@@ -11,7 +11,6 @@ use Zoolanders\Framework\Container\Container;
  */
 class Apc implements CacheInterface
 {
-
     /**
      * @var string $prefix
      */

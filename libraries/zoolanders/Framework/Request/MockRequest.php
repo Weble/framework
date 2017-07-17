@@ -10,7 +10,6 @@ class MockRequest implements RequestInterface
     protected $data;
     protected $headers;
 
-
     public function __construct ()
     {
         $this->data = new Data();
