@@ -33,11 +33,10 @@ deploy:
   skip_cleanup: true
   on:
     repo: joolanders/framework
-    branch: testing-ci
+    branch: develop
 notifications:
   email: false
 branches:
   only:
   - master
   - develop
-  - testing-ci
