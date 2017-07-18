@@ -30,7 +30,7 @@ class Dispatcher
     {
         $this->container = $c;
 
-        if (!ZF_TEST) {
+        if (!defined('ZL_TEST') || (defined('ZL_TEST') && !ZL_TEST)) {
             $this->zoo = new Zoo($this, $c->make('\Zoolanders\Framework\Service\Zoo'));
             $this->joomla = \JEventDispatcher::getInstance();
         }
@@ -99,7 +99,7 @@ class Dispatcher
      */
     public function trigger (EventInterface &$event)
     {
-        if (ZF_TEST) {
+        if (defined('ZL_TEST') && ZL_TEST) {
             // Test mode, notify event catcher service
             $this->container->eventstack->push($event->getName(), $event);
             return;
@@ -112,6 +112,7 @@ class Dispatcher
      * @param $name
      * @param array $args
      * @param null $namespace
+     * @return mixed
      */
     public function createAndTrigger($name, $args = [], $namespace = null)
     {

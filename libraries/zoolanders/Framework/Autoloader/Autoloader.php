@@ -7,8 +7,8 @@ use Composer\Autoload\ClassLoader;
 // Register utility functions
 require_once __DIR__ . '/../Utils/ArrayUtils.php';
 
-if (!defined('ZF_TEST')) {
-    define('ZF_TEST', false);
+if (!defined('ZL_TEST')) {
+    define('ZL_TEST', false);
 }
 
 class Autoloader

@@ -31,7 +31,7 @@ class Factory
      */
     public function response (RequestInterface $input)
     {
-        if (ZL_TEST) {
+        if (defined('ZL_TEST') && ZL_TEST) {
             return $this->container->make(\Zoolanders\Framework\Response\MockResponse::class);
         }
 
@@ -58,7 +58,7 @@ class Factory
      */
     public function request ()
     {
-        if (ZL_TEST) {
+        if (defined('ZL_TEST') && ZL_TEST) {
             return $this->container->make(\Zoolanders\Framework\Request\MockRequest::class);
         }
 
