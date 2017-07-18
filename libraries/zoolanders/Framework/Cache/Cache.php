@@ -10,7 +10,6 @@ use Zoolanders\Framework\Service\Filesystem;
  */
 class Cache implements CacheInterface
 {
-
     /**
      * Path to cache file
      *

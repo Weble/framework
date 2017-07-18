@@ -275,7 +275,6 @@ class Container
      */
     public function dispatch ($defaultController = null)
     {
-
         try {
             $this->injector->defineParam('defaultController', $defaultController);
 

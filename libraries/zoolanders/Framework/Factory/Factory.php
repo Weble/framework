@@ -93,9 +93,7 @@ class Factory
 
         $responseClass = '\Zoolanders\Framework\Response\Error\\' . $type . 'Response';
 
-        return $this->container->make($responseClass, [
-
-        ]);
+        return $this->container->make($responseClass, []);
     }
 
     /**
