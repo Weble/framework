@@ -1,37 +1,37 @@
 language: php
 php:
-- '5.6'
-- '7.0'
+  - '5.6'
+  - '7.0'
 install:
-- composer install
+  - composer install
 services:
-- mysql
+  - mysql
 dist: trusty
 sudo: required
 addons:
   apt:
     packages:
-    - mysql-server-5.6
-    - mysql-client-core-5.6
-    - mysql-client-5.6
+      - mysql-server-5.6
+      - mysql-client-core-5.6
+      - mysql-client-5.6
 before_script:
-- sudo apt-get install apache2 libapache2-mod-fastcgi
-- sudo service apache2 restart
-- mysql -uroot -e "create database IF NOT EXISTS joomla;"
-- mysql -uroot joomla < libraries/zoolanders/vendor/zoolanders/framework-test-env/db/joomla.sql
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  - sudo service apache2 restart
+  - mysql -uroot -e "create database IF NOT EXISTS joomla;"
+  - mysql -uroot joomla < libraries/zoolanders/vendor/zoolanders/framework-test-env/db/joomla.sql
 script:
-- nvm install node
-- npm install
-- composer install
-- npm run build
+  - nvm install node
+  - npm install
+  - composer install
+  - npm run build
 after_success:
-    "curl -T dist/*.zip -u $FTP_USER:$FTP_PASSWORD ftp://www.zoolanders.com/framework/"
+  "curl -T dist/*.zip -u $FTP_USER:$FTP_PASSWORD ftp://www.zoolanders.com/framework/"
 notifications:
   email: false
 branches:
   only:
-  - master
-  - develop
+    - master
+    - develop
 env:
   global:
     - secure: aumWyo+Yt1S/FjRbyNg4LwEDLpp7SaBMf2S9bjclvZPB45mSJ602Em8T6If8hJk447mBILyxtu8nSyKdmpkLawj4rOgyf2Iplvd4LPmWAeacFogZFkVhwaTihwx6kbmpSruICEQtXYOZeNJjwP6O0+HQoRwxu906otAz++ABRP4vfyMrj6ILXqffWi16AyuLvmYH8r0lEoVXDEMjD9kGupMBnxUMls1uBSiG1g2xInsbNHODsgoL7/qGgI+2AjuN2vfENOeSnAjZBFcNwAgVTONBZk7qnu/2vc2ELJ9biiM+906sKIP/c7UrrFmxiDZYNloOdPTUMl+hX5KGxryc95uo7K+MvSoYFot3FJFmuHVm3Uvec7y48gQw+ka99ezCIdvysvQiGigdtWzAOq+1fL7F8LFEVejb+nbfYiWUhta7zv/gcnFrEaWlnH0L/6PJKiMDxgZQlTslZ31t/ImxwITHv+pAoLz2AnoCWEGUl3OiZlNYWDoRU53wFBJNyBpMkWhd8roBUnA975W1Cw5MVuEfuoW1zyU4erxkuVu1IJvjWCVkYcbuyohNo4pvlDoC/9LeznuJs2ZgFt6yjdFdHYH/bzYCYjllWO7Tg66ajSPV/QL7KAteUd+VocBGoUnQfMoXs+gTjaO5t6Zhx9hMUEr3FlVFxSaKf2Wf/MQsEVc=

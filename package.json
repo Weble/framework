@@ -14,7 +14,7 @@
     "bump": "node build/bump.js"
   },
   "devDependencies": {
-    "@zoolanders/build": "^1.4.0"
+    "@zoolanders/build": "^1.5.0"
   },
   "engines": {
     "node": ">= 7.8.0",

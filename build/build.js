@@ -142,8 +142,11 @@ build.run(async _ => {
       ])
 
       await build.zip({
-        src: ['dist/tmp/pkg'],
-        dest: `dist/ZOOlanders_Framework_${pkg.version}.zip`
+        src: 'dist/tmp/pkg/',
+        dest: `dist/${build.packageName({
+          name: 'zl-framework',
+          version: pkg.version
+        })}`
       })
     }
   })
