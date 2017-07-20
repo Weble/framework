@@ -53,22 +53,12 @@ build.run(async _ => {
 
   await build.runTask({
     text: 'Install Composer ',
-    task: async () => {
-      await new Promise((resolve, reject) => {
-        const exec = require('child_process').exec
-
-        const child = exec('composer install --no-dev --optimize-autoloader --no-plugins', {
-          cwd: 'dist/tmp/build'
-        }, (error, stdout, stderr) => {
-          if (error !== null) {
-            build.util.warn(error)
-            reject()
-          } else {
-            resolve()
-          }
-        })
-      })
-    }
+    task: () => build.exec({
+      command: 'composer install --no-dev --optimize-autoloader --no-plugins',
+      options: {
+        cwd: 'dist/tmp/build'
+      }
+    })
   })
 
   await build.runTask({
