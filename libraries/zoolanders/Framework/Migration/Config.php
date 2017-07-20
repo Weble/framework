@@ -25,10 +25,6 @@ class Config extends \Phinx\Config\Config
             $port = $tmp[1];
         }
 
-        if (trim(strtolower($host)) == 'localhost') {
-            $host = '127.0.0.1';
-        }
-
         // Force the configuration using the joomla data and some standard zl stuff
         $defaultConfigArray = [
             'environments' => [
