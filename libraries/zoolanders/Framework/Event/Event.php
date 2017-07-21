@@ -80,5 +80,4 @@ abstract class Event implements EventInterface
     {
         return $this->value;
     }
-
 }

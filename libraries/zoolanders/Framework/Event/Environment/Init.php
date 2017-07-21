@@ -4,8 +4,9 @@ namespace Zoolanders\Framework\Event\Environment;
 
 use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Service\System\Application;
+use Zoolanders\Framework\Event\Event;
 
-class Init extends \Zoolanders\Framework\Event\Event
+class Init extends Event
 {
     /**
      * @var string
