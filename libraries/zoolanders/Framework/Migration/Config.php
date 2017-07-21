@@ -11,7 +11,7 @@ class Config extends \Phinx\Config\Config
     {
         $type = \JFactory::getConfig()->get('dbtype');
 
-        if ($type == 'mysqli') {
+        if ($type == 'mysqli' || $type == 'pdomysql') {
             $type = 'mysql';
         }
 
