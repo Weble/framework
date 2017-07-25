@@ -44,6 +44,7 @@ class Zoo
         $listeners['element:beforesubmissiondisplay'] = [];
         $listeners['type:coreconfig'] = [];
         $listeners['type:aftersave'] = [];
+        $listeners['application:init'] = [];
         $listeners['application:sefbuildroute'] = [];
 
 
