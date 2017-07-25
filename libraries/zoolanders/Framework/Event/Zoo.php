@@ -82,8 +82,11 @@ class Zoo
         $resource = @$parts[0];
         $event = @$parts[1];
 
+        $resourceName = ucfirst(strtolower($resource));
+        $eventName = ucfirst(strtolower($event));
+
         // First try a dedicated event class for this resource
-        $eventClass = '\\Zoolanders\\Framework\\Event\\' . ucfirst(strtolower($resource)) . '\\' . ucfirst(strtolower($event));
+        $eventClass = '\\Zoolanders\\Framework\\Event\\' . $resourceName . '\\' . $eventName;
 
         return $eventClass;
     }
