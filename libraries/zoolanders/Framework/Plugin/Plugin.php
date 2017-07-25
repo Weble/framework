@@ -31,7 +31,7 @@ abstract class Plugin extends \JPlugin
     protected function registerNamespace ()
     {
         $name = ucfirst(strtolower($this->_name));
-        $path = JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/' . $name;
+        $path = JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name;
 
         $this->container->registerExtension($name, $path);
     }
