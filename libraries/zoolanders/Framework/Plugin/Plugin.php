@@ -33,7 +33,7 @@ abstract class Plugin extends \JPlugin
         $name = ucfirst(strtolower($this->_name));
         $path = JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/' . $name;
 
-        $this->container->registerExtension('zoolingual', $path);
+        $this->container->registerExtension($name, $path);
     }
 
     protected function loadEvents ()
