@@ -33,6 +33,9 @@ class Dispatcher
         if (!defined('ZL_TEST') || (defined('ZL_TEST') && !ZL_TEST)) {
             $this->zoo = new Zoo($this, $c->make('\Zoolanders\Framework\Service\Zoo'));
             $this->joomla = \JEventDispatcher::getInstance();
+
+            // Load every zoolanders plugin by default
+            \JPluginHelper::importPlugin('zoolanders');
         }
     }
 
