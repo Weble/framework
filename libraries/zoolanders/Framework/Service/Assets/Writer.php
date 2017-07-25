@@ -5,7 +5,6 @@ namespace Zoolanders\Framework\Service\Assets;
 use Assetic\Asset\AssetInterface;
 use Assetic\AssetWriter;
 use Assetic\Util\VarUtils;
-use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Service\Filesystem;
 
 class Writer extends AssetWriter
@@ -18,7 +17,7 @@ class Writer extends AssetWriter
 
     /**
      * Writer constructor.
-     * @param Container $container
+     * @param Filesystem $fs
      * @param array $dir
      * @param array $values
      */
@@ -29,6 +28,10 @@ class Writer extends AssetWriter
         $this->filesystem = $fs;
         $this->values = $values;
         $this->dir = $dir;
+
+        if (!$this->filesystem->has($dir)) {
+            $this->filesystem->folderCreate($dir);
+        }
     }
 
     public function writeAsset (AssetInterface $asset)

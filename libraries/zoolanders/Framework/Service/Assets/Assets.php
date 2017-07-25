@@ -83,7 +83,7 @@ abstract class Assets
 
         $asset = $this->factory->createAsset($this->assets, $filters);
 
-        $writer = new Writer($this->filesystem, $this->path->path('cache:'));
+        $writer = new Writer($this->filesystem, JPATH_CACHE . '/zoolanders/');
         $writer->writeAsset($asset);
 
         foreach ($writer->getPaths() as $path) {
