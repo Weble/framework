@@ -206,7 +206,10 @@ class Container
 
         // get the config file
         $config = new Registry();
-        $config->loadFile(JPATH_SITE . '/' . self::$configFile);
+
+        if (file_exists(JPATH_SITE . '/' . self::$configFile)) {
+            $config->loadFile(JPATH_SITE . '/' . self::$configFile);
+        }
 
         // Load the configuration file
         $container->loadConfig($config);

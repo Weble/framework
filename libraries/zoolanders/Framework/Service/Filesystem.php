@@ -2,8 +2,7 @@
 
 namespace Zoolanders\Framework\Service;
 
-use League\Flysystem\Adapter\Local;
-use Zoolanders\Framework\Container\Container;
+use Zoolanders\Framework\Service\Filesystem\Adapter\Local;
 
 class Filesystem
 {
