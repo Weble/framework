@@ -29,13 +29,8 @@ class DispatcherTest extends ZFTestCase
         return;
 
         $request = new MockRequest();
+
         /** @var Dispatcher $dispatcher */
         self::$container->dispatch($request);
-
-        // Check if expected events were triggered
-        /*$this->assertEventTriggered('dispatcher:beforedispatch', function () {
-        });
-        $this->assertEventTriggered('dispatcher:afterdispatch', function () {
-        });*/
     }
 }

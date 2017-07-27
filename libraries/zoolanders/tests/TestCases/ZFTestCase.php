@@ -5,9 +5,7 @@ namespace ZFTests\TestCases;
 use Joomla\Registry\Registry;
 use PHPUnit\Framework\TestCase;
 use Zoolanders\Framework\Container\Container;
-use Zoolanders\Framework\Event\Dispatcher;
 use Zoolanders\Framework\Service\Event;
-use ZFTests\Classes\EventStackService;
 use ZFTests\Classes\DBUtils;
 
 /**
@@ -48,9 +46,6 @@ class ZFTestCase extends TestCase
 
         self::$container = Container::getInstance();
         self::$container->loadConfig($config);
-
-        self::$container->eventstack = EventStackService::getInstance();
-        self::$container->share(self::$container->eventstack);
     }
 
     public static function tearDownAfterClass ()
@@ -144,24 +139,6 @@ class ZFTestCase extends TestCase
         }
         $this->fail('An unexpected error occurred - ' . $error->get('message'));
         return $error;
-    }
-
-    /**
-     * Assert event was triggered
-     *
-     * @param $eventName
-     * @param callable $callback
-     * @param string $message
-     */
-    public function assertEventTriggered ($eventName, callable $callback, $message = '')
-    {
-        $eventStack = self::$container->eventstack;
-        $offset = $eventStack->find($eventName);
-        $this->assertThat(($offset !== false), new \PHPUnit_Framework_Constraint_IsTrue, $message);
-
-        if ($offset !== false) {
-            call_user_func($callback, $eventStack->get($offset));
-        }
     }
 
     /**
