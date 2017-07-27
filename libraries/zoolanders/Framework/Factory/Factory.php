@@ -4,6 +4,9 @@ namespace Zoolanders\Framework\Factory;
 
 use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Controller\ControllerInterface;
+use Zoolanders\Framework\Event\Dispatcher;
+use Zoolanders\Framework\Event\DispatcherInterface;
+use Zoolanders\Framework\Event\MockDispatcher;
 use Zoolanders\Framework\Request\Request;
 use Zoolanders\Framework\Request\RequestInterface;
 use Zoolanders\Framework\Response\ResponseInterface;
@@ -70,6 +73,19 @@ class Factory
         }
 
         return $input;
+    }
+
+    /**
+     * Make the event dispatcher
+     * @return DispatcherInterface
+     */
+    public function eventDispatcher ()
+    {
+        if (defined('ZL_TEST') && ZL_TEST) {
+            return $this->container->make(MockDispatcher::class);
+        }
+
+        return $this->container->make(Dispatcher::class);
     }
 
     /**

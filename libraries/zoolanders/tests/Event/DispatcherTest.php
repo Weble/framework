@@ -4,7 +4,10 @@ namespace ZFTests\Event;
 
 use ZFTests\TestCases\ZFTestCase;
 use ZFTests\Classes\TestEvent;
+use Zoolanders\Framework\Container\Container;
 use Zoolanders\Framework\Event\Dispatcher;
+use Zoolanders\Framework\Event\MockDispatcher;
+use Zoolanders\Framework\Event\Triggerable;
 
 /**
  * Class DispatcherTest
@@ -14,6 +17,8 @@ use Zoolanders\Framework\Event\Dispatcher;
  */
 class DispatcherTest extends ZFTestCase
 {
+    use Triggerable;
+
     public static $check = false;
 
     /**
@@ -28,14 +33,15 @@ class DispatcherTest extends ZFTestCase
      * Test event triggering
      *
      * @covers      Dispatcher::trigger()
-     * @depends     testNotify
      */
     public function testTriggerEvent ()
     {
-        $dispatcher = new Dispatcher(self::$container->zoo);
         $event = new TestEvent();
 
-        $dispatcher->trigger($event);
-        //$this->assertEventTriggered('classes:testevent', function($event){});
+        Container::getInstance()->event->connect('test', function($triggeredEvent) use ($event) {
+            $this->assertEquals($event, $triggeredEvent);
+        });
+
+        $this->triggerEvent($event);
     }
 }

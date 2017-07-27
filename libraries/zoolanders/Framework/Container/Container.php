@@ -9,6 +9,7 @@ use Zoolanders\Framework\Autoloader\Autoloader;
 use Zoolanders\Framework\Controller\ControllerInterface;
 use Zoolanders\Framework\Event\Controller\AfterExecute;
 use Zoolanders\Framework\Event\Controller\BeforeExecute;
+use Zoolanders\Framework\Event\DispatcherInterface;
 use Zoolanders\Framework\Factory\Factory;
 use Zoolanders\Framework\Dispatcher\Dispatcher;
 use Zoolanders\Framework\Dispatcher\Exception;
@@ -107,9 +108,10 @@ class Container
         $this->loader = Autoloader::getInstance();
         $this->injector = new Injector();
         $this->factory = new Factory($this);
-        $this->event = new \Zoolanders\Framework\Event\Dispatcher($this);
 
         $this->registerFactoryDelegates();
+
+        $this->event = $this->injector->make(DispatcherInterface::class);
     }
 
     /**
@@ -350,5 +352,6 @@ class Container
         $this->injector->delegate(ErrorResponseInterface::class, [$this->factory, 'errorResponse']);
         $this->injector->delegate(ControllerInterface::class, [$this->factory, 'controller']);
         $this->injector->delegate(ViewInterface::class, [$this->factory, 'view']);
+        $this->injector->delegate(DispatcherInterface::class, [$this->factory, 'eventDispatcher']);
     }
 }

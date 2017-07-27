@@ -49,7 +49,8 @@ class ZFTestCase extends TestCase
         self::$container = Container::getInstance();
         self::$container->loadConfig($config);
 
-        self::$container->share(EventStackService::class);
+        self::$container->eventstack = EventStackService::getInstance();
+        self::$container->share(self::$container->eventstack);
     }
 
     public static function tearDownAfterClass ()

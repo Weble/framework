@@ -2,8 +2,6 @@
 
 namespace Zoolanders\Framework\Event;
 
-use Zoolanders\Framework\Container\Container;
-
 class Zoo
 {
     /**

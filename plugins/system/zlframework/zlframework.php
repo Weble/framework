@@ -36,10 +36,16 @@ class plgSystemZlframework extends JPlugin
         }
     }
 
-    public function onBeforeRender ()
+    /**
+     * @param bool $event
+     */
+    public function onBeforeRender ($event = false)
     {
-        // trigger a Environment/Init event
-        $event = $this->container->event->create('Environment\BeforeRender');
-        $this->container->event->trigger($event);
+        // First time it's called by the joomla dispatcher
+        if (!$event) {
+            // trigger a Environment/Init event
+            $event = $this->container->event->create('Environment\BeforeRender');
+            $this->container->event->trigger($event);
+        }
     }
 }

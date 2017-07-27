@@ -21,9 +21,6 @@ trait Triggerable
             $this->$eventName($event);
         }
 
-        // First, trigger the joomla event
-        $container->event->joomla->trigger($eventName, [&$event]);
-
         // Then trigger also the zoolanders one
         $container->event->trigger($event);
     }
