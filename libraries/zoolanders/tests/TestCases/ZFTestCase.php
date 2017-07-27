@@ -25,6 +25,20 @@ class ZFTestCase extends TestCase
      */
     protected static $container;
 
+    /**
+     * Overrides the parent setup method.
+     *
+     * @return  void
+     *
+     * @see     \PHPUnit\Framework\TestCase::setUp()
+     * @since   11.1
+     */
+    protected function setUp()
+    {
+        $this->setExpectedError();
+        parent::setUp();
+    }
+
     public static function setUpBeforeClass ()
     {
         parent::setUpBeforeClass();
@@ -35,8 +49,7 @@ class ZFTestCase extends TestCase
         self::$container = Container::getInstance();
         self::$container->loadConfig($config);
 
-        // self::$container['eventstack'] = EventStackService::getInstance();
-        //self::$container['event'] = new Dispatcher(self::$container);
+        self::$container->share(EventStackService::class);
     }
 
     public static function tearDownAfterClass ()
@@ -57,9 +70,79 @@ class ZFTestCase extends TestCase
     {
         if ($name == 'container') {
             return self::$container;
-        } else {
-            return parent::__get($name);
         }
+    }
+
+    /**
+     * Tells the unit tests that a method or action you are about to attempt
+     * is expected to result in JError::raiseSomething being called.
+     *
+     * If you don't call this method first, the test will fail.
+     * If you call this method during your test and the error does not occur, then your test
+     * will also fail because we assume you were testing to see that an error did occur when it was
+     * supposed to.
+     *
+     * If passed without argument, the array is initialized if it hsn't been already
+     *
+     * @param   mixed  $error  The JException object to expect.
+     *
+     * @return  void
+     *
+     * @deprecated  13.1
+     * @since       12.1
+     */
+    public function setExpectedError($error = null)
+    {
+        if (!is_array($this->expectedErrors))
+        {
+            $this->expectedErrors = array();
+
+            // Handle optional usage of JError until removed.
+            if (class_exists(\JError::class))
+            {
+                \JError::setErrorHandling(E_NOTICE, 'callback', array($this, 'expectedErrorCallback'));
+                \JError::setErrorHandling(E_WARNING, 'callback', array($this, 'expectedErrorCallback'));
+                \JError::setErrorHandling(E_ERROR, 'callback', array($this, 'expectedErrorCallback'));
+            }
+        }
+        if (!is_null($error))
+        {
+            $this->expectedErrors[] = $error;
+        }
+    }
+
+    /**
+     * Callback receives the error from JError and deals with it appropriately
+     * If a test expects a JError to be raised, it should call this setExpectedError first
+     * If you don't call this method first, the test will fail.
+     *
+     * @param   \JException  $error  The JException object from JError
+     *
+     * @return  \JException
+     *
+     * @deprecated  13.1
+     * @since       12.1
+     */
+    public function expectedErrorCallback($error)
+    {
+        foreach ($this->expectedErrors as $key => $err)
+        {
+            $thisError = true;
+            foreach ($err as $prop => $value)
+            {
+                if ($error->get($prop) !== $value)
+                {
+                    $thisError = false;
+                }
+            }
+            if ($thisError)
+            {
+                unset($this->expectedErrors[$key]);
+                return $error;
+            }
+        }
+        $this->fail('An unexpected error occurred - ' . $error->get('message'));
+        return $error;
     }
 
     /**

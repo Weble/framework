@@ -5,7 +5,7 @@ if (!defined('ZL_TEST')) {
 }
 
 require_once dirname(__FILE__) . '/Framework/Autoloader/Autoloader.php';
-$composerAutoloader = require_once dirname(__FILE__) . '/vendor/autoload.php';
+$composerAutoloader = require dirname(__FILE__) . '/vendor/autoload.php';
 
 // Create autoloader and add the mapping to the framework
 $loader = \Zoolanders\Framework\Autoloader\Autoloader::getInstance($composerAutoloader);
