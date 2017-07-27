@@ -3,6 +3,7 @@
 namespace Zoolanders\Framework\Service;
 
 use Zoolanders\Framework\Service\Filesystem\Adapter\Local;
+use League\Flysystem\Filesystem as LeagueFilesystem;
 
 class Filesystem
 {
@@ -35,11 +36,11 @@ class Filesystem
      * Filesystem constructor.
      * @param \League\Flysystem\Filesystem|null $fs
      */
-    public function __construct (\League\Flysystem\Filesystem $fs = null, Zoo $zoo)
+    public function __construct (LeagueFilesystem $fs = null, Zoo $zoo)
     {
         if (!$fs) {
             $adapter = new Local('/');
-            $fs = new \League\Flysystem\Filesystem($adapter);
+            $fs = new LeagueFilesystem($adapter);
         }
 
         $this->app = $zoo;
