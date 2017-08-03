@@ -161,6 +161,47 @@ class FilesystemServiceTest extends ZFTestCase
     }
 
     /**
+     * Test copy method
+     *
+     * @covers          Filesystem::copy()
+     */
+    public function testCopy ()
+    {
+        /** @var \League\Flysystem\Filesystem $file */
+        $file = self::$container->filesystem;
+        $destFile = JOOMLA_ENV_PATH . '/tmp/test1.txt';
+
+        if ($file->has($destFile)) {
+            $file->delete($destFile);
+        }
+
+        $file->copy(JOOMLA_ENV_PATH . '/fixtures/filesystem/test1.txt', $destFile);
+        $content = $file->read($destFile);
+        $this->assertStringEndsWith('RANDOM_STRING', $content);
+    }
+
+    /**
+     * Test copy method
+     *
+     * @covers          Filesystem::forceCopy()
+     */
+    public function testForceCopy ()
+    {
+        /** @var \League\Flysystem\Filesystem $file */
+        $file = self::$container->filesystem;
+        $destFile = JOOMLA_ENV_PATH . '/tmp/test2.txt';
+
+        if (!$file->has($destFile)) {
+            $file->copy(JOOMLA_ENV_PATH . '/fixtures/filesystem/test1.txt', $destFile);
+        }
+
+        $file->forceCopy(JOOMLA_ENV_PATH . '/fixtures/filesystem/test1.txt', $destFile);
+        $content = $file->read($destFile);
+        $this->assertStringEndsWith('RANDOM_STRING', $content);
+    }
+
+
+    /**
      * Test createDir function
      *
      * @covers          Filesystem::folderCreate()

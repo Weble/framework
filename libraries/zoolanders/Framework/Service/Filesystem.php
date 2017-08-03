@@ -2,6 +2,13 @@
 
 namespace Zoolanders\Framework\Service;
 
+use League\Flysystem\Plugin\EmptyDir;
+use League\Flysystem\Plugin\ForcedCopy;
+use League\Flysystem\Plugin\ForcedRename;
+use League\Flysystem\Plugin\GetWithMetadata;
+use League\Flysystem\Plugin\ListFiles;
+use League\Flysystem\Plugin\ListPaths;
+use League\Flysystem\Plugin\ListWith;
 use Zoolanders\Framework\Service\Filesystem\Adapter\Local;
 use League\Flysystem\Filesystem as LeagueFilesystem;
 
@@ -45,6 +52,15 @@ class Filesystem
 
         $this->app = $zoo;
         $this->filesystem = $fs;
+
+        // Load the extra plugins for all the methods
+        $this->filesystem->addPlugin(new ForcedCopy());
+        $this->filesystem->addPlugin(new ForcedRename());
+        $this->filesystem->addPlugin(new GetWithMetadata());
+        $this->filesystem->addPlugin(new ListFiles());
+        $this->filesystem->addPlugin(new ListPaths());
+        $this->filesystem->addPlugin(new ListWith());
+        $this->filesystem->addPlugin(new EmptyDir());
     }
 
     /**

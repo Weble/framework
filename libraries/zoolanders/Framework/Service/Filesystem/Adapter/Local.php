@@ -17,7 +17,7 @@ class Local extends \League\Flysystem\Adapter\Local
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS, array $permissions = [])
     {
-        $root = is_link($root) ? realpath($root) : $root;
+        $root = @is_link($root) ? realpath($root) : $root;
         $this->permissionMap = array_replace_recursive(static::$permissions, $permissions);
 
         $this->setPathPrefix($root);
