@@ -126,8 +126,9 @@ class Schema
      */
     public function loadLink ($linkSchema)
     {
-        if (isset($linkSchema->rel)) {
-            $this->links[$linkSchema->rel] = new Link($linkSchema);
+        if (isset($linkSchema->href) && isset($linkSchema->method)) {
+            $id = $linkSchema->href . $linkSchema->method;
+            $this->links[$id] = new Link($linkSchema);
         }
     }
 
@@ -151,10 +152,11 @@ class Schema
      * @param $rel
      * @return bool|Link
      */
-    public function getLink($rel)
+    public function getLink($href, $method)
     {
-        if (isset($this->links[$rel])) {
-            return $this->links[$rel];
+        $id = $href . $method;
+        if (isset($this->links[$id])) {
+            return $this->links[$id];
         }
 
         return false;
