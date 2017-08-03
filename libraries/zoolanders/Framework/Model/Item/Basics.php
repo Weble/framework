@@ -13,26 +13,31 @@ trait Basics
      */
     protected function filterIds ($ids)
     {
+        $this->setState('id', $ids);
         return $this->filterIn('id', $ids);
     }
 
     protected function filterName ($name)
     {
+        $this->setState('name', $name);
         return $this->where('name', 'like', $name);
     }
 
     protected function filterApplication ($applications)
     {
+        $this->setState('applications', $applications);
         return $this->filterIn('application_id', $applications);
     }
 
     protected function filterType ($types)
     {
+        $this->setState('types', $types);
         return $this->filterIn('type', $types);
     }
 
     protected function filterSearchable ($state = 1)
     {
+        $this->setState('searchable', $state);
         $state = (int)$state;
         $this->wherePrefix('searchable = ' . $state);
         return $this;
@@ -40,6 +45,7 @@ trait Basics
 
     protected function filterState ($state = 1)
     {
+        $this->setState('state', $state);
         $state = (int)$state;
         $this->wherePrefix('state = ' . $state);
         return $this;
@@ -57,6 +63,7 @@ trait Basics
 
     protected function filterFrontpage ()
     {
+        $this->setState('frontpage', 1);
         $this->join(ZOO_TABLE_CATEGORY_ITEM, "{$this->getQuery()->qn($this->tablePrefix)}.id = f.item_id", "f");
         $this->whereRaw('f.category_id = 0');
     }

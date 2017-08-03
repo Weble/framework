@@ -86,7 +86,7 @@ class ListFromSchema extends JsonResponse
             }
 
             if ($key == self::KEYWORD_FILTER) {
-                $data[$key] = (object) $model->getFilter();
+                $data[$key] = (object) $model->getState();
             }
         }
 

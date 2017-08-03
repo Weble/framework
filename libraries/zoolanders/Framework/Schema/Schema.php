@@ -149,8 +149,9 @@ class Schema
     }
 
     /**
-     * @param $rel
-     * @return bool|Link
+     * @param $href
+     * @param $method
+     * @return bool|mixed
      */
     public function getLink($href, $method)
     {
