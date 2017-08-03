@@ -20,6 +20,7 @@ class ListFromSchema extends JsonResponse
     const KEYWORD_PAGE = 'page';
     const KEYWORD_SORT = 'sort';
     const KEYWORD_DATA = 'data';
+    const KEYWORD_FILTER = 'filter';
 
     /**
      * @var Link
@@ -51,9 +52,7 @@ class ListFromSchema extends JsonResponse
     {
         $properties = $schema->getProperties();
 
-        $data = [
-
-        ];
+        $data = [];
 
         $offset = $model->getState('offset');
         $limit = $model->getState('limit');
@@ -84,6 +83,10 @@ class ListFromSchema extends JsonResponse
 
             if ($key == self::KEYWORD_SORT) {
                 $data[$key] = (object) $model->getOrder();
+            }
+
+            if ($key == self::KEYWORD_FILTER) {
+                $data[$key] = (object) $model->getFilter();
             }
         }
 
