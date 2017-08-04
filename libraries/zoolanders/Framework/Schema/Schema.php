@@ -4,6 +4,7 @@ namespace Zoolanders\Framework\Schema;
 
 use League\JsonGuard\Validator;
 use League\JsonReference\Dereferencer;
+use Zoolanders\Framework\Data\Data;
 
 class Schema
 {
@@ -47,6 +48,7 @@ class Schema
 
         if ($schema) {
             $this->loadSchema($schema);
+            $this->links = new Data($this->links);
         }
     }
 
@@ -126,10 +128,14 @@ class Schema
      */
     public function loadLink ($linkSchema)
     {
-        if (isset($linkSchema->href) && isset($linkSchema->method)) {
-            $id = $linkSchema->href . $linkSchema->method;
-            $this->links[$id] = new Link($linkSchema);
+        $href = $linkSchema->href;
+        $method = $linkSchema->method;
+
+        if (!isset($this->links[$href])) {
+            $this->links[$href] = new Data();
         }
+
+        $this->links[$href][$method] = new Link($linkSchema);
     }
 
     /**
@@ -146,21 +152,6 @@ class Schema
     public function getLinks()
     {
         return $this->links;
-    }
-
-    /**
-     * @param $href
-     * @param $method
-     * @return bool|mixed
-     */
-    public function getLink($href, $method)
-    {
-        $id = $href . $method;
-        if (isset($this->links[$id])) {
-            return $this->links[$id];
-        }
-
-        return false;
     }
 
     /**
