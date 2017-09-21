@@ -23,4 +23,9 @@ class Js extends Assets
     {
         $this->document->addScript($path);
     }
+
+    protected function getAssetName ()
+    {
+        return 'zoolanders.js';
+    }
 }

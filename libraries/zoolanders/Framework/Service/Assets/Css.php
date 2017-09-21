@@ -25,4 +25,9 @@ class Css extends Assets
     {
         $this->document->addStylesheet($path);
     }
+
+    protected function getAssetName ()
+    {
+        return 'zoolanders.css';
+    }
 }

@@ -30,6 +30,21 @@ abstract class Assets
     protected $factory;
 
     /**
+     * @var Document
+     */
+    protected $document;
+
+    /**
+     * @var Path
+     */
+    protected $path;
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * @var array
      */
     protected $filters = [];
@@ -41,7 +56,9 @@ abstract class Assets
 
     /**
      * Assets constructor.
-     * @param Container $c
+     * @param Document $document
+     * @param Path $path
+     * @param Filesystem $fs
      */
     public function __construct (Document $document, Path $path, Filesystem $fs)
     {
@@ -58,12 +75,22 @@ abstract class Assets
         $this->filesystem = $fs;
     }
 
+    /**
+     * Define an asset with a name
+     * @param $name
+     * @param $assets
+     */
     public function define ($name, $assets)
     {
         settype($assets, 'array');
         $this->assetManager->set($name, $this->factory->createAsset($assets));
     }
 
+    /**
+     * Add a list of assets to be loaded
+     *
+     * @param array $assets
+     */
     public function add ($assets)
     {
         settype($assets, 'array');
@@ -75,13 +102,23 @@ abstract class Assets
         $this->assets = array_unique(array_merge($this->assets, $assets));
     }
 
+    /**
+     * Load the asset files in the browser
+     * @param bool $filters
+     */
     public function load ($filters = false)
     {
+        if (count($this->assets) <= 0) {
+              return;
+        }
+
         if (!$filters) {
             $filters = $this->filters;
         }
 
-        $asset = $this->factory->createAsset($this->assets, $filters);
+        $asset = $this->factory->createAsset($this->assets, $filters, [
+            'name' => $this->getAssetName($this->assets, $filters)
+        ]);
 
         $writer = new Writer($this->filesystem, JPATH_CACHE . '/zoolanders/');
         $writer->writeAsset($asset);
@@ -91,5 +128,14 @@ abstract class Assets
         }
     }
 
+    /**
+     * @param $path
+     * @return mixed
+     */
     abstract protected function loadFile ($path);
+
+    /**
+     * @return string
+     */
+    abstract protected function getAssetName();
 }
