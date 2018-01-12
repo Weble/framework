@@ -18,8 +18,12 @@ trait ValidateResponse
         }
 
         $targetSchema = $schema->getTargetSchema();
-        $validator = $targetSchema->validate($response);
 
-        return $validator;
+        if ($targetSchema) {
+            $validator = $targetSchema->validate($response);
+            return $validator;
+        }
+
+        return false;
     }
 }

@@ -48,45 +48,57 @@ class ListFromSchema extends JsonResponse
      * @param Schema $schema
      * @return array
      */
-    protected function setupDataFromSchema ($items, Model\Database $model, Schema $schema)
+    protected function setupDataFromSchema ($items, Model\Database $model, Schema $schema = null)
     {
-        $properties = $schema->getProperties();
-
         $data = [];
 
-        $offset = $model->getState('offset');
-        $limit = $model->getState('limit');
+        if ($schema) {
+            $properties = $schema->getProperties();
 
-        if ($limit == 0) {
-            $limit = 20;
-        }
+            $offset = $model->getState('offset');
+            $limit = $model->getState('limit');
 
-        foreach ($properties as $key => $property) {
-            $data[$key] = $property->getDefaultValue();
-
-            // this is the items list
-            if ($key == self::KEYWORD_DATA) {
-                $data[$key] = $items;
+            if ($limit == 0) {
+                $limit = 20;
             }
 
-            if ($key == self::KEYWORD_TOTAL) {
-                $data[$key] = $model->getTotal();
-            }
+            foreach ($properties as $key => $property) {
+                $data[$key] = $property->getDefaultValue();
 
-            if ($key == self::KEYWORD_PER_PAGE) {
-                $data[$key] = $limit;
-            }
+                // this is the items list
+                if ($key == self::KEYWORD_DATA) {
+                    $data[$key] = $items;
+                }
 
-            if ($key == self::KEYWORD_PAGE) {
-                $data[$key] = (int) ($offset / $limit) + 1;
-            }
+                if ($key == self::KEYWORD_TOTAL) {
+                    $data[$key] = $model->getTotal();
+                }
 
-            if ($key == self::KEYWORD_SORT) {
-                $data[$key] = (object) $model->getOrder();
-            }
+                if ($key == self::KEYWORD_PER_PAGE) {
+                    $data[$key] = $limit;
+                }
 
-            if ($key == self::KEYWORD_FILTER) {
-                $data[$key] = (object) $model->getState();
+                if ($key == self::KEYWORD_PAGE) {
+                    $data[$key] = (int) ($offset / $limit) + 1;
+                }
+
+                if ($key == self::KEYWORD_SORT) {
+                    $data[$key] = (object) $model->getOrder();
+                }
+
+                if ($key == self::KEYWORD_FILTER) {
+                    $state = $model->getState();
+
+                    if (isset($state['offset'])) {
+                        unset($state['offset']);
+                    }
+
+                    if (isset($state['limit'])) {
+                        unset($state['limit']);
+                    }
+
+                    $data[$key] = (object) $state;
+                }
             }
         }
 

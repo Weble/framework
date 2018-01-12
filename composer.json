@@ -24,7 +24,8 @@
     "robmorgan/phinx": "^0.6.6",
     "league/json-guard": "^1.0",
     "league/json-reference": "^1.0",
-    "yuloh/bccomp-polyfill" : "dev-master"
+    "yuloh/bccomp-polyfill" : "dev-master",
+    "spatie/fractalistic": "^2.7"
   },
   "repositories": [
     {

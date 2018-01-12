@@ -34,6 +34,11 @@ class Init extends Event
     protected $task;
 
     /**
+     * @var string
+     */
+    protected $group;
+
+    /**
      * @var RequestInterface
      */
     protected $request;
@@ -52,6 +57,7 @@ class Init extends Event
         $this->controller = $request->getCmd('controller', false);
         $this->view = $request->getCmd('view', false);
         $this->task = $request->getCmd('task', false);
+        $this->group = $request->getCmd('group', false);
     }
 
     /**

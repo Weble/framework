@@ -25,8 +25,18 @@ trait Basics
 
     protected function filterApplication ($applications)
     {
-        $this->setState('applications', $applications);
+        return $this->filterApplication($applications);
+    }
+
+    protected function filterApp ($applications)
+    {
+        $this->setState('app', $applications);
         return $this->filterIn('application_id', $applications);
+    }
+
+    protected function filterApplicationId ($applications)
+    {
+        return $this->filterApplication($applications);
     }
 
     protected function filterType ($types)

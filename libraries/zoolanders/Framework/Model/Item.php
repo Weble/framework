@@ -212,4 +212,37 @@ class Item extends Database
 
         return $result;
     }
+
+    /**
+     * @param \Item $item
+     * @param array $categories
+     */
+    public function associate(\Item $item, $categories = [])
+    {
+        $this->zoo->category->saveCategoryItemRelations($item, $categories);
+    }
+
+    /**
+     * @param \Item $item
+     * @param array $categories
+     */
+    public function attach(\Item $item, $categories = [])
+    {
+        $existingCategories = $item->getRelatedCategoryIds(false);
+        $categories = array_merge($existingCategories, $categories);
+
+        $this->zoo->category->saveCategoryItemRelations($item, $categories);
+    }
+
+    /**
+     * @param \Item $item
+     * @param array $categories
+     */
+    public function detach(\Item $item, $categories = [])
+    {
+        $existingCategories = $item->getRelatedCategoryIds(false);
+        $categories = array_diff($existingCategories, $categories);
+
+        $this->zoo->category->saveCategoryItemRelations($item, $categories);
+    }
 }

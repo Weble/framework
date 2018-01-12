@@ -135,7 +135,9 @@ class Schema
             $this->links[$href] = new Data();
         }
 
-        $this->links[$href][$method] = new Link($linkSchema);
+        if ($linkSchema) {
+            $this->links[$href][$method] = new Link($linkSchema);
+        }
     }
 
     /**
@@ -175,6 +177,12 @@ class Schema
     {
         $data = (object) $data;
 
-        return new Validator($data, $this->getSchemaDefinition());
+        $schema =  $this->getSchemaDefinition();
+
+        if ($schema) {
+            return new Validator($data, $schema);
+        }
+
+        return false;
     }
 }

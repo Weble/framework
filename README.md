@@ -143,7 +143,7 @@ composer dump-autoload
 
 ## Controllers
 
-Controllers need to extend the base class `Zoolanders\Framework\Controller\Controller`. 
+Controllers need to extend the base class `Zoolanders\Framework\Controller\Controller`.
 Any public method can be used as a task, triggered in the url by the `task` variable
 Any method of the controller (as well as the constructor itself) supports Dependecy Injection.
 Therefore you can "ask" for any class / service known to the container and expect it to be given to you.
@@ -157,31 +157,31 @@ public function index(Request $request, Response $response, Filesystem $filesyst
 Before and after each task several events are fired:
 - `onBeforeExecute`
 - `onAfterExecute`
-- 'onBefore{Task}'
-- 'onAfter{Task}'
+- `onBefore{Task}`
+- `onAfter{Task}`
 
 The easiest way to use these events is to implement a ***public*** method with the same name of the event
 
 ```php
-public function onBeforeSave(BeforeExecute $event) 
+public function onBeforeSave(BeforeExecute $event)
 {
     // For example, deal with acl stuff
     if ($cannotSave) {
-        throw new \Zoolanders\Framework\Dispatcher\Exception\AccessForbidden();   
+        throw new \Zoolanders\Framework\Dispatcher\Exception\AccessForbidden();
     }
-    
+
     // change the task name maybe?
     $event->setTask('similarTask');
 }
 
-public function onAfterSave(AftereExecute $event) 
+public function onAfterSave(AftereExecute $event)
 {
     // change the response?
     $response = $event->getResponse();
-    
+
     ....
-    
-    
+
+
     $event->setResponse($response);
 }
 ```
@@ -199,7 +199,7 @@ and listen to it with a listener that you will have to attach to it at some poin
 class DoSomethingBeforeWhatever extends Listener {
 
     public function handle(BeforeTaskName $event) {
-  
+
     }
 }
 
@@ -207,3 +207,7 @@ class DoSomethingBeforeWhatever extends Listener {
 
 $container->event->connect('\Zoolanders\ExtensionName\ViewName\BeforeTaskName', 'DoSomethingBeforeWhatever@handle');
 ```
+
+## Composer
+
+If the environment doesn't fullfil all the requirements use the `--ignore-platform-reqs` option.

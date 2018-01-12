@@ -3,20 +3,25 @@
 namespace Zoolanders\Framework\Request;
 
 use Zoolanders\Framework\Schema\Link;
+use Zoolanders\Framework\Schema\Schema;
 
-trait ValidateRequest
+/**
+ * Trait RequestFromSchema
+ * @package Zoolanders\Framework\Request
+ */
+trait RequestFromSchema
 {
     /**
      * @param RequestInterface $request
      * @param Link $schema
      * @return \League\JsonGuard\Validator
      */
-    public static function validateJsonRequest (RequestInterface $request, Link $schema)
+    public function validateJsonRequest (RequestInterface $request, Link $schema)
     {
         $data = new \stdClass();
 
         foreach ($schema->getProperties() as $key => $property) {
-            $type = self::getValidateRequestType($property->type);
+            $type = $this->getValidateRequestType($property->type);
             $value = $request->get($key, false, $type);
 
             if ($type == 'object' && is_array($value)) {
@@ -34,10 +39,28 @@ trait ValidateRequest
     }
 
     /**
+     * @param RequestInterface $request
+     * @param Schema $schema
+     * @return array
+     */
+    public function getRequestParametersFromSchema(RequestInterface $request, Schema $schema)
+    {
+        $properties = $schema->getProperties();
+
+        $data = [];
+        foreach ($properties as $key => $value) {
+            $data[$key] = $request->get($key, $value->getDefaultValue(), $this->getValidateRequestType($value->type));
+        }
+
+        return $data;
+    }
+
+    /**
+     * Convert the schema type to the joomla filter type
      * @param $schemaType
      * @return string
      */
-    protected static function getValidateRequestType ($schemaType)
+    public function getValidateRequestType ($schemaType)
     {
         switch ($schemaType) {
             case 'number':

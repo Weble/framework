@@ -117,7 +117,7 @@ class Model
     public function __call ($name, $arguments)
     {
         // filterAt, filterPublished, filterWhatever
-        $filter = 'filter' . ucfirst($name);
+        $filter = 'filter' . ucfirst(str_replace("_", "", ucwords($name, "_")));
         if (method_exists($this, $filter)) {
             call_user_func_array([$this, $filter], $arguments);
             return $this;

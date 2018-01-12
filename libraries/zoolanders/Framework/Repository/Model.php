@@ -9,7 +9,7 @@ use Zoolanders\Framework\Service\Zoo;
  * Base table repository for any repository that needs to use the old ZOO table classes
  * @package Zoolanders\Repository
  */
-abstract class Table extends Database
+abstract class Model extends Database
 {
     /**
      * @var Zoo
@@ -65,7 +65,7 @@ abstract class Table extends Database
         return $this->table->all();
     }
 
-    public function find ($id)
+    public function get ($id)
     {
         return $this->table->get($id);
     }
