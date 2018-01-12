@@ -2,7 +2,9 @@
 
 namespace Zoolanders\Framework\Event\Type;
 
-class Type extends \Zoolanders\Framework\Event\Event
+use Zoolanders\Framework\Event\HasSubjectInterface;
+
+class Type extends \Zoolanders\Framework\Event\Event implements HasSubjectInterface
 {
     /**
      * @var \Type

@@ -2,7 +2,9 @@
 
 namespace Zoolanders\Framework\Event\Submission;
 
-class Submission extends \Zoolanders\Framework\Event\Event
+use Zoolanders\Framework\Event\HasSubjectInterface;
+
+class Submission extends \Zoolanders\Framework\Event\Event implements HasSubjectInterface
 {
     /**
      * @var \Category

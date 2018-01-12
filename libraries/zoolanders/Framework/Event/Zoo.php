@@ -2,6 +2,8 @@
 
 namespace Zoolanders\Framework\Event;
 
+use Zoolanders\Framework\Event\Element\Beforedisplay;
+
 class Zoo
 {
     /**
@@ -93,7 +95,7 @@ class Zoo
      * Create the right Zoolanders event class instance from the zoo event
      * @param string $eventClass class to instantiate
      * @param \AppEvent $zooEvent The event itself
-     * @return \Zoolanders\Framework\Event\Event
+     * @return \Zoolanders\Framework\Event\Event|null
      */
     protected function createEventObject ($eventClass, \AppEvent $zooEvent)
     {
@@ -101,16 +103,23 @@ class Zoo
 
         // Create the list of the constructor arguments for the event class
         $parameters = [];
-        $subject = $zooEvent->getSubject();;
-
-        if ($subject) {
+        if ($r->implementsInterface(HasSubjectInterface::class)) {
             $parameters[] = $zooEvent->getSubject();
         }
 
         // add any other paramenter
-        $parameters = array_merge($parameters, array_values($zooEvent->getParameters()));
+        foreach ($zooEvent->getParameters() as $key => &$value) {
+            $parameters[] = &$value;
+        }
 
-        $obj = $r->newInstanceArgs($parameters);
+        try {
+            if ($zooEvent->getName() == 'element:beforedisplay' && !$parameters[2] instanceof \Element) {
+                echo json_encode($zooEvent->getSubject());die();
+            }
+            $obj = $r->newInstanceArgs($parameters);
+        } catch (\Exception $e) {
+            return null;
+        }
 
         return $obj;
     }

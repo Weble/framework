@@ -2,7 +2,9 @@
 
 namespace Zoolanders\Framework\Event\Application;
 
-class Application extends \Zoolanders\Framework\Event\Event
+use Zoolanders\Framework\Event\HasSubjectInterface;
+
+class Application extends \Zoolanders\Framework\Event\Event implements HasSubjectInterface
 {
     /**
      * @var \Application

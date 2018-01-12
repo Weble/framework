@@ -265,9 +265,14 @@ class Path
     {
         $relative = ltrim(preg_replace('/^' . preg_quote(str_replace(DIRECTORY_SEPARATOR, '/', JPATH_ROOT), '/') . '/i', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath($path))), '/');
 
+        // Check for symlinks in the path
+        if (stripos(realpath($path), JPATH_ROOT) !== 0) {
+            return ltrim(preg_replace('/^' . preg_quote(str_replace(DIRECTORY_SEPARATOR, '/', JPATH_ROOT), '/') . '/i', '', str_replace(DIRECTORY_SEPARATOR, '/', $path)), '/');
+        }
+
         // if equal, probably something went wrong, try without realpath (symlinks?)
         if ($path == $relative) {
-            return ltrim(preg_replace('/^' . preg_quote(str_replace(DIRECTORY_SEPARATOR, '/', JPATH_ROOT), '/') . '/i', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath($path))), '/');
+            return ltrim(preg_replace('/^' . preg_quote(str_replace(DIRECTORY_SEPARATOR, '/', JPATH_ROOT), '/') . '/i', '', str_replace(DIRECTORY_SEPARATOR, '/', $path)), '/');
         }
 
         return $relative;

@@ -2,7 +2,9 @@
 
 namespace Zoolanders\Framework\Event\Item;
 
-abstract class Item extends \Zoolanders\Framework\Event\Event
+use Zoolanders\Framework\Event\HasSubjectInterface;
+
+abstract class Item extends \Zoolanders\Framework\Event\Event implements HasSubjectInterface
 {
     /**
      * @var \Item
@@ -13,7 +15,7 @@ abstract class Item extends \Zoolanders\Framework\Event\Event
      * Beforesave constructor.
      * @param \Item $item
      */
-    public function __construct (\Item $item)
+    public function __construct (\Item $item = null)
     {
         $this->item = $item;
     }

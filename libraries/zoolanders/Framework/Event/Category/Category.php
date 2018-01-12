@@ -2,7 +2,9 @@
 
 namespace Zoolanders\Framework\Event\Category;
 
-class Category extends \Zoolanders\Framework\Event\Event
+use Zoolanders\Framework\Event\HasSubjectInterface;
+
+class Category extends \Zoolanders\Framework\Event\Event implements HasSubjectInterface
 {
     /**
      * @var \Category

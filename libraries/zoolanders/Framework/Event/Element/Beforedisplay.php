@@ -2,9 +2,10 @@
 
 namespace Zoolanders\Framework\Event\Element;
 
+use Zoolanders\Framework\Event\HasSubjectInterface;
 use Zoolanders\Framework\Event\Item\Item;
 
-class Beforedisplay extends Item
+class Beforedisplay extends Item implements HasSubjectInterface
 {
 
     /**
@@ -29,7 +30,7 @@ class Beforedisplay extends Item
      * @param \Element|null $element
      * @param array $params
      */
-    public function __construct (\Item $item, &$render = true, \Element $element = null, $params = [])
+    public function __construct (\Item $item = null, &$render = true, \Element $element = null, $params = [])
     {
         parent::__construct($item);
 
