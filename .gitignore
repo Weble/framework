@@ -1,6 +1,11 @@
-/libraries/zoolanders/vendor
-/libraries/zoolanders/tests/config/configuration.php
-/dist
-/node_modules
 .idea
+.cache
+.DS_Store
 npm-debug.log
+yarn-error.log
+
+dist/
+vendor/
+node_modules/
+
+src/libraries/zoolanders/__tests__/config/configuration.php
