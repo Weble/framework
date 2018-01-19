@@ -208,6 +208,10 @@ class DoSomethingBeforeWhatever extends Listener {
 $container->event->connect('\Zoolanders\ExtensionName\ViewName\BeforeTaskName', 'DoSomethingBeforeWhatever@handle');
 ```
 
-## Composer
+## Build
 
-If the environment doesn't fullfil all the requirements use the `--ignore-platform-reqs` option.
+The build requires [Docker](https://www.docker.com/) to be set in the host mashine.
+
+```sh
+npm run build
+```
