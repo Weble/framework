@@ -6,9 +6,9 @@ import bump from './util/bump-version'
   const args = argv()
 
   await bump([
+    'pkg.xml',
     'package.json',
     'CHANGELOG.MD',
-    'build/pkg.xml',
     'src/libraries/zoolanders/lib_zoolanders.xml',
     'src/plugins/system/zlframework/zlframework.xml',
     'src/libraries/zoolanders/Framework/Element/**/*.xml'
