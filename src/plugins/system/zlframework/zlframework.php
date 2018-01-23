@@ -16,6 +16,10 @@ class plgSystemZlframework extends JPlugin
 
     function onAfterInitialise ()
     {
+        if (!$this->checkDependencies()) {
+            return;
+        }
+
         require_once JPATH_LIBRARIES . '/zoolanders/include.php';
 
         $this->container = \Zoolanders\Framework\Container\Container::getInstance();
@@ -41,6 +45,10 @@ class plgSystemZlframework extends JPlugin
      */
     public function onBeforeRender ($event = false)
     {
+        if (!$this->checkDependencies()) {
+            return;
+        }
+
         // First time it's called by the joomla dispatcher
         if (!$event) {
             // trigger a Environment/Init event
@@ -48,4 +56,18 @@ class plgSystemZlframework extends JPlugin
             $this->container->event->trigger($event);
         }
     }
+
+    function checkDependencies ()
+    {
+        if (!JFile::exists(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php')
+            || !JComponentHelper::getComponent('com_zoo', true)->enabled
+        ) {
+            return false;
+        }
+
+        if (!JFile::exists(JPATH_ROOT . '/libraries/zoolanders/include.php')) {
+            return false;
+        }
+    }
+
 }
