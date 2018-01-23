@@ -127,20 +127,6 @@ $manager = new \Zoolanders\Framework\Migration\Manager();
 $manager->run();
 ```
 
-## Devflow
-
-Dependencies must be installed with composer which will check if the PHP version satisfy the requirements during the update. As such make sure you run this command from the virtual machine.
-
-```
-composer update
-```
-
-If for some reason the autoloader needs to be re-generated:
-
-```
-composer dump-autoload
-```
-
 ## Controllers
 
 Controllers need to extend the base class `Zoolanders\Framework\Controller\Controller`.
@@ -215,3 +201,17 @@ The build requires [Docker](https://www.docker.com/) to be set in the host mashi
 ```sh
 npm run build
 ```
+
+## Devflow
+
+Dependencies must be installed with composer which will check if the PHP version satisfy the requirements during the update. As such make sure you run this command from the virtual machine.
+
+```sh
+# first of all install dependencies
+yarn vendor
+
+# then init the Docker containers
+docker-compose up
+```
+
+Note: the Docker Compose will try to load the `zoolanders` image. It must be created locally from one of the zoolanders Dockerfiles.
