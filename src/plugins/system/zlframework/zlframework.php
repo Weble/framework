@@ -68,6 +68,8 @@ class plgSystemZlframework extends JPlugin
         if (!JFile::exists(JPATH_ROOT . '/libraries/zoolanders/include.php')) {
             return false;
         }
+
+        return true;
     }
 
 }
