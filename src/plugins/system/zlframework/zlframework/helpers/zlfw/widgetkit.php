@@ -1,22 +1,22 @@
 <?php
 
 /*
-	Class: zlfwHelperZLUX
-		A class that contains ZLUX functions
+    Class: zlfwHelperZLUX
+        A class that contains ZLUX functions
 */
-
 class zlfwHelperWidgetkit extends AppHelper {
 
     /**
      * Load ZLUX Items Manager assets
      *
-     * @param    $settings    AppXmlElement    The xml settings array of widget style
+     * @param    $settings     AppXmlElement    The xml settings array of widget style
      */
-    public function fromSettingsToZLfield ($settings) {
+    public function fromSettingsToZLfield($settings)
+    {
         // convert settings to array
         $json_array = array();
         foreach ($settings as $setting) {
-            $type = (string)$setting->attributes()->type;
+            $type = (string) $setting->attributes()->type;
 
             // skip style setting
             if ($type == 'style') continue;

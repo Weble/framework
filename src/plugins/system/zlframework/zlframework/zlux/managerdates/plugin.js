@@ -1,3 +1,210 @@
+/* ===================================================
+ * ZLUX datesManager
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+;(function ($, window, document, undefined) {
+  "use strict";
+  var Plugin = function(){};
+  $.extend(Plugin.prototype, $.zlux.Manager.prototype, {
+    name: 'datesManager',
+    initialize: function(target, options) {
+      this.options = $.extend({}, this.options, options);
+      var $this = this;
+
+      // run the initial check
+      $this.initCheck();
+
+      // save target
+      $this.target = target;
+
+      // set wrapper
+      $this.date = $('<div class="zl-bootstrap zlux-datesmanager" />').appendTo(target);
+    },
+    /**
+     * Performs initial tasks
+     */
+    initCheck: function() {
+      var $this = this;
+
+      // set ID
+      $.zlux.datesManager.iNextUnique++;
+      $this.ID = $.zlux.datesManager.iNextUnique;
+    }
+  });
+  // save the plugin for global use
+  $.zlux[Plugin.prototype.name] = Plugin;
+  $.zlux[Plugin.prototype.name].iNextUnique = 0;
+})(jQuery, window, document);
 
 
-!function(t,e,i,o){"use strict";var n=function(){};t.extend(n.prototype,t.zlux.Manager.prototype,{name:"datesManager",initialize:function(e,i){this.options=t.extend({},this.options,i);var o=this;o.initCheck(),o.target=e,o.date=t('<div class="zl-bootstrap zlux-datesmanager" />').appendTo(e)},initCheck:function(){var e=this;t.zlux.datesManager.iNextUnique++,e.ID=t.zlux.datesManager.iNextUnique}}),t.zlux[n.prototype.name]=n,t.zlux[n.prototype.name].iNextUnique=0}(jQuery,window,document),function(t,e,i,o){"use strict";var n=function(e,i){var o=this,a=t(e);a.data(n.prototype.name)||(o.element=t(e),o.options=t.extend({},n.prototype.options,t.zlux.datesManager.prototype.options,i),this.events={},o.initialize(),o.element.data(n.prototype.name,o))};t.extend(n.prototype,t.zlux.datesManager.prototype,{name:"datesDialogManager",options:{title:"Dates Manager",position:{},full_mode:0,dialogClass:"",mode:"date",firstDay:0},initialize:function(){var t=this;t.initCheck(),t.element.on("click",function(){return t.zluxdialog.toggle(),!1}),t.initDialog(),t.initMainEvents()},initDialog:function(){var e=this;e.options.dialogClass="zl-bootstrap zlux-datesmanager zlux-datesmanager-"+e.options.mode+(e.options.full_mode?" zlux-dialog-full ":"")+(e.options.dialogClass?" "+e.options.dialogClass:""),t.zlux.assets.load("dialog").done(function(){e.zluxdialog=t.zlux.dialog({title:e.options.title,width:e.options.full_mode?"75%":300,dialogClass:e.options.dialogClass,scrollbar:!1,position:t.extend({of:e.element,my:"left top",at:"right bottom"},e.options.position)}).bind("InitComplete",function(){e.zluxdialog.widget.attr("id","zluxDatesManager_"+e.ID),e.eventDialogLoaded()})})},eventDialogLoaded:function(){var e=this;e.datesmanager=t('<div class="zlux-datesmanager" />').appendTo(e.zluxdialog.content),t("html").on("mousedown",function(t){!e.zluxdialog.dialog("isOpen")||e.element.is(t.target)||e.element.find(t.target).length||e.zluxdialog.widget.find(t.target).length||e.zluxdialog.widget.is(t.target)||e.zluxdialog.dialog("close")});var i={dateFormat:t.datepicker.ISO_8601,constrainInput:!1,prevText:"",nextText:"",firstDay:e.options.firstDay,onSelect:function(t){e.trigger("DateSelected",t)}};"date"===e.options.mode?e.datesmanager.datepicker(i).datepicker("show"):e.datesmanager.datetimepicker(t.extend(i,{timeFormat:t.ui.timepicker.version="hh:mm:ss",showSecond:!1,timeOnly:"time"===e.options.mode})).datetimepicker("show"),e.trigger("InitComplete")},initMainEvents:function(){var t=this;t.bind("InitComplete",function(){t.zluxdialog.initContent()})}}),t.zlux[n.prototype.name]=n}(jQuery,window,document);
+/* ===================================================
+ * ZLUX datesDialogManager
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+;(function ($, window, document, undefined) {
+  "use strict";
+  var Plugin = function(element, options) {
+    var $this    = this,
+      $element =  $(element);
+
+    if($element.data(Plugin.prototype.name)) return;
+
+    $this.element =  $(element);
+    $this.options = $.extend({}, Plugin.prototype.options, $.zlux.datesManager.prototype.options, options);
+    this.events = {};
+
+    // init the script
+    $this.initialize();
+
+    $this.element.data(Plugin.prototype.name, $this);
+  };
+  $.extend(Plugin.prototype, $.zlux.datesManager.prototype, {
+    name: 'datesDialogManager',
+    options: {
+      title: 'Dates Manager',
+      position: {}, // override the Dialog position
+      full_mode: 0,
+      dialogClass: '',
+      mode: 'date', // date, time or datetime
+      firstDay: 0 // week start day
+    },
+    initialize: function() {
+      var $this = this;
+
+      // run initial check
+      $this.initCheck();
+
+      // element example, it should be set by the caller script
+      // $('<a title="' + $this.options.title + '" class="btn btn-mini zlux-btn-edit" href="#"><i class="icon-edit"></i></a>')
+
+      // set the trigger button event
+      $this.element.on('click', function(){
+
+        // toggle the dialog
+        $this.zluxdialog.toggle();
+
+        // avoid default
+        return false;
+      });
+
+      $this.initDialog();
+      $this.initMainEvents();
+    },
+    /**
+     * Init the Dialog
+     */
+    initDialog: function() {
+      var $this = this;
+
+      // prepare the dialog class
+      $this.options.dialogClass = 'zl-bootstrap zlux-datesmanager' +
+        ' zlux-datesmanager-' + $this.options.mode +
+        ($this.options.full_mode ? ' zlux-dialog-full ' : '') +
+        ($this.options.dialogClass ? ' ' + $this.options.dialogClass : '');
+
+      // load assets
+      $.zlux.assets.load('dialog').done(function(){
+
+        // set the dialog options
+        $this.zluxdialog = $.zlux.dialog({
+          title: $this.options.title,
+          width: $this.options.full_mode ? '75%' : 300,
+          dialogClass: $this.options.dialogClass,
+          scrollbar: false,
+          position: $.extend({
+            of: $this.element,
+            my: 'left top',
+            at: 'right bottom'
+          }, $this.options.position)
+        })
+
+        .bind("InitComplete", function() {
+
+          // set the dialog unique ID
+          $this.zluxdialog.widget.attr('id', 'zluxDatesManager_' + $this.ID);
+
+          // init dialog related functions
+          $this.eventDialogLoaded();
+        });
+      });
+    },
+    /*
+     * Fires when the dialog has finished it's initial tasks
+     */
+    eventDialogLoaded: function() {
+      var $this = this;
+
+      // init dates manager
+      $this.datesmanager = $('<div class="zlux-datesmanager" />').appendTo($this.zluxdialog.content);
+
+      // set global close event
+      $('html').on('mousedown', function(event) {
+        // close if target is not the trigger or the dialog it self
+        if ($this.zluxdialog.dialog('isOpen') && !$this.element.is(event.target) && !$this.element.find(event.target).length &&
+            !$this.zluxdialog.widget.find(event.target).length && !$this.zluxdialog.widget.is(event.target)) {
+
+          $this.zluxdialog.dialog('close');
+        }
+      });
+
+      // set the settings options
+      var settings = {
+        dateFormat: $.datepicker.ISO_8601,
+        constrainInput: false,
+        prevText: '', // important as icons have been modified
+        nextText: '', // idem
+        firstDay: $this.options.firstDay,
+        onSelect: function(dateText){
+          // trigger event
+          $this.trigger("DateSelected", dateText);
+        }
+      };
+
+      // load date mode
+      if ($this.options.mode === 'date') {
+
+        // init
+        $this.datesmanager.datepicker(settings)
+
+        // show it
+        .datepicker('show');
+
+      // load time/datetime mode
+      } else {
+
+        $this.datesmanager.datetimepicker($.extend(settings, {
+          timeFormat: $.ui.timepicker.version = '1.0.1' ? 'hh:mm:ss' : 'HH:mm:ss',
+          showSecond: false,
+          timeOnly: $this.options.mode === 'time' ? true : false // will hide date if time mode
+        }))
+
+        // show it
+        .datetimepicker('show');
+      }
+
+      // trigger event
+      $this.trigger("InitComplete");
+    },
+    /**
+     * Init the Main Events
+     */
+    initMainEvents: function() {
+      var $this = this;
+
+      // on manager init
+      $this.bind("InitComplete", function() {
+
+        // show the content
+        $this.zluxdialog.initContent();
+      });
+    }
+  });
+  // Don't touch
+  $.zlux[Plugin.prototype.name] = Plugin;
+})(jQuery, window, document);

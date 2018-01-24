@@ -1,7 +1,8 @@
 <?php
 
 // prepare title
-if ($title = $field->find('specific.title')) {
+if($title = $field->find('specific.title'))
+{
     $vars = explode('||', $title);
     $text = JText::_($vars[0]);
     unset($vars[0]);
@@ -10,6 +11,6 @@ if ($title = $field->find('specific.title')) {
 }
 ?>
 
-<div class="row subsection-title" data-type="separator" data-id="<?php echo $id ?>">
+<div class="row subsection-title" data-type="separator" data-id="<?php echo $id ?>" >
     <?php echo $title ?>
 </div>

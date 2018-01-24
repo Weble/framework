@@ -19,7 +19,7 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
     /**
      * Class Constructor
      */
-    public function __construct () {
+    public function __construct() {
 
         // init vars
         $this->app = App::getInstance('zoo');
@@ -32,7 +32,7 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return boolean The success of the operation
      */
-    public function exists ($file) {
+    public function exists($file) {
         return false;
     }
 
@@ -44,7 +44,7 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return boolean The success of the operation
      */
-    public function write ($file, $content, $overwrite = true) {
+    public function write($file, $content, $overwrite = true){
         return false;
     }
 
@@ -55,30 +55,32 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return mixed The content of the file
      */
-    public function read ($file) {
+    public function read($file) {
         return false;
     }
 
     /**
      * Creates a folder
      *
-     * @param string $path The path to the new object
+      * @param string $path The path to the new object
      *
      * @return boolean The success of the operation
      */
-    public function createFolder ($path) {
+    public function createFolder($path)
+    {
         return false;
     }
 
     /**
      * Moves a file
      *
-     * @param string $src The path to the source file
+      * @param string $src The path to the source file
      * @param string $dest The path to the destination file
      *
      * @return boolean The success of the operation
      */
-    public function move ($src, $dest) {
+    public function move($src, $dest)
+    {
         return false;
     }
 
@@ -90,7 +92,8 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return boolean The success of the operation
      */
-    public function upload ($file, $dest) {
+    public function upload($file, $dest)
+    {
         return false;
     }
 
@@ -101,7 +104,8 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return boolean The success of the operation
      */
-    public function delete ($path) {
+    public function delete($path)
+    {
         return false;
     }
 
@@ -112,7 +116,8 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return boolean The success of the operation
      */
-    public function getTree ($root, $legalExt) {
+    public function getTree($root, $legalExt)
+    {
         return false;
     }
 
@@ -123,14 +128,15 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return array The object info
      */
-    public function getObjectInfo ($path) {
+    public function getObjectInfo($path)
+    {
         // make sure is file url
-        if (!preg_match('/(\.[a-zA-Z0-9]{3,4}$)/', $path)) return false;
+        if(!preg_match('/(\.[a-zA-Z0-9]{3,4}$)/', $path)) return false;
 
         $obj = array('type' => 'file');
         $obj['name'] = basename($path);
         $obj['path'] = $path;
-        $obj['ext'] = JFile::getExt($obj['name']);
+        $obj['ext']  = JFile::getExt($obj['name']);
         $obj['basename'] = basename($obj['name'], '.' . $obj['ext']);
         $obj['content_type'] = $this->app->zlfw->filesystem->getContentType($obj['name']);
         // $obj['size']['value'] = $this->app->zlfw->filesystem->getSourceSize($path, false);
@@ -146,7 +152,8 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return array The resources
      */
-    public function getValidResources ($path, $legalExt) {
+    public function getValidResources($path, $legalExt)
+    {
         $resources = array();
         $resources[] = $path;
 
@@ -160,7 +167,8 @@ class ZLStorageAdapterURI extends ZLStorageAdapterBase implements ZLStorageAdapt
      *
      * @return string The absolute url
      */
-    public function getAbsoluteURL ($path) {
+    public function getAbsoluteURL($path)
+    {
         return $path;
     }
 }

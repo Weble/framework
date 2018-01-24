@@ -20,7 +20,7 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
     /**
      * Class Constructor
      */
-    public function __construct () {
+    public function __construct() {
 
         // init vars
         $this->app = App::getInstance('zoo');
@@ -33,7 +33,7 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return boolean The success of the operation
      */
-    public function exists ($path) {
+    public function exists($path) {
         return is_readable($this->app->path->path("root:$path"));
     }
 
@@ -45,7 +45,7 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return boolean The success of the operation
      */
-    public function write ($file, $content, $overwrite = true) {
+    public function write($file, $content, $overwrite = true){
         return JFile::write($this->app->path->path("root:$file"), $content);
     }
 
@@ -56,18 +56,19 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return mixed The content of the file
      */
-    public function read ($file) {
+    public function read($file) {
         return JFile::read($this->app->path->path($file));
     }
 
     /**
      * Creates a folder
      *
-     * @param string $path The path to the new object
+      * @param string $path The path to the new object
      *
      * @return boolean The success of the operation
      */
-    public function createFolder ($path) {
+    public function createFolder($path)
+    {
         $result = false;
         $path = $this->app->path->path('root:') . '/' . $path;
 
@@ -92,19 +93,20 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
     /**
      * Moves a file
      *
-     * @param string $src The path to the source file
+      * @param string $src The path to the source file
      * @param string $dest The path to the destination file
      *
      * @return boolean The success of the operation
      */
-    public function move ($src, $dest) {
+    public function move($src, $dest)
+    {
         $result = false;
         $_src = $this->app->path->path('root:' . $src);
-        $targetDir = dirname($dest);
+        $targetDir  = dirname($dest);
 
         // Make sure the dest folder exists
         if (!$this->exists($targetDir)) {
-            if (!$this->createFolder($targetDir)) {
+            if(!$this->createFolder($targetDir)) {
                 // if fails abort and report
                 $this->setError(JText::_('PLG_ZLFRAMEWORK_STRG_ERR_SOMETHING_WENT_WRONG'));
                 return false;
@@ -120,7 +122,7 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
             //if the item directory exists
             if ($this->exists($dest)) {
                 $result = JFolder::copy($src, $dest, $this->app->path->path('root:'), true);
-                $result = $result ? JFolder::delete(JPATH_SITE . '/' . $src) : $result;
+                $result = $result ? JFolder::delete(JPATH_SITE.'/'.$src) : $result;
             } else {
                 $result = JFolder::move($src, $dest, $this->app->path->path('root:'));
             }
@@ -146,12 +148,13 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return boolean The success of the operation
      */
-    public function upload ($file, $dest) {
+    public function upload($file, $dest)
+    {
         // init vars
-        $result = false;
-        $basename = basename($file, '.' . JFile::getExt($file));
-        $ext = strtolower(JFile::getExt($file));
-        $targetDir = dirname($dest);
+        $result     = false;
+        $basename     = basename($file, '.' . JFile::getExt($file));
+        $ext         = strtolower(JFile::getExt($file));
+        $targetDir  = dirname($dest);
 
         // construct filename
         $fileName = "{$basename}.{$ext}";
@@ -193,7 +196,8 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return boolean The success of the operation
      */
-    public function delete ($path) {
+    public function delete($path)
+    {
         $result = false;
         $fullpath = $this->app->path->path("root:$path");
 
@@ -223,7 +227,8 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return boolean The success of the operation
      */
-    public function getTree ($root, $legalExt) {
+    public function getTree($root, $legalExt)
+    {
         // init vars
         $rows = array();
 
@@ -233,8 +238,8 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
         }
 
         // files
-        foreach ($this->app->path->files("root:$root", false, '/^.*(' . $legalExt . ')$/i') as $file) {
-            $obj = $this->getObjectInfo($root . '/' . $file);
+        foreach ($this->app->path->files("root:$root", false, '/^.*('.$legalExt.')$/i') as $file) {
+            $obj  = $this->getObjectInfo($root . '/' . $file);
             // prevent empty output in files dialog if file name could not be converted to json
             if (json_encode($obj['name'])) {
                 $rows[] = $obj;
@@ -252,7 +257,8 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return array The object info
      */
-    public function getObjectInfo ($path) {
+    public function getObjectInfo($path)
+    {
         $result = false;
         $obj = null;
         $fullpath = $this->app->path->path("root:$path");
@@ -261,13 +267,13 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
             $this->setError(JText::_('PLG_ZLFRAMEWORK_STRG_ERR_OBJECT_ACCESS_DENIED'));
             return $result;
 
-            // if file
+        // if file
         } else if (is_file($fullpath)) {
 
             $obj = array('type' => 'file');
             $obj['name'] = basename($path);
             // $obj['path'] = $path;
-            $obj['ext'] = JFile::getExt($obj['name']);
+            $obj['ext']  = JFile::getExt($obj['name']);
             $obj['basename'] = basename($obj['name'], '.' . $obj['ext']);
             $obj['content_type'] = $this->app->zlfw->filesystem->getContentType($obj['name']);
             $obj['size']['value'] = $this->app->zlfw->filesystem->getSourceSize($path, false);
@@ -275,17 +281,16 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
 
             // if image
             if (strpos($obj['content_type'], 'image/') !== false
-                && $obj['size']['value'] != 0
-            ) {
+                    && $obj['size']['value'] != 0) {
                 $imageinfo = getimagesize($fullpath);
-                $obj['resolution'] = $imageinfo[0] . 'x' . $imageinfo[1] . 'px';
+                $obj['resolution'] = $imageinfo[0].'x'.$imageinfo[1].'px';
             }
 
             // all ok
             $result = true;
 
-            // if folder
-        } else if (is_dir($fullpath)) {
+        // if folder
+        } else if (is_dir($fullpath)){
 
             $obj = array('type' => 'folder');
             $obj['name'] = basename($path);
@@ -317,7 +322,8 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return array The resources
      */
-    public function getValidResources ($path, $legalExt) {
+    public function getValidResources($path, $legalExt)
+    {
         // basic check
         if (empty($path)) return false;
 
@@ -330,7 +336,7 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
             $this->setError(JText::_('PLG_ZLFRAMEWORK_STRG_ERR_OBJECT_ACCESS_DENIED'));
             return $result;
 
-            // if file
+        // if file
         } else if (is_file($fullpath)) {
 
             $resources[] = $path;
@@ -338,11 +344,11 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
             // all ok
             $result = true;
 
-            // if folder
-        } else if (is_dir($fullpath)) {
+        // if folder
+        } else if (is_dir($fullpath)){
 
             // retrieve all valid files
-            foreach ($this->app->path->files("root:$path", false, '/^.*(' . $legalExt . ')$/i') as $filename) {
+            foreach ($this->app->path->files("root:$path", false, '/^.*('.$legalExt.')$/i') as $filename) {
                 $filepath = "$fullpath/$filename";
                 if (is_readable($filepath) && is_file($filepath)) {
                     $resources[] = "$path/$filename"; // add relative path
@@ -370,7 +376,8 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return string The absolute url
      */
-    public function getAbsoluteURL ($path) {
+    public function getAbsoluteURL($path)
+    {
         $this->app->path->url("root:$path");
     }
 
@@ -382,7 +389,8 @@ class ZLStorageAdapterLocal extends ZLStorageAdapterBase implements ZLStorageAda
      *
      * @return boolean The success of the operation
      */
-    public function getDirectorySize ($root, $recursive = true) {
+    public function getDirectorySize($root, $recursive = true)
+    {
         // get size of root
         $total_size = $this->app->zlfw->filesystem->getSourceSize($root, false);
 

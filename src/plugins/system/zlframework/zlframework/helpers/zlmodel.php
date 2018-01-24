@@ -1,10 +1,9 @@
 <?php
 
 /*
-	Class: ModelHelper
-		Helper for models
+    Class: ModelHelper
+        Helper for models
 */
-
 class ZlModelHelper extends AppHelper {
 
     /* prefix */
@@ -17,7 +16,7 @@ class ZlModelHelper extends AppHelper {
         Function: __construct
             Class Constructor.
     */
-    public function __construct ($app) {
+    public function __construct($app) {
         parent::__construct($app);
 
         // set table prefix
@@ -35,7 +34,7 @@ class ZlModelHelper extends AppHelper {
         Returns:
             Mixed
     */
-    public function get ($name, $prefix = null) {
+    public function get($name, $prefix = null) {
 
         // set prefix
         if ($prefix == null) {
@@ -45,7 +44,7 @@ class ZlModelHelper extends AppHelper {
         // load class
         $class = $prefix . $name;
 
-        $this->app->loader->register($class, 'models:' . strtolower($name) . '.php');
+        $this->app->loader->register($class, 'models:'.strtolower($name).'.php');
 
         // add model, if not exists
         if (!isset($this->_models[$name])) {
@@ -66,17 +65,22 @@ class ZlModelHelper extends AppHelper {
         Returns:
             Mixed
     */
-    public function getNew ($name, $prefix = null) {
+    public function getNew($name, $prefix = null)
+    {
         // set prefix
         if ($prefix == null) {
             $prefix = $this->_prefix;
         }
 
         // register class
-        $class = $prefix . $name;
-        $this->app->loader->register($class, 'models:' . strtolower($name) . '.php');
+        $class = $prefix.$name;
+        $this->app->loader->register($class, 'models:'.strtolower($name).'.php');
 
-        return ZLModel::getInstance($name, $prefix);
+        $model = ZLModel::getInstance($name, $prefix);
+        if (!isset($this->_models[$name])) {
+            $this->_models[$name] = $model;
+        }
+        return $model;
     }
 
     /*
@@ -89,7 +93,7 @@ class ZlModelHelper extends AppHelper {
         Returns:
             Mixed
     */
-    public function __get ($name) {
+    public function __get($name) {
         return $this->get($name);
     }
 

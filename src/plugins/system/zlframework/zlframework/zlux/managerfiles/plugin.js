@@ -1,3 +1,2246 @@
+/* ===================================================
+ * ZLUX filesManager
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+;(function ($, window, document, undefined) {
+  "use strict";
+  var Plugin = function(){};
+  $.extend(Plugin.prototype, $.zlux.Manager.prototype, {
+    name: 'filesManager',
+    options: {
+      root: 'images', // relative path to the root
+      extensions: '', // Array or comma separated values
+      storage: 'local',
+      storage_params: {},
+      max_file_size: '',
+      resize: {}
+    },
+    initialize: function(target, options) {
+      this.options = $.extend({}, this.options, options);
+      var $this = this;
+
+      // http://srobbin.com/jquery-plugins/approach/
+      // if placeholder set the trigger button
+      // $('<a class="btn btn-mini" href="#"><i class="icon-plus-sign"></i>Add Item</a>')
+
+      // run the initial check
+      $this.initCheck();
+
+      // save target
+      $this.target = target;
+
+      // init filesmanager
+      $this.filesmanager = $('<div class="zl-bootstrap zlux-filesmanager" />').appendTo(target);
+      $this.initDataTable($this.filesmanager);
+    },
+    /**
+     * Performs initial tasks
+     */
+    initCheck: function() {
+      var $this = this;
+
+      // set ID
+      $.zlux.filesManager.iNextUnique++;
+      $this.ID = $.zlux.filesManager.iNextUnique;
+
+      // save the instance reference
+      $.zlux.filesManager.instances[$this.ID] = $this;
+
+      // Convert settings
+      $this.options.max_file_size = $this.parseSize($this.options.max_file_size);
+      $this.options.extensions = $this.options.extensions.replace(/\|/g, ',');
+
+      // check storage param
+      if ($this.options.storage === '' || $this.options.storage === undefined || $this.options.storage === null) {
+        $this._ErrorLog(0, $this._('STORAGE_PARAM_MISSING'));
+        $this.options.storage = 'local';
+      }
+
+      // save the start root
+      $this.sStartRoot = $this.cleanPath($this.options.root);
+
+      // and the current path
+      $this.sCurrentPath = $this.sStartRoot;
+    },
+    initDataTable: function(wrapper) {
+      var $this = this;
+
+      // load asset
+      $.zlux.assets.load($.zlux.url.zlfw('zlux/assets/datatables/dataTables.with.plugins.min.js'), function(){
+        $this._initDataTable(wrapper);
+      });
+    },
+    _initDataTable: function(wrapper) {
+      var $this = this;
+
+      // set table
+      $('<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" />')
+      .appendTo(wrapper);
+
+      // init dataTable
+      $this.oTable = $('table', wrapper).dataTable({
+        "sDom": "F<'row-fluid'<'span12't>>",
+        "oLanguage": {
+          "sEmptyTable": $this._('EMPTY_FOLDER'),
+          "sInfoEmpty": ""
+        },
+        "sAjaxUrl": $.zlux.url.ajax('zlux'),
+        "sAjaxSource": $.zlux.url.ajax('zlux', 'getManagerFilesData'),
+        "sServerMethod": "POST",
+        "bPaginate": false,
+        "aoColumns": [
+          {
+            "sTitle": "", "mData": "type", "bSearchable": false, "sWidth": "14px", "sClass": "column-icon",
+            "mRender": function ( data, type ) {
+              if (type === 'display') {
+                return '<i class="icon-' + (data === 'folder' ? 'folder-close' : 'file-alt') + '"></i>';
+              } else {
+                return data;
+              }
+            }
+          },
+          {
+            "sTitle": $this._('NAME'), "mData": "name", "sClass": "column-name",
+            "mRender": function ( data, type ) {
+              return type === 'display' ? '' : data;
+            },
+            "fnCreatedCell": function (nTd, sData, oData) {
+              // store path in data
+              $(nTd).parent('tr').attr('data-id', $this.cleanPath( oData.name ));
+            }
+          }
+        ],
+        "aoColumnDefs": {
+          "bVisible": false, "aTargets": [ 2 ]
+        },
+        "aaSorting": [ [0,'desc'], [1,'asc'] ], // init sort
+        "fnServerData": function ( sUrl, aoData, fnCallback, oSettings ) {
+          $this._fnServerData(sUrl, aoData, fnCallback, oSettings);
+        },
+        "fnServerParams": function (aoData) {
+          aoData.push({ "name": "extensions", "value": $this.options.extensions });
+
+          // if S3 storage
+          if($this.options.storage === 's3') {
+            aoData.push({ "name": "storage", "value": "s3" });
+            aoData.push({ "name": "accesskey", "value": $this.options.storage_params.accesskey });
+            aoData.push({ "name": "key", "value": $this.options.storage_params.secretkey });
+            aoData.push({ "name": "bucket", "value": $this.options.storage_params.bucket });
+          }
+        },
+        "fnRowCallback": function(nRow, aData) {
+          var $object = aData;
+
+          // save object dom
+          $object.dom = $(nRow);
+
+          // set object dom properties
+          $object.dom.attr('data-type', aData.type).addClass('zlux-object');
+
+          // reset and append the object data
+          $('.column-name', $object.dom).html('').removeClass('zlux-ui-open').append(
+            // render the object content
+            $this.renderObjectDOM($object)
+          );
+
+          // append the object edit feature to the name
+          $('.zlux-x-name', $object.dom).append(
+            '<i class="zlux-x-name-edit icon-edit-sign" title="' + $this._('RENAME') + '" />'
+          );
+        },
+        "fnInitComplete": function() {
+          var input_filter = $('.zlux-x-filter-input_wrapper', wrapper)
+
+          .append(
+            // set search icon
+            $('<i class="icon-search" />'),
+            // and the cancel button
+            $('<i class="icon-remove zlux-ui-dropdown-unselect" />').hide().on('click', function(){
+              $('input', input_filter).val('');
+              $(this).hide();
+              // reset the filter
+              $this.oTable.fnFilter('');
+            })
+          );
+
+          // set search events
+          $('input', input_filter).on('keyup', function(){
+            if ($(this).val() === '') {
+              $('.zlux-ui-dropdown-unselect', input_filter).hide();
+            } else {
+              $('.zlux-ui-dropdown-unselect', input_filter).show();
+            }
+          });
+
+          // trigger table init event 50ms after as a workaround if the first ajax call is canceled
+          setTimeout(function() {
+            $this.trigger("InitComplete");
+          }, 50);
+        },
+        "fnPreDrawCallback": function() {
+          // show processing
+          $this.zluxdialog.spinner('show');
+        },
+        "fnDrawCallback": function(oSettings) {
+          // pagination hide/show
+          var oPaging = oSettings.oInstance.fnPagingInfo(),
+            pagination = $('.dataTables_paginate', $(oSettings.nTableWrapper)).closest('.row-fluid');
+
+          if (oPaging.iTotalPages <= 1) pagination.hide(); else pagination.show();
+
+          // trigger event
+          $this.trigger("DrawCallback");
+
+          // update dialog scrollbar
+          $this.zluxdialog.scrollbar('refresh');
+
+          // hide spinner
+          $this.zluxdialog.spinner('hide');
+        }
+      })
+
+      // Trigger Object Selected event
+      .on('click', '.zlux-object .zlux-x-name a', function(){
+        var object_dom = $(this).closest('tr.zlux-object'),
+          $object = $this.oTable.fnGetData( object_dom[0] );
+
+        // set the zlux object
+        $object.dom = object_dom;
+
+        if ($object.dom.attr('data-zlux-object-status') !== 'true') {
+          $object.dom.attr('data-zlux-object-status', 'true');
+
+          // remove selected status from siblings
+          $object.dom.siblings().removeAttr('data-zlux-object-status');
+
+          // trigger event
+          $this.trigger("ObjectSelected", $object);
+
+          // if folder
+          if ($object.dom.data('type') === 'folder') {
+            $this.oTable.fnSettings();
+
+            // update go to path
+            $this.sGoToPath = $object.dom.data('id');
+
+            // reload with new path
+            $this.oTable.fnReloadAjax();
+          }
+        }
+
+        // prevent default
+        return false;
+      })
+
+      // Trigger Object Removed event
+      .on('click', '.zlux-object .zlux-x-remove', function(){
+        var object_dom = $(this).closest('tr.zlux-object'),
+          TD = $('td', object_dom),
+          $object = $this.oTable.fnGetData( object_dom[0] );
+
+        // set the zlux object
+        $object.dom = object_dom;
+
+        // if open, the remove action will delete the file, with confirmation
+        if (TD.hasClass('zlux-ui-open')) {
+          $this.trigger("BeforeDeleteFile", $object);
+        }
+
+        // prevent default
+        return false;
+      });
+    },
+    _fnServerData: function( sUrl, aoData, fnCallback, oSettings ) {
+      var $this = this,
+        root;
+
+      /* the Cache Data is stored in the main plugin so it can be shared by all instances */
+
+      // set the root
+      root = $this.cleanPath($this.sCurrentPath + '/' + $this.sGoToPath);
+
+      // reset vars
+      $this.sGoToPath = '';
+
+      // send root with post data
+      aoData.push({ "name": "root", "value": root });
+
+      // ajax
+      oSettings.jqXHR = $.ajax({
+        "url": sUrl,
+        "data": aoData,
+        "beforeSend": function(){
+          // check if the data is cached
+          var cached = false;
+
+          // if not reloading
+          if (!$this.bReloading || $this.bRedrawing){
+
+            // check if already cached
+            var json = $.zlux.filesManager.aAjaxDataCache[root];
+            if (json) {
+
+              // if first time, save real root path, as it can be changed for security reasons by the server
+              if (!$this.bCacheInited) $this.sStartRoot = json.root;
+
+              // save root
+              $this.sCurrentPath = root;
+
+              // set cache status
+              $this.bCacheInited = true;
+
+              // emulate the xhr events
+              $(oSettings.oInstance).trigger('xhr', [oSettings, json]);
+              fnCallback( json );
+
+              // avoid ajax call
+              cached = true;
+            }
+
+            // if redrawing
+            if ($this.bRedrawing) {
+              // reset the param
+              $this.bRedrawing = false;
+
+              // save root
+              $this.sCurrentPath = root;
+
+              // avoid the ajax call
+              return false;
+            }
+          }
+
+          // if cached abort ajax
+          if (cached) return false;
+
+          // else, the ajax proceeds, show the spinner
+          $this.zluxdialog.spinner('show');
+        },
+        "dataType": "json",
+        "cache": false,
+        "type": oSettings.sServerMethod,
+        "error": function (xhr, error) {
+          if ( error === "parsererror" ) {
+            oSettings.oApi._fnLog( oSettings, 0, "DataTables warning: JSON data from "+
+              "server could not be parsed. This is caused by a JSON formatting error." );
+          }
+        }
+      })
+
+      .done(function ( json ) {
+        // manage possible errors
+        if (json.errors.length) {
+          oSettings.oApi._fnLog( oSettings, 0, json.errors );
+        }
+
+        // set json
+        json = json.result;
+
+        // if first time, save real root path, as it can be changed for security reasons by the server
+        if (!$this.bCacheInited) $this.sStartRoot = json.root;
+
+        // save new path
+        $this.sCurrentPath = json.root;
+
+        // empty cache if reloading, so the content is retrieved again
+        if ($this.bReloading) $.zlux.filesManager.aAjaxDataCache = {};
+
+        // cache the data
+        $.zlux.filesManager.aAjaxDataCache[json.root] = json;
+
+        // redraw the other instances
+        $this.redrawInstances();
+
+        // set reloading to false
+        $this.bReloading = false;
+
+        // set cache status
+        $this.bCacheInited = true;
+
+        // trigger events
+        $(oSettings.oInstance).trigger('xhr', [oSettings, json]);
+        fnCallback( json );
+      });
+    },
+    /**
+     * Reload the data
+     */
+    reload: function() {
+      var $this = this;
+
+      // set vars
+      $this.bReloading = true;
+
+      // reload
+      $this.oTable.fnReloadAjax();
+    },
+    /**
+     * Redraw all other instances
+     */
+    redrawInstances: function() {
+      var $this = this;
+
+      // redraw instances
+      $.each($.zlux.filesManager.instances, function(index, instance){
+
+        // skip current instance
+        if (parseInt(index) === $this.ID) return true;
+
+        // if table inited
+        if (instance.oTable) {
+
+          // redraw
+          instance.bRedrawing = true;
+          instance.oTable.fnReloadAjax();
+        }
+      });
+    },
+    /**
+     * Init breadcrumb
+     */
+    initBreadcrumb: function() {
+      var $this = this;
+
+      // set the breadcrumb wrapper
+      $this.breadcrumb = $('<ul class="breadcrumb" />').prependTo($this.filesmanager)
+
+      // wrap it
+      .wrap('<div class="row-fluid"><div class="span12" /></div>')
+
+      // assign events
+      .on('click', 'a', function(){
+        // set path values for correct routing
+        $this.sCurrentPath = $this.sStartRoot;
+        $this.sGoToPath = $(this).data('path');
+
+        // reload
+        $this.oTable.fnReloadAjax();
+        return false;
+      });
+
+      // set event
+      $this.bind("DrawCallback initBreadcrumb", function() {
+        var path = $this.sCurrentPath ? $this.sCurrentPath : '', // current browsed path
+          brcb = [],
+          paths,
+          txtROOT = $this._('ROOT').toLowerCase();
+
+        // remove the root, is confidential data
+        path = path.replace(new RegExp('^' + $this.sStartRoot), '');
+
+        // clean the path
+        path = path.replace(/(^\/|\/$)/, '');
+
+        // split the path in folders
+        paths = path.length ? path.split('/') : [];
+
+        // if active path is the root
+        if (!paths.length) brcb.push('<li class="active">' + txtROOT + '</li>');
+
+        // if not
+        else brcb.push('<li><a href="#" data-path="">' + txtROOT + '</a><span class="divider">/</span></li>');
+
+        // populate with the other paths
+        path = [];
+        $.each(paths, function(i, v){
+          path.push(v);
+          if (paths.length === i+1 ) {
+            brcb.push('<li class="active">' + v.toLowerCase() + '</li>');
+          } else {
+            brcb.push('<li><a href="#" data-path="' + path.join('/') + '">' + v.toLowerCase() + '</a><span class="divider">/</span></li>');
+          }
+        });
+
+        // update breadcrumb
+        $this.breadcrumb.html(brcb.join(''));
+      })
+
+      // first init
+      .trigger("initBreadcrumb");
+    },
+    /**
+     * Render the Object content
+     */
+    renderObjectDOM: function($object) {
+      var $this = this,
+        aDetails;
+
+      // set the details
+      if ($object.type === 'folder') {
+
+        aDetails = [
+          {name: $this._('NAME'), value: $object.basename}
+        ];
+
+      } else { // file
+
+        aDetails = [
+          {name: $this._('NAME'), value: $object.basename},
+          {name: $this._('TYPE'), value: $object.content_type},
+          {name: $this._('SIZE'), value: $object.size.display}
+        ];
+      }
+
+      // prepare the details
+      var sDetails = '';
+      $.each(aDetails, function(i, detail){
+        sDetails += '<li><strong>' + detail.name + '</strong>: <span>' + detail.value + '</span></li>';
+      });
+
+      // set entry details
+      var content = $(
+        // btns
+        '<div class="zlux-x-tools">' +
+          '<i class="zlux-x-details-btn icon-angle-down" />' +
+          '<i class="zlux-x-remove icon-minus-sign" title="' + $this._('DELETE') + '" />' +
+        '</div>' +
+
+        // name
+        '<div class="zlux-x-name"><a href="#" class="zlux-x-name-link">' + $object.name + '</a></div>' +
+
+        // details
+        '<div class="zlux-x-details">' +
+          '<div class="zlux-x-messages" />' +
+          '<div class="zlux-x-details-content">' +
+            '<ul class="unstyled">' + sDetails + '</ul>' +
+          '</div>' +
+        '</div>'
+      );
+
+      return content;
+    },
+    /**
+     * Delete the object from the server
+     */
+    deleteObject: function($object) {
+      var $this = this,
+        aoData = [],
+
+      // save object path
+      path = $this.getFullPath($object.name);
+
+      // push the storage related data
+      aoData = $this.pushStorageData(aoData);
+
+      // if S3 storage
+      if($this.options.storage === 's3') {
+
+        // add a slash if folder
+        if($object.type === 'folder') {
+          path = path + '/';
+        }
+      }
+
+      // set path
+      aoData.push({ "name": "path", "value": path });
+
+      // make the request and return a promise
+      return $.Deferred(function( defer )
+      {
+        $.ajax({
+          "url": $.zlux.url.ajax('zlux', 'deleteObject'),
+          "data": aoData,
+          "dataType": "json",
+          "type": "post"
+        })
+
+        .done(function(json) {
+          if (json.result) {
+
+            defer.resolve();
+
+            // trigger event
+            $this.trigger("FileDeleted", path);
+
+          } else {
+            // failed with reported error
+            defer.reject(json.errors);
+          }
+        })
+
+        .fail(function(){
+          // some unreported error
+          defer.reject($this._('SOMETHING_WENT_WRONG'));
+        });
+
+      }).promise();
+    },
+    /**
+     * Change the server Object name
+     */
+    createFolder: function(name) {
+      var $this = this,
+        aoData = [],
+
+      // save folder path
+      path = $this.getFullPath(name);
+
+      // push the storage related data
+      aoData = $this.pushStorageData(aoData);
+
+      // if S3 storage
+      if($this.options.storage === 's3') {
+        // add a slash, needed for folders
+        path = path + '/';
+      }
+
+      // set paths
+      aoData.push({ "name": "path", "value": path });
+
+      // make the request and return a promise
+      return $.Deferred(function( defer )
+      {
+        $.ajax({
+          "url": $.zlux.url.ajax('zlux', 'newFolder'),
+          "data": aoData,
+          "dataType": "json",
+          "type": "post"
+        })
+
+        .done(function(json) {
+          if (json.result) {
+
+            defer.resolve(json.name);
+          } else {
+            // failed with reported error
+            defer.reject(json.errors);
+          }
+        })
+
+        .fail(function(){
+          // some unreported error
+          defer.reject($this._('SOMETHING_WENT_WRONG'));
+        });
+
+      }).promise();
+    },
+    /**
+     * Perform the actions related to rename the Object
+     */
+    renameObject: function($object) {
+      var $this = this,
+        name = $('.zlux-x-name a', $object.dom),
+        ext = name.html().match(/\.+[a-zA-Z]+$/g),
+        raw_name = name.html().replace(/\.+[a-zA-Z]+$/g, '');
+
+      // if is folder ignore the extension
+      ext = ext !== null ? ext : '';
+
+      // prepare and display the confirm message
+      var msg = $('<div>' + $this._('INPUT_THE_NEW_NAME') + '<br /><input class="zlux-x-input" type="text" value="' + raw_name + '" /> ' + ext + '<br /><span class="label label-success label-link">' + $this._('CONFIRM').toLowerCase() + '</span></div>')
+
+      // confirm action
+      .on('click', '.label-link', function(){
+        // only allowed to be submited once
+        if ($(this).data('submited')) return; $(this).data('submited', true);
+
+        // set spinner
+        $('.column-icon i', $object.dom).addClass('icon-spinner icon-spin');
+
+        // change the object name
+        $this._changeObjectName($object, $('input', msg).val() + ext)
+
+        // if succesfull
+        .done(function(new_name)
+        {
+          // update the dom name
+          name.html(new_name);
+          // in details also
+          $('.zlux-x-details-content ul li:first span', $object.dom).html(new_name);
+
+          // and path data
+          $object.dom.attr('data-id', new_name);
+
+          // update the object data, and as it's a reference to DataTables data it will be also updated :)
+          $object.name = new_name;
+          $object.basename = new_name.replace(/\.+[a-zA-Z]+$/g, '');
+          if ($object.path !== undefined) {
+            $object.path = $object.path.replace(/(\w|[-.])+$/, new_name);
+          }
+
+          // update the cache
+          $.zlux.filesManager.aAjaxDataCache[$this.sCurrentPath].aaData = $this.oTable.fnGetData();
+
+          // redraw the other instances
+          $this.redrawInstances();
+
+          // remove selected status as the object has changed
+          $object.dom.removeAttr('data-zlux-object-status');
+
+          // remove msg
+          $('.zlux-x-msg', $object.dom).remove();
+        })
+
+        // if fails
+        .fail(function(message) {
+          $this.pushMessageToObject($object, message);
+        })
+
+        // on result
+        .always(function() {
+          // remove spinner
+          $('.column-icon i', $object.dom).removeClass('icon-spinner icon-spin');
+        });
+      })
+
+      .on('keypress', 'input', function(e){
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code === 13) {
+          // Enter key was pressed, emulate click event
+          $('.label-link', msg).trigger('click');
+        }
+      });
+
+      $this.pushMessageToObject($object, msg);
+    },
+    /**
+     * Requests the Object name change
+     */
+    _changeObjectName: function($object, name) {
+      var $this = this,
+        aoData = [],
+        src = $this.getFullPath($object.name),
+        dest = $this.getFullPath(name);
+
+      // push the storage related data
+      aoData = $this.pushStorageData(aoData);
+
+      // if S3 storage
+      if($this.options.storage === 's3') {
+
+        // add a slash if folder
+        if($object.type === 'folder') {
+          src = src + '/';
+          dest = dest + '/';
+        }
+      }
+
+      // set paths
+      aoData.push({ "name": "src", "value": src });
+      aoData.push({ "name": "dest", "value": dest });
+
+      // make the request and return a promise
+      return $.Deferred(function( defer )
+      {
+        $.ajax({
+          "url": $.zlux.url.ajax('zlux', 'moveObject'),
+          "data": aoData,
+          "dataType": "json",
+          "type": "post"
+        })
+
+        .done(function(json) {
+          if (json.result) {
+
+            defer.resolve(json.name);
+          } else {
+            // failed with reported error
+            defer.reject(json.errors);
+          }
+        })
+
+        .fail(function(){
+          // some unreported error
+          defer.reject($this._('SOMETHING_WENT_WRONG'));
+        });
+
+      }).promise();
+    },
+    /**
+     * Returns the full path prepended to the passed relative path
+     */
+    getFullPath: function(path) {
+      var cp = this.sCurrentPath;
+      return cp ? cp + '/' + path : path;
+    },
+    /**
+     * Returns the oTable row related to the provided path
+     */
+    _getRowFromPath: function(path) {
+      var $this = this;
+      return $('tr[data-path="' + path + '"]', $this.oTable);
+    },
+    /**
+      Parses the specified size string into a byte value. For example 10kb becomes 10240.
+
+      @method parseSize
+      @static
+      @param {String/Number} size String to parse or number to just pass through.
+      @return {Number} Size in bytes.
+    */
+    parseSize: function(size) {
+      if (typeof(size) !== 'string' || size === '') return size;
+
+      var muls = {
+          t: 1099511627776,
+          g: 1073741824,
+          m: 1048576,
+          k: 1024
+        },
+        mul;
+
+      size = /^([0-9]+)([mgk]?)$/.exec(size.toLowerCase().replace(/[^0-9mkg]/g, ''));
+      mul = size[2];
+      size = +size[1];
+
+      if (muls.hasOwnProperty(mul)) {
+        size *= muls[mul];
+      }
+      return size;
+    },
+    /**
+     * Push the necesary storage DATA
+     */
+    pushStorageData: function(aoData) {
+      var $this = this;
+
+      // if S3 storage
+      if($this.options.storage === 's3') {
+        aoData.push({ "name": "storage", "value": "s3" });
+        aoData.push({ "name": "accesskey", "value": $this.options.storage_params.accesskey });
+        aoData.push({ "name": "key", "value": $this.options.storage_params.secretkey });
+        aoData.push({ "name": "bucket", "value": $this.options.storage_params.bucket });
+      }
+
+      return aoData;
+    }
+  });
+  // save the plugin for global use
+  $.zlux[Plugin.prototype.name] = Plugin;
+  $.zlux[Plugin.prototype.name].iNextUnique = 0;
+  $.zlux[Plugin.prototype.name].aAjaxDataCache = {};
+  $.zlux[Plugin.prototype.name].instances = {};
+})(jQuery, window, document);
 
 
-!function(e,a,t,o){"use strict";var l=function(){};e.extend(l.prototype,e.zlux.Manager.prototype,{name:"filesManager",options:{root:"images",extensions:"",storage:"local",storage_params:{},max_file_size:"",resize:{}},initialize:function(a,t){this.options=e.extend({},this.options,t);var o=this;o.initCheck(),o.target=a,o.filesmanager=e('<div class="zl-bootstrap zlux-filesmanager" />').appendTo(a),o.initDataTable(o.filesmanager)},initCheck:function(){var a=this;e.zlux.filesManager.iNextUnique++,a.ID=e.zlux.filesManager.iNextUnique,e.zlux.filesManager.instances[a.ID]=a,a.options.max_file_size=a.parseSize(a.options.max_file_size),a.options.extensions=a.options.extensions.replace(/\|/g,","),""!==a.options.storage&&a.options.storage!==o&&null!==a.options.storage||(a._ErrorLog(0,a._("STORAGE_PARAM_MISSING")),a.options.storage="local"),a.sStartRoot=a.cleanPath(a.options.root),a.sCurrentPath=a.sStartRoot},initDataTable:function(a){var t=this;e.zlux.assets.load(e.zlux.url.zlfw("zlux/assets/datatables/dataTables.with.plugins.min.js"),function(){t._initDataTable(a)})},_initDataTable:function(a){var t=this;e('<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" />').appendTo(a),t.oTable=e("table",a).dataTable({sDom:"F<'row-fluid'<'span12't>>",oLanguage:{sEmptyTable:t._("EMPTY_FOLDER"),sInfoEmpty:""},sAjaxUrl:e.zlux.url.ajax("zlux"),sAjaxSource:e.zlux.url.ajax("zlux","getManagerFilesData"),sServerMethod:"POST",bPaginate:!1,aoColumns:[{sTitle:"",mData:"type",bSearchable:!1,sWidth:"14px",sClass:"column-icon",mRender:function(e,a){return"display"===a?'<i class="icon-'+("folder"===e?"folder-close":"file-alt")+'"></i>':e}},{sTitle:t._("NAME"),mData:"name",sClass:"column-name",mRender:function(e,a){return"display"===a?"":e},fnCreatedCell:function(a,o,l){e(a).parent("tr").attr("data-id",t.cleanPath(l.name))}}],aoColumnDefs:{bVisible:!1,aTargets:[2]},aaSorting:[[0,"desc"],[1,"asc"]],fnServerData:function(e,a,o,l){t._fnServerData(e,a,o,l)},fnServerParams:function(e){e.push({name:"extensions",value:t.options.extensions}),"s3"===t.options.storage&&(e.push({name:"storage",value:"s3"}),e.push({name:"accesskey",value:t.options.storage_params.accesskey}),e.push({name:"key",value:t.options.storage_params.secretkey}),e.push({name:"bucket",value:t.options.storage_params.bucket}))},fnRowCallback:function(a,o){var l=o;l.dom=e(a),l.dom.attr("data-type",o.type).addClass("zlux-object"),e(".column-name",l.dom).html("").removeClass("zlux-ui-open").append(t.renderObjectDOM(l)),e(".zlux-x-name",l.dom).append('<i class="zlux-x-name-edit icon-edit-sign" title="'+t._("RENAME")+'" />')},fnInitComplete:function(){var o=e(".zlux-x-filter-input_wrapper",a).append(e('<i class="icon-search" />'),e('<i class="icon-remove zlux-ui-dropdown-unselect" />').hide().on("click",function(){e("input",o).val(""),e(this).hide(),t.oTable.fnFilter("")}));e("input",o).on("keyup",function(){""===e(this).val()?e(".zlux-ui-dropdown-unselect",o).hide():e(".zlux-ui-dropdown-unselect",o).show()}),setTimeout(function(){t.trigger("InitComplete")},50)},fnPreDrawCallback:function(){t.zluxdialog.spinner("show")},fnDrawCallback:function(a){var o=a.oInstance.fnPagingInfo(),l=e(".dataTables_paginate",e(a.nTableWrapper)).closest(".row-fluid");o.iTotalPages<=1?l.hide():l.show(),t.trigger("DrawCallback"),t.zluxdialog.scrollbar("refresh"),t.zluxdialog.spinner("hide")}}).on("click",".zlux-object .zlux-x-name a",function(){var a=e(this).closest("tr.zlux-object"),o=t.oTable.fnGetData(a[0]);return o.dom=a,"true"!==o.dom.attr("data-zlux-object-status")&&(o.dom.attr("data-zlux-object-status","true"),o.dom.siblings().removeAttr("data-zlux-object-status"),"folder"===o.dom.data("type")&&(t.oTable.fnSettings(),t.sGoToPath=o.dom.data("id"),t.oTable.fnReloadAjax()),t.trigger("ObjectSelected",o)),!1}).on("click",".zlux-object .zlux-x-remove",function(){var a=e(this).closest("tr.zlux-object"),o=e("td",a),l=t.oTable.fnGetData(a[0]);return l.dom=a,o.hasClass("zlux-ui-open")&&t.trigger("BeforeDeleteFile",l),!1})},_fnServerData:function(a,t,o,l){var n,i=this;n=i.cleanPath(i.sCurrentPath+"/"+i.sGoToPath),i.sGoToPath="",t.push({name:"root",value:n}),l.jqXHR=e.ajax({url:a,data:t,beforeSend:function(){var a=!1;if(!i.bReloading||i.bRedrawing){var t=e.zlux.filesManager.aAjaxDataCache[n];if(t&&(i.bCacheInited||(i.sStartRoot=t.root),i.sCurrentPath=n,i.bCacheInited=!0,e(l.oInstance).trigger("xhr",[l,t]),o(t),a=!0),i.bRedrawing)return i.bRedrawing=!1,i.sCurrentPath=n,!1}return a?!1:void i.zluxdialog.spinner("show")},dataType:"json",cache:!1,type:l.sServerMethod,error:function(e,a){"parsererror"===a&&l.oApi._fnLog(l,0,"DataTables warning: JSON data from server could not be parsed. This is caused by a JSON formatting error.")}}).done(function(a){a.errors.length&&l.oApi._fnLog(l,0,a.errors),a=a.result,i.bCacheInited||(i.sStartRoot=a.root),i.sCurrentPath=a.root,i.bReloading&&(e.zlux.filesManager.aAjaxDataCache={}),e.zlux.filesManager.aAjaxDataCache[a.root]=a,i.redrawInstances(),i.bReloading=!1,i.bCacheInited=!0,e(l.oInstance).trigger("xhr",[l,a]),o(a)})},reload:function(){var e=this;e.bReloading=!0,e.oTable.fnReloadAjax()},redrawInstances:function(){var a=this;e.each(e.zlux.filesManager.instances,function(e,t){return parseInt(e)===a.ID?!0:void(t.oTable&&(t.bRedrawing=!0,t.oTable.fnReloadAjax()))})},initBreadcrumb:function(){var a=this;a.breadcrumb=e('<ul class="breadcrumb" />').prependTo(a.filesmanager).wrap('<div class="row-fluid"><div class="span12" /></div>').on("click","a",function(){return a.sCurrentPath=a.sStartRoot,a.sGoToPath=e(this).data("path"),a.oTable.fnReloadAjax(),!1}),a.bind("DrawCallback initBreadcrumb",function(){var t,o=a.sCurrentPath?a.sCurrentPath:"",l=[],n=a._("ROOT").toLowerCase();o=o.replace(new RegExp("^"+a.sStartRoot),""),o=o.replace(/(^\/|\/$)/,""),t=o.length?o.split("/"):[],t.length?l.push('<li><a href="#" data-path="">'+n+'</a><span class="divider">/</span></li>'):l.push('<li class="active">'+n+"</li>"),o=[],e.each(t,function(e,a){o.push(a),t.length===e+1?l.push('<li class="active">'+a.toLowerCase()+"</li>"):l.push('<li><a href="#" data-path="'+o.join("/")+'">'+a.toLowerCase()+'</a><span class="divider">/</span></li>')}),a.breadcrumb.html(l.join(""))}).trigger("initBreadcrumb")},renderObjectDOM:function(a){var t,o=this;t="folder"===a.type?[{name:o._("NAME"),value:a.basename}]:[{name:o._("NAME"),value:a.basename},{name:o._("TYPE"),value:a.content_type},{name:o._("SIZE"),value:a.size.display}];var l="";e.each(t,function(e,a){l+="<li><strong>"+a.name+"</strong>: <span>"+a.value+"</span></li>"});var n=e('<div class="zlux-x-tools"><i class="zlux-x-details-btn icon-angle-down" /><i class="zlux-x-remove icon-minus-sign" title="'+o._("DELETE")+'" /></div><div class="zlux-x-name"><a href="#" class="zlux-x-name-link">'+a.name+'</a></div><div class="zlux-x-details"><div class="zlux-x-messages" /><div class="zlux-x-details-content"><ul class="unstyled">'+l+"</ul></div></div>");return n},deleteObject:function(a){var t=this,o=[],l=t.getFullPath(a.name);return o=t.pushStorageData(o),"s3"===t.options.storage&&"folder"===a.type&&(l+="/"),o.push({name:"path",value:l}),e.Deferred(function(a){e.ajax({url:e.zlux.url.ajax("zlux","deleteObject"),data:o,dataType:"json",type:"post"}).done(function(e){e.result?(a.resolve(),t.trigger("FileDeleted",l)):a.reject(e.errors)}).fail(function(){a.reject(t._("SOMETHING_WENT_WRONG"))})}).promise()},createFolder:function(a){var t=this,o=[],l=t.getFullPath(a);return o=t.pushStorageData(o),"s3"===t.options.storage&&(l+="/"),o.push({name:"path",value:l}),e.Deferred(function(a){e.ajax({url:e.zlux.url.ajax("zlux","newFolder"),data:o,dataType:"json",type:"post"}).done(function(e){e.result?a.resolve(e.name):a.reject(e.errors)}).fail(function(){a.reject(t._("SOMETHING_WENT_WRONG"))})}).promise()},renameObject:function(a){var t=this,l=e(".zlux-x-name a",a.dom),n=l.html().match(/\.+[a-zA-Z]+$/g),i=l.html().replace(/\.+[a-zA-Z]+$/g,"");n=null!==n?n:"";var s=e("<div>"+t._("INPUT_THE_NEW_NAME")+'<br /><input class="zlux-x-input" type="text" value="'+i+'" /> '+n+'<br /><span class="label label-success label-link">'+t._("CONFIRM").toLowerCase()+"</span></div>").on("click",".label-link",function(){e(this).data("submited")||(e(this).data("submited",!0),e(".column-icon i",a.dom).addClass("icon-spinner icon-spin"),t._changeObjectName(a,e("input",s).val()+n).done(function(n){l.html(n),e(".zlux-x-details-content ul li:first span",a.dom).html(n),a.dom.attr("data-id",n),a.name=n,a.basename=n.replace(/\.+[a-zA-Z]+$/g,""),a.path!==o&&(a.path=a.path.replace(/(\w|[-.])+$/,n)),e.zlux.filesManager.aAjaxDataCache[t.sCurrentPath].aaData=t.oTable.fnGetData(),t.redrawInstances(),a.dom.removeAttr("data-zlux-object-status"),e(".zlux-x-msg",a.dom).remove()}).fail(function(e){t.pushMessageToObject(a,e)}).always(function(){e(".column-icon i",a.dom).removeClass("icon-spinner icon-spin")}))}).on("keypress","input",function(a){var t=a.keyCode?a.keyCode:a.which;13===t&&e(".label-link",s).trigger("click")});t.pushMessageToObject(a,s)},_changeObjectName:function(a,t){var o=this,l=[],n=o.getFullPath(a.name),i=o.getFullPath(t);return l=o.pushStorageData(l),"s3"===o.options.storage&&"folder"===a.type&&(n+="/",i+="/"),l.push({name:"src",value:n}),l.push({name:"dest",value:i}),e.Deferred(function(a){e.ajax({url:e.zlux.url.ajax("zlux","moveObject"),data:l,dataType:"json",type:"post"}).done(function(e){e.result?a.resolve(e.name):a.reject(e.errors)}).fail(function(){a.reject(o._("SOMETHING_WENT_WRONG"))})}).promise()},getFullPath:function(e){var a=this.sCurrentPath;return a?a+"/"+e:e},_getRowFromPath:function(a){var t=this;return e('tr[data-path="'+a+'"]',t.oTable)},parseSize:function(e){if("string"!=typeof e||""===e)return e;var a,t={t:1099511627776,g:1073741824,m:1048576,k:1024};return e=/^([0-9]+)([mgk]?)$/.exec(e.toLowerCase().replace(/[^0-9mkg]/g,"")),a=e[2],e=+e[1],t.hasOwnProperty(a)&&(e*=t[a]),e},pushStorageData:function(e){var a=this;return"s3"===a.options.storage&&(e.push({name:"storage",value:"s3"}),e.push({name:"accesskey",value:a.options.storage_params.accesskey}),e.push({name:"key",value:a.options.storage_params.secretkey}),e.push({name:"bucket",value:a.options.storage_params.bucket})),e}}),e.zlux[l.prototype.name]=l,e.zlux[l.prototype.name].iNextUnique=0,e.zlux[l.prototype.name].aAjaxDataCache={},e.zlux[l.prototype.name].instances={}}(jQuery,window,document),function(e,a,t,o){"use strict";var l=function(a,t){var o=this,n=e(a);n.data(l.prototype.name)||(o.element=e(a),o.options=e.extend({},l.prototype.options,e.zlux.filesManager.prototype.options,t),this.events={},o.initialize(),o.element.data(l.prototype.name,o))};e.extend(l.prototype,e.zlux.filesManager.prototype,{name:"filesDialogManager",options:{title:"Files Manager",full_mode:0,dialogClass:""},initialize:function(){var e=this;e.initCheck(),e.element.on("click",function(){return e.zluxdialog.toggle(),!1}),e.initDialog(),e.initMainEvents()},initDialog:function(){var a=this;a.options.dialogClass="zl-bootstrap zlux-filesmanager"+(a.options.full_mode?" zlux-dialog-full ":"")+(a.options.dialogClass?" "+a.options.dialogClass:""),e.zlux.assets.load("dialog").done(function(){a.zluxdialog=e.zlux.dialog({title:a.options.title,width:a.options.full_mode?"75%":300,dialogClass:a.options.dialogClass,position:a.options.full_mode===!1?{of:a.element,my:"left top",at:"right bottom"}:null}).bind("InitComplete",function(){a.zluxdialog.widget.attr("id","zluxFilesManager_"+a.ID),a.eventDialogLoaded()})})},eventDialogLoaded:function(){var a=this;a.filesmanager=e('<div class="zlux-filesmanager" />').appendTo(a.zluxdialog.content),a.initDataTable(a.filesmanager),a.zluxdialog.main.on("click",".zlux-x-details-btn",function(){var t=e(this),o=t.closest("tr.zlux-object"),l=e("td.column-name",o),n=e(".zlux-x-details",o);l.hasClass("zlux-ui-open")?(t.addClass("icon-angle-down").removeClass("icon-angle-up"),l.removeClass("zlux-ui-open"),n.slideUp("fast",function(){a.zluxdialog.scrollbar("refresh")})):(l.addClass("zlux-ui-open"),t.removeClass("icon-angle-down").addClass("icon-angle-up"),a.zluxdialog.content.stop().animate({scrollTop:o.get(0).offsetTop},900,"swing"),n.slideDown("fast",function(){a.zluxdialog.scrollbar("refresh")}))}),a.zluxdialog.main.on("click",".icon-edit-sign",function(){var t,o=e(this).closest("tr.zlux-object");t=a.oTable.fnGetData(o[0]),t.dom=o,a.renameObject(t)}),e("html").on("mousedown",function(e){!a.zluxdialog.dialog("isOpen")||a.element.is(e.target)||a.element.find(e.target).length||a.zluxdialog.widget.find(e.target).length||a.zluxdialog.dialog("close")}),a.initMainToolbar(),a.zluxdialog.newSubToolbar("filter","main"),a.zluxdialog.newSubToolbar("newfolder","main"),a.initUploader()},initMainEvents:function(){var a=this;a.bind("InitComplete",function(){a.zluxdialog.scrollbar("refresh");var t=e(".zlux-dialog-subtoolbar-filter",a.zluxdialog.toolbar.wrapper);e(".zlux-x-filter-input_wrapper",a.oTable.fnSettings().nTableWrapper).appendTo(t),a.initBreadcrumb(),a.zluxdialog.initContent()}).bind("BeforeDeleteFile",function(t,o){if(!e(".zlux-x-details-message-actions")[0]){var l="folder"===o.type?"DELETE_THIS_FOLDER":"DELETE_THIS_FILE",n=e("<div>"+a._(l)+'<span class="label label-warning label-link">'+a._("CONFIRM").toLowerCase()+"</span></div>").on("click",".label-link",function(){if(!e(this).data("submited")){e(this).data("submited",!0),e(".column-icon i",o.dom).addClass("icon-spinner icon-spin");var t=a.deleteObject(o);t.done(function(){o.dom.fadeOut("slow",function(){e(this).remove();var t=e.zlux.filesManager.aAjaxDataCache[a.sCurrentPath].aaData;e.each(t,function(e,a){return o.dom.data("id")===a.name&&o.dom.data("type")===a.type?(t.splice(e,1),!1):void 0}),a.redrawInstances()})}).fail(function(e){a.pushMessageToObject(o,e)}).always(function(){e(".column-icon i",o.dom).removeClass("icon-spinner icon-spin")})}});a.pushMessageToObject(o,n)}})},initMainToolbar:function(){var a=this;a.zluxdialog.setMainToolbar([{title:a._("APPLY_FILTERS"),icon:"filter",click:function(e){a.zluxdialog.toggleSubtoolbar("filter","main"),e.parent().siblings().children("i").not(e).removeClass("zlux-ui-tool-enabled"),e.toggleClass("zlux-ui-tool-enabled")}},{title:a._("NEW_FOLDER"),icon:"folder-close",subicon:"plus-sign",click:function(t){a.zluxdialog.toggleSubtoolbar("newfolder","main"),e(".zlux-dialog-subtoolbar-newfolder",a.zluxdialog.toolbar.wrapper).html("").append(e('<input type="text" class="zlux-x-input" placeholder="'+a._("FOLDER_NAME")+'" />').on("keypress",function(t){var o=t.keyCode?t.keyCode:t.which;13===o&&(a.createFolder(e(this).val()),a.zluxdialog.spinner("show"),a.createFolder(e(this).val()).always(function(){a.reload()}))})),t.parent().siblings().children("i").not(t).removeClass("zlux-ui-tool-enabled"),t.toggleClass("zlux-ui-tool-enabled")}},{title:a._("UPLOAD_FILES"),icon:"cloud-upload",click:function(){a.zluxdialog.showToolbar(2),a.zluxdialog.scrollbar("hide"),e(".zlux-filesmanager",a.zluxdialog.content).fadeOut("400",function(){a.zluxupload.inited||a.zluxupload.init(),a.zluxupload.options.path=a.sCurrentPath,e(".zlux-upload",a.zluxdialog.content).fadeIn("400")})}},{title:a._("REFRESH"),icon:"refresh",click:function(){a.reload()}}])},initUploader:function(){var a=this;a.zluxdialog.newToolbar([{title:a._("ADD_NEW_FILES"),icon:"plus-sign",id:"add",click:function(){}},{title:a._("START_UPLOADING"),icon:"upload disabled",id:"start",click:function(){return a.zluxupload.uploader.start(),!1}},{title:a._("CANCEL_CURRENT_UPLOAD"),icon:"ban-circle disabled",id:"cancel",click:function(){a.zluxupload.uploader.stop(),a.zluxdialog.toolbarBtnState(2,"ban-circle","disabled"),a.zluxdialog.toolbarBtnState(2,"upload","enabled"),a.zluxdialog.toolbarBtnState(2,"plus-sign","enabled")}}],2,function(){e(".zlux-upload",a.zluxdialog.content).fadeOut("400",function(){a.zluxupload.emptyQueue(),e(".zlux-filesmanager",a.zluxdialog.content).fadeIn("400"),a.zluxupload._updateFilelist(),a.zluxdialog.scrollbar("refresh")})}),a.zluxupload=e.zlux.filesUpload({path:"images",wrapper:a.zluxdialog.content,storage:a.options.storage,storage_params:a.options.storage_params,max_file_size:a.options.max_file_size,extensions:a.options.extensions,browse_button:e('.zlux-dialog-toolbar-2 i[data-id="add"]',a.zluxdialog.toolbar.wrapper),resize:a.options.resize}).bind("QueueChanged",function(){a.zluxdialog.scrollbar("refresh")}).bind("FilesAdded",function(t,l){a.zluxdialog.toolbarBtnState(2,"upload","enabled"),t.filelist.show(),e.each(l,function(l,n){n.status="validating";var i={name:n.name,basename:n.name.replace(/(\.[a-z0-9]+)$/,""),type:"file",content_type:n.type,size:{size:n.size,display:plupload.formatSize(n.size)}};if(i.dom=e('<tr id="'+n.id+'" class="zlux-object" data-zlux-status="validating" />').append(e('<td class="column-icon" />').append('<i class="icon-file-alt zlux-x-object-icon" />'),e('<td class="column-name" />').append(a.renderObjectDOM(i))).appendTo(t.filelist),e(".zlux-x-tools",i.dom).append(e('<span class="zlux-upload-file-progress"/>')),e(".zlux-x-name",i.dom).html(n.name),n.size!==o&&""!==a.options.max_file_size&&n.size>a.options.max_file_size){e(".icon-file-alt",i.dom).removeClass("icon-file-alt").addClass("icon-warning-sign");var s=a.pushMessageToObject(i,a.sprintf(a._("FILE_SIZE_ERROR"),plupload.formatSize(a.options.max_file_size)));return e(".zlux-x-msg-remove",s).remove(),!0}e.ajax({url:e.zlux.url.ajax("zlux","validateObjectName"),type:"post",data:{name:n.name},dataType:"json",cache:!1,beforeSend:function(){e(".column-icon i",i.dom).addClass("icon-spinner icon-spin")},success:function(a){e(".zlux-x-name",i.dom).html(a.result),n.name=a.result,n.status=1,t._handleFileStatus(n),e(".column-icon i",i.dom).removeClass("icon-spinner icon-spin"),t._updateFilelist()}})})}).bind("BeforeUpload",function(){a.zluxdialog.toolbarBtnState(2,"cancel","enabled"),a.zluxdialog.toolbarBtnState(2,"start","disabled"),a.zluxdialog.toolbarBtnState(2,"add","disabled")}).bind("FileUploaded",function(t,o){e(".zlux-x-name",o.dom).html(o.name),e(".zlux-upload-file-progress",o.dom).html("100%").fadeOut(),e(".zlux-x-object-icon",o.dom).removeClass("icon-file-alt").addClass("icon-ok"),e(".zlux-x-name",o.dom).wrapInner('<a class="zlux-x-name-link" href="#" />').end().on("click","a",function(){if(a.zluxdialog.spinning)return!1;var t=e('.zlux-object[data-id="'+o.name+'"]',a.filesmanager);return o=a.oTable.fnGetData(t[0]),a.trigger("ObjectSelected",o),!1})}).bind("FileNotUpload",function(t,o,l){a.zluxdialog.toolbarBtnState(2,"cancel","disabled"),a.zluxdialog.toolbarBtnState(2,"start","disabled"),a.zluxdialog.toolbarBtnState(2,"add","enabled"),e(".zlux-upload-file-progress",o.dom).fadeOut(),e(".zlux-x-object-icon",o.dom).removeClass("icon-file-alt").addClass("icon-warning-sign");var n=a.pushMessageToObject(o,l);e(".zlux-x-msg-remove",n).remove()}).bind("UploadComplete",function(){a.zluxdialog.toolbarBtnState(2,"cancel","disabled"),a.zluxdialog.toolbarBtnState(2,"start","disabled"),a.zluxdialog.toolbarBtnState(2,"add","enabled"),a.reload()}).bind("CancelUpload",function(){a.zluxdialog.toolbarBtnState(2,"cancel","disabled"),a.zluxdialog.toolbarBtnState(2,"add","enabled")}).bind("QueueChanged",function(t,o){var l=!1;e.each(o,function(e,a){a.status!==plupload.DONE&&"validating"!==a.status&&(l=!0)}),o.length&&l?a.zluxdialog.toolbarBtnState(2,"start","enabled"):a.zluxdialog.toolbarBtnState(2,"start","disabled")}).bind("FileError",function(t,o,l){if(a.uploading&&"pending"===a.uploading.state())return void a.uploading.reject(l);o.dom[0]||(o.dom=e('<tr id="'+o.id+'" class="zlux-object" />').append(e('<td class="column-icon" />').append('<i class="icon-file-alt zlux-x-object-icon" />'),e('<td class="column-name" />').append(a.renderObjectDOM(o))).appendTo(t.filelist),t._updateFilelist()),e(".zlux-x-object-icon",o.dom).removeClass("icon-file-alt").addClass("icon-warning-sign");var n=a.pushMessageToObject(o,l);e(".zlux-x-msg-remove",n).remove()})}}),e.zlux[l.prototype.name]=l}(jQuery,window,document),function(e,a,t,o){"use strict";var l=function(a){this.options=e.extend({},this.options,a),this.events={}};e.extend(l.prototype,e.zlux.Main.prototype,{name:"filesUpload",options:{extensions:"",path:null,fileMode:"files",max_file_size:"1024kb",wrapper:null,storage:"local",storage_params:{},browse_button:null,resize:{}},init:function(){var a=this;a.upload=e('<div class="zlux-upload" />').attr("data-zlux-status","").appendTo(a.options.wrapper).hide(),a.dropzone=e('<div class="zlux-upload-dropzone" />').appendTo(a.upload).append(e('<span class="zlux-upload-dropzone-msg" />')),a.initDnDevents(),a.bind("WindowDragHoverStart",function(){a.dropzone.attr("data-zlux-draghover",!0)}),a.bind("WindowDragHoverEnd",function(){a.dropzone.attr("data-zlux-draghover",!1)}),a.initFilelist(),e.zlux.assets.load(e.zlux.url.zlfw("zlux/assets/plupload/plupload.full.min.js"),function(){a.initPlupload(),a.bind("Init",function(){"html5"===a.uploader.runtime&&e(".zlux-upload-dropzone-msg",a.dropzone).html(a.sprintf(a._("DROP_FILES"),"zlux-upload-browse")).on("click","a",function(){return a.options.browse_button.trigger("click"),!1}),a.inited=!0})})},initFilelist:function(){var a=this;a.filelist=e('<table cellpadding="0" cellspacing="0" border="0" class="zlux-upload-filelist table table-striped table-bordered"><tbody /></table>').appendTo(a.upload).on("click",".zlux-x-remove",function(){if("uploding"!==e(this).closest(".zlux-object").data("zlux-status")){var t=e(this).closest(".zlux-object"),o=a.uploader.getFile(t[0].id);o&&("undefined"===o||o.zlux_status!==plupload.STARTED&&o.status!==plupload.UPLOADING)?(a.uploader.removeFile(o),t.remove()):(t.remove(),a._updateFilelist())}})},initPlupload:function(){var a=this,t={runtimes:"html5, flash",browse_button:a.options.browse_button[0],drop_element:a.dropzone[0],max_file_size:o,url:e.zlux.url.ajax("zlux","upload",a.options.resize),filters:[{title:"Files",extensions:a.options.extensions}],flash_swf_url:e.zlux.url.zlfw("zlux/assets/plupload/Moxie.swf")};"s3"===a.options.storage&&e.extend(t,{url:"https://"+a.options.storage_params.bucket+".s3.amazonaws.com",multipart:!0,multipart_params:{key:"${filename}",Filename:"${filename}",acl:"public-read",success_action_status:"201",AWSAccessKeyId:a.options.storage_params.accesskey,policy:a.options.storage_params.policy,signature:a.options.storage_params.signature},file_data_name:"file"}),e.extend(t,{init:{BeforeUpload:function(e,t){a.eventBeforeUpload(t)},UploadFile:function(e,t){a.eventUploadFile(t)},UploadProgress:function(e,t){a.eventUploadProgress(t)},FileUploaded:function(e,t,o){a.eventFileUploaded(t,o)},UploadComplete:function(e,t){a.eventUploadComplete(t)},CancelUpload:function(){a.eventCancelUpload()},FilesAdded:function(e,t){a.eventFilesAdded(t)},QueueChanged:function(){a.eventQueueChanged()},StateChanged:function(){a.eventStateChanged()},Error:function(e,t){a.eventError(t)}}}),a.uploader=new plupload.Uploader(t),a.uploader.bind("Init",function(){a.trigger("Init")}),a.uploader.init()},eventError:function(a){var t,o,l=this,n=a.file;if(n){if(t="<strong>"+a.message+"</strong>",o=a.details)t+=" <br /><i>"+a.details+"</i>";else{switch(a.code){case plupload.FILE_EXTENSION_ERROR:o=l._("FILE_EXT_ERROR").replace("%s",n.name);break;case plupload.IMAGE_MEMORY_ERROR:o=l._("RUNTIME_MEMORY_ERROR");break;case plupload.HTTP_ERROR:o="s3"===l.options.storage?l.options.storage_params.bucket.match(/\./g)?l._("S3_BUCKET_PERIOD_ERROR"):l._("S3_BUCKET_MISSCONFIG_ERROR"):l._("UPLOAD_URL_ERROR")}t+=" <br /><i>"+o+"</i>"}var i={name:n.name,basename:n.name.replace(/(\.[a-z0-9]+)$/,""),type:"file",content_type:n.type,size:{size:n.size,display:plupload.formatSize(n.size)}};i.dom=e("#"+n.id,l.filelist),l.trigger("FileError",i,t)}},eventStateChanged:function(){var e=this;e.uploader.state===plupload.UPLOADING&&e.upload.attr("data-zlux-status","uploading"),e.uploader.state===plupload.STOPPED&&(e.upload.attr("data-zlux-status","stopped"),e._updateFilelist())},eventBeforeUpload:function(a){var t=this,o=e("#"+a.id,t.filelist);if("local"===t.options.storage&&(t.uploader.settings.url=t.uploader.settings.url+"&path="+t.options.path),"s3"===t.options.storage){var l=t.options.path?t.options.path+"/":"";t.uploader.settings.multipart_params.key=l+a.name}e(".zlux-upload-file-progress",o).html("0%"),a.zlux_status=2,t._handleFileStatus(a),e(".zlux-upload-file-btn-remove",o).removeClass("icon-remove").addClass("icon-spinner icon-spin"),t.trigger("BeforeUpload",a)},eventUploadFile:function(a){var t=this,o={name:a.name,basename:a.name.replace(/(\.[a-z0-9]+)$/,""),type:"file",content_type:a.type,size:{size:a.size,display:plupload.formatSize(a.size)}};o.dom=e("#"+a.id,t.filelist),t.uploading=e.Deferred().fail(function(e){t.trigger("FileNotUpload",o,e)}).done(function(e){o.name=e,t.trigger("FileUploaded",o)}).always(function(){t._handleFileStatus(a)})},eventUploadProgress:function(a){var t=this,o=isNaN(a.percent)?0:a.percent;e("#"+a.id+" .zlux-upload-file-progress",t.filelist).html(o+"%"),t._handleFileStatus(a)},eventFileUploaded:function(a,t){var o,l=this;"local"===l.options.storage?(o=e.parseJSON(t.response),o.error?l.uploading.reject(o.error.message):l.uploading.resolve(o.result)):"s3"===l.options.storage&&(o=e(t.response),l.uploading.resolve(o.find("Key").html()))},eventUploadComplete:function(e){var a=this;a.trigger("UploadComplete",e)},eventCancelUpload:function(){var e=this;e.trigger("CancelUpload")},eventFilesAdded:function(e){var a=this;a.trigger("FilesAdded",e)},eventQueueChanged:function(){var e=this;e._updateFilelist()},getQueuedFiles:function(){var a=this,t=[];return e.each(a.uploader.files,function(e,a){a.status!==plupload.DONE&&"validating"!==a.status&&t.push(a)}),t},emptyQueue:function(){var e=this;e.uploader.splice(),e.filelist.empty()},_updateFilelist:function(){var a=this,t=!1,o=e(".zlux-object",a.filelist);e.each(a.uploader.files,function(e,o){o.status!==plupload.DONE&&"validating"!==o.status&&(t=!0),o.status===plupload.STOPPED&&a._handleFileStatus(o)}),(a.uploader.files.length||o.length)&&e(".zlux-upload-dropzone-msg",a.upload).hide(),a.uploader.files.length||o.length?t?a.upload.attr("data-zlux-status","queued"):a.upload.attr("data-zlux-status","stopped"):(a.upload.attr("data-zlux-status",""),e(".zlux-upload-dropzone-msg",a.upload).fadeIn()),a.trigger("QueueChanged",a.uploader.files)},_handleFileStatus:function(a){var t=this,o=e("#"+a.id,t.filelist),l="";a.zlux_status===plupload.STARTED?(l="started",a.zlux_status=""):(a.status===plupload.DONE&&(l="done"),a.status===plupload.FAILED&&(l="failed"),a.status===plupload.QUEUED&&(l="queued"),a.status===plupload.UPLOADING&&(l="uploading"),a.status===plupload.STOPPED&&e(".zlux-upload-file-progress",o).html("")),o.attr("data-zlux-status",l)},initDnDevents:function(){var t=this,o=e(),l=e(),n=!1,i=!1;e(a).on("drop",function(e){return e.preventDefault(),!1}).on("dragenter",function(e){0===o.size()&&(t.trigger("WindowDragHoverStart"),n=!0,i=!1),o=o.add(e.target)}).on("dragleave drop",function(a){setTimeout(function(){var t=!1;try{t=e("body").find(a.relatedTarget).length?!0:t}catch(l){}o=o.not(a.target),0!==o.size()||t||(n=!1)},1),setTimeout(function(){n||i||(t.trigger("WindowDragHoverEnd"),l=e(),o=e())},2)}),t.dropzone.on("dragenter",function(e){0===l.size()&&(t.trigger("WindowDragHoverStart"),n=!1,i=!0),l=l.add(e.target)}),t.dropzone.on("dragleave drop",function(a){setTimeout(function(){var t=!1;try{t=e("body").find(a.relatedTarget).length?!0:t}catch(o){}l=l.not(a.target),0!==l.size()||t||(i=!1)},1),setTimeout(function(){n||i||(t.trigger("WindowDragHoverEnd"),l=e(),o=e())},2)})}}),e.zlux[l.prototype.name]=function(){var e=arguments;return new l(e[0]?e[0]:{})}}(jQuery,window,document),function(e,a,t,o){"use strict";var l=function(a){this.options=e.extend({},this.options,a),this.events={}};e.extend(l.prototype,e.zlux.Main.prototype,{name:"filesPreview",renderPreviewDOM:function(a,t){var l,n=[];t=t===o?!1:t,a.size=a.size===o?!1:a.size,n.push({name:"name",value:a.basename}),"folder"===a.type?l='<span class="zlux-x-folder"></span>':(l=t?'<div class="zlux-x-image"><img src="'+e.zlux.url.root(a.path)+'" /></div>':'<span class="zlux-x-filetype">'+a.ext+"</span>",a.size&&n.push({name:"size",value:a.size.display}));var i="";return e.each(n,function(e,a){i+="<li>"+a.value+"</li>"}),e('<div class="zlux-preview"><div class="zlux-x-thumbnail">'+l+'</div><ul class="zlux-x-details unstyled">'+i+"</ul></div>")}}),e.zlux[l.prototype.name]=function(){var e=arguments;return new l(e[0]?e[0]:{})}}(jQuery,window,document);
+/* ===================================================
+ * ZLUX filesDialogManager
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+;(function ($, window, document, undefined) {
+  "use strict";
+  var Plugin = function(element, options) {
+    var $this    = this,
+      $element =  $(element);
+
+    if($element.data(Plugin.prototype.name)) return;
+
+    $this.element =  $(element);
+    $this.options = $.extend({}, Plugin.prototype.options, $.zlux.filesManager.prototype.options, options);
+    this.events = {};
+
+    // init the script
+    $this.initialize();
+
+    $this.element.data(Plugin.prototype.name, $this);
+  };
+  $.extend(Plugin.prototype, $.zlux.filesManager.prototype, {
+    name: 'filesDialogManager',
+    options: {
+      title: 'Files Manager',
+      full_mode: 0,
+      dialogClass: ''
+    },
+    initialize: function() {
+      var $this = this;
+
+      // run initial check
+      $this.initCheck();
+
+      // element example, it should be set by the caller script
+      // $('<a title="' + $this.options.title + '" class="btn btn-mini zlux-btn-edit" href="#"><i class="icon-edit"></i></a>');
+
+      // set the trigger button event
+      $this.element.on('click', function(){
+
+        // toggle the dialog
+        $this.zluxdialog.toggle();
+
+        // avoid default
+        return false;
+      });
+
+      $this.initDialog();
+      $this.initMainEvents();
+    },
+    /**
+     * Init the Dialog
+     */
+    initDialog: function() {
+      var $this = this;
+
+      // prepare the dialog class
+      $this.options.dialogClass = 'zl-bootstrap zlux-filesmanager' +
+        ($this.options.full_mode ? ' zlux-dialog-full ' : '') +
+        ($this.options.dialogClass ? ' ' + $this.options.dialogClass : '');
+
+      // load assets
+      $.zlux.assets.load('dialog').done(function(){
+
+        // init the dialog plugin
+        $this.zluxdialog = $.zlux.dialog({
+          title: $this.options.title,
+          width: $this.options.full_mode ? '75%' : 300,
+          dialogClass: $this.options.dialogClass,
+          position: ($this.options.full_mode === false ? {
+            of: $this.element,
+            my: 'left top',
+            at: 'right bottom'
+          } : null)
+        })
+
+        .bind("InitComplete", function() {
+
+          // set the dialog unique ID
+          $this.zluxdialog.widget.attr('id', 'zluxFilesManager_' + $this.ID);
+
+          // init dialog related functions
+          $this.eventDialogLoaded();
+        });
+      });
+    },
+    /**
+     * Trigger functions when Dialog ready
+     */
+    eventDialogLoaded: function() {
+      var $this = this;
+
+      // init filesmanager
+      $this.filesmanager = $('<div class="zlux-filesmanager" />').appendTo($this.zluxdialog.content);
+      $this.initDataTable($this.filesmanager);
+
+      // set Object details Open event
+      $this.zluxdialog.main.on('click', '.zlux-x-details-btn', function(){
+        var toggle = $(this),
+          $object = toggle.closest('tr.zlux-object'),
+          TD = $('td.column-name', $object),
+          details = $('.zlux-x-details', $object);
+
+        // open the details
+        if (!TD.hasClass('zlux-ui-open')) {
+          TD.addClass('zlux-ui-open');
+          toggle.removeClass('icon-angle-down').addClass('icon-angle-up');
+
+          // scroll to the Object with animation
+          $this.zluxdialog.content.stop().animate({
+            'scrollTop': $object.get(0).offsetTop
+          }, 900, 'swing');
+
+          // open, when done...
+          details.slideDown('fast', function(){
+            $this.zluxdialog.scrollbar('refresh');
+          });
+
+        // close them
+        } else {
+          toggle.addClass('icon-angle-down').removeClass('icon-angle-up');
+          TD.removeClass('zlux-ui-open');
+          details.slideUp('fast', function(){
+            $this.zluxdialog.scrollbar('refresh');
+          });
+        }
+      });
+
+      // trigger Object rename event on click
+      $this.zluxdialog.main.on('click', '.icon-edit-sign', function(){
+        var object_dom = $(this).closest('tr.zlux-object'),
+          $object;
+
+        // set zlux object
+        $object = $this.oTable.fnGetData( object_dom[0] );
+        $object.dom = object_dom;
+
+        // rename
+        $this.renameObject($object);
+      });
+
+      // set global close event
+      $('html').on('mousedown', function(event) {
+        // close if target is not the trigger or the dialog it self
+        if ($this.zluxdialog.dialog('isOpen') && !$this.element.is(event.target) &&
+            !$this.element.find(event.target).length && !$this.zluxdialog.widget.find(event.target).length) {
+
+          $this.zluxdialog.dialog('close');
+        }
+      });
+
+
+      // init main toolbar
+      $this.initMainToolbar();
+
+      // init subtoolbars
+      $this.zluxdialog.newSubToolbar('filter', 'main');
+      $this.zluxdialog.newSubToolbar('newfolder', 'main');
+
+      // init the uploaded
+      $this.initUploader();
+    },
+    /**
+     * Init the Main Events
+     */
+    initMainEvents: function() {
+      var $this = this;
+
+      // on manager init
+      $this.bind("InitComplete", function() {
+
+        // init dialog scrollbar
+        $this.zluxdialog.scrollbar('refresh');
+
+        // get subtoolbar
+        var subtoolbar = $('.zlux-dialog-subtoolbar-filter', $this.zluxdialog.toolbar.wrapper);
+
+        // move the search field to the toolbar
+        $('.zlux-x-filter-input_wrapper', $this.oTable.fnSettings().nTableWrapper).appendTo(subtoolbar);
+
+        // init breadcrumb
+        $this.initBreadcrumb();
+
+        // show the content
+        $this.zluxdialog.initContent();
+      })
+
+      // before Deleting file
+      .bind("BeforeDeleteFile", function(manager, $object){
+        // if allready message displayed, abort
+        if ($('.zlux-x-details-message-actions')[0]) return;
+
+        var deleteMSG = $object.type === 'folder' ? 'DELETE_THIS_FOLDER' : 'DELETE_THIS_FILE';
+
+        // prepare and display the confirm message
+        var msg = $('<div>' + $this._(deleteMSG) + '<span class="label label-warning label-link">' + $this._('CONFIRM').toLowerCase() + '</span></div>')
+
+        // confirm action
+        .on('click', '.label-link', function(){
+
+          // only allowed to be submited once
+          if ($(this).data('submited')) return; $(this).data('submited', true);
+
+          // set spinner
+          $('.column-icon i', $object.dom).addClass('icon-spinner icon-spin');
+
+          // delete the file
+          var deleting = $this.deleteObject($object);
+
+          // if succesfull
+          deleting.done(function(){
+            // hide the object
+            $object.dom.fadeOut('slow', function(){
+              // remove object from dom
+              $(this).remove();
+
+              // remove the object from cache
+              var aaData = $.zlux.filesManager.aAjaxDataCache[$this.sCurrentPath].aaData;
+
+              $.each(aaData, function(i, value){
+                if ($object.dom.data('id') === value.name && $object.dom.data('type') === value.type) {
+                  // found, remove
+                  aaData.splice(i, 1);
+
+                  // stop iteration
+                  return false;
+                }
+              });
+
+              // redraw the other instances
+              $this.redrawInstances();
+            });
+          })
+
+          // if fails
+          .fail(function(message) {
+            // pushs the issue message
+            $this.pushMessageToObject($object, message);
+          })
+
+          // on result
+          .always(function() {
+            // remove spinner
+            $('.column-icon i', $object.dom).removeClass('icon-spinner icon-spin');
+          });
+        });
+
+        // show the message
+        $this.pushMessageToObject($object, msg);
+      });
+
+      // on object select example
+      // .bind("ObjectSelected", function(manager, $object){
+        // var value = $this.sCurrentPath + '/' + $object.name;
+
+        // save new value in input
+        // input.val(value).trigger('change');
+      // });
+    },
+    /**
+     * Init the Main Dialog Toolbar
+     */
+    initMainToolbar: function() {
+      var $this = this;
+
+      $this.zluxdialog.setMainToolbar(
+        [{
+          title: $this._('APPLY_FILTERS'),
+          icon: "filter",
+          click: function(tool){
+            // toggle the subtoolbar visibility
+            $this.zluxdialog.toggleSubtoolbar('filter', 'main');
+
+            tool.parent().siblings().children('i').not(tool).removeClass('zlux-ui-tool-enabled');
+            tool.toggleClass('zlux-ui-tool-enabled');
+          }
+        },{
+          title: $this._('NEW_FOLDER'),
+          icon: "folder-close",
+          subicon: "plus-sign",
+          click: function(tool){
+            $this.zluxdialog.toggleSubtoolbar('newfolder', 'main');
+
+            // toggle the subtoolbar visibility
+            $('.zlux-dialog-subtoolbar-newfolder', $this.zluxdialog.toolbar.wrapper).html('').
+            append(
+              $('<input type="text" class="zlux-x-input" placeholder="' + $this._('FOLDER_NAME') + '" />').on('keypress', function(e){
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if (code === 13) {
+                  // Enter key was pressed, create folder
+                  $this.createFolder($(this).val());
+
+                  // set spinner
+                  $this.zluxdialog.spinner('show');
+
+                  // start creating the folder
+                  $this.createFolder($(this).val())
+
+                  // on result
+                  .always(function() {
+                    $this.reload();
+                  });
+                }
+              })
+            );
+
+            tool.parent().siblings().children('i').not(tool).removeClass('zlux-ui-tool-enabled');
+            tool.toggleClass('zlux-ui-tool-enabled');
+          }
+        },
+        {
+          title: $this._('UPLOAD_FILES'),
+          icon: "cloud-upload",
+          click: function(){
+            // show the associated toolbar
+            $this.zluxdialog.showToolbar(2);
+
+            // disable dialog scroll
+            $this.zluxdialog.scrollbar('hide');
+
+            $('.zlux-filesmanager', $this.zluxdialog.content).fadeOut('400', function(){
+
+              // init ZLUX Upload
+              if (!$this.zluxupload.inited) $this.zluxupload.init();
+
+              // update upload path
+              $this.zluxupload.options.path = $this.sCurrentPath;
+
+              // show the upload view
+              $('.zlux-upload', $this.zluxdialog.content).fadeIn('400');
+            });
+          }
+        },
+        {
+          title: $this._('REFRESH'),
+          icon: "refresh",
+          click: function(){
+            $this.reload();
+          }
+        }]
+      );
+    },
+    /**
+     * Init the Upload engine
+     */
+    initUploader: function() {
+      var $this = this;
+
+      // set Upload toolbar
+      $this.zluxdialog.newToolbar(
+        [{
+          title : $this._('ADD_NEW_FILES'),
+          icon : "plus-sign",
+          id : "add",
+          click : function(){
+            // already triggered by plupload
+          }
+        },
+        {
+          title : $this._('START_UPLOADING'),
+          icon : "upload disabled",
+          id : "start",
+          click : function(){
+            $this.zluxupload.uploader.start();
+            return false;
+          }
+        },
+        {
+          title : $this._('CANCEL_CURRENT_UPLOAD'),
+          icon : "ban-circle disabled",
+          id : "cancel",
+          click : function(){
+            // cancel current queue upload
+            $this.zluxupload.uploader.stop();
+
+            // disable the btn
+            $this.zluxdialog.toolbarBtnState(2, 'ban-circle', 'disabled');
+            $this.zluxdialog.toolbarBtnState(2, 'upload', 'enabled');
+            $this.zluxdialog.toolbarBtnState(2, 'plus-sign', 'enabled');
+          }
+        }],
+        2,
+        // back to main function
+        function(){
+          $('.zlux-upload', $this.zluxdialog.content).fadeOut('400', function(){
+
+            // empty possible upload queue
+            $this.zluxupload.emptyQueue();
+
+            // show the filesmanager view
+            $('.zlux-filesmanager', $this.zluxdialog.content).fadeIn('400');
+
+            // refresh the uploader file list
+            $this.zluxupload._updateFilelist();
+
+            // refresh dialog scroll
+            $this.zluxdialog.scrollbar('refresh');
+          });
+        }
+      );
+
+      // set upload engine
+      $this.zluxupload = $.zlux.filesUpload({
+        path: 'images',
+        wrapper: $this.zluxdialog.content,
+        storage: $this.options.storage,
+        storage_params: $this.options.storage_params,
+        max_file_size: $this.options.max_file_size,
+        extensions: $this.options.extensions,
+        browse_button: $('.zlux-dialog-toolbar-2 i[data-id="add"]', $this.zluxdialog.toolbar.wrapper),
+        resize: $this.options.resize
+      })
+
+      // when queue files changes
+      .bind('QueueChanged', function(){
+        // refresh scroll
+        $this.zluxdialog.scrollbar('refresh');
+      })
+
+      // when new file added to queue
+      .bind('FilesAdded', function($up, files)
+      {
+        // toggle toolbar buttons
+        $this.zluxdialog.toolbarBtnState(2, 'upload', 'enabled');
+
+        // show the filelist
+        $up.filelist.show();
+
+        // add the file preview
+        $.each(files, function(index, file) {
+
+          // set initial status
+          file.status = 'validating';
+
+          // prepare object
+          var $object = {
+            name: file.name,
+            basename: file.name.replace(/(\.[a-z0-9]+)$/, ''),
+            type: 'file', // upload folders is not yet posible
+            content_type: file.type,
+            size: {size: file.size, display: plupload.formatSize(file.size)}
+          };
+
+          // render the dom
+          $object.dom = $('<tr id="' + file.id + '" class="zlux-object" data-zlux-status="validating" />').append(
+
+            $('<td class="column-icon" />').append('<i class="icon-file-alt zlux-x-object-icon" />'),
+
+            $('<td class="column-name" />').append(
+              $this.renderObjectDOM($object)
+            )
+          )
+
+          // append to the file list
+          .appendTo($up.filelist);
+
+          // append the file upload progress bar
+          $('.zlux-x-tools', $object.dom).append(
+            $('<span class="zlux-upload-file-progress"/>')
+          );
+
+          // remove the name link, not needed here
+          $('.zlux-x-name', $object.dom).html(file.name);
+
+          // check file size
+          if (file.size !== undefined && $this.options.max_file_size !== '' && file.size > $this.options.max_file_size) {
+            // set icon
+            $('.icon-file-alt', $object.dom).removeClass('icon-file-alt').addClass('icon-warning-sign');
+
+            // set msg
+            var msg = $this.pushMessageToObject($object, $this.sprintf($this._('FILE_SIZE_ERROR'), plupload.formatSize($this.options.max_file_size)));
+
+            // delete the 'remove' msg option, as this message can not be ignored
+            $('.zlux-x-msg-remove', msg).remove();
+
+            // continue
+            return true;
+          }
+
+          // validate file name
+          $.ajax({
+            "url": $.zlux.url.ajax('zlux', 'validateObjectName'),
+            "type": 'post',
+            "data":{
+              name: file.name
+            },
+            "dataType": "json",
+            "cache": false,
+            "beforeSend": function(){
+              // set spinner
+              $('.column-icon i', $object.dom).addClass('icon-spinner icon-spin');
+            },
+            "success": function (json) {
+              // update name
+              $('.zlux-x-name', $object.dom).html(json.result);
+
+              // update file name
+              file.name = json.result;
+
+              // ready to upload, set status
+              file.status = 1;
+
+              // update file status
+              $up._handleFileStatus(file);
+
+              // remove spinner
+              $('.column-icon i', $object.dom).removeClass('icon-spinner icon-spin');
+
+              // refresh the filelist
+              $up._updateFilelist();
+            }
+          });
+        });
+      })
+
+      // toogle the buttons on upload events
+      .bind('BeforeUpload', function(){
+        $this.zluxdialog.toolbarBtnState(2, 'cancel', 'enabled');
+        $this.zluxdialog.toolbarBtnState(2, 'start', 'disabled');
+        $this.zluxdialog.toolbarBtnState(2, 'add', 'disabled');
+      })
+
+      // when file is uploaded
+      .bind('FileUploaded', function(up, $object){
+
+        // update the file name to reflect the final result
+        $('.zlux-x-name', $object.dom).html($object.name);
+
+        // update progress
+        $('.zlux-upload-file-progress', $object.dom).html('100%').fadeOut();
+
+        // set the OK icon
+        $('.zlux-x-object-icon', $object.dom).removeClass('icon-file-alt').addClass('icon-ok');
+
+        // set the link for inminent selection
+        $('.zlux-x-name', $object.dom).wrapInner('<a class="zlux-x-name-link" href="#" />').end()
+
+        .on('click', 'a', function(){
+
+          // until all loaded return
+          if ($this.zluxdialog.spinning) return false;
+
+          // get the uploaded object dom from the files manager, keep the name unmodified
+          var object_dom = $('.zlux-object[data-id="' + $object.name + '"]', $this.filesmanager);
+
+          // get updated object data
+          $object = $this.oTable.fnGetData( object_dom[0] );
+
+          // trigger event
+          $this.trigger("ObjectSelected", $object);
+
+          return false;
+        });
+      })
+
+      // when file upload fails
+      .bind('FileNotUpload', function(up, $object, message){
+
+        // toogle toolbar buttons
+        $this.zluxdialog.toolbarBtnState(2, 'cancel', 'disabled');
+        $this.zluxdialog.toolbarBtnState(2, 'start', 'disabled');
+        $this.zluxdialog.toolbarBtnState(2, 'add', 'enabled');
+
+        // remove progress indication
+        $('.zlux-upload-file-progress', $object.dom).fadeOut();
+
+        // set the fail icon
+        $('.zlux-x-object-icon', $object.dom).removeClass('icon-file-alt').addClass('icon-warning-sign');
+
+        // render the message
+        var msg = $this.pushMessageToObject($object, message);
+
+        // delete the 'remove' msg option, as this message can not be ignored
+        $('.zlux-x-msg-remove', msg).remove();
+      })
+
+      // when all files uploaded
+      .bind('UploadComplete', function(){
+        // toogle the toolbar buttons
+        $this.zluxdialog.toolbarBtnState(2, 'cancel', 'disabled');
+        $this.zluxdialog.toolbarBtnState(2, 'start', 'disabled');
+        $this.zluxdialog.toolbarBtnState(2, 'add', 'enabled');
+
+        // reload the table data
+        $this.reload();
+      })
+
+      // when uploading canceled by the user
+      .bind('CancelUpload', function(){
+        // toogle the toolbar buttons
+        $this.zluxdialog.toolbarBtnState(2, 'cancel', 'disabled');
+        $this.zluxdialog.toolbarBtnState(2, 'add', 'enabled');
+      })
+
+      // when the queue changes
+      .bind('QueueChanged', function(up, files){
+        var queued = false;
+
+        // foreach file
+        $.each(files, function(index, file) {
+
+          // check if there are files left to upload
+          if (file.status !== plupload.DONE && file.status !== 'validating') {
+            queued = true;
+          }
+        });
+
+        // if no files left
+        if (!files.length) {
+
+          // disable the upload btn
+          $this.zluxdialog.toolbarBtnState(2, 'start', 'disabled');
+
+        // if queued files left
+        } else if (queued) {
+
+          // enable the upload btn
+          $this.zluxdialog.toolbarBtnState(2, 'start', 'enabled');
+
+        // if uploaded files left
+        } else {
+
+          // disable the upload btn
+          $this.zluxdialog.toolbarBtnState(2, 'start', 'disabled');
+        }
+      })
+
+      // listen to File Errors event
+      .bind("FileError", function($up, $object, message) {
+
+        // resolve the uploading deferrer, if any
+        if ($this.uploading && $this.uploading.state() === 'pending') {
+          $this.uploading.reject(message);
+
+          return;
+        }
+
+        if (!$object.dom[0]) {
+
+          // render the dom
+          $object.dom = $('<tr id="' + $object.id + '" class="zlux-object" />').append(
+
+            $('<td class="column-icon" />').append('<i class="icon-file-alt zlux-x-object-icon" />'),
+
+            $('<td class="column-name" />').append(
+              $this.renderObjectDOM($object)
+            )
+          )
+
+          .appendTo($up.filelist);
+
+          // refresh the filelist
+          $up._updateFilelist();
+        }
+
+        // set the fail icon
+        $('.zlux-x-object-icon', $object.dom).removeClass('icon-file-alt').addClass('icon-warning-sign');
+
+        // render the message
+        var msg = $this.pushMessageToObject($object, message);
+
+        // delete the 'remove' msg option, as this message can not be ignored
+        $('.zlux-x-msg-remove', msg).remove();
+
+        // set status, necesary?
+        // $file.attr('data-zlux-status', 'error');
+      });
+    }
+  });
+  // Don't touch
+  $.zlux[Plugin.prototype.name] = Plugin;
+})(jQuery, window, document);
+
+
+/* ===================================================
+ * ZLUX filesUpload
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+;(function ($, window, document, undefined) {
+  "use strict";
+  var Plugin = function(options){
+    this.options = $.extend({}, this.options, options);
+    this.events = {};
+  };
+  $.extend(Plugin.prototype, $.zlux.Main.prototype, {
+    name: 'filesUpload',
+    options: {
+      extensions: '', // Array or comma separated values
+      path: null,
+      fileMode: 'files',
+      max_file_size: '1024kb', // Maximum file size. This string can be in 100b, 10kb, 10mb, 1gb format.
+      wrapper: null,
+      storage: 'local', // local, s3
+      storage_params: {},
+      browse_button: null,
+      resize: {}
+    },
+    init: function() {
+      var $this = this;
+
+      // append the upload to the wrapper
+      $this.upload = $('<div class="zlux-upload" />').attr('data-zlux-status', '').appendTo($this.options.wrapper)
+
+      // start hiden
+      .hide();
+
+      // set the dropzone
+      $this.dropzone = $('<div class="zlux-upload-dropzone" />').appendTo($this.upload).append(
+        $('<span class="zlux-upload-dropzone-msg" />')
+      );
+
+      // init DnD events
+      $this.initDnDevents();
+
+      // bind DnD events
+      $this.bind("WindowDragHoverStart", function() {
+        // set draghover attr
+        $this.dropzone.attr('data-zlux-draghover', true);
+      });
+
+      $this.bind("WindowDragHoverEnd", function() {
+        // set draghover attr
+        $this.dropzone.attr('data-zlux-draghover', false);
+      });
+
+      $this.initFilelist();
+
+
+      // load asset
+      $.zlux.assets.load($.zlux.url.zlfw('zlux/assets/plupload/plupload.full.min.js'), function(){
+
+        // init plupload
+        $this.initPlupload();
+
+        // on Plupload init
+        $this.bind("Init", function() {
+
+          // add drop msg if html5
+          if ($this.uploader.runtime === 'html5') {
+            $('.zlux-upload-dropzone-msg', $this.dropzone).html($this.sprintf($this._('DROP_FILES'), 'zlux-upload-browse'))
+
+            .on('click', 'a', function(){
+              // trigger the upload browse button
+              $this.options.browse_button.trigger('click');
+              return false;
+            });
+          }
+
+          // set init state
+          $this.inited = true;
+        });
+      });
+    },
+    /*
+     * Init Filelist
+     */
+    initFilelist: function() {
+      var $this = this;
+
+      $this.filelist =
+      $('<table cellpadding="0" cellspacing="0" border="0" class="zlux-upload-filelist table table-striped table-bordered"><tbody /></table>')
+      .appendTo($this.upload)
+
+      // remove file from files function
+      .on('click', '.zlux-x-remove', function(){
+
+        // abort if it's being uploaded
+        if ($(this).closest('.zlux-object').data('zlux-status') === 'uploding') return;
+
+        var $object = $(this).closest('.zlux-object'),
+          file = $this.uploader.getFile($object[0].id);
+
+        // proceede if file is not being uploaded currently
+        // or if file undefined, could happen if file added twice but deleted once
+        if (file && (file === 'undefined' || file.zlux_status !== plupload.STARTED && file.status !== plupload.UPLOADING)) {
+
+          // remove from upload queue
+          $this.uploader.removeFile(file);
+
+          // remove from dom
+          $object.remove();
+        } else {
+          // just remove from dom
+          $object.remove();
+
+          // refresh list
+          $this._updateFilelist();
+        }
+      });
+    },
+    /*
+     * Init the Plupload plugin
+     */
+    initPlupload: function() {
+      var $this = this;
+
+      // set basics params
+      var params = {
+        runtimes: 'html5, flash',
+        browse_button: $this.options.browse_button[0],
+        drop_element: $this.dropzone[0],
+        max_file_size: undefined, // controlled by ZLUX Upload
+        url: $.zlux.url.ajax('zlux', 'upload', $this.options.resize),
+        filters: [ // Specify what files to browse for
+          {title: "Files", extensions: $this.options.extensions}
+        ],
+
+        // flash runtime settings
+        flash_swf_url: $.zlux.url.zlfw('zlux/assets/plupload/Moxie.swf')
+      };
+
+      // if S3 storage
+      if($this.options.storage === 's3') {
+        $.extend(params, {
+          url: 'https://' + $this.options.storage_params.bucket + '.s3.amazonaws.com',
+          multipart: true,
+          multipart_params: {
+            'key': '${filename}', // use filename as a key
+            'Filename': '${filename}', // adding this to keep consistency across the runtimes
+            'acl': 'public-read',
+            'success_action_status': '201',
+            'AWSAccessKeyId': $this.options.storage_params.accesskey,
+            'policy': $this.options.storage_params.policy,
+            'signature': $this.options.storage_params.signature
+          },
+          file_data_name: 'file' // optional, but better be specified directly
+        });
+      }
+
+      // Post init events, bound after the internal events
+      $.extend(params, {
+        init : {
+          BeforeUpload: function(up, file) {
+            $this.eventBeforeUpload(file);
+          },
+          UploadFile: function(up, file) {
+            $this.eventUploadFile(file);
+          },
+          UploadProgress: function(up, file) {
+            $this.eventUploadProgress(file);
+          },
+          FileUploaded: function(up, file, info) {
+            $this.eventFileUploaded(file, info);
+          },
+          UploadComplete: function(up, files) {
+            $this.eventUploadComplete(files);
+          },
+          CancelUpload: function() {
+            $this.eventCancelUpload();
+          },
+          FilesAdded: function(up, files) {
+            $this.eventFilesAdded(files);
+          },
+          QueueChanged: function() {
+            $this.eventQueueChanged();
+          },
+          StateChanged: function() {
+            $this.eventStateChanged();
+          },
+          Error: function(up, err) {
+            $this.eventError(err);
+          }
+        }
+      });
+
+      // set the Plupload uploader
+      $this.uploader = new plupload.Uploader(params);
+
+      // workaround to trigger the Init event
+      // perhaps Plupload bug but it's not working as the others
+      $this.uploader.bind("Init", function(){
+        $this.trigger("Init");
+      });
+
+      // init the plupload uploader
+      $this.uploader.init();
+    },
+    /*
+     * Fires when a error occurs.
+     */
+    eventError: function(err) {
+      var $this = this,
+        file = err.file,
+        message,
+        details;
+
+      // file related errors
+      if (file) {
+        message = '<strong>' + err.message + '</strong>';
+        details = err.details;
+
+        if (details) {
+          message += " <br /><i>" + err.details + "</i>";
+        } else {
+
+          switch (err.code) {
+            case plupload.FILE_EXTENSION_ERROR:
+              details = $this._('FILE_EXT_ERROR').replace('%s', file.name);
+              break;
+
+            case plupload.IMAGE_MEMORY_ERROR :
+              details = $this._('RUNTIME_MEMORY_ERROR');
+              break;
+
+            case plupload.HTTP_ERROR:
+
+              // if S3 storage
+              if($this.options.storage === 's3') {
+
+                if ($this.options.storage_params.bucket.match(/\./g)) {
+                  // When using SLL the bucket names can't have dots
+                  details = $this._('S3_BUCKET_PERIOD_ERROR');
+                } else {
+                  details = $this._('S3_BUCKET_MISSCONFIG_ERROR');
+                }
+
+              // if local storage
+              } else {
+                details = $this._('UPLOAD_URL_ERROR');
+              }
+              break;
+          }
+          message += " <br /><i>" + details + "</i>";
+        }
+
+        // prepare object
+        var $object = {
+          name: file.name,
+          basename: file.name.replace(/(\.[a-z0-9]+)$/, ''),
+          type: 'file', // upload folders is not yet posible
+          content_type: file.type,
+          size: {size: file.size, display: plupload.formatSize(file.size)}
+        };
+
+        // add the file dom
+        $object.dom = $('#' + file.id, $this.filelist);
+
+        // trigger file error event
+        $this.trigger("FileError", $object, message);
+      }
+    },
+    /*
+     * Fires when the overall state is being changed for the upload queue.
+     */
+    eventStateChanged: function() {
+      var $this = this;
+
+      // update the zlux upload status
+      if ($this.uploader.state === plupload.UPLOADING) {
+        $this.upload.attr('data-zlux-status', 'uploading');
+      }
+
+      if ($this.uploader.state === plupload.STOPPED) {
+        $this.upload.attr('data-zlux-status', 'stopped');
+
+        // refresh the file list
+        $this._updateFilelist();
+      }
+    },
+    /*
+     * Fires when just before a file is uploaded.
+     */
+    eventBeforeUpload: function(file) {
+      var $this = this,
+        $file = $('#' + file.id, $this.filelist);
+
+      // if local storage
+      if($this.options.storage === 'local') {
+        // update the upload path
+        $this.uploader.settings.url = $this.uploader.settings.url + '&path=' + $this.options.path;
+      }
+
+      // if S3 storage
+      if($this.options.storage === 's3') {
+        // update the upload path and file name
+        var folder = $this.options.path ? $this.options.path + '/' : '';
+        $this.uploader.settings.multipart_params.key = folder + file.name;
+      }
+
+      // set progress to 0
+      $('.zlux-upload-file-progress', $file).html('0%');
+
+      // set the started status
+      file.zlux_status = 2;
+
+      // update status
+      $this._handleFileStatus(file);
+
+      // change the buttons/icons
+      $('.zlux-upload-file-btn-remove', $file).removeClass('icon-remove').addClass('icon-spinner icon-spin');
+
+      // trigger event
+      $this.trigger("BeforeUpload", file);
+    },
+    /*
+     * Fires when a file is to be uploaded by the runtime.
+     */
+    eventUploadFile: function(file) {
+      var $this = this;
+
+      // prepare object
+      var $object = {
+        name: file.name,
+        basename: file.name.replace(/(\.[a-z0-9]+)$/, ''),
+        type: 'file', // upload folders is not yet posible
+        content_type: file.type,
+        size: {size: file.size, display: plupload.formatSize(file.size)}
+      };
+
+      // add the file dom
+      $object.dom = $('#' + file.id, $this.filelist);
+
+      // create and save the upload deferrer
+      $this.uploading = $.Deferred()
+
+      // if the upload fails
+      .fail(function(msg){
+        // trigger file error event
+        $this.trigger("FileNotUpload", $object, msg);
+      })
+
+      // if succeeds
+      .done(function(result){
+
+        // update the file name
+        $object.name = result;
+
+        // trigger event
+        $this.trigger("FileUploaded", $object);
+      })
+
+      // always
+      .always(function(){
+        // update file status
+        $this._handleFileStatus(file);
+      });
+    },
+    /*
+     * Fires while a file is being uploaded.
+     */
+    eventUploadProgress: function(file) {
+      var $this = this,
+
+      // avoid the NaN value
+      percentage = isNaN(file.percent) ? 0 : file.percent;
+
+      // upload the progress info
+      $('#' + file.id + ' .zlux-upload-file-progress', $this.filelist).html(percentage + '%');
+
+      // update status
+      $this._handleFileStatus(file);
+    },
+    /*
+     * Fires when a file is successfully uploaded.
+     */
+    eventFileUploaded: function(file, info) {
+      var $this = this,
+        response;
+
+      // if local storage
+      if($this.options.storage === 'local') {
+        response = $.parseJSON(info.response);
+
+        // resolve/reject the deferrer
+        if (response.error) {
+          $this.uploading.reject(response.error.message);
+        } else {
+          $this.uploading.resolve(response.result);
+        }
+      }
+
+      // if s3 storage
+      else if($this.options.storage === 's3') {
+        response = $(info.response);
+
+        // resolve/reject the deferrer
+        $this.uploading.resolve(response.find('Key').html());
+      }
+    },
+    /*
+     * Fires when all files in a queue are uploaded.
+     */
+    eventUploadComplete: function(file) {
+      var $this = this;
+
+      // trigger event
+      $this.trigger("UploadComplete", file);
+    },
+    /*
+     * Fires when the uploading is canceled by the user.
+     */
+    eventCancelUpload: function() {
+      var $this = this;
+
+      // trigger event
+      $this.trigger("CancelUpload");
+    },
+    /*
+     * Fires while when the user selects files to upload.
+     */
+    eventFilesAdded: function(files) {
+      var $this = this;
+
+      // trigger event
+      $this.trigger("FilesAdded", files);
+    },
+    /*
+     * Fires when the file queue is changed.
+     */
+    eventQueueChanged: function() {
+      var $this = this;
+
+      // refresh the filelist
+      $this._updateFilelist();
+    },
+    /*
+     * Get files yet to be uploaded
+     */
+    getQueuedFiles: function() {
+      var $this = this,
+        files = [];
+
+      // add the file preview
+      $.each($this.uploader.files, function(index, file) {
+        if (file.status !== plupload.DONE && file.status !== 'validating') files.push(file);
+      });
+
+      return files;
+    },
+    /*
+     * Empty the file queue and dom
+     */
+    emptyQueue: function() {
+      var $this = this;
+
+      // removes all file froms queue and dom
+      $this.uploader.splice();
+      $this.filelist.empty();
+    },
+    _updateFilelist: function() {
+      var $this = this,
+        queued = false,
+        objects = $('.zlux-object', $this.filelist); // there could be empty objects, wrong file ext for ex
+
+      // foreach file
+      $.each($this.uploader.files, function(index, file) {
+
+        // check if there are files left to upload
+        if (file.status !== plupload.DONE && file.status !== 'validating') {
+          queued = true;
+        }
+
+        // check for stopped files
+        if (file.status === plupload.STOPPED) {
+          // refresh file statut
+          $this._handleFileStatus(file);
+        }
+      });
+
+      // if files left
+      if ($this.uploader.files.length || objects.length) {
+        // hide the dropzone msg
+        $('.zlux-upload-dropzone-msg', $this.upload).hide();
+      }
+
+      // if no files left
+      if (!$this.uploader.files.length && !objects.length) {
+
+        // update the upload status
+        $this.upload.attr('data-zlux-status', '');
+
+        // show the dropzone message
+        $('.zlux-upload-dropzone-msg', $this.upload).fadeIn();
+
+      // if queued files left
+      } else if (queued) {
+
+        // update the upload status
+        $this.upload.attr('data-zlux-status', 'queued');
+
+      // if uploaded files left
+      } else {
+
+        // update the upload status
+        $this.upload.attr('data-zlux-status', 'stopped');
+      }
+
+      // fire queue event
+      $this.trigger("QueueChanged", $this.uploader.files);
+    },
+    _handleFileStatus: function(file) {
+      var $this = this,
+        $file = $('#' + file.id, $this.filelist),
+        status = '';
+
+      // check custom status
+      if (file.zlux_status === plupload.STARTED) {
+        status = 'started';
+
+        // unset the status to avoid further conflicts
+        file.zlux_status = '';
+
+      // else check default status
+      } else {
+
+        if (file.status === plupload.DONE) {
+          status = 'done';
+        }
+
+        if (file.status === plupload.FAILED) {
+          status = 'failed';
+        }
+
+        if (file.status === plupload.QUEUED) {
+          status = 'queued';
+        }
+
+        if (file.status === plupload.UPLOADING) {
+          status = 'uploading';
+        }
+
+        if (file.status === plupload.STOPPED) {
+          // reset the file upload progress
+          $('.zlux-upload-file-progress', $file).html('');
+        }
+      }
+
+      // set the file status
+      $file.attr('data-zlux-status', status);
+    },
+    /**
+      Init the Drag and Drop events
+
+      In order to normalize the window in/out for File dragging a jQuery collection $() is used to keep track of what events were fired on what elements. The event.target is added the collection whenever dragenter was fired and removed whenever dragleave happened. The idea is if the collection is empty it means we have actually left the original element because if we were entering a child element at least one element (the child) would still be in the jQuery collection. This workaround doesn't work with Plupload DnD declared element, additional events must be used instead.
+
+      Original idea - http://stackoverflow.com/a/10310815/698289
+    */
+    initDnDevents: function() {
+      var $this = this,
+      collection = $(),
+      dz_collection = $(),
+      inWindow = false,
+      inDZ = false;
+
+      // Make sure if we drop something on the page we don't navigate away
+      $(window).on("drop", function(e) {
+        e.preventDefault();
+        return false;
+      })
+
+      // when enter the window draging a file, fire the event
+      .on('dragenter', function(e) {
+
+        if (collection.size() === 0) {
+          $this.trigger('WindowDragHoverStart');
+
+          // update zones
+          inWindow = true;
+          inDZ = false;
+        }
+
+        collection = collection.add(e.target);
+      })
+
+      // when leave the window or drop a file on it, fire the event
+      .on('dragleave drop', function(e) {
+
+        // timeout is needed because Firefox 3.6 fires the dragleave event on
+        // the previous element before firing dragenter on the next one
+        setTimeout(function() {
+          var isChild = false;
+
+          // FF workaround, in order to avoid permission errors dragging outside the body, use the try-catch
+          // to check if the relatedTarget is a child of the body
+          try {
+            isChild = $('body').find(e.relatedTarget).length ? true : isChild;
+          }
+          catch(err){} // do nothing
+
+          // remove target from collection
+          collection = collection.not(e.target);
+
+
+          if (collection.size() === 0 && !isChild) {
+            inWindow = false;
+          }
+        }, 1);
+
+        // check a while later if both zones are left
+        setTimeout(function() {
+          if(!inWindow && !inDZ){
+            $this.trigger('WindowDragHoverEnd');
+            dz_collection = $();
+            collection = $();
+          }
+        }, 2);
+      });
+
+
+      // because of plupload events on the dropzone, it's considered like new window, so must be checked separatly
+      $this.dropzone.on('dragenter', function(e) {
+
+        if (dz_collection.size() === 0) {
+          $this.trigger('WindowDragHoverStart');
+
+          // update zones
+          inWindow = false;
+          inDZ = true;
+        }
+
+        dz_collection = dz_collection.add(e.target);
+      });
+
+      $this.dropzone.on('dragleave drop', function(e) {
+
+        setTimeout(function() {
+          var isChild = false;
+
+          // FF workaround, in order to avoid permission errors dragging outside the body, use the try-catch
+          // to check if the relatedTarget is a child of the body
+          try {
+            isChild = $('body').find(e.relatedTarget).length ? true : isChild;
+          }
+          catch(err){} // do nothing
+
+          // remove target from collection
+          dz_collection = dz_collection.not(e.target);
+
+          // this event could be prevented, once each time
+          if (dz_collection.size() === 0 && !isChild) {
+            inDZ = false;
+          }
+
+        }, 1);
+
+        // check a while later if both zones are left
+        setTimeout(function() {
+          if(!inWindow && !inDZ){
+            $this.trigger('WindowDragHoverEnd');
+            dz_collection = $();
+            collection = $();
+          }
+        }, 2);
+      });
+    }
+  });
+  // Don't touch
+  $.zlux[Plugin.prototype.name] = function() {
+    var args = arguments;
+    return new Plugin(args[0] ? args[0] : {});
+  };
+})(jQuery, window, document);
+
+
+/* ===================================================
+ * ZLUX filesPreview
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+;(function ($, window, document, undefined) {
+  "use strict";
+  var Plugin = function(options){
+    this.options = $.extend({}, this.options, options);
+    this.events = {};
+  };
+  $.extend(Plugin.prototype, $.zlux.Main.prototype, {
+    name: 'filesPreview',
+    renderPreviewDOM: function(oData, preview) {
+      var $this = this,
+        sThumb,
+        aDetails = [];
+
+      // set defaults
+      preview = preview === undefined ? false : preview;
+      oData.size = oData.size === undefined ? false : oData.size;
+
+      // set name
+      aDetails.push({name: 'name', value: oData.basename});
+
+      // prepare the details
+      if (oData.type === 'folder') {
+        sThumb = '<span class="zlux-x-folder"></span>';
+      } else { // file
+
+        // if preview enabled render a mini preview of the file
+        if (preview) {
+          sThumb = '<div class="zlux-x-image"><img src="' + $.zlux.url.root(oData.path) + '" /></div>';
+        } else {
+          sThumb = '<span class="zlux-x-filetype">' + oData.ext + '</span>';
+        }
+
+        // set size if available
+        if (oData.size) aDetails.push({name: 'size', value: oData.size.display});
+      }
+
+      var sDetails = '';
+      $.each(aDetails, function(i, detail){
+        sDetails += '<li>' + detail.value + '</li>';
+      });
+
+      // set and return the DOM
+      return $(
+        '<div class="zlux-preview">' +
+          // thumbnail
+          '<div class="zlux-x-thumbnail">' +
+            sThumb +
+          '</div>' +
+
+          // details
+          '<ul class="zlux-x-details unstyled">' + sDetails + '</ul>' +
+        '</div>'
+      );
+    }
+  });
+  // Don't touch
+  $.zlux[Plugin.prototype.name] = function() {
+    var args = arguments;
+    return new Plugin(args[0] ? args[0] : {});
+  };
+})(jQuery, window, document);

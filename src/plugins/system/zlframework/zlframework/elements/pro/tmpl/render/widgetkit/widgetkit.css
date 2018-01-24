@@ -1,3 +1,6 @@
 
-
-#lightbox-wrap #lightbox-title.lightbox-title-none{display:none!important}
+/* Common
+----------------------------------------------------------------------------------------------------*/
+#lightbox-wrap #lightbox-title.lightbox-title-none {
+    display: none !important;
+}

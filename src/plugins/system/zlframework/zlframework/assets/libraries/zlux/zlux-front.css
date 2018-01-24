@@ -1,1 +1,5 @@
-body .zl-bootstrap .btn-working i{background:url(img/loader-btn.gif) no-repeat}
+/* ZL Bootstrap
+----------------------------------------------------------------------------------------------------*/
+body .zl-bootstrap .btn-working i {
+    background:url(img/loader-btn.gif) no-repeat scroll 0 0 transparent
+}

@@ -4,11 +4,11 @@ jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.folder');
 
 /*
-	Class: ZL Installer Script
-		The InstallerScript abstract class
+    Class: ZL Installer Script
+        The InstallerScript abstract class
 */
-
-abstract class zlInstallerScript {
+abstract class zlInstallerScript
+{
     /*
         Variable: db
             The DB object reference.
@@ -60,7 +60,8 @@ abstract class zlInstallerScript {
     /**
      * Set initials vars
      */
-    public function initVars ($type, $parent) {
+    public function initVars($type, $parent)
+    {
         $this->db = JFactory::getDBO();
         $this->type = strtolower($type);
         $this->parent = $parent;
@@ -72,56 +73,54 @@ abstract class zlInstallerScript {
     /**
      * Called before any type of action
      *
-     * @param   string $type Which action is happening (install|uninstall|discover_install)
-     * @param   object $parent The object responsible for running this script
+     * @param   string  $type  Which action is happening (install|uninstall|discover_install)
+     * @param   object  $parent  The object responsible for running this script
      *
      * @return  boolean  True on success
      */
-    public function preflight ($type, $parent) {
-    }
+    public function preflight($type, $parent){}
 
     /**
      * Called on installation
      *
-     * @param   object $parent The object responsible for running this script
+     * @param   object  $parent  The object responsible for running this script
      *
      * @return  boolean  True on success
      */
-    public function install ($parent) {
-    }
+    public function install($parent){}
 
     /**
      * Called on update
      *
      * @return void
      */
-    public function update ($parent) {
-    }
+    public function update($parent){}
 
     /**
      * Called on uninstallation
      *
-     * @param   object $parent The object responsible for running this script
+     * @param   object  $parent  The object responsible for running this script
      *
      * @return  boolean  True on success
      */
-    public function uninstall ($parent) {
-    }
+    public function uninstall($parent){}
 
     /**
      * Called after all actions
      *
-     * @param   string $type Which action is happening (install|uninstall|discover_install)
-     * @param   object $parent The object responsible for running this script
+     * @param   string  $type  Which action is happening (install|uninstall|discover_install)
+     * @param   object  $parent  The object responsible for running this script
      *
      * @return  boolean  True on success
      */
-    public function postflight ($type, $parent) {
+    public function postflight($type, $parent)
+    {
         // init vars
         $new_version = (string)$parent->get('manifest')->version;
 
         // after install
-        if ($type == 'install') {
+        if($type == 'install')
+        {
             // set ext version
             $this->setVersion();
 
@@ -130,7 +129,8 @@ abstract class zlInstallerScript {
         }
 
         // after update
-        if ($this->type == 'update') {
+        if($this->type == 'update')
+        {
             // set ext version
             $this->setVersion();
 
@@ -139,7 +139,8 @@ abstract class zlInstallerScript {
         }
 
         // after uninstall
-        if ($type == 'uninstall') {
+        if($type == 'uninstall')
+        {
             // remove version from schema table
             $this->cleanVersion();
         }
@@ -150,61 +151,64 @@ abstract class zlInstallerScript {
      *
      * @return  boolean  True on success
      */
-    protected function checkDependencies ($parent) {
+    protected function checkDependencies($parent)
+    {
         // init vars
-        $dependencies = $parent->get("manifest")->dependencies->attributes();
+        $dependencies = $parent->get( "manifest" )->dependencies->attributes();
 
         // check Joomla
-        if ($min_v = (string)$dependencies->joomla) {
+        if ($min_v = (string)$dependencies->joomla)
+        {
             // if up to date
             $joomla_release = new JVersion();
             $joomla_release = $joomla_release->getShortVersion();
-            if (version_compare((string)$joomla_release, $min_v, '<')) {
+            if( version_compare( (string)$joomla_release, $min_v, '<' ) ) {
                 $this->_error = JText::sprintf('PLG_ZLFRAMEWORK_SYS_DEPENDENCY_OUTDATED', $this->ext_name, 'http://www.joomla.org', 'Joomla!', $min_v);
                 return false;
             }
         }
 
         // check ZOO
-        if ($min_v = (string)$dependencies->zoo) {
+        if ($min_v = (string)$dependencies->zoo)
+        {
             // if installed and enabled
-            if (!JFile::exists(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php')
-                || !JComponentHelper::getComponent('com_zoo', true)->enabled
-            ) {
+            if (!JFile::exists(JPATH_ADMINISTRATOR.'/components/com_zoo/config.php')
+                || !JComponentHelper::getComponent('com_zoo', true)->enabled) {
                 $this->_error = JText::sprintf('PLG_ZLFRAMEWORK_SYS_DEPENDENCY_MISSING', $this->ext_name, 'http://www.yootheme.com/zoo', 'ZOO');
                 return false;
             }
 
             // if up to date
-            $zoo_manifest = simplexml_load_file(JPATH_ADMINISTRATOR . '/components/com_zoo/zoo.xml');
+            $zoo_manifest = simplexml_load_file(JPATH_ADMINISTRATOR.'/components/com_zoo/zoo.xml');
 
-            if (version_compare((string)$zoo_manifest->version, $min_v, '<')) {
+            if( version_compare((string)$zoo_manifest->version, $min_v, '<') ) {
                 $this->_error = JText::sprintf('PLG_ZLFRAMEWORK_SYS_DEPENDENCY_OUTDATED', $this->ext_name, 'http://www.yootheme.com/zoo', 'ZOO', $min_v);
                 return false;
             }
         }
 
         // check ZL
-        if ($min_v = (string)$dependencies->zl) {
+        if ($min_v = (string)$dependencies->zl)
+        {
             // if installed and enabled
-            if (!JFile::exists(JPATH_ADMINISTRATOR . '/components/com_zoolanders/zoolanders.php')
-                || !JComponentHelper::getComponent('com_zoolanders', true)->enabled
-            ) {
+            if (!JFile::exists(JPATH_ADMINISTRATOR.'/components/com_zoolanders/zoolanders.php')
+                || !JComponentHelper::getComponent('com_zoolanders', true)->enabled) {
                 $this->_error = JText::sprintf('PLG_ZLFRAMEWORK_SYS_DEPENDENCY_MISSING', $this->ext_name, 'https://www.zoolanders.com/extensions/zoolanders', 'ZOOlanders Component');
                 return false;
             }
 
             // if up to date
-            $zl_manifest = simplexml_load_file(JPATH_ADMINISTRATOR . '/components/com_zoolanders/zoolanders.xml');
+            $zl_manifest = simplexml_load_file(JPATH_ADMINISTRATOR.'/components/com_zoolanders/zoolanders.xml');
 
-            if (version_compare((string)$zl_manifest->version, $min_v, '<')) {
+            if( version_compare((string)$zl_manifest->version, $min_v, '<') ) {
                 $this->_error = JText::sprintf('PLG_ZLFRAMEWORK_SYS_DEPENDENCY_OUTDATED', $this->ext_name, 'https://www.zoolanders.com/extensions/zoolanders', 'ZOOlanders Component', $min_v);
                 return false;
             }
         }
 
         // check ZLFW
-        if ($min_v = (string)$dependencies->zlfw) {
+        if ($min_v = (string)$dependencies->zlfw)
+        {
             // if installed and enabled
             if (!JPluginHelper::getPlugin('system', 'zlframework')) {
                 $this->_error = JText::sprintf('PLG_ZLFRAMEWORK_SYS_DEPENDENCY_MISSING', $this->ext_name, 'https://www.zoolanders.com/extensions/zl-framework', 'ZL Framework');
@@ -212,9 +216,9 @@ abstract class zlInstallerScript {
             }
 
             // if up to date
-            $zlfw_manifest = simplexml_load_file(JPATH_ROOT . '/plugins/system/zlframework/zlframework.xml');
+            $zlfw_manifest = simplexml_load_file(JPATH_ROOT.'/plugins/system/zlframework/zlframework.xml');
 
-            if (version_compare((string)$zlfw_manifest->version, $min_v, '<')) {
+            if( version_compare((string)$zlfw_manifest->version, $min_v, '<') ) {
                 $this->_error = JText::sprintf('PLG_ZLFRAMEWORK_SYS_DEPENDENCY_OUTDATED', $this->ext_name, 'https://www.zoolanders.com/extensions/zl-framework', 'ZL Framework', $min_v);
                 return false;
             }
@@ -228,8 +232,9 @@ abstract class zlInstallerScript {
      *
      * @return  string
      */
-    protected function langString ($string) {
-        return $this->lng_prefix . $string;
+    protected function langString($string)
+    {
+        return $this->lng_prefix.$string;
     }
 
     /**
@@ -237,8 +242,9 @@ abstract class zlInstallerScript {
      *
      * @return  string
      */
-    protected function getExtID () {
-        if (!$this->_ext_id) {
+    protected function getExtID()
+    {
+        if(!$this->_ext_id) {
             $this->db->setQuery("SELECT `extension_id` FROM `#__extensions` WHERE `element` = '{$this->_ext}'");
             if ($plg = $this->db->loadObject())
                 $this->_ext_id = (int)$plg->extension_id;
@@ -250,12 +256,13 @@ abstract class zlInstallerScript {
     /**
      * Gets the current version from schema table
      */
-    public function getVersion () {
+    public function getVersion()
+    {
         // set query
         $this->db->setQuery("SELECT `version_id` FROM `#__schemas` WHERE `extension_id` = '{$this->getExtID()}'");
 
         // load and return
-        if ($obj = $this->db->loadObject()) {
+        if($obj = $this->db->loadObject()) {
             return $obj->version_id;
         }
 
@@ -267,7 +274,8 @@ abstract class zlInstallerScript {
      *
      * @param string $version
      */
-    public function setVersion ($version = null) {
+    public function setVersion($version = null)
+    {
         // init vars
         $version = $version ? $version : (string)$this->parent->get('manifest')->version;
         $version = str_replace(array(' ', '_'), '', $version);
@@ -283,13 +291,13 @@ abstract class zlInstallerScript {
                 ->values($ext_id . ', ' . $this->db->quote($version));
             $this->db->setQuery($query)->execute();
 
-            // of update if exists
+        // of update if exists
         } else {
             $query = $this->db->getQuery(true);
             $query->clear()
                 ->update($this->db->quoteName('#__schemas'))
                 ->set($this->db->quoteName('version_id') . ' = ' . $this->db->quote($version))
-                ->where($this->db->quoteName('extension_id') . ' = ' . $ext_id);
+                ->where($this->db->quoteName('extension_id').' = '. $ext_id);
             $this->db->setQuery($query)->execute();
         }
     }
@@ -297,7 +305,7 @@ abstract class zlInstallerScript {
     /**
      * Removes the version from schema table
      */
-    protected function cleanVersion () {
+    protected function cleanVersion(){
         $this->db->setQuery("DELETE FROM `#__schemas` WHERE `extension_id` = '{$this->getExtID()}'")->execute();
     }
 
@@ -309,9 +317,10 @@ abstract class zlInstallerScript {
      *
      * @return array versions of required updates
      */
-    public function getRequiredUpdates ($version, $path) {
+    public function getRequiredUpdates($version, $path)
+    {
         if ($files = JFolder::files($path, '^\d+.*\.php$')) {
-            $files = array_map(create_function('$file', 'return basename($file, ".php");'), array_filter($files, create_function('$file', 'return version_compare("' . $version . '", basename($file, ".php")) < 0;')));
+            $files = array_map(create_function('$file', 'return basename($file, ".php");'), array_filter($files, create_function('$file', 'return version_compare("'.$version.'", basename($file, ".php")) < 0;')));
             usort($files, create_function('$a, $b', 'return version_compare($a, $b);'));
         }
 
@@ -326,16 +335,17 @@ abstract class zlInstallerScript {
      *
      * @return bool Result of the update
      */
-    public function runUpdates ($current_v, $path) {
+    public function runUpdates($current_v, $path)
+    {
         // get required updates
         $updates = $this->getRequiredUpdates($current_v, $path);
 
         // run each of them
         foreach ($updates as $version) {
             if ((version_compare($version, $current_v) > 0)) {
-                $class = 'Update' . str_replace('.', '', $version);
+                $class = 'Update'.str_replace('.', '', $version);
                 if (!class_exists($class)) {
-                    JLoader::register($class, $path . '/' . $version . '.php');
+                    JLoader::register($class, $path.'/'.$version.'.php');
                 }
 
                 if (class_exists($class)) {
@@ -377,7 +387,7 @@ abstract class zlUpdate {
         Function: __construct
             Class Constructor.
     */
-    public function __construct () {
+    public function __construct() {
 
         // set DB instance
         $this->db = JFactory::getDBO();
@@ -386,13 +396,14 @@ abstract class zlUpdate {
     /**
      * Check if column exists in specified table
      */
-    function column_exists ($column, $table) {
+    function column_exists($column, $table)
+    {
         $exists = false;
         $this->db->setQuery("SHOW columns FROM `{$table}`");
         $columns = $this->db->loadAssocList();
 
-        if (is_array($columns)) while (list ($key, $val) = each($columns)) {
-            if ($val['Field'] == $column) {
+        if (is_array($columns)) while (list ($key, $val) = each ($columns)) {
+            if($val['Field'] == $column) {
                 $exists = true;
                 break;
             }
@@ -404,26 +415,27 @@ abstract class zlUpdate {
     /**
      * Removes obsolete files and folders
      */
-    public function removeObsolete () {
+    public function removeObsolete()
+    {
         // Remove files
-        if (isset($this->_obsolete['files']) && !empty($this->_obsolete['files']))
-            foreach ($this->_obsolete['files'] as $file) {
-                $f = JPATH_ROOT . '/' . $file;
-                if (!JFile::exists($f)) continue;
+        if(isset($this->_obsolete['files']) && !empty($this->_obsolete['files']))
+            foreach($this->_obsolete['files'] as $file) {
+                $f = JPATH_ROOT.'/'.$file;
+                if(!JFile::exists($f)) continue;
                 JFile::delete($f);
-            }
+        }
 
         // Remove folders
-        if (isset($this->_obsolete['folders']) && !empty($this->_obsolete['folders']))
-            foreach ($this->_obsolete['folders'] as $folder) {
-                $f = JPATH_ROOT . '/' . $folder;
-                if (!JFolder::exists($f)) continue;
+        if(isset($this->_obsolete['folders']) && !empty($this->_obsolete['folders']))
+            foreach($this->_obsolete['folders'] as $folder) {
+                $f = JPATH_ROOT.'/'.$folder;
+                if(!JFolder::exists($f)) continue;
                 JFolder::delete($f);
-            }
+        }
     }
 
     /**
      * Performs the update
      */
-    abstract public function run ();
+    abstract public function run();
 }

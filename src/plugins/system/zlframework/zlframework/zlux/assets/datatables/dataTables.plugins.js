@@ -1,3 +1,328 @@
+(function ($) {
+
+/*
+ * Function: fnGetColumnData
+ * Purpose:  Return an array of table values from a particular column.
+ * Returns:  array string: 1d data array
+ * Inputs:   object:oSettings - dataTable settings object. This is always the last argument past to the function
+ *           int:iColumn - the id of the column to extract the data from
+ *           bool:bUnique - optional - if set to false duplicated values are not filtered out
+ *           bool:bFiltered - optional - if set to false all the table data is used (not only the filtered)
+ *           bool:bIgnoreEmpty - optional - if set to false empty values are not filtered from the result array
+ * Author:   Benedikt Forchhammer <b.forchhammer /AT\ mind2.de>
+ */
+jQuery.fn.dataTableExt.oApi.fnGetColumnData = function ( oSettings, iColumn, bUnique, bFiltered, bIgnoreEmpty ) {
+	// check that we have a column id
+	if ( typeof iColumn == "undefined" ) return [];
+
+	// by default we only wany unique data
+	if ( typeof bUnique == "undefined" ) bUnique = true;
+
+	// by default we do want to only look at filtered data
+	if ( typeof bFiltered == "undefined" ) bFiltered = true;
+
+	// by default we do not wany to include empty values
+	if ( typeof bIgnoreEmpty == "undefined" ) bIgnoreEmpty = true;
+
+	// list of rows which we're going to loop through
+	var aiRows;
+
+	// use only filtered rows
+	if (bFiltered == true) aiRows = oSettings.aiDisplay; 
+	// use all rows
+	else aiRows = oSettings.aiDisplayMaster; // all row numbers
+ 
+	// set up data array    
+	var asResultData = new Array();
+
+	for (var i=0,c=aiRows.length; i<c; i++) {
+		iRow = aiRows[i];
+		var sValue = this.fnGetData(iRow, iColumn);
+
+		// ignore empty values?
+		if (bIgnoreEmpty == true && sValue.length == 0) continue;
+ 
+		// ignore unique values?
+		else if (bUnique == true && jQuery.inArray(sValue, asResultData) > -1) continue;
+
+		// else push the value onto the result data array
+		else asResultData.push(sValue);
+	}
+
+	return asResultData;
+};
 
 
-!function(a){jQuery.fn.dataTableExt.oApi.fnGetColumnData=function(a,e,i,n,t){if("undefined"==typeof e)return[];"undefined"==typeof i&&(i=!0),"undefined"==typeof n&&(n=!0),"undefined"==typeof t&&(t=!0);var l;l=1==n?a.aiDisplay:a.aiDisplayMaster;for(var s=new Array,r=0,o=l.length;o>r;r++){iRow=l[r];var f=this.fnGetData(iRow,e);1==t&&0==f.length||1==i&&jQuery.inArray(f,s)>-1||s.push(f)}return s},a.fn.dataTableExt.oApi.fnReloadAjax=function(a,e,i,n){if("undefined"!=typeof e&&null!=e&&(a.sAjaxSource=e),a.oFeatures.bServerSide)return void this.fnDraw();this.oApi._fnProcessingDisplay(a,!0);var t=this,l=a._iDisplayStart,s=[];this.oApi._fnServerParams(a,s),a.fnServerData.call(a.oInstance,a.sAjaxSource,s,function(e){t.oApi._fnClearTable(a);for(var s=""!==a.sAjaxDataProp?t.oApi._fnGetObjectDataFn(a.sAjaxDataProp)(e):e,r=0;r<s.length;r++)t.oApi._fnAddData(a,s[r]);a.aiDisplay=a.aiDisplayMaster.slice(),"undefined"!=typeof n&&n===!0?(a._iDisplayStart=l,t.fnDraw(!1)):t.fnDraw(),t.oApi._fnProcessingDisplay(a,!1),"function"==typeof i&&null!=i&&i(a)},a)},a.fn.dataTableExt.aoFeatures.push({fnInit:function(a){return new e(a)},cFeature:"F",sFeature:"Filtering"});var e=function(e){var n=a('<div class="zlux-x-filter-input_wrapper" />'),t=null;return a('<input type="text" class="zlux-x-filter-input" />').on("keyup",function(n){var l=a(this).val();clearTimeout(t),""==l&&i(e,"");var s=n.keyCode?n.keyCode:n.which;13==s&&i(e,l),t=setTimeout(function(){i(e,l)},500)}).appendTo(n),n[0]},i=function(a,e){e!=a.oPreviousSearch.sSearch&&a.oInstance.fnFilter(e)};a.extend(!0,a.fn.dataTable.defaults,{sDom:"<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",sPaginationType:"bootstrap",oLanguage:{sProcessing:'<span class="zlux-loader-circle-big"></span>',sLengthMenu:"_MENU_ records per page"},bProcessing:!1,bLengthChange:!1}),a.extend(a.fn.dataTableExt.oStdClasses,{sWrapper:"dataTables_wrapper form-horizontal zlux-datatables",sStripeOdd:"",sStripeEven:""}),a.fn.dataTableExt.oApi.fnPagingInfo=function(a){return{iStart:a._iDisplayStart,iEnd:a.fnDisplayEnd(),iLength:a._iDisplayLength,iTotal:a.fnRecordsTotal(),iFilteredTotal:a.fnRecordsDisplay(),iPage:-1===a._iDisplayLength?0:Math.ceil(a._iDisplayStart/a._iDisplayLength),iTotalPages:-1===a._iDisplayLength?0:Math.ceil(a.fnRecordsDisplay()/a._iDisplayLength)}};var n=function(a){a.aoDrawCallback.push({fn:function(){for(var e=a.oInstance.fnPagingInfo().iTotalPages>1,i=0,n=a.aanFeatures.p.length;n>i;i++)a.aanFeatures.p[i].style.display=e?"block":"none"},sName:"PagingControl"})};a.fn.dataTableExt.aoFeatures.push({fnInit:function(a){new n(a)},cFeature:"P",sFeature:"PagingControl"}),a.extend(a.fn.dataTableExt.oPagination,{bootstrap:{fnInit:function(e,i,n){var t=(e.oLanguage.oPaginate,function(a){a.preventDefault(),e.oApi._fnPageChange(e,a.data.action)&&n(e)});a(i).addClass("pagination").append('<ul class="zlux-x-pagination"><li class="first disabled"><a href="#" class="zlux-x-btn"><i class="icon-double-angle-left"></i></a></li><li class="prev disabled"><a href="#" class="zlux-x-btn"><i class="icon-angle-left"></i></a></li><li class="next disabled"><a href="#" class="zlux-x-btn"><i class="icon-angle-right"></i></a></li><li class="last disabled"><a href="#" class="zlux-x-btn"><i class="icon-double-angle-right"></i></a></li></ul>');var l=a("a",i);a(l[0]).bind("click.DT",{action:"first"},t),a(l[1]).bind("click.DT",{action:"previous"},t),a(l[2]).bind("click.DT",{action:"next"},t),a(l[3]).bind("click.DT",{action:"last"},t)},fnUpdate:function(e,i){var n,t,l,s,r,o,f=4,p=e.oInstance.fnPagingInfo(),c=e.aanFeatures.p,u=Math.floor(f/2);for(p.iTotalPages<f?(r=1,o=p.iTotalPages):p.iPage<=u?(r=1,o=f):p.iPage>=p.iTotalPages-u?(r=p.iTotalPages-f+1,o=p.iTotalPages):(r=p.iPage-u+1,o=r+f-1),n=0,t=c.length;t>n;n++){for(a("li:gt(1)",c[n]).filter(":not(:last)").not(".next").remove(),l=r;o>=l;l++)s=l==p.iPage+1?'class="active"':"",a("<li "+s+'><a href="#">'+l+"</a></li>").insertBefore(a("li.next, li.last",c[n])[0]).bind("click",function(n){n.preventDefault(),e._iDisplayStart=(parseInt(a("a",this).text(),10)-1)*p.iLength,i(e)});0===p.iPage?a("li.first, li.prev",c[n]).addClass("disabled"):a("li.first, li.prev",c[n]).removeClass("disabled"),p.iPage===p.iTotalPages-1||0===p.iTotalPages?a("li.next, li.last",c[n]).addClass("disabled"):a("li.next, li.last",c[n]).removeClass("disabled")}}}})}(jQuery);
+/**
+ * By default DataTables only uses the sAjaxSource variable at initialisation
+ * time, however it can be useful to re-read an Ajax source and have the table
+ * update. Typically you would need to use the fnClearTable() and fnAddData()
+ * functions, however this wraps it all up in a single function call.
+ *  @name fnReloadAjax
+ *  @anchor fnReloadAjax
+ *  @author <a href="http://sprymedia.co.uk">Allan Jardine</a>
+ *
+ *  @example
+ *    // Example call to load a new file
+ *    oTable.fnReloadAjax( 'media/examples_support/json_source2.txt' );
+ *     
+ *    // Example call to reload from original file
+ *    oTable.fnReloadAjax();
+ */
+$.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallback, bStandingRedraw )
+{
+	if ( typeof sNewSource != 'undefined' && sNewSource != null ) {
+		oSettings.sAjaxSource = sNewSource;
+	}
+
+	// Server-side processing should just call fnDraw
+	if ( oSettings.oFeatures.bServerSide ) {
+		this.fnDraw();
+		return;
+	}
+
+	this.oApi._fnProcessingDisplay( oSettings, true );
+	var that = this;
+	var iStart = oSettings._iDisplayStart;
+	var aData = [];
+ 
+	this.oApi._fnServerParams( oSettings, aData );
+
+	oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aData, function(json) {
+		/* Clear the old information from the table */
+		that.oApi._fnClearTable( oSettings );
+
+		/* Got the data - add it to the table */
+		var aData =  (oSettings.sAjaxDataProp !== "") ?
+			that.oApi._fnGetObjectDataFn( oSettings.sAjaxDataProp )( json ) : json;
+
+		for ( var i=0 ; i<aData.length ; i++ )
+		{
+			that.oApi._fnAddData( oSettings, aData[i] );
+		}
+
+		oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+
+		if ( typeof bStandingRedraw != 'undefined' && bStandingRedraw === true )
+		{
+			oSettings._iDisplayStart = iStart;
+			that.fnDraw( false );
+		}
+		else
+		{
+			that.fnDraw();
+		}
+
+		that.oApi._fnProcessingDisplay( oSettings, false );
+
+		/* Callback user function - for event handlers etc */
+		if ( typeof fnCallback == 'function' && fnCallback != null )
+		{
+			fnCallback( oSettings );
+		}
+	}, oSettings );
+};
+
+
+/* ===================================================
+ * DT Filtering
+ * ===================================================
+ * Copyright (C) JOOlanders SL 
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+$.fn.dataTableExt.aoFeatures.push({
+	"fnInit": function( oDTSettings ) {
+		return new DT_Filtering( oDTSettings );
+	},
+	"cFeature": "F",
+	"sFeature": "Filtering"
+});
+
+var DT_Filtering = function ( oSettings )
+{
+	// create the breadcrumb wrapper
+	var wrapper = $('<div class="zlux-x-filter-input_wrapper" />');
+
+	// prepare the input and it's events
+	var thread = null;
+	$('<input type="text" class="zlux-x-filter-input" />').on('keyup', function(e){
+		var val = $(this).val();
+
+		// clear any previous query execution
+		clearTimeout(thread);
+
+		// if input empty, reset search
+		if (val == '') DT_Filtering_search(oSettings, '');
+		
+		// perform search on enter key press
+		var code = (e.keyCode ? e.keyCode : e.which);
+		if (code == 13) {
+			// Enter key was pressed,
+			DT_Filtering_search(oSettings, val);
+		}
+
+		// queue the query
+		thread = setTimeout(function() { DT_Filtering_search(oSettings, val); }, 500); 
+	})
+
+	// add to wrapper
+	.appendTo(wrapper);
+
+	return wrapper[0];
+}
+
+var DT_Filtering_search = function ( oSettings, val )
+{
+	if ( val != oSettings.oPreviousSearch.sSearch ) {
+		oSettings.oInstance.fnFilter(val);
+	}
+}
+
+
+/* ===================================================
+ * Bootstrap integration - Custom Styling + Pagination
+ * ===================================================
+ * Copyright (C) JOOlanders SL 
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+
+/* Set the defaults for DataTables initialisation */
+$.extend( true, $.fn.dataTable.defaults, {
+	"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+	"sPaginationType": "bootstrap",
+	"oLanguage": {
+		"sProcessing": '<span class="zlux-loader-circle-big"></span>',
+		"sLengthMenu": "_MENU_ records per page"
+	},
+	"bProcessing": false, // the display processing will be managed externally
+	"bLengthChange": false
+});
+
+/* Default class modification */
+$.extend( $.fn.dataTableExt.oStdClasses, {
+	"sWrapper": "dataTables_wrapper form-horizontal zlux-datatables",
+	"sStripeOdd": "",
+	"sStripeEven": ""
+});
+
+
+/* API method to get paging information */
+$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
+{
+	return {
+		"iStart":         oSettings._iDisplayStart,
+		"iEnd":           oSettings.fnDisplayEnd(),
+		"iLength":        oSettings._iDisplayLength,
+		"iTotal":         oSettings.fnRecordsTotal(),
+		"iFilteredTotal": oSettings.fnRecordsDisplay(),
+		"iPage":          oSettings._iDisplayLength === -1 ?
+			0 : Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
+		"iTotalPages":    oSettings._iDisplayLength === -1 ?
+			0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
+	};
+};
+
+/* Pagination display control when no enaugh rows */
+var DT_PagingControl = function ( oDTSettings )
+{
+	oDTSettings.aoDrawCallback.push({
+		"fn": function () {
+			var bShow = oDTSettings.oInstance.fnPagingInfo().iTotalPages > 1;
+			for ( var i=0, iLen=oDTSettings.aanFeatures.p.length ; i<iLen ; i++ ) {
+				oDTSettings.aanFeatures.p[i].style.display = bShow ? "block" : "none";
+			}
+		},
+		"sName": "PagingControl"
+	});
+}
+
+$.fn.dataTableExt.aoFeatures.push({
+	"fnInit": function( oDTSettings ) {
+		new DT_PagingControl( oDTSettings );
+	},
+	"cFeature": "P",
+	"sFeature": "PagingControl"
+});
+
+
+/* Bootstrap style pagination control */
+$.extend( $.fn.dataTableExt.oPagination, {
+	"bootstrap": {
+		"fnInit": function( oSettings, nPaging, fnDraw ) {
+			var oLang = oSettings.oLanguage.oPaginate;
+			var fnClickHandler = function ( e ) {
+				e.preventDefault();
+				if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
+					fnDraw( oSettings );
+				}
+			};
+
+			$(nPaging).addClass('pagination').append(
+				'<ul class="zlux-x-pagination">'+
+					'<li class="first disabled"><a href="#" class="zlux-x-btn"><i class="icon-double-angle-left"></i></a></li>'+
+					'<li class="prev disabled"><a href="#" class="zlux-x-btn"><i class="icon-angle-left"></i></a></li>'+
+					'<li class="next disabled"><a href="#" class="zlux-x-btn"><i class="icon-angle-right"></i></a></li>'+
+					'<li class="last disabled"><a href="#" class="zlux-x-btn"><i class="icon-double-angle-right"></i></a></li>'+
+				'</ul>'
+			);
+			var els = $('a', nPaging);
+			$(els[0]).bind( 'click.DT', { action: "first" }, fnClickHandler );
+			$(els[1]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
+			$(els[2]).bind( 'click.DT', { action: "next" }, fnClickHandler );
+			$(els[3]).bind( 'click.DT', { action: "last" }, fnClickHandler );
+		},
+
+		"fnUpdate": function ( oSettings, fnDraw ) {
+			var iListLength = 4;
+			var oPaging = oSettings.oInstance.fnPagingInfo();
+			var an = oSettings.aanFeatures.p;
+			var i, ien, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
+
+			if ( oPaging.iTotalPages < iListLength) {
+				iStart = 1;
+				iEnd = oPaging.iTotalPages;
+			}
+			else if ( oPaging.iPage <= iHalf ) {
+				iStart = 1;
+				iEnd = iListLength;
+			} else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
+				iStart = oPaging.iTotalPages - iListLength + 1;
+				iEnd = oPaging.iTotalPages;
+			} else {
+				iStart = oPaging.iPage - iHalf + 1;
+				iEnd = iStart + iListLength - 1;
+			}
+
+			for ( i=0, ien=an.length ; i<ien ; i++ ) {
+				// Remove the middle elements
+				$('li:gt(1)', an[i]).filter(':not(:last)').not('.next').remove();
+
+				// Add the new list items and their event handlers
+				for ( j=iStart ; j<=iEnd ; j++ ) {
+					sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
+					$('<li '+sClass+'><a href="#">'+j+'</a></li>')
+						.insertBefore( $('li.next, li.last', an[i])[0] )
+						.bind('click', function (e) {
+							e.preventDefault();
+							oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
+							fnDraw( oSettings );
+						} );
+				}
+
+				// Add / remove disabled classes from the static elements
+				if ( oPaging.iPage === 0 ) {
+					$('li.first, li.prev', an[i]).addClass('disabled');
+				} else {
+					$('li.first, li.prev', an[i]).removeClass('disabled');
+				}
+
+				if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
+					$('li.next, li.last', an[i]).addClass('disabled');
+				} else {
+					$('li.next, li.last', an[i]).removeClass('disabled');
+				}
+			}
+		}
+	}
+} );
+})(jQuery);

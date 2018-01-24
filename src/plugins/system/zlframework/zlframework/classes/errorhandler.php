@@ -1,19 +1,20 @@
 <?php
 
 /**
- * Original Credits
- * AkeebaBackupPro AEAbstractObject \backend\akeeba\abstract\object.php
- *
- * @author        Nicholas K. Dionysopoulos
- * @copyright    Copyright (c)2009-2013 Nicholas K. Dionysopoulos
- * @license        GNU GPL version 3 or, at your option, any later version
- * @package        akeebaengine
- */
+* Original Credits
+* AkeebaBackupPro AEAbstractObject \backend\akeeba\abstract\object.php
+*
+* @author        Nicholas K. Dionysopoulos
+* @copyright    Copyright (c)2009-2013 Nicholas K. Dionysopoulos
+* @license        GNU GPL version 3 or, at your option, any later version
+* @package        akeebaengine
+*/
 
 /**
  * The base class for error and warnings logging and propagation
  */
-abstract class ZLErrorHandlerAbstractObject {
+abstract class ZLErrorHandlerAbstractObject
+{
     /** @var    array    An array of errors */
     private $_errors = array();
 
@@ -29,16 +30,18 @@ abstract class ZLErrorHandlerAbstractObject {
     /**
      * Public constructor, makes sure we are instanciated only by the factory class
      */
-    public function __construct () {
+    public function __construct()
+    {
         // Assisted Singleton pattern
-        if (function_exists('debug_backtrace')) {
-            $caller = debug_backtrace();
-            if (
+        if(function_exists('debug_backtrace'))
+        {
+            $caller=debug_backtrace();
+            if(
                 ($caller[1]['class'] != 'AEFactory') &&
                 ($caller[2]['class'] != 'AEFactory') &&
                 ($caller[3]['class'] != 'AEFactory')
             ) {
-                trigger_error("You can't create direct descendants of " . __CLASS__, E_USER_ERROR);
+                trigger_error("You can't create direct descendants of ".__CLASS__, E_USER_ERROR);
             }
         }
     }
@@ -47,15 +50,17 @@ abstract class ZLErrorHandlerAbstractObject {
      * This method should be overriden by descendant classes. It is called when the factory is being
      * serialized and can be used to perform any necessary cleanup steps.
      */
-    public function _onSerialize () {
+    public function _onSerialize()
+    {
     }
 
     /**
      * Get the most recent error message
-     * @param    integer $i Optional error index
+     * @param    integer    $i Optional error index
      * @return    string    Error message
      */
-    public function getError ($i = null) {
+    public function getError($i = null)
+    {
         return $this->getItemFromArray($this->_errors, $i);
     }
 
@@ -63,7 +68,8 @@ abstract class ZLErrorHandlerAbstractObject {
      * Return all errors, if any
      * @return    array    Array of error messages
      */
-    public function getErrors () {
+    public function getErrors()
+    {
         return $this->_errors;
     }
 
@@ -71,9 +77,12 @@ abstract class ZLErrorHandlerAbstractObject {
      * Add an error message
      * @param    string $error Error message
      */
-    public function setError ($error) {
-        if ($this->_errors_queue_size > 0) {
-            if (count($this->_errors) >= $this->_errors_queue_size) {
+    public function setError($error)
+    {
+        if($this->_errors_queue_size > 0)
+        {
+            if(count($this->_errors) >= $this->_errors_queue_size)
+            {
                 array_shift($this->_errors);
             }
         }
@@ -83,16 +92,18 @@ abstract class ZLErrorHandlerAbstractObject {
     /**
      * Resets all error messages
      */
-    public function resetErrors () {
+    public function resetErrors()
+    {
         $this->_errors = array();
     }
 
     /**
      * Get the most recent warning message
-     * @param    integer $i Optional warning index
+     * @param    integer    $i Optional warning index
      * @return    string    Error message
      */
-    public function getWarning ($i = null) {
+    public function getWarning($i = null)
+    {
         return $this->getItemFromArray($this->_warnings, $i);
     }
 
@@ -100,7 +111,8 @@ abstract class ZLErrorHandlerAbstractObject {
      * Return all warnings, if any
      * @return    array    Array of error messages
      */
-    public function getWarnings () {
+    public function getWarnings()
+    {
         return $this->_warnings;
     }
 
@@ -108,9 +120,12 @@ abstract class ZLErrorHandlerAbstractObject {
      * Add an error message
      * @param    string $error Error message
      */
-    public function setWarning ($warning) {
-        if ($this->_warnings_queue_size > 0) {
-            if (count($this->_warnings) >= $this->_warnings_queue_size) {
+    public function setWarning($warning)
+    {
+        if($this->_warnings_queue_size > 0)
+        {
+            if(count($this->_warnings) >= $this->_warnings_queue_size)
+            {
                 array_shift($this->_warnings);
             }
         }
@@ -121,7 +136,8 @@ abstract class ZLErrorHandlerAbstractObject {
     /**
      * Resets all warning messages
      */
-    public function resetWarnings () {
+    public function resetWarnings()
+    {
         $this->_warnings = array();
     }
 
@@ -132,22 +148,29 @@ abstract class ZLErrorHandlerAbstractObject {
      * JObject instance in Joomla!. Propagated items will be removed from ourself.
      * @param object $object The object to propagate errors and warnings to.
      */
-    public function propagateToObject (&$object) {
+    public function propagateToObject(&$object)
+    {
         // Skip non-objects
-        if (!is_object($object)) return;
+        if(!is_object($object)) return;
 
-        if (method_exists($object, 'setError')) {
-            if (!empty($this->_errors)) {
-                foreach ($this->_errors as $error) {
+        if( method_exists($object,'setError') )
+        {
+            if(!empty($this->_errors))
+            {
+                foreach($this->_errors as $error)
+                {
                     $object->setError($error);
                 }
                 $this->_errors = array();
             }
         }
 
-        if (method_exists($object, 'setWarning')) {
-            if (!empty($this->_warnings)) {
-                foreach ($this->_warnings as $warning) {
+        if( method_exists($object,'setWarning') )
+        {
+            if(!empty($this->_warnings))
+            {
+                foreach($this->_warnings as $warning)
+                {
                     $object->setWarning($warning);
                 }
                 $this->_warnings = array();
@@ -161,27 +184,36 @@ abstract class ZLErrorHandlerAbstractObject {
      * resetWarnings() methods.
      * @param object $object The object to propagate errors and warnings from
      */
-    public function propagateFromObject (&$object) {
-        if (method_exists($object, 'getErrors')) {
+    public function propagateFromObject(&$object)
+    {
+        if( method_exists($object,'getErrors') )
+        {
             $errors = $object->getErrors();
-            if (!empty($errors)) {
-                foreach ($errors as $error) {
+            if(!empty($errors))
+            {
+                foreach($errors as $error)
+                {
                     $this->setError($error);
                 }
             }
-            if (method_exists($object, 'resetErrors')) {
+            if(method_exists($object,'resetErrors'))
+            {
                 $object->resetErrors();
             }
         }
 
-        if (method_exists($object, 'getWarnings')) {
+        if( method_exists($object,'getWarnings') )
+        {
             $warnings = $object->getWarnings();
-            if (!empty($warnings)) {
-                foreach ($warnings as $warning) {
+            if(!empty($warnings))
+            {
+                foreach($warnings as $warning)
+                {
                     $this->setWarning($warning);
                 }
             }
-            if (method_exists($object, 'resetWarnings')) {
+            if(method_exists($object,'resetWarnings'))
+            {
                 $object->resetWarnings();
             }
         }
@@ -191,7 +223,8 @@ abstract class ZLErrorHandlerAbstractObject {
      * Sets the size of the error queue (acts like a LIFO buffer)
      * @param int $newSize The new queue size. Set to 0 for infinite length.
      */
-    protected function setErrorsQueueSize ($newSize = 0) {
+    protected function setErrorsQueueSize($newSize = 0)
+    {
         $this->_errors_queue_size = (int)$newSize;
     }
 
@@ -199,7 +232,8 @@ abstract class ZLErrorHandlerAbstractObject {
      * Sets the size of the warnings queue (acts like a LIFO buffer)
      * @param int $newSize The new queue size. Set to 0 for infinite length.
      */
-    protected function setWarningsQueueSize ($newSize = 0) {
+    protected function setWarningsQueueSize($newSize = 0)
+    {
         $this->_warnings_queue_size = (int)$newSize;
     }
 
@@ -210,18 +244,22 @@ abstract class ZLErrorHandlerAbstractObject {
      * @param int $i Optional message index
      * @return mixed The message string, or false if the key doesn't exist
      */
-    private function getItemFromArray ($array, $i = null) {
+    private function getItemFromArray($array, $i = null)
+    {
         // Find the item
-        if ($i === null) {
+        if ( $i === null) {
             // Default, return the last item
             $item = end($array);
-        } else
-            if (!array_key_exists($i, $array)) {
-                // If $i has been specified but does not exist, return false
-                return false;
-            } else {
-                $item = $array[$i];
-            }
+        }
+        else
+        if ( ! array_key_exists($i, $array) ) {
+            // If $i has been specified but does not exist, return false
+            return false;
+        }
+        else
+        {
+            $item    = $array[$i];
+        }
 
         return $item;
     }

@@ -16,7 +16,7 @@ class zlHelperRoute extends AppHelper {
      *
      * @param App $app A reference to the global App object
      */
-    public function __construct ($app) {
+    public function __construct($app) {
         parent::__construct($app);
 
         // load class
@@ -30,7 +30,7 @@ class zlHelperRoute extends AppHelper {
      *
      * @return mixed
      */
-    public function __get ($name) {
+    public function __get($name) {
         return $this->get($name);
     }
 
@@ -42,7 +42,7 @@ class zlHelperRoute extends AppHelper {
      *
      * @return mixed
      */
-    public function get ($name) {
+    public function get($name) {
         return $this->_routers[$name];
     }
 
@@ -51,7 +51,7 @@ class zlHelperRoute extends AppHelper {
      *
      * @return array
      */
-    public function getRouters () {
+    public function getRouters() {
         return $this->_routers;
     }
 
@@ -61,7 +61,8 @@ class zlHelperRoute extends AppHelper {
      * @param string $name Router name
      * @param string $file Router file path
      */
-    public function register ($name, $file) {
+    public function register($name, $file)
+    {
         // load class
         $class = 'zlRouter' . ucfirst($name);
 

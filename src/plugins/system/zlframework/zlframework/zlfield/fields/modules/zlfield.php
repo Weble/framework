@@ -3,33 +3,34 @@
 jimport('joomla.form.formfield');
 
 // load config
-require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
+require_once(JPATH_ADMINISTRATOR.'/components/com_zoo/config.php');
 
 class JFormFieldZlfield extends JFormField {
 
     protected $type = 'Zlfield';
 
-    public function getInput () {
+    public function getInput()
+    {
         // get app
         $this->app = App::getInstance('zoo');
 
-        // init var
-        $node = $this->element;
+         // init var
+         $node       = $this->element;
         $node_atr = (array)$node->attributes();
         $node_atr = $node_atr['@attributes'];
-        $class = $node->attributes()->class;
+        $class      = $node->attributes()->class;
 
         // parse fields
         $fields = $this->app->zlfield->parseArray($this->app->zlfw->xml->XMLtoArray($node));
 
         // set json
-        $json = '{"fields": {' . implode(",", $fields) . '}}';
+        $json = '{"fields": {'.implode(",", $fields).'}}';
 
         // set ctrl
-        $ctrl = "{$this->formControl}[{$this->group}]" . ($node->attributes()->addctrl ? "[{$node->attributes()->addctrl}]" : '');
+        $ctrl = "{$this->formControl}[{$this->group}]".($node->attributes()->addctrl ? "[{$node->attributes()->addctrl}]" : '');
 
         // set arguments
-        $ajaxargs = array('node' => $node_atr);
+        $ajaxargs  = array('node' => $node_atr);
         $arguments = array('node' => $node_atr);
 
         // set toggle hidden label

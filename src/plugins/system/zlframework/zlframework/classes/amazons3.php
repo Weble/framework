@@ -1,17 +1,17 @@
 <?php
 
 /**
- * Original Credits
- * AkeebaBackupPro AEUtilAmazons3 \backend\akeeba\plugins\utils\amazons3.php
- *
- * @author        Nicholas K. Dionysopoulos
- * @copyright    Copyright (c)2009-2013 Nicholas K. Dionysopoulos
- * @license        GNU GPL version 3 or, at your option, any later version
- * @package        akeebaengine
- *
- * It is a subset of S3.php, written by Donovan Schonknecht and available
- * at http://undesigned.org.za/2007/10/22/amazon-s3-php-class under a BSD-like license.
- */
+* Original Credits
+* AkeebaBackupPro AEUtilAmazons3 \backend\akeeba\plugins\utils\amazons3.php
+*
+* @author        Nicholas K. Dionysopoulos
+* @copyright    Copyright (c)2009-2013 Nicholas K. Dionysopoulos
+* @license        GNU GPL version 3 or, at your option, any later version
+* @package        akeebaengine
+*
+* It is a subset of S3.php, written by Donovan Schonknecht and available
+* at http://undesigned.org.za/2007/10/22/amazon-s3-php-class under a BSD-like license.
+*/
 
 // register necesary classes
 App::getInstance('zoo')->loader->register('ZLErrorHandlerAbstractObject', 'classes:errorhandler.php');
@@ -19,7 +19,8 @@ App::getInstance('zoo')->loader->register('ZLErrorHandlerAbstractObject', 'class
 /**
  * Amazon S3 Utility class, Nicholas version
  */
-class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
+class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject
+{
     // ACL flags
     const ACL_PRIVATE = 'private';
     const ACL_PUBLIC_READ = 'public-read';
@@ -36,14 +37,14 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
     public $defaultHost = 's3.amazonaws.com';
 
     /**
-     * Constructor - if you're not using the class statically
-     *
-     * @param string $accessKey Access key
-     * @param string $secretKey Secret key
-     * @param boolean $useSSL Enable SSL
-     * @return void
-     */
-    public function __construct ($accessKey = null, $secretKey = null, $useSSL = true) {
+    * Constructor - if you're not using the class statically
+    *
+    * @param string $accessKey Access key
+    * @param string $secretKey Secret key
+    * @param boolean $useSSL Enable SSL
+    * @return void
+    */
+    public function __construct($accessKey = null, $secretKey = null, $useSSL = true) {
         if ($accessKey !== null && $secretKey !== null)
             self::setAuth($accessKey, $secretKey);
         self::$useSSL = $useSSL;
@@ -53,58 +54,60 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
      * Singleton
      * @return AEUtilAmazons3
      */
-    public static function &getInstance ($accessKey = null, $secretKey = null, $useSSL = true) {
+    public static function &getInstance($accessKey = null, $secretKey = null, $useSSL = true)
+    {
         static $instance = null;
-        if (!is_object($instance)) {
+        if(!is_object($instance))
+        {
             $instance = new AEUtilAmazons3($accessKey, $secretKey, $useSSL);
         }
         return $instance;
     }
 
     /**
-     * Set AWS access key and secret key
-     *
-     * @param string $accessKey Access key
-     * @param string $secretKey Secret key
-     * @return void
-     */
-    public static function setAuth ($accessKey, $secretKey) {
+    * Set AWS access key and secret key
+    *
+    * @param string $accessKey Access key
+    * @param string $secretKey Secret key
+    * @return void
+    */
+    public static function setAuth($accessKey, $secretKey) {
         self::$__accessKey = $accessKey;
         self::$__secretKey = $secretKey;
     }
 
     /**
-     * Create input info array for putObject()
-     *
-     * @param string $file Input file
-     * @param mixed $md5sum Use MD5 hash (supply a string if you want to use your own)
-     * @return array | false
-     */
-    public static function inputFile ($file, $md5sum = false) {
+    * Create input info array for putObject()
+    *
+    * @param string $file Input file
+    * @param mixed $md5sum Use MD5 hash (supply a string if you want to use your own)
+    * @return array | false
+    */
+    public static function inputFile($file, $md5sum = false) {
         if (!file_exists($file) || !is_file($file) || !is_readable($file)) {
             $o = self::getInstance();
-            $o->setWarning(__CLASS__ . '::inputFile(): Unable to open input file: ' . $file);
+            $o->setWarning(__CLASS__.'::inputFile(): Unable to open input file: '.$file);
             return false;
         }
 
         return array('file' => $file, 'size' => filesize($file),
-            'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :
-                base64_encode(md5_file($file, true))) : '');
+        'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :
+        base64_encode(md5_file($file, true))) : '');
     }
 
 
     /**
-     * Create input array info for putObject() with a resource
-     *
-     * @param string $resource Input resource to read from
-     * @param integer $bufferSize Input byte size
-     * @param string $md5sum MD5 hash to send (optional)
-     * @return array | false
-     */
-    public static function inputResource (&$resource, $bufferSize, $md5sum = '') {
+    * Create input array info for putObject() with a resource
+    *
+    * @param string $resource Input resource to read from
+    * @param integer $bufferSize Input byte size
+    * @param string $md5sum MD5 hash to send (optional)
+    * @return array | false
+    */
+    public static function inputResource(&$resource, $bufferSize, $md5sum = '') {
         if (!is_resource($resource) || $bufferSize < 0) {
             $o = self::getInstance();
-            $o->setWarning(__CLASS__ . '::inputResource(): Invalid resource or buffer size');
+            $o->setWarning(__CLASS__.'::inputResource(): Invalid resource or buffer size');
             return false;
         }
         $input = array('size' => $bufferSize, 'md5sum' => $md5sum);
@@ -114,17 +117,17 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
 
 
     /**
-     * Put an object
-     *
-     * @param mixed $input Input data
-     * @param string $bucket Bucket name
-     * @param string $uri Object URI
-     * @param constant $acl ACL constant
-     * @param array $metaHeaders Array of x-amz-meta-* headers
-     * @param array $requestHeaders Array of request headers or content type as a string
-     * @return boolean
-     */
-    public static function putObject ($input, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array()) {
+    * Put an object
+    *
+    * @param mixed $input Input data
+    * @param string $bucket Bucket name
+    * @param string $uri Object URI
+    * @param constant $acl ACL constant
+    * @param array $metaHeaders Array of x-amz-meta-* headers
+    * @param array $requestHeaders Array of request headers or content type as a string
+    * @return boolean
+    */
+    public static function putObject($input, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array()) {
         if ($input === false) return false;
         $rest = new AEUtilsS3Request('PUT', $bucket, $uri, AEUtilAmazons3::getInstance()->defaultHost);
 
@@ -154,7 +157,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         // Custom request headers (Content-Type, Content-Disposition, Content-Encoding)
         if (is_array($requestHeaders))
             foreach ($requestHeaders as $h => $v) {
-                if (strtolower(substr($h, 0, 6)) == 'x-amz-') {
+                if(strtolower(substr($h,0,6)) == 'x-amz-') {
                     $rest->setAmzHeader($h, $v);
                 } else {
                     $rest->setHeader($h, $v);
@@ -179,7 +182,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
             if (isset($input['md5sum'])) $rest->setHeader('Content-MD5', $input['md5sum']);
 
             $rest->setAmzHeader('x-amz-acl', $acl);
-            foreach ($metaHeaders as $h => $v) $rest->setAmzHeader('x-amz-meta-' . $h, $v);
+            foreach ($metaHeaders as $h => $v) $rest->setAmzHeader('x-amz-meta-'.$h, $v);
             $rest->getResponse();
         } else
             $rest->response->error = array('code' => 0, 'message' => 'Missing input parameters');
@@ -188,27 +191,27 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
             $rest->response->error = array('code' => $rest->response->code, 'message' => 'Unexpected HTTP status');
         if ($rest->response->error !== false) {
             $o = self::getInstance();
-            $o->setWarning(sprintf(__CLASS__ . "::putObject(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']));
+            $o->setWarning(sprintf(__CLASS__."::putObject(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']));
             return false;
         }
         return true;
     }
 
     /**
-     * Start a multipart upload of an object
-     *
-     * @param mixed $input Input data
-     * @param string $bucket Bucket name
-     * @param string $uri Object URI
-     * @param constant $acl ACL constant
-     * @param array $metaHeaders Array of x-amz-meta-* headers
-     * @param array $requestHeaders Array of request headers or content type as a string
-     * @return boolean
-     */
-    public static function startMultipart ($input, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array()) {
+    * Start a multipart upload of an object
+    *
+    * @param mixed $input Input data
+    * @param string $bucket Bucket name
+    * @param string $uri Object URI
+    * @param constant $acl ACL constant
+    * @param array $metaHeaders Array of x-amz-meta-* headers
+    * @param array $requestHeaders Array of request headers or content type as a string
+    * @return boolean
+    */
+    public static function startMultipart($input, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array()) {
         if ($input === false) return false;
         $rest = new AEUtilsS3Request('POST', $bucket, $uri, AEUtilAmazons3::getInstance()->defaultHost);
-        $rest->setParameter('uploads', '');
+        $rest->setParameter('uploads','');
 
         if (is_string($input)) $input = array(
             'data' => $input, 'size' => strlen($input),
@@ -218,7 +221,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         // Custom request headers (Content-Type, Content-Disposition, Content-Encoding)
         if (is_array($requestHeaders))
             foreach ($requestHeaders as $h => $v) {
-                if (strtolower(substr($h, 0, 6)) == 'x-amz-') {
+                if(strtolower(substr($h,0,6)) == 'x-amz-') {
                     $rest->setAmzHeader($h, $v);
                 } else {
                     $rest->setHeader($h, $v);
@@ -242,37 +245,37 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         if (isset($input['md5sum'])) $rest->setHeader('Content-MD5', $input['md5sum']);
 
         $rest->setAmzHeader('x-amz-acl', $acl);
-        foreach ($metaHeaders as $h => $v) $rest->setAmzHeader('x-amz-meta-' . $h, $v);
+        foreach ($metaHeaders as $h => $v) $rest->setAmzHeader('x-amz-meta-'.$h, $v);
         $rest->getResponse();
 
         if ($rest->response->error === false && $rest->response->code !== 200)
             $rest->response->error = array('code' => $rest->response->code, 'message' => 'Unexpected HTTP status');
         if ($rest->response->error !== false) {
             $o = self::getInstance();
-            $o->setWarning(sprintf(__CLASS__ . "::startMultipart(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']));
+            $o->setWarning(sprintf(__CLASS__."::startMultipart(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']));
             return false;
         }
 
         $body = $rest->response->body;
-        if (!is_object($body)) $body = simplexml_load_string($body);
+        if(!is_object($body)) $body = simplexml_load_string($body);
         return (string)$body->UploadId;
     }
 
     /**
-     * Uploads a part of a multipart object upload
-     *
-     * @param mixed $input Input data. You MUST specify the UploadID and PartNumber
-     * @param string $bucket Bucket name
-     * @param string $uri Object URI
-     * @param constant $acl ACL constant
-     * @param array $metaHeaders Array of x-amz-meta-* headers (NOT USED)
-     * @param array $requestHeaders Array of request headers or content type as a string
-     * @return boolean
-     */
-    public static function uploadMultipart ($input, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array()) {
+    * Uploads a part of a multipart object upload
+    *
+    * @param mixed $input Input data. You MUST specify the UploadID and PartNumber
+    * @param string $bucket Bucket name
+    * @param string $uri Object URI
+    * @param constant $acl ACL constant
+    * @param array $metaHeaders Array of x-amz-meta-* headers (NOT USED)
+    * @param array $requestHeaders Array of request headers or content type as a string
+    * @return boolean
+    */
+    public static function uploadMultipart($input, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array()) {
         if ($input === false) {
             $o = self::getInstance();
-            $o->setWarning(__CLASS__ . "::uploadMultipart(): No input specified");
+            $o->setWarning(__CLASS__."::uploadMultipart(): No input specified");
             return false;
         }
 
@@ -282,14 +285,14 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         );
 
         // We need a valid UploadID and PartNumber
-        if (!array_key_exists('UploadID', $input)) {
+        if(!array_key_exists('UploadID', $input)) {
             $o = self::getInstance();
-            $o->setWarning(__CLASS__ . "::uploadMultipart(): No UploadID specified");
+            $o->setWarning(__CLASS__."::uploadMultipart(): No UploadID specified");
             return false;
         }
-        if (!array_key_exists('PartNumber', $input)) {
+        if(!array_key_exists('PartNumber', $input)) {
             $o = self::getInstance();
-            $o->setWarning(__CLASS__ . "::uploadMultipart(): No PartNumber specified");
+            $o->setWarning(__CLASS__."::uploadMultipart(): No PartNumber specified");
             return false;
         }
 
@@ -302,8 +305,8 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         //AEUtilLogger::WriteLog(_AE_LOG_DEBUG, '*** Part Number: '.$PartNumber);
 
         $rest = new AEUtilsS3Request('PUT', $bucket, $uri, 's3.amazonaws.com', AEUtilAmazons3::getInstance()->defaultHost);
-        $rest->setParameter('partNumber', $PartNumber);
-        $rest->setParameter('uploadId', $UploadID);
+        $rest->setParameter('partNumber',$PartNumber);
+        $rest->setParameter('uploadId',$UploadID);
 
         // Data
         if (isset($input['fp'])) {
@@ -326,20 +329,20 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         }
 
         // No Content-Type for multipart uploads
-        if (array_key_exists('type', $input)) unset($input['type']);
+        if(array_key_exists('type', $input)) unset($input['type']);
 
         // Calculate part offset
         $partOffset = 5242880 * ($PartNumber - 1);
-        if ($partOffset > $totalSize) {
+        if($partOffset > $totalSize) {
             return 0; // This is to signify that we ran out of parts ;)
         }
 
         // How many parts are there?
         $totalParts = floor($totalSize / 5242880);
-        if ($totalParts * 5242880 < $totalSize) $totalParts++;
+        if($totalParts * 5242880 < $totalSize) $totalParts++;
 
         // Calculate Content-Length
-        if ($PartNumber == $totalParts) {
+        if($PartNumber == $totalParts) {
             $rest->size = $totalSize - ($PartNumber - 1) * 5242880;
         } else {
             $rest->size = 5242880;
@@ -361,7 +364,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         // Custom request headers (Content-Type, Content-Disposition, Content-Encoding)
         if (is_array($requestHeaders))
             foreach ($requestHeaders as $h => $v) {
-                if (strtolower(substr($h, 0, 6)) == 'x-amz-') {
+                if(strtolower(substr($h,0,6)) == 'x-amz-') {
                     $rest->setAmzHeader($h, $v);
                 } else {
                     $rest->setHeader($h, $v);
@@ -374,7 +377,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         if ($rest->size >= 0 && ($rest->fp !== false || $rest->data !== false)) {
             $rest->getResponse();
         } else {
-            if ($rest->size < 0) {
+            if($rest->size < 0) {
                 $rest->response->error = array('code' => 0, 'message' => 'Missing file size parameter');
             } else {
                 $rest->response->error = array('code' => 0, 'message' => 'No data file pointer specified');
@@ -387,12 +390,12 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
             $rest->response->error = array('code' => $rest->response->code, 'message' => 'Unexpected HTTP status');
         if ($rest->response->error !== false) {
             // Sometimes we get a broken pipe error which is bogus; it's just a response with 0 size
-            if (($rest->response->error['code'] == 55) && ($rest->response->code == 200) && is_array($rest->response->headers)) {
+            if( ($rest->response->error['code'] == 55) && ($rest->response->code == 200) && is_array($rest->response->headers) ) {
                 // This is not an error. AAAAARGH!
                 return $rest->response->headers['hash'];
             } else {
                 $o = self::getInstance();
-                $o->setWarning(sprintf(__CLASS__ . "::uploadMultipart(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']));
+                $o->setWarning(sprintf(__CLASS__."::uploadMultipart(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']));
                 return false;
             }
         }
@@ -409,15 +412,15 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
      * @param $uri The key (path) to the object
      * @return bool True on success
      */
-    public static function finalizeMultipart ($input, $bucket, $uri) {
-        if (!array_key_exists('etags', $input)) {
+    public static function finalizeMultipart($input, $bucket, $uri) {
+        if(!array_key_exists('etags',$input)) {
             $o = self::getInstance();
-            $o->setWarning(__CLASS__ . "::finalizeMultipart(): No ETags array specified");
+            $o->setWarning(__CLASS__."::finalizeMultipart(): No ETags array specified");
             return false;
         }
-        if (!array_key_exists('UploadID', $input)) {
+        if(!array_key_exists('UploadID', $input)) {
             $o = self::getInstance();
-            $o->setWarning(__CLASS__ . "::finalizeMultipart(): No UploadID specified");
+            $o->setWarning(__CLASS__."::finalizeMultipart(): No UploadID specified");
             return false;
         }
 
@@ -425,9 +428,9 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         $UploadID = $input['UploadID'];
 
         // Create the message
-        $message = "<CompleteMultipartUpload>\n";
+        $message ="<CompleteMultipartUpload>\n";
         $part = 0;
-        foreach ($etags as $etag) {
+        foreach($etags as $etag) {
             $part++;
             $message .= "\t<Part>\n\t\t<PartNumber>$part</PartNumber>\n\t\t<ETag>\"$etag\"</ETag>\n\t</Part>\n";
         }
@@ -452,11 +455,11 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
             $rest->response->error = array('code' => $rest->response->code, 'message' => 'Unexpected HTTP status');
         if ($rest->response->error !== false) {
             // A RequestTimeout is not an error. S3 will finish constructing the big file on its own pace
-            if ($rest->response->error['code'] == 'RequestTimeout') {
+            if($rest->response->error['code'] == 'RequestTimeout') {
                 return true;
             } else {
                 $o = self::getInstance();
-                $o->setWarning(sprintf(__CLASS__ . "::finalizeMultipart(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']));
+                $o->setWarning(sprintf(__CLASS__."::finalizeMultipart(): [%s] %s", $rest->response->error['code'], $rest->response->error['message']));
                 return false;
             }
         }
@@ -465,14 +468,14 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
     }
 
     /**
-     * Get an object
-     *
-     * @param string $bucket Bucket name
-     * @param string $uri Object URI
-     * @param mixed $saveTo Filename or resource to write to
-     * @return mixed
-     */
-    public static function getObject ($bucket, $uri, $saveTo = false, $from = null, $to = null) {
+    * Get an object
+    *
+    * @param string $bucket Bucket name
+    * @param string $uri Object URI
+    * @param mixed $saveTo Filename or resource to write to
+    * @return mixed
+    */
+    public static function getObject($bucket, $uri, $saveTo = false, $from = null, $to = null) {
         $rest = new AEUtilsS3Request('GET', $bucket, $uri, AEUtilAmazons3::getInstance()->defaultHost);
         if ($saveTo !== false) {
             if (is_resource($saveTo))
@@ -481,12 +484,13 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
                 if (($rest->fp = @fopen($saveTo, 'wb')) !== false)
                     $rest->file = realpath($saveTo);
                 else
-                    $rest->response->error = array('code' => 0, 'message' => 'Unable to open save file for writing: ' . $saveTo);
+                    $rest->response->error = array('code' => 0, 'message' => 'Unable to open save file for writing: '.$saveTo);
         }
         if ($rest->response->error === false) {
             // Set the range header
-            if (!empty($from) && !empty($to)) {
-                $rest->setHeader('Range', "bytes=$from-$to");
+            if(!empty($from) && !empty($to))
+            {
+                $rest->setHeader('Range',"bytes=$from-$to");
             }
             $rest->getResponse();
         }
@@ -495,48 +499,47 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
             $rest->response->error = array('code' => $rest->response->code, 'message' => 'Unexpected HTTP status');
         if ($rest->response->error !== false) {
             $o = self::getInstance();
-            $o->setWarning(sprintf(__CLASS__ . "::getObject({$bucket}, {$uri}): [%s] %s",
-                $rest->response->error['code'], $rest->response->error['message']));
+            $o->setWarning(sprintf(__CLASS__."::getObject({$bucket}, {$uri}): [%s] %s",
+            $rest->response->error['code'], $rest->response->error['message']));
             return false;
         }
         return true;
     }
 
     /**
-     * Delete an object
-     *
-     * @param string $bucket Bucket name
-     * @param string $uri Object URI
-     * @return boolean
-     */
-    public static function deleteObject ($bucket, $uri) {
+    * Delete an object
+    *
+    * @param string $bucket Bucket name
+    * @param string $uri Object URI
+    * @return boolean
+    */
+    public static function deleteObject($bucket, $uri) {
         $rest = new AEUtilsS3Request('DELETE', $bucket, $uri, AEUtilAmazons3::getInstance()->defaultHost);
         $rest = $rest->getResponse();
         if ($rest->error === false && $rest->code !== 204)
             $rest->error = array('code' => $rest->code, 'message' => 'Unexpected HTTP status');
         if ($rest->error !== false) {
             $o = self::getInstance();
-            $o->setWarning(sprintf(__CLASS__ . "::deleteObject({$bucket}, {$uri}): [%s] %s",
-                $rest->error['code'], $rest->error['message']));
+            $o->setWarning(sprintf(__CLASS__."::deleteObject({$bucket}, {$uri}): [%s] %s",
+            $rest->error['code'], $rest->error['message']));
             return false;
         }
         return true;
     }
 
     /**
-     * Get MIME type for file
-     *
-     * @internal Used to get mime types
-     * @param string &$file File path
-     * @return string
-     */
-    public static function __getMimeType (&$file) {
+    * Get MIME type for file
+    *
+    * @internal Used to get mime types
+    * @param string &$file File path
+    * @return string
+    */
+    public static function __getMimeType(&$file) {
         $type = false;
         // Fileinfo documentation says fileinfo_open() will use the
         // MAGIC env var for the magic file
         if (extension_loaded('fileinfo') && isset($_ENV['MAGIC']) &&
-            ($finfo = finfo_open(FILEINFO_MIME, $_ENV['MAGIC'])) !== false
-        ) {
+        ($finfo = finfo_open(FILEINFO_MIME, $_ENV['MAGIC'])) !== false) {
             if (($type = finfo_file($finfo, $file)) !== false) {
                 // Remove the charset and grab the last content-type
                 $type = explode(' ', str_replace('; charset=', ';charset=', $type));
@@ -546,7 +549,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
             }
             finfo_close($finfo);
 
-            // If anyone is still using mime_content_type()
+        // If anyone is still using mime_content_type()
         } elseif (function_exists('mime_content_type'))
             $type = trim(mime_content_type($file));
 
@@ -572,23 +575,23 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
     }
 
     /**
-     * Get a query string authenticated URL
-     *
-     * @param string $bucket Bucket name
-     * @param string $uri Object URI
-     * @param integer $lifetime Lifetime in seconds
-     * @param boolean $hostBucket Use the bucket name as the hostname
-     * @param boolean $https Use HTTPS ($hostBucket should be false for SSL verification)
-     * @return string
-     */
-    public static function getAuthenticatedURL ($bucket, $uri, $lifetime = null, $hostBucket = false, $https = false) {
-        if (empty($bucket)) $bucket = self::$__default_bucket;
-        if (is_null($lifetime)) $lifetime = self::$__default_time;
+    * Get a query string authenticated URL
+    *
+    * @param string $bucket Bucket name
+    * @param string $uri Object URI
+    * @param integer $lifetime Lifetime in seconds
+    * @param boolean $hostBucket Use the bucket name as the hostname
+    * @param boolean $https Use HTTPS ($hostBucket should be false for SSL verification)
+    * @return string
+    */
+    public static function getAuthenticatedURL($bucket, $uri, $lifetime = null, $hostBucket = false, $https = false) {
+        if(empty($bucket)) $bucket = self::$__default_bucket;
+        if(is_null($lifetime)) $lifetime = self::$__default_time;
         $expires = time() + $lifetime;
         $uri = str_replace('%2F', '/', rawurlencode($uri)); // URI should be encoded (thanks Sean O'Dea)
-        return sprintf(($https ? 'https' : 'http') . '://%s/%s?AWSAccessKeyId=%s&Expires=%u&Signature=%s',
-            $hostBucket ? $bucket : $bucket . '.s3.amazonaws.com', $uri, self::$__accessKey, $expires,
-            urlencode(self::__getHash("GET\n\n\n{$expires}\n/{$bucket}/{$uri}")));
+        return sprintf(($https ? 'https' : 'http').'://%s/%s?AWSAccessKeyId=%s&Expires=%u&Signature=%s',
+        $hostBucket ? $bucket : $bucket.'.s3.amazonaws.com', $uri, self::$__accessKey, $expires,
+        urlencode(self::__getHash("GET\n\n\n{$expires}\n/{$bucket}/{$uri}")));
     }
 
     /*
@@ -604,8 +607,8 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
     * @param boolean $returnCommonPrefixes Set to true to return CommonPrefixes
     * @return array | false
     */
-    public static function getBucket ($bucket, $prefix = null, $marker = null, $maxKeys = null, $delimiter = null, $returnCommonPrefixes = false) {
-        if (empty($bucket)) $bucket = self::$__default_bucket;
+    public static function getBucket($bucket, $prefix = null, $marker = null, $maxKeys = null, $delimiter = null, $returnCommonPrefixes = false) {
+        if(empty($bucket)) $bucket = self::$__default_bucket;
         $rest = new AEUtilsS3Request('GET', $bucket, '', AEUtilAmazons3::getInstance()->defaultHost);
         if ($prefix !== null && $prefix !== '') $rest->setParameter('prefix', $prefix);
         if ($marker !== null && $marker !== '') $rest->setParameter('marker', $marker);
@@ -615,7 +618,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         if ($response->error === false && $response->code !== 200)
             $response->error = array('code' => $response->code, 'message' => 'Unexpected HTTP status');
         if ($response->error !== false) {
-            self::getInstance()->setError(sprintf(__CLASS__ . "::getBucket(): [%s] %s", $response->error['code'], $response->error['message']));
+            self::getInstance()->setError(sprintf(__CLASS__."::getBucket(): [%s] %s", $response->error['code'], $response->error['message']));
             return false;
         }
 
@@ -623,6 +626,37 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
 
         $nextMarker = null;
         if (isset($response->body, $response->body->Contents))
+        foreach ($response->body->Contents as $c) {
+            $results[(string)$c->Key] = array(
+                'name' => (string)$c->Key,
+                'time' => strtotime((string)$c->LastModified),
+                'size' => (int)$c->Size,
+                'hash' => substr((string)$c->ETag, 1, -1)
+            );
+            $nextMarker = (string)$c->Key;
+        }
+
+        if ($returnCommonPrefixes && isset($response->body, $response->body->CommonPrefixes))
+            foreach ($response->body->CommonPrefixes as $c)
+                $results[(string)$c->Prefix] = array('prefix' => (string)$c->Prefix);
+
+        if (isset($response->body, $response->body->IsTruncated) &&
+        (string)$response->body->IsTruncated == 'false') return $results;
+
+        if (isset($response->body, $response->body->NextMarker))
+            $nextMarker = (string)$response->body->NextMarker;
+
+        // Loop through truncated results if maxKeys isn't specified
+        if ($maxKeys == null && $nextMarker !== null && (string)$response->body->IsTruncated == 'true')
+        do {
+            $rest = new AEUtilsS3Request('GET', $bucket, '', AEUtilAmazons3::getInstance()->defaultHost);
+            if ($prefix !== null && $prefix !== '') $rest->setParameter('prefix', $prefix);
+            $rest->setParameter('marker', $nextMarker);
+            if ($delimiter !== null && $delimiter !== '') $rest->setParameter('delimiter', $delimiter);
+
+            if (($response = $rest->getResponse(true)) == false || $response->code !== 200) break;
+
+            if (isset($response->body, $response->body->Contents))
             foreach ($response->body->Contents as $c) {
                 $results[(string)$c->Key] = array(
                     'name' => (string)$c->Key,
@@ -633,57 +667,25 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
                 $nextMarker = (string)$c->Key;
             }
 
-        if ($returnCommonPrefixes && isset($response->body, $response->body->CommonPrefixes))
-            foreach ($response->body->CommonPrefixes as $c)
-                $results[(string)$c->Prefix] = array('prefix' => (string)$c->Prefix);
+            if ($returnCommonPrefixes && isset($response->body, $response->body->CommonPrefixes))
+                foreach ($response->body->CommonPrefixes as $c)
+                    $results[(string)$c->Prefix] = array('prefix' => (string)$c->Prefix);
 
-        if (isset($response->body, $response->body->IsTruncated) &&
-            (string)$response->body->IsTruncated == 'false'
-        ) return $results;
+            if (isset($response->body, $response->body->NextMarker))
+                $nextMarker = (string)$response->body->NextMarker;
 
-        if (isset($response->body, $response->body->NextMarker))
-            $nextMarker = (string)$response->body->NextMarker;
-
-        // Loop through truncated results if maxKeys isn't specified
-        if ($maxKeys == null && $nextMarker !== null && (string)$response->body->IsTruncated == 'true')
-            do {
-                $rest = new AEUtilsS3Request('GET', $bucket, '', AEUtilAmazons3::getInstance()->defaultHost);
-                if ($prefix !== null && $prefix !== '') $rest->setParameter('prefix', $prefix);
-                $rest->setParameter('marker', $nextMarker);
-                if ($delimiter !== null && $delimiter !== '') $rest->setParameter('delimiter', $delimiter);
-
-                if (($response = $rest->getResponse(true)) == false || $response->code !== 200) break;
-
-                if (isset($response->body, $response->body->Contents))
-                    foreach ($response->body->Contents as $c) {
-                        $results[(string)$c->Key] = array(
-                            'name' => (string)$c->Key,
-                            'time' => strtotime((string)$c->LastModified),
-                            'size' => (int)$c->Size,
-                            'hash' => substr((string)$c->ETag, 1, -1)
-                        );
-                        $nextMarker = (string)$c->Key;
-                    }
-
-                if ($returnCommonPrefixes && isset($response->body, $response->body->CommonPrefixes))
-                    foreach ($response->body->CommonPrefixes as $c)
-                        $results[(string)$c->Prefix] = array('prefix' => (string)$c->Prefix);
-
-                if (isset($response->body, $response->body->NextMarker))
-                    $nextMarker = (string)$response->body->NextMarker;
-
-            } while ($response !== false && (string)$response->body->IsTruncated == 'true');
+        } while ($response !== false && (string)$response->body->IsTruncated == 'true');
 
         return $results;
     }
 
     /**
-     * Get a list of buckets
-     *
-     * @param boolean $detailed Returns detailed bucket list when true
-     * @return array | false
-     */
-    public static function listBuckets ($detailed = false) {
+    * Get a list of buckets
+    *
+    * @param boolean $detailed Returns detailed bucket list when true
+    * @return array | false
+    */
+    public static function listBuckets($detailed = false) {
         $rest = new AEUtilsS3Request('GET', '', '', AEUtilAmazons3::getInstance()->defaultHost);
         $rest = $rest->getResponse();
 
@@ -691,7 +693,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
             $rest->error = array('code' => $rest->code, 'message' => 'Unexpected HTTP status');
         if ($rest->error !== false) {
             $o = self::getInstance();
-            $o->setError(sprintf(__CLASS__ . '::' . __METHOD__ . "(): [%s] %s", $rest->error['code'], $rest->error['message']));
+            $o->setError(sprintf(__CLASS__.'::'.__METHOD__."(): [%s] %s", $rest->error['code'], $rest->error['message']));
             return false;
         }
         $results = array();
@@ -699,9 +701,9 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
 
         if ($detailed) {
             if (isset($rest->body->Owner, $rest->body->Owner->ID, $rest->body->Owner->DisplayName))
-                $results['owner'] = array(
-                    'id' => (string)$rest->body->Owner->ID, 'name' => (string)$rest->body->Owner->ID
-                );
+            $results['owner'] = array(
+                'id' => (string)$rest->body->Owner->ID, 'name' => (string)$rest->body->Owner->ID
+            );
             $results['buckets'] = array();
             foreach ($rest->body->Buckets->Bucket as $b)
                 $results['buckets'][] = array(
@@ -714,32 +716,34 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
     }
 
     /**
-     * Generate the auth string: "AWS AccessKey:Signature"
-     *
-     * @internal Used by AEUtilsS3Request::getResponse()
-     * @param string $string String to sign
-     * @return string
-     */
-    public static function __getSignature ($string) {
-        return 'AWS ' . self::$__accessKey . ':' . self::__getHash($string);
+    * Generate the auth string: "AWS AccessKey:Signature"
+    *
+    * @internal Used by AEUtilsS3Request::getResponse()
+    * @param string $string String to sign
+    * @return string
+    */
+    public static function __getSignature($string) {
+        return 'AWS '.self::$__accessKey.':'.self::__getHash($string);
     }
 
     /**
-     * Creates a HMAC-SHA1 hash
-     *
-     * This uses the hash extension if loaded
-     *
-     * @internal Used by __getSignature()
-     * @param string $string String to sign
-     * @return string
-     */
-    public static function __getHash ($string) {
+    * Creates a HMAC-SHA1 hash
+    *
+    * This uses the hash extension if loaded
+    *
+    * @internal Used by __getSignature()
+    * @param string $string String to sign
+    * @return string
+    */
+    public static function __getHash($string) {
         return base64_encode(extension_loaded('hash') ?
-            hash_hmac('sha1', $string, self::$__secretKey, true) : pack('H*', sha1(
-                (str_pad(self::$__secretKey, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
-                pack('H*', sha1((str_pad(self::$__secretKey, 64, chr(0x00)) ^
-                        (str_repeat(chr(0x36), 64))) . $string)))));
+        hash_hmac('sha1', $string, self::$__secretKey, true) : pack('H*', sha1(
+        (str_pad(self::$__secretKey, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
+        pack('H*', sha1((str_pad(self::$__secretKey, 64, chr(0x00)) ^
+        (str_repeat(chr(0x36), 64))) . $string)))));
     }
+
+
 
 
     /** END NICHOLAS CONTENT **/
@@ -751,23 +755,24 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
     private static $__signingKeyResource = false; // Key resource, freeSigningKey() must be called to clear it from memory
 
     /**
-     * Copy an object
-     *
-     * @param string $bucket Source bucket name
-     * @param string $uri Source object URI
-     * @param string $bucket Destination bucket name
-     * @param string $uri Destination object URI
-     * @param constant $acl ACL constant
-     * @param array $metaHeaders Optional array of x-amz-meta-* headers
-     * @param array $requestHeaders Optional array of request headers (content type, disposition, etc.)
-     * @param constant $storageClass Storage class constant
-     * @return mixed | false
-     */
-    public static function copyObject ($srcBucket, $srcUri, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array(), $storageClass = self::STORAGE_CLASS_STANDARD) {
+    * Copy an object
+    *
+    * @param string $bucket Source bucket name
+    * @param string $uri Source object URI
+    * @param string $bucket Destination bucket name
+    * @param string $uri Destination object URI
+    * @param constant $acl ACL constant
+    * @param array $metaHeaders Optional array of x-amz-meta-* headers
+    * @param array $requestHeaders Optional array of request headers (content type, disposition, etc.)
+    * @param constant $storageClass Storage class constant
+    * @return mixed | false
+    */
+    public static function copyObject($srcBucket, $srcUri, $bucket, $uri, $acl = self::ACL_PRIVATE, $metaHeaders = array(), $requestHeaders = array(), $storageClass = self::STORAGE_CLASS_STANDARD)
+    {
         $rest = new AEUtilsS3Request('PUT', $bucket, $uri, AEUtilAmazons3::getInstance()->defaultHost);
         $rest->setHeader('Content-Length', 0);
         foreach ($requestHeaders as $h => $v) $rest->setHeader($h, $v);
-        foreach ($metaHeaders as $h => $v) $rest->setAmzHeader('x-amz-meta-' . $h, $v);
+        foreach ($metaHeaders as $h => $v) $rest->setAmzHeader('x-amz-meta-'.$h, $v);
         if ($storageClass !== self::STORAGE_CLASS_STANDARD) // Storage class
             $rest->setAmzHeader('x-amz-storage-class', $storageClass);
         $rest->setAmzHeader('x-amz-acl', $acl);
@@ -778,74 +783,79 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
         $rest = $rest->getResponse();
         if ($rest->error === false && $rest->code !== 200)
             $rest->error = array('code' => $rest->code, 'message' => 'Unexpected HTTP status');
-        if ($rest->error !== false) {
+        if ($rest->error !== false)
+        {
             $o = self::getInstance();
-            $o->setWarning(sprintf(__CLASS__ . "::copyObject({$srcBucket}, {$srcUri}, {$bucket}, {$uri}): [%s] %s",
-                $rest->error['code'], $rest->error['message']));
+            $o->setWarning(sprintf(__CLASS__."::copyObject({$srcBucket}, {$srcUri}, {$bucket}, {$uri}): [%s] %s",
+            $rest->error['code'], $rest->error['message']));
             return false;
         }
         return true;
     }
 
     /**
-     * Get object information
-     *
-     * @param string $bucket Bucket name
-     * @param string $uri Object URI
-     * @param boolean $returnInfo Return response information
-     * @return mixed | false
-     */
-    public static function getObjectInfo ($bucket, $uri, $returnInfo = true) {
+    * Get object information
+    *
+    * @param string $bucket Bucket name
+    * @param string $uri Object URI
+    * @param boolean $returnInfo Return response information
+    * @return mixed | false
+    */
+    public static function getObjectInfo($bucket, $uri, $returnInfo = true)
+    {
         $rest = new AEUtilsS3Request('HEAD', $bucket, $uri, AEUtilAmazons3::getInstance()->defaultHost);
         $rest = $rest->getResponse();
         if ($rest->error === false && ($rest->code !== 200 && $rest->code !== 404))
             $rest->error = array('code' => $rest->code, 'message' => 'Unexpected HTTP status');
-        if ($rest->error !== false) {
+        if ($rest->error !== false)
+        {
             $o = self::getInstance();
-            $o->setWarning(sprintf(__CLASS__ . "::getObjectInfo({$bucket}, {$uri}): [%s] %s",
-                $rest->error['code'], $rest->error['message']));
+            $o->setWarning(sprintf(__CLASS__."::getObjectInfo({$bucket}, {$uri}): [%s] %s",
+            $rest->error['code'], $rest->error['message']));
             return false;
         }
         return $rest->code == 200 ? $returnInfo ? $rest->headers : true : false;
     }
 
     /**
-     * Set signing key
-     *
-     * @param string $keyPairId AWS Key Pair ID
-     * @param string $signingKey Private Key
-     * @param boolean $isFile Load private key from file, set to false to load string
-     * @return boolean
-     */
-    public static function setSigningKey ($keyPairId, $signingKey, $isFile = true) {
+    * Set signing key
+    *
+    * @param string $keyPairId AWS Key Pair ID
+    * @param string $signingKey Private Key
+    * @param boolean $isFile Load private key from file, set to false to load string
+    * @return boolean
+    */
+    public static function setSigningKey($keyPairId, $signingKey, $isFile = true)
+    {
         self::$__signingKeyPairId = $keyPairId;
         if ((self::$__signingKeyResource = openssl_pkey_get_private($isFile ?
-                file_get_contents($signingKey) : $signingKey)) !== false
-        ) return true;
+        file_get_contents($signingKey) : $signingKey)) !== false) return true;
 
         $o = self::getInstance();
-        $o->setWarning(sprintf(__CLASS__ . "::ssetSigningKey(): Unable to open load private key: %s",
-            $signingKey));
+        $o->setWarning(sprintf(__CLASS__."::ssetSigningKey(): Unable to open load private key: %s",
+        $signingKey));
         return false;
     }
 
     /**
-     * Free signing key from memory, MUST be called if you are using setSigningKey()
-     *
-     * @return void
-     */
-    public static function freeSigningKey () {
+    * Free signing key from memory, MUST be called if you are using setSigningKey()
+    *
+    * @return void
+    */
+    public static function freeSigningKey()
+    {
         if (self::$__signingKeyResource !== false)
             openssl_free_key(self::$__signingKeyResource);
     }
 
     /**
-     * Get a CloudFront signed policy URL
-     *
-     * @param array $policy Policy
-     * @return string
-     */
-    public static function getSignedPolicyURL ($policy) {
+    * Get a CloudFront signed policy URL
+    *
+    * @param array $policy Policy
+    * @return string
+    */
+    public static function getSignedPolicyURL($policy)
+    {
         $data = json_encode($policy);
         $signature = '';
         if (!openssl_sign($data, $signature, self::$__signingKeyResource)) return false;
@@ -855,18 +865,19 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
 
         $url = $policy['Statement'][0]['Resource'] . '?';
         foreach (array('Policy' => $encoded, 'Signature' => $signature, 'Key-Pair-Id' => self::$__signingKeyPairId) as $k => $v)
-            $url .= $k . '=' . str_replace('%2F', '/', rawurlencode($v)) . '&';
+            $url .= $k.'='.str_replace('%2F', '/', rawurlencode($v)).'&';
         return substr($url, 0, -1);
     }
 
     /**
-     * Get a CloudFront canned policy URL
-     *
-     * @param string $string URL to sign
-     * @param integer $lifetime URL lifetime
-     * @return string
-     */
-    public static function getSignedCannedURL ($url, $lifetime) {
+    * Get a CloudFront canned policy URL
+    *
+    * @param string $string URL to sign
+    * @param integer $lifetime URL lifetime
+    * @return string
+    */
+    public static function getSignedCannedURL($url, $lifetime)
+    {
         return self::getSignedPolicyURL(array(
             'Statement' => array(
                 array('Resource' => $url, 'Condition' => array(
@@ -877,9 +888,10 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
     }
 
     /**
-     * Test Authentication
-     */
-    public static function testAuth () {
+    * Test Authentication
+    */
+    public static function testAuth()
+    {
         $rest = new AEUtilsS3Request('GET', '', '', AEUtilAmazons3::getInstance()->defaultHost);
         $rest = $rest->getResponse();
 
@@ -887,7 +899,7 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
             $rest->error = array('code' => $rest->code, 'message' => 'Unexpected HTTP status');
         if ($rest->error !== false) {
             $o = self::getInstance();
-            $o->setError(sprintf(__CLASS__ . '::' . __METHOD__ . "(): [%s] %s", $rest->error['code'], $rest->error['message']));
+            $o->setError(sprintf(__CLASS__.'::'.__METHOD__."(): [%s] %s", $rest->error['code'], $rest->error['message']));
             return false;
         }
 
@@ -898,30 +910,31 @@ class AEUtilAmazons3 extends ZLErrorHandlerAbstractObject {
 /**
  * AEUtilsS3Request
  */
-final class AEUtilsS3Request {
+final class AEUtilsS3Request
+{
     private $verb, $bucket, $uri, $resource = '', $parameters = array(),
-        $amzHeaders = array(), $headers = array(
+    $amzHeaders = array(), $headers = array(
         'Host' => '', 'Date' => '', 'Content-MD5' => '', 'Content-Type' => ''
     );
     public $fp = false, $size = 0, $data = false, $response;
 
 
     /**
-     * Constructor
-     *
-     * @param string $verb Verb
-     * @param string $bucket Bucket name
-     * @param string $uri Object URI
-     * @return mixed
-     */
-    function __construct ($verb, $bucket = '', $uri = '', $defaultHost = 's3.amazonaws.com') {
+    * Constructor
+    *
+    * @param string $verb Verb
+    * @param string $bucket Bucket name
+    * @param string $uri Object URI
+    * @return mixed
+    */
+    function __construct($verb, $bucket = '', $uri = '', $defaultHost = 's3.amazonaws.com') {
         $this->verb = $verb;
         $this->bucket = $bucket;
-        $this->uri = $uri !== '' ? '/' . str_replace('%2F', '/', rawurlencode($uri)) : '/';
+        $this->uri = $uri !== '' ? '/'.str_replace('%2F', '/', rawurlencode($uri)) : '/';
 
         if ($this->bucket !== '') {
-            $this->headers['Host'] = $this->bucket . '.' . $defaultHost;
-            $this->resource = '/' . $this->bucket . $this->uri;
+            $this->headers['Host'] = $this->bucket.'.'.$defaultHost;
+            $this->resource = '/'.$this->bucket.$this->uri;
         } else {
             $this->headers['Host'] = $defaultHost;
             //$this->resource = strlen($this->uri) > 1 ? '/'.$this->bucket.$this->uri : $this->uri;
@@ -935,50 +948,50 @@ final class AEUtilsS3Request {
 
 
     /**
-     * Set request parameter
-     *
-     * @param string $key Key
-     * @param string $value Value
-     * @return void
-     */
-    public function setParameter ($key, $value) {
+    * Set request parameter
+    *
+    * @param string $key Key
+    * @param string $value Value
+    * @return void
+    */
+    public function setParameter($key, $value) {
         $this->parameters[$key] = $value;
     }
 
 
     /**
-     * Set request header
-     *
-     * @param string $key Key
-     * @param string $value Value
-     * @return void
-     */
-    public function setHeader ($key, $value) {
+    * Set request header
+    *
+    * @param string $key Key
+    * @param string $value Value
+    * @return void
+    */
+    public function setHeader($key, $value) {
         $this->headers[$key] = $value;
     }
 
 
     /**
-     * Set x-amz-meta-* header
-     *
-     * @param string $key Key
-     * @param string $value Value
-     * @return void
-     */
-    public function setAmzHeader ($key, $value) {
+    * Set x-amz-meta-* header
+    *
+    * @param string $key Key
+    * @param string $value Value
+    * @return void
+    */
+    public function setAmzHeader($key, $value) {
         $this->amzHeaders[$key] = $value;
     }
 
     /**
      * Deal with curl issues when open_basedir or safe mode is set
      */
-    protected function curl (&$curl, $verb = 'GET') {
+    protected function curl(&$curl, $verb = 'GET'){
 
         //follow on location problems
-        if ((@ini_get('open_basedir') == '' && @ini_get('safe_mode' == 'Off')) || !in_array($verb, array('GET', 'POST', 'PUT'))) {
-            @curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        if ((@ini_get('open_basedir') == '' && @ini_get('safe_mode' == 'Off')) || !in_array($verb, array('GET', 'POST', 'PUT'))){
+            @curl_setopt ($curl, CURLOPT_FOLLOWLOCATION,true);
             $syn = curl_exec($curl);
-        } else {
+        } else{
             $syn = $this->curl_redir_exec($curl);
         }
 
@@ -986,7 +999,8 @@ final class AEUtilsS3Request {
     }
 
     // Special custom follow redirect in curl
-    protected function curl_redir_exec (&$ch) {
+    protected function curl_redir_exec(&$ch)
+    {
         $this->curl_loops = 0;
         $this->curl_max_loops = 20;
 
@@ -1031,7 +1045,7 @@ final class AEUtilsS3Request {
                 $url['path'] = $last_url['path'];
             }
 
-            $new_url = $url['scheme'] . '://' . $url['host'] . $url['path'] . ($url['query'] ? '?' . $url['query'] : '');
+            $new_url = $url['scheme'] . '://' . $url['host'] . $url['path'] . ($url['query']?'?'.$url['query']:'');
 
             curl_setopt($ch, CURLOPT_URL, $new_url);
 
@@ -1047,33 +1061,32 @@ final class AEUtilsS3Request {
 
 
     /**
-     * Get the S3 response
-     *
-     * @return object | false
-     */
-    public function getResponse () {
+    * Get the S3 response
+    *
+    * @return object | false
+    */
+    public function getResponse() {
         $query = '';
         if (sizeof($this->parameters) > 0) {
             $query = substr($this->uri, -1) !== '?' ? '?' : '&';
             foreach ($this->parameters as $var => $value)
-                if ($value == null || $value == '') $query .= $var . '&';
+                if ($value == null || $value == '') $query .= $var.'&';
                 // Parameters should be encoded (thanks Sean O'Dea)
-                else $query .= $var . '=' . rawurlencode($value) . '&';
+                else $query .= $var.'='.rawurlencode($value).'&';
             $query = substr($query, 0, -1);
             $this->uri .= $query;
 
             if (array_key_exists('acl', $this->parameters) ||
-                array_key_exists('location', $this->parameters) ||
-                array_key_exists('torrent', $this->parameters) ||
-                array_key_exists('logging', $this->parameters) ||
-                array_key_exists('uploads', $this->parameters) ||
-                array_key_exists('uploadId', $this->parameters) ||
-                array_key_exists('partNumber', $this->parameters)
-            )
+            array_key_exists('location', $this->parameters) ||
+            array_key_exists('torrent', $this->parameters) ||
+            array_key_exists('logging', $this->parameters) ||
+            array_key_exists('uploads', $this->parameters) ||
+            array_key_exists('uploadId', $this->parameters) ||
+            array_key_exists('partNumber', $this->parameters))
                 $this->resource .= $query;
         }
         $url = ((AEUtilAmazons3::$useSSL && extension_loaded('openssl')) ?
-                'https://' : 'http://') . $this->headers['Host'] . $this->uri;
+        'https://':'http://').$this->headers['Host'].$this->uri;
 
         // Basic setup
         $curl = curl_init();
@@ -1088,29 +1101,28 @@ final class AEUtilsS3Request {
         curl_setopt($curl, CURLOPT_URL, $url);
 
         // Headers
-        $headers = array();
-        $amz = array();
+        $headers = array(); $amz = array();
         foreach ($this->amzHeaders as $header => $value)
-            if (strlen($value) > 0) $headers[] = $header . ': ' . $value;
+            if (strlen($value) > 0) $headers[] = $header.': '.$value;
         foreach ($this->headers as $header => $value)
-            if (strlen($value) > 0) $headers[] = $header . ': ' . $value;
+            if (strlen($value) > 0) $headers[] = $header.': '.$value;
 
         // Collect AMZ headers for signature
         foreach ($this->amzHeaders as $header => $value)
-            if (strlen($value) > 0) $amz[] = strtolower($header) . ':' . $value;
+            if (strlen($value) > 0) $amz[] = strtolower($header).':'.$value;
 
         // AMZ headers must be sorted
         if (sizeof($amz) > 0) {
             sort($amz);
-            $amz = "\n" . implode("\n", $amz);
+            $amz = "\n".implode("\n", $amz);
         } else $amz = '';
 
         // Authorization string (CloudFront stringToSign should only contain a date)
-        if ($this->headers['Host'] == 'cloudfront.amazonaws.com') {
+        if( $this->headers['Host'] == 'cloudfront.amazonaws.com' ) {
             $stringToSign = $this->headers['Date'];
         } else {
-            $stringToSign = $this->verb . "\n" . $this->headers['Content-MD5'] . "\n" .
-                $this->headers['Content-Type'] . "\n" . $this->headers['Date'] . $amz . "\n" . $this->resource;
+            $stringToSign = $this->verb."\n".$this->headers['Content-MD5']."\n".
+            $this->headers['Content-Type']."\n".$this->headers['Date'].$amz."\n".$this->resource;
         }
 
         $headers[] = 'Authorization: ' . AEUtilAmazons3::__getSignature($stringToSign);
@@ -1123,10 +1135,8 @@ final class AEUtilsS3Request {
 
         // Request types
         switch ($this->verb) {
-            case 'GET':
-                break;
-            case 'PUT':
-            case 'POST': // POST only used for CloudFront
+            case 'GET': break;
+            case 'PUT': case 'POST': // POST only used for CloudFront
                 if ($this->fp !== false) {
                     curl_setopt($curl, CURLOPT_PUT, true);
                     curl_setopt($curl, CURLOPT_INFILE, $this->fp);
@@ -1139,16 +1149,15 @@ final class AEUtilsS3Request {
                         curl_setopt($curl, CURLOPT_BUFFERSIZE, $this->size);
                 } else
                     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $this->verb);
-                break;
+            break;
             case 'HEAD':
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'HEAD');
                 curl_setopt($curl, CURLOPT_NOBODY, true);
-                break;
+            break;
             case 'DELETE':
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
-                break;
-            default:
-                break;
+            break;
+            default: break;
         }
 
         $response = $this->curl($curl, $this->verb);
@@ -1167,8 +1176,7 @@ final class AEUtilsS3Request {
 
         // Parse body into XML
         if ($this->response->error === false && isset($this->response->headers['type']) &&
-            $this->response->headers['type'] == 'application/xml' && isset($this->response->body)
-        ) {
+        $this->response->headers['type'] == 'application/xml' && isset($this->response->body)) {
 
             // process errors about not valid xml in code
             libxml_use_internal_errors(true);
@@ -1187,8 +1195,7 @@ final class AEUtilsS3Request {
 
             // Grab S3 errors
             if (!in_array($this->response->code, array(200, 204)) &&
-                isset($this->response->body->Code, $this->response->body->Message)
-            ) {
+            isset($this->response->body->Code, $this->response->body->Message)) {
                 $this->response->error = array(
                     'code' => (string)$this->response->body->Code,
                     'message' => (string)$this->response->body->Message
@@ -1207,29 +1214,29 @@ final class AEUtilsS3Request {
 
 
     /**
-     * CURL write callback
-     *
-     * @param resource &$curl CURL resource
-     * @param string &$data Data
-     * @return integer
-     */
-    private function __responseWriteCallback (&$curl, &$data) {
-        if (in_array($this->response->code, array(200, 206)) && $this->fp !== false)
+    * CURL write callback
+    *
+    * @param resource &$curl CURL resource
+    * @param string &$data Data
+    * @return integer
+    */
+    private function __responseWriteCallback(&$curl, &$data) {
+        if ( in_array($this->response->code, array(200,206)) && $this->fp !== false)
             return fwrite($this->fp, $data);
         else
-            $this->response->body = !empty($this->response->body) ? $this->response->body . $data : $data;
+            $this->response->body = !empty($this->response->body) ? $this->response->body.$data : $data;
         return strlen($data);
     }
 
 
     /**
-     * CURL header callback
-     *
-     * @param resource &$curl CURL resource
-     * @param string &$data Data
-     * @return integer
-     */
-    private function __responseHeaderCallback (&$curl, &$data) {
+    * CURL header callback
+    *
+    * @param resource &$curl CURL resource
+    * @param string &$data Data
+    * @return integer
+    */
+    private function __responseHeaderCallback(&$curl, &$data) {
         if (($strlen = strlen($data)) <= 2) return $strlen;
         if (substr($data, 0, 4) == 'HTTP')
             $this->response->code = (int)substr($data, 9, 3);

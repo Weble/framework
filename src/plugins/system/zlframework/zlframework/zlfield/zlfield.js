@@ -1,1 +1,838 @@
-!function(t){var i=function(){};i.prototype=t.extend(i.prototype,{name:"ZLfield",options:{url:"",type:"",enviroment:"",enviroment_args:""},initialize:function(e,i){this.options=t.extend({},this.options,i);var n=this;t("#toolbar-apply, #toolbar-save").click(function(){return t(".zlfield input").each(function(){t(this).val()||t(this).remove()}),!0}),t(document).ready(function(){"undefined"!=typeof zl_options&&"undefined"!=typeof zl_options.max_input_vars&&jQuery("textarea, input, select").length>zl_options.max_input_vars&&alert("WARNING! Please increase the max_input_vars option in php.ini or contact ZOOlanders support for more information."),t(".zlfield-main .chzn-container").each(function(){t(this).prev("select").data("chosen",null).show(),t(this).remove()}),t(".col-left ul.element-list").on("element.added",function(e,i){n.actions(t(i))}),t("ul.ui-sortable").on("sortstop",function(e,i){var a=RegExp(/(elements\[[a-z0-9_-]+\])|(positions\[[a-z0-9_-]+\]\[[0-9]+\])/);t("#assign-elements ul.element-list:not(.unassigned)").each(function(){var e="positions["+t(this).data("position")+"]";t(this).children().each(function(i){t(this).find("[data-control^=positions], [data-control^=elements]").each(function(){t(this).attr("data-control","tmp"+t(this).attr("data-control").replace(a,e+"["+i+"]"))})})}),a=RegExp(/^tmp/),t("#assign-elements ul.element-list").find("[data-control^=tmp]").each(function(){t(this).attr("data-control",t(this).attr("data-control").replace(a,""))}),n.actions(i.item)}),n.initActions()})},initActions:function(){var e=this,i=e.options.enviroment;("type-positions"==i||"type-edit"==i)&&t(".col-left ul.ui-sortable > li.element").each(function(){t(this).parent().trigger("sortstop",{item:t(this)})}),"type-edit"==i&&t(".col-left .core-element-configuration .element-list > li.element").each(function(){e.actions(t(this))}),"item-edit"==i&&t(".item-edit .creation-form .zlfield-main").each(function(){e.actions(t(this))}),"module"==i&&t("form#module-form .zlfield-main").each(function(){t(this).closest("li, .control-group").addClass("zlfield-module"),t(this).closest(".controls").removeClass("controls"),e.actions(t(this))}),"app-config"==i&&t(".col-right .zlfield-main").each(function(){e.actions(t(this))})},actions:function(i){var n=this;i.data("zlfield-actions-init")||(i.find(".qTipHelp").each(function(){var e=t(this);e.qtip({overwrite:!1,content:{text:e.find(".qtip-content")},position:{my:"bottom center",at:"top center",viewport:t(window)},show:{solo:!0,delay:300},hide:{fixed:!0,delay:300},style:"ui-tooltip-light ui-tooltip-zlparam"})}),i.find(".zl-select-expand").each(function(){var e=t(this);e.click(function(){t(this).prev().height(150),t(this).remove()}).qtip({overwrite:!1,content:{text:e.data("zl-qtip")},position:{at:"right top",my:"left bottom"},show:{solo:!0,delay:600},hide:{delay:0},style:"ui-tooltip-light ui-tooltip-zlparam"})}),t("#toolbar-apply, #toolbar-save").on("mousedown",function(){i.find(".zl-row[data-type=password] .zl-field input").each(function(){t(this).val("zl-decrypted["+t(this).val()+"]")})}),i.find(".zl-state").each(function(){var e=t(this).find("input"),i=e.closest(".zl-row");e.on("change",function(){var e="checked"==t(this).attr("checked");e?(i.removeClass("zl-disabled"),i.find(".zl-field").children().removeAttr("disabled")):(i.addClass("zl-disabled"),i.find(".zl-field").children().attr("disabled",!0))}).trigger("change")}),i.find(".zl-state input").each(function(){var e=t(this);e.qtip({content:{text:"Override this field"},position:{at:"left top",my:"right bottom",effect:!1},show:{target:e.closest(".zl-row"),solo:!0,delay:200},hide:{target:e.closest(".zl-row"),delay:0},style:"ui-tooltip-light ui-tooltip-zlparam",events:{show:function(t,i){"checked"==e.attr("checked")&&t.preventDefault(),e.bind("change",function(){i.hide()}),i.set("content.text",e.parent().attr("tooltip"))}}})}),i.find(".zl-toggle").each(function(){var e=t(this),i=e.next();t(".btn-open",e).on("click",function(){e.toggleClass("open")&&i.show()}),t(".btn-close",e).on("click",function(){e.toggleClass("open")&&i.hide()})}),i.find("[data-dependents]").each(function(){var i=t(this),n=i.data("dependents").replace(/ /g,"").split("|"),a=i.closest(".zlfield.placeholder .wrapper, .zlfield.placeholder").first();n.forEach(function(n){var l=n.split("!>"),o=2==l.length?"!>":">";l=">"==o?n.split(">"):l,d=l[0].split(","),e=l[1].replace("NONE",""),("select"==i.data("type")||"itemLayoutList"==i.data("type")||"layout"==i.data("type")||"apps"==i.data("type")||"types"==i.data("type")||"elements"==i.data("type")||"modulelist"==i.data("type")||"separatedby"==i.data("type"))&&d.forEach(function(n){var l=a.find('[data-id="'+n+'"]').data("e",e).data("m",o).hide();i.find(".zl-field select").bind("change",function(){var e=l.data("e"),i=l.data("m"),n=t.makeArray(t(this).val()),a=0;if(e&&e.match(/OR/g))t.each(n,function(t,n){var l=new RegExp("(\\b|OR)"+n+"(\\b|OR)","g");("!>"==i&&!e.match(l)||">"==i&&e.match(l))&&(a=1)});else if(e&&e.match(/AND/g)){var o=e.split("AND").length;n.length==o&&t.each(n,function(t,n){var l=new RegExp("(\\b|AND)"+n+"(\\b|AND)","g");a="!>"==i&&!e.match(l)||">"==i&&e.match(l)?1:0})}else t.each(n,function(t,n){("!>"==i&&n!=e||">"==i&&n==e)&&(a=1)});a&&l.slideDown("fast")||l.slideUp("fast")}).trigger("change")}),"checkbox"==i.data("type")&&d.forEach(function(e){var n=a.find('[data-id="'+e+'"]').hide();i.find(".zl-field input").bind("change",function(){var e="checked"==t(this).attr("checked");("!>"==o&&!e||">"==o&&e)&&n.slideDown("fast")||n.slideUp("fast")}).trigger("change")}),"radio"==i.data("type")&&d.forEach(function(n){var l=e,d=a.find('[data-id="'+n+'"]').hide();i.find(".zl-field input").bind("change",function(){var e="checked"==t(this).attr("checked"),i=0,n=t(this).attr("value");if(e){if(l&&l.match(/OR/g)){var a=new RegExp(n,"g");("!>"==o&&!l.match(a)||">"==o&&l.match(a))&&(i=1)}else("!>"==o&&n!=l&&e||">"==o&&n==l&&e&&e)&&(i=1);i&&d.slideDown("fast")||d.slideUp("fast")}}).trigger("change")}),"text"==i.data("type")&&d.forEach(function(e){var n=a.find('[data-id="'+e+'"]').hide();i.find(".zl-field input").on("keyup change",function(){var e=""!=t(this).val();("!>"==o&&!e||">"==o&&e)&&n.slideDown("fast")||n.slideUp("fast")}).trigger("change")})})}),i.find("[data-dependent]").each(function(){var e=t(this).hide(),i=e.data("dependent").replace(/ /g,""),a=i.match(/AND/g)?i.split("AND"):[],l=i.match(/OR/g)?i.split("OR"):[],o=e.parents(".zlfield.placeholder .wrapper, .zlfield.placeholder").first();e.on("zlfield-dependent-event",function(t){A_match=0,a.length?A_match=n.evaluateDependentRules(a,e,o,"AND"):A_match=n.evaluateDependentRules(l,e,o,"OR"),A_match&&e.slideDown("fast")||e.slideUp("fast")}).trigger("zlfield-dependent-event")}),i.find("[data-relieson]").each(function(){var e=t(this),i=e.data("relieson"),a=e.parents(".placeholder").find('[data-id="'+i.id+'"]'),l=a.find("select");l.on("change",function(){var a=t(this).val()?t(this).val():"",o=t(this).closest(".zl-field"),d=i.json,s=e.attr("data-control"),c=t(this).closest(".zlfield-main").attr("data-ajaxargs"),r=i.psv,p=i.id;r[i.id]=a,o.append(t('<span class="activity zl-loader">'));t.ajax({type:"POST",url:i.url+"&task=loadfield",data:{json:d,ctrl:s,psv:r,pid:p,node:null,args:c,ajaxcall:!0,enviroment:n.options.enviroment,enviroment_args:n.options.enviroment_args}}).done(function(i){i=t.parseJSON(i),o.find(".activity").remove(),e.slideUp("fast",function(){e.empty(),i&&i.result&&e.html('<div class="loaded-fields">'+i.result+"</div>"),n.actions(e.find("> .loaded-fields")),e.slideDown("fast"),l.trigger("loaded.zlfield")})})})}),i.find(".load-field-btn").on("click",function(e){e.preventDefault();var i=t(this),a=i.parent(".zlfield-main"),l=a.data("ajaxargs");i.find("span").addClass("zlux-loader-raw"),t.ajax({url:n.options.url,type:"POST",data:{task:"loadZLfield",group:l.group,type:n.options.type,control_name:l.control_name,json_path:l.json_path,element_id:l.element_id,element_type:l.element_type,enviroment:l.enviroment,node:l.node},success:function(e){e=t.parseJSON(e),a.fadeOut("fast",function(){t(this).html(e.result),n.actions(a),a.fadeIn("slow")})}})}),t("[data-type=items] .zl-field",i).each(function(){var e=t(this),i=t("input.zlux-x-dummy",e),n=i.val(),a=i.data("params");i.remove(),t.zlux.assets.load("fields").done(function(){e.zlux("fields",t.extend({},a,{field:"items",controlName:n}))})}),t("[data-type=options] .zl-field",i).each(function(){var e=t(this),i=t("input.zlux-x-dummy",e),n=i.val(),a=i.data("params");i.remove(),t.zlux.assets.load("fields").done(function(){e.zlux("fields",t.extend({},a,{field:"options",controlName:n}))})}),t("[data-type=attributes] .zl-field",i).each(function(){var e=t(this),i=t("input.zlux-x-dummy",e),n=i.val(),a=i.data("params");i.remove(),t.zlux.assets.load("fields").done(function(){e.zlux("fields",t.extend({},a,{field:"attributes",controlName:n}))})}),i.data("zlfield-actions-init",!0))},evaluateDependentRules:function(i,n,a,l){var o=0,d=1;return i.forEach(function(i){if(!d)return!1;var s=i.split("!="),c=2==s.length?"!=":"==";if(s="=="==c?i.split("=="):s,field=a.find('[data-id="'+s[0]+'"]'),type=field.data("type"),unique_id=l+"-"+n.data("id")+"-"+field.data("id")+"-"+a.data("id"),e=s[1].replace("NONE",""),"select"==type||"itemLayoutList"==type||"layout"==type||"apps"==type||"types"==type||"elements"==type||"modulelist"==type||"separatedby"==type){var r=field.find(".zl-field select"),p=t.makeArray(r.val()),f=0;if(e&&e.match(/OR/g))t.each(p,function(t,i){var n=new RegExp("(\\b|OR)"+i+"(\\b|OR)","g");("!="==c&&!e.match(n)||"=="==c&&e.match(n))&&(f=1)});else if(e&&e.match(/AND/g)){var h=e.split("AND").length;p.length==h&&t.each(p,function(t,i){var n=new RegExp("(\\b|AND)"+i+"(\\b|AND)","g");f="!="==c&&!e.match(n)||"=="==c&&e.match(n)?1:0})}else t.each(p,function(t,i){("!="==c&&i!=e||"=="==c&&i==e)&&(f=1)});o=f,r.data("zlfield-dependent-"+unique_id+"-init")||(r.on("change",function(){n.trigger("zlfield-dependent-event")}),r.data("zlfield-dependent-"+unique_id+"-init",!0))}if("checkbox"==type){var u=field.find(".zl-field input"),f=0,m="checked"==u.attr("checked");("!="==c&&!m||"=="==c&&m)&&(f=1),o=f,u.data("zlfield-dependent-"+unique_id+"-init")||(u.on("change",function(){n.trigger("zlfield-dependent-event")}),u.data("zlfield-dependent-"+unique_id+"-init",!0))}if("radio"==type){var v=field.find(".zl-field input"),f=0,g=e;v.each(function(){var e="checked"==t(this).attr("checked"),i=t(this).attr("value");if(e)if(g&&g.match(/OR/g)){var n=new RegExp(i,"g");("!="==c&&!g.match(n)||"=="==c&&g.match(n))&&(f=1)}else("!="==c&&i!=g&&e||"=="==c&&i==g&&e&&e)&&(f=1)}),o=f,v.data("zlfield-dependent-"+unique_id+"-init")||(v.on("change",function(){n.trigger("zlfield-dependent-event")}),v.data("zlfield-dependent-"+unique_id+"-init",!0))}if("text"==type){var y=field.find(".zl-field input"),z=""!=y.val();("!="==c&&!z||"=="==c&&z)&&(f=1),o=f,y.data("zlfield-dependent-"+unique_id+"-init")||(y.on("keyup change",function(){n.trigger("zlfield-dependent-event")}),y.data("zlfield-dependent-"+unique_id+"-init",!0))}("AND"==l&&!o||"OR"==l&&o)&&(d=!1)}),o}}),t.fn[i.prototype.name]=function(){var e=arguments,n=e[0]?e[0]:null;return this.each(function(){var a=t(this);if(i.prototype[n]&&a.data(i.prototype.name)&&"initialize"!=n)a.data(i.prototype.name)[n].apply(a.data(i.prototype.name),Array.prototype.slice.call(e,1));else if(!n||t.isPlainObject(n)){var l=new i;i.prototype.initialize&&l.initialize.apply(l,t.merge([a],e)),a.data(i.prototype.name,l)}else t.error("Method "+n+" does not exist on jQuery."+i.name)})}}(jQuery),function(e,t){e(function(){e(".wk2-zl-selector").each(function(i,n){var a,l=e(this).nextAll("input"),o=e(this).nextAll("span");try{a=JSON.parse(l.val())}catch(d){a={}}a.widget&&t.widgetkit.config.widgets[a.widget]&&o.html("("+t.widgetkit.config.widgets[a.widget].label+")")})}),e(function(){e("body").on("click",".wk2-zl-selector",function(i){i.preventDefault();var n,a,l=e(this).nextAll("input"),o=e(this).nextAll("span");e(this).data("zl-widgets");try{n=JSON.parse(l.val())}catch(i){n={}}t.zlwk.env.init(n,function(e){a.widget&&o.html("("+a.widget.label+")"),l.val(JSON.stringify(e))}),e(t.zlwk.env.modal.element).on("show.uk.modal",function(){var t=e(this);a=angular.element(e("[ng-controller]",t)[0]).scope()})})})}(jQuery,window);
+/* ===================================================
+ * ZLfield
+ * https://zoolanders.com/extensions/zlframework
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+(function ($) {
+  var Plugin = function(){};
+  Plugin.prototype = $.extend(Plugin.prototype, {
+    name: 'ZLfield',
+    options: {
+      url: '',
+      type: '',
+      enviroment: '',
+      enviroment_args: ''
+    },
+    initialize: function(body, options) {
+      this.options = $.extend({}, this.options, options);
+      var $this = this;
+
+      // on save/apply no initialized inputs are removed
+      $('#toolbar-apply, #toolbar-save').click(function(){
+        $('.zlfield input').each(function(){
+          $(this).val() || $(this).remove();
+        });
+        return true;
+      });
+
+      $(document).ready(function()
+      {
+        // count the elements
+        if (typeof zl_options !== 'undefined' &&
+          typeof zl_options.max_input_vars !== 'undefined' &&
+          jQuery('textarea, input, select').length > zl_options.max_input_vars)
+        {
+          alert('WARNING! Please increase the max_input_vars option in php.ini or contact ZOOlanders support for more information.');
+        }
+
+        // remove chosen script on J3
+        $('.zlfield-main .chzn-container').each(function(){
+          $(this).prev('select').data("chosen", null).show();
+          $(this).remove();
+        });
+
+        // set element actions when added to a type
+        $('.col-left ul.element-list').on('element.added', function(event, element){
+          // set action
+          $this.actions($(element));
+        });
+
+        // set element actions on sorting or added to a position
+        $('ul.ui-sortable').on('sortstop', function(event, ui)
+        {
+          // Placeholders - Control name must be updated dinamically on each reorder or assignment
+          var b = RegExp(/(elements\[[a-z0-9_-]+\])|(positions\[[a-z0-9_-]+\]\[[0-9]+\])/);
+          $("#assign-elements ul.element-list:not(.unassigned)").each(function () {
+            var c = "positions[" + $(this).data("position") + "]";
+            $(this).children().each(function (d) {
+              $(this).find("[data-control^=positions], [data-control^=elements]").each(function () {
+                $(this).attr("data-control", "tmp" + $(this).attr("data-control").replace(b, c + "[" + d + "]"))
+              })
+            })
+          });
+          b = RegExp(/^tmp/);
+          $("#assign-elements ul.element-list").find("[data-control^=tmp]").each(function () {
+            $(this).attr("data-control", $(this).attr("data-control").replace(b, ""))
+          }); // Placeholders END
+
+          // set action
+          $this.actions(ui.item);
+        });
+
+        // init actions
+        $this.initActions();
+      });
+    },
+
+    /*
+     * initModules - init ZL Field on Modules
+     */
+    initActions: function() {
+      var $this = this,
+        env = $this.options.enviroment;
+
+      // init on Position view
+      (env == 'type-positions' || env == 'type-edit') &&
+      $('.col-left ul.ui-sortable > li.element').each(function(){
+        $(this).parent().trigger('sortstop', { item: $(this) });
+      });
+
+      // init Core Elements on Edit view
+      (env == 'type-edit') &&
+      $('.col-left .core-element-configuration .element-list > li.element').each(function(){
+        $this.actions($(this));
+      });
+
+      // init on Item Edit view
+      env == 'item-edit' && $('.item-edit .creation-form .zlfield-main').each(function(){
+        $this.actions($(this));
+      });
+
+      // init on Module view
+      env == 'module' && $('form#module-form .zlfield-main').each(function(){
+        // add Class for specific styling
+        $(this).closest('li, .control-group').addClass('zlfield-module');
+        $(this).closest('.controls').removeClass('controls'); // j3
+
+        // call actions
+        $this.actions($(this));
+      })
+
+      // init on App Config view
+      env == 'app-config' && $('.col-right .zlfield-main').each(function(){
+        // call actions
+        $this.actions($(this));
+      })
+    },
+
+    /*
+     * Actions - set ZL Field actions
+     */
+    actions: function($dom) {
+      var $this = this;
+
+      // only once or when insisted
+      if (!$dom.data('zlfield-actions-init'))
+      {
+        /*
+         * Fields Help Tips
+         */
+        $dom.find('.qTipHelp').each(function(){
+          var $qtip = $(this);
+          $qtip.qtip({
+            overwrite: false,
+            content: {
+              text: $qtip.find('.qtip-content')
+            },
+            position: {
+              my: 'bottom center',
+              at: 'top center',
+              viewport: $(window)
+            },
+            show: {
+              solo: true,
+              delay: 300
+            },
+            hide: {
+              fixed: true,
+              delay: 300
+            },
+            style: 'ui-tooltip-light ui-tooltip-zlparam'
+          });
+        }); // Fields Help Tips END
+
+
+        /*
+         * Fields Select Expand
+         */
+        $dom.find('.zl-select-expand').each(function(){
+          var $expand = $(this);
+          $expand.click(function(){
+            $(this).prev().height(150);
+            $(this).remove();
+          }).qtip({
+            overwrite: false,
+            content: {
+              text: $expand.data('zl-qtip')
+            },
+            position: {
+              at: 'right top',
+              my: 'left bottom'
+            },
+            show: {
+              solo: true,
+              delay: 600
+            },
+            hide: {
+              delay: 0
+            },
+            style: 'ui-tooltip-light ui-tooltip-zlparam'
+          });
+        }); // Fields Select Expand END
+
+
+        /*
+         * Password Field
+         */
+        $('#toolbar-apply, #toolbar-save').on('mousedown', function(){
+          $dom.find('.zl-row[data-type=password] .zl-field input').each(function(){
+            $(this).val('zl-decrypted['+$(this).val()+']');
+          });
+        })
+
+
+        /*
+         * Override Field
+         */
+        $dom.find('.zl-state').each(function(){
+          var $checkbox = $(this).find('input'),
+            $row = $checkbox.closest('.zl-row');
+
+          $checkbox.on('change', function(){
+            var checkd = $(this).attr('checked') == 'checked'; // it is checked?
+
+            if (checkd){
+              $row.removeClass('zl-disabled')
+              $row.find('.zl-field').children().removeAttr('disabled');
+            } else {
+              $row.addClass('zl-disabled')
+              $row.find('.zl-field').children().attr('disabled', true);
+            }
+          })
+
+          // init the action
+          .trigger('change');
+        }); // Override Field END
+
+
+        /*
+         * Override Field Tooltip
+         */
+        $dom.find('.zl-state input').each(function(){
+          var $checkbox = $(this);
+          $checkbox.qtip({
+            content: {
+              text: 'Override this field' // default text
+            },
+            position: {
+              at: 'left top',
+              my: 'right bottom',
+              effect: false
+            },
+            show: {
+              target: $checkbox.closest('.zl-row'),
+              solo: true,
+              delay: 200
+            },
+            hide: {
+              target: $checkbox.closest('.zl-row'),
+              delay: 0
+            },
+            style: 'ui-tooltip-light ui-tooltip-zlparam',
+            events: {
+              show: function(event, api) {
+                ($checkbox.attr('checked') == 'checked') && event.preventDefault(); // Stop it!
+
+                // hide if checkbox checked
+                $checkbox.bind('change', function(){
+                  api.hide();
+                });
+
+                // Update the content of the tooltip on each show
+                api.set('content.text', $checkbox.parent().attr('tooltip'));
+              }
+            }
+          });
+        }); // Override Field Tooltip END
+
+
+        /*
+         * Toggle Fields
+         */
+        $dom.find('.zl-toggle').each(function(){
+          var toggle = $(this),
+            content = toggle.next();
+
+          // set action
+          $('.btn-open', toggle).on('click', function(){
+            toggle.toggleClass('open') && content.show();
+          });
+          $('.btn-close', toggle).on('click', function(){
+            toggle.toggleClass('open') && content.hide();
+          });
+        }); // Toggle Fields END
+
+
+        /*
+         * Dependents - Fields are shown/hidden depending on this field value
+         */
+        $dom.find('[data-dependents]').each(function(){
+          var field = $(this),
+            rules = field.data("dependents").replace(/ /g, '').split('|'), // remove empty spaces and split into rules
+            ph = field.closest('.zlfield.placeholder .wrapper, .zlfield.placeholder').first();
+
+          // for each rule
+          rules.forEach(function(val)
+          {
+            var c = val.split('!>'),
+              m = c.length == 2 ? '!>' : '>'; // mode
+              c = m == '>' ? val.split('>') : c, // second split if necesary
+              d = c[0].split(','), // dependents array
+              e = c[1].replace('NONE', ''); // dependent option
+
+            // if select
+            (field.data("type") == 'select' || field.data("type") == 'itemLayoutList' || field.data("type") == 'layout' || field.data("type") == 'apps' || field.data("type") == 'types' || field.data("type") == 'elements' || field.data("type") == 'modulelist' || field.data("type") == 'separatedby')
+            && d.forEach(function(val) // for each dependent of the option
+            {
+              var dep = ph.find('[data-id="'+val+'"]').data('e', e).data('m', m).hide();
+
+              field.find('.zl-field select').bind('change', function(){
+                var e = dep.data('e'), // dependent value
+                  m = dep.data('m'), // dependent mode
+                  selection = $.makeArray($(this).val()), // for multiselect compatibility
+                  match = 0; // by default no match
+
+                if (e && e.match(/OR/g)){
+                  $.each(selection, function(index, value){ // for each selected value
+                    // regex search value on begin/end of string or with OR in any side
+                    var re = new RegExp('(\\b|OR)'+value+'(\\b|OR)', 'g');
+                    ( (m == '!>' && !e.match(re)) || (m == '>' && e.match(re)) ) && (match = 1);
+                    // check mode and Select value, mark any match
+                  })
+                } else if (e && e.match(/AND/g)){
+                  var min = e.split('AND').length;
+                  (selection.length == min) && $.each(selection, function(index, value){
+                    // regex search value on begin/end of string or with AND in any side
+                    var re = new RegExp('(\\b|AND)'+value+'(\\b|AND)', 'g');
+                    if ( (m == '!>' && !e.match(re)) || (m == '>' && e.match(re)) ) {
+                      match = 1;
+                    } else { match = 0; }
+                    // check mode and Select value, mark only if all matched
+                  })
+                } else {
+                  $.each(selection, function(index, value){
+                    ( (m == '!>' && value != e) || (m == '>' && value == e) ) && (match = 1);
+                    // check mode and Select value, mark any match
+                  })
+                }
+
+                // if match Show, otherwise Hide
+                match && dep.slideDown('fast') || dep.slideUp('fast');
+              }).trigger('change');
+
+            });
+
+            // if checkbox
+            (field.data("type") == 'checkbox') && d.forEach(function(val) {
+              var dep = ph.find('[data-id="'+val+'"]').hide();
+              field.find('.zl-field input').bind('change', function(){
+                var checkd = $(this).attr('checked') == 'checked'; // it is checked?
+
+                ( (m == '!>' && !checkd) || (m == '>' && checkd) ) && dep.slideDown('fast') || dep.slideUp('fast');
+                // check mode and Checkbox state, then slide Up or Down
+              }).trigger('change');
+            });
+
+            // if radio
+            (field.data("type") == 'radio') && d.forEach(function(val)
+            {
+              var option = e, // it must be declared local to avoid some weard issue that changes true string values to 1 number value
+                dep = ph.find('[data-id="'+val+'"]').hide();
+              field.find('.zl-field input').bind('change', function()
+              {
+                var checkd = $(this).attr('checked') == 'checked', // it is checked?
+                  match = 0, // by default no match
+                  value = $(this).attr('value');
+
+                if(checkd) // proceed only if it's the checked input
+                {
+                  if (option && option.match(/OR/g)){
+                    var re = new RegExp(value, 'g');
+                    ( (m == '!>' && !option.match(re)) || (m == '>' && option.match(re)) ) && (match = 1);
+                    // check mode, value and check state for multiple values, mark any match
+                  }
+                  else
+                  {
+                    ( (m == '!>' && value != option && checkd) || (m == '>' && value == option && checkd) && checkd) && (match = 1);
+                    // check mode, value and check state, mark any match
+                  }
+
+                  // if match Show, otherwise Hide
+                  match && dep.slideDown('fast') || dep.slideUp('fast');
+                }
+
+              }).trigger('change');
+            });
+
+            // if text
+            (field.data("type") == 'text') && d.forEach(function(val)
+            {
+              var dep = ph.find('[data-id="'+val+'"]').hide();
+              field.find('.zl-field input').on('keyup change', function(){
+                var filled = $(this).val() != ''; // has text?
+
+                ( (m == '!>' && !filled) || (m == '>' && filled) ) && dep.slideDown('fast') || dep.slideUp('fast');
+                // check mode and Input state, then slide Up or Down
+              }).trigger('change');
+            });
+          });
+        }); // Dependents END
+
+
+        /*
+         * Dependent - The field is shown/hidden depending on other fields values
+         */
+        $dom.find('[data-dependent]').each(function(){
+          var dep = $(this).hide(),
+            rules = dep.data("dependent").replace(/ /g, ''), // remove empty spaces
+            AND_rules = rules.match(/AND/g) ? rules.split('AND') : [], // split AND rules
+            OR_rules = rules.match(/OR/g) ? rules.split('OR') : [], // split OR rules
+            ph = dep.parents('.zlfield.placeholder .wrapper, .zlfield.placeholder').first();
+
+          dep.on('zlfield-dependent-event', function(event)
+          {
+            A_match = 0;
+            if (AND_rules.length) A_match = $this.evaluateDependentRules(AND_rules, dep, ph, 'AND');
+            else A_match = $this.evaluateDependentRules(OR_rules, dep, ph, 'OR');
+
+            // Show if match, Hide otherwise
+            A_match && dep.slideDown('fast') || dep.slideUp('fast');
+          }).trigger('zlfield-dependent-event');
+
+        }); // Dependent END
+
+
+        /*
+         * Relies On - Fields are loaded depending on other fields values
+         */
+        $dom.find('[data-relieson]').each(function(){
+          var placeholder = $(this), // placeholder
+            b = placeholder.data('relieson'),
+            c = placeholder.parents('.placeholder').find('[data-id="'+b.id+'"]'), // find the parent field
+            select = c.find('select');
+
+          // on select change
+          select.on('change', function()
+          {
+            var val  = $(this).val() ? $(this).val() : '',
+              ac   = $(this).closest('.zl-field'), // activity holder
+              json = b.json, // convert json string to object
+              ctrl  = placeholder.attr('data-control'), // field ctrl
+              args = $(this).closest('.zlfield-main').attr('data-ajaxargs'),
+              psv  = b.psv, // parents values
+              pid  = b.id;
+
+            // add current value to parents array
+            psv[b.id] = val;
+
+            // peform ajax request
+            ac.append($('<span class="activity zl-loader">'));
+
+            // make ajax request
+            var jqxhr = $.ajax({
+              type: 'POST',
+              url: b.url+'&task=loadfield',
+              data: {
+                json:json,
+                ctrl:ctrl,
+                psv:psv,
+                pid:pid,
+                node:null,
+                args:args,
+                ajaxcall:true,
+                enviroment:$this.options.enviroment,
+                enviroment_args:$this.options.enviroment_args
+              }
+            })
+
+            // if success
+            .done(function(data){
+              data = $.parseJSON(data);
+
+              // remove activity indication
+              ac.find('.activity').remove();
+
+              // set data
+              placeholder.slideUp('fast', function()
+              {
+                // remove old html
+                placeholder.empty();
+
+                // set new html if any
+                data && data.result && placeholder.html('<div class="loaded-fields">'+data.result+'</div>');
+
+                // init ZL Field Actions on the new fields
+                $this.actions(placeholder.find('> .loaded-fields'));
+
+                // show the new content
+                placeholder.slideDown('fast');
+
+                // trigger custom event for noticing the field was loaded
+                select.trigger('loaded.zlfield');
+              });
+            })
+          });
+        }); // Relies On END
+
+
+        /*
+         * Load Field
+         */
+        $dom.find('.load-field-btn').on('click', function(event){
+          event.preventDefault();
+
+          var $button = $(this),
+            $wrapper = $button.parent('.zlfield-main'),
+            $zlfield = $wrapper.data('ajaxargs');
+
+          // add loading indicator
+          $button.find('span').addClass('zlux-loader-raw');
+
+          $.ajax({
+            url : $this.options.url,
+            type : 'POST',
+            data: {
+              task: 'loadZLfield',
+              group: $zlfield.group,
+              type: $this.options.type,
+              control_name: $zlfield.control_name,
+              json_path: $zlfield.json_path,
+              element_id: $zlfield.element_id,
+              element_type: $zlfield.element_type,
+              enviroment: $zlfield.enviroment,
+              node: $zlfield.node
+            },
+            success : function(data) {
+              data = $.parseJSON(data);
+
+              $wrapper.fadeOut('fast', function(){
+                // set results
+                $(this).html(data.result);
+
+                // apply ZL Field Actions
+                $this.actions($wrapper);
+
+                // show the new content
+                $wrapper.fadeIn('slow');
+              });
+            }
+          });
+        }); // Load Field
+
+        /*
+         * Items selector
+         */
+        $('[data-type=items] .zl-field', $dom).each(function(){
+          var $field = $(this),
+            info = $('input.zlux-x-dummy', $field),
+            cname = info.val(),
+            params = info.data('params');
+
+          // remove dummy input
+          info.remove();
+
+          // load the field JS
+          $.zlux.assets.load('fields').done(function(){
+
+            // init
+            $field.zlux('fields', $.extend({}, params, {
+              field: 'items',
+              controlName: cname
+            }));
+          });
+
+        }); // Items selector END
+
+        /*
+         * Options field
+         */
+        $('[data-type=options] .zl-field', $dom).each(function(){
+          var $field = $(this),
+            info = $('input.zlux-x-dummy', $field),
+            cname = info.val(),
+            params = info.data('params');
+
+          // remove dummy input
+          info.remove();
+
+          // load the field JS
+          $.zlux.assets.load('fields').done(function(){
+
+            // init
+            $field.zlux('fields', $.extend({}, params, {
+              field: 'options',
+              controlName: cname
+            }));
+          });
+
+        }); // Options field END
+
+        /*
+         * Attributes field
+         */
+        $('[data-type=attributes] .zl-field', $dom).each(function(){
+          var $field = $(this),
+            info = $('input.zlux-x-dummy', $field),
+            cname = info.val(),
+            params = info.data('params');
+
+          // remove dummy input
+          info.remove();
+
+          // load the field JS
+          $.zlux.assets.load('fields').done(function(){
+
+            // init
+            $field.zlux('fields', $.extend({}, params, {
+              field: 'attributes',
+              controlName: cname
+            }));
+          });
+
+        }); // Options field END
+
+      $dom.data('zlfield-actions-init', !0)}
+    },
+
+    /*
+     * evaluateDependentRules - evaluate the Dependent rules
+     */
+    evaluateDependentRules: function(rules, dep, ph, mode) {
+      var $this = this,
+        A_match = 0, // by default no match
+        loop = 1;
+
+      rules.forEach(function(val)
+      {
+        if (!loop) return false; // workaround for braking the loop
+
+        var c = val.split('!='),
+          m = c.length == 2 ? '!=' : '=='; // mode
+          c = m == '==' ? val.split('==') : c, // second split if necesary
+          field = ph.find('[data-id="'+c[0]+'"]'), // the field value it depends on
+          type = field.data("type"),
+          unique_id = mode+'-'+dep.data("id")+'-'+field.data("id")+'-'+ph.data("id"),
+          e = c[1].replace('NONE', ''); // dependent option
+
+        // if select
+        if (type == 'select' || type == 'itemLayoutList' || type == 'layout' || type == 'apps' || type == 'types' || type == 'elements' || type == 'modulelist' || type == 'separatedby')
+        {
+          var select = field.find('.zl-field select'),
+            selection = $.makeArray(select.val()), // for multiselect compatibility
+            match = 0;
+
+          if (e && e.match(/OR/g)){
+            $.each(selection, function(index, value){ // for each selected value
+              // regex search value on begin/end of string or with OR in any side
+              var re = new RegExp('(\\b|OR)'+value+'(\\b|OR)', 'g');
+              ( (m == '!=' && !e.match(re)) || (m == '==' && e.match(re)) ) && (match = 1);
+              // check mode and Select value, mark any match
+            })
+          } else if (e && e.match(/AND/g)){
+            var min = e.split('AND').length;
+            (selection.length == min) && $.each(selection, function(index, value){
+              // regex search value on begin/end of string or with AND in any side
+              var re = new RegExp('(\\b|AND)'+value+'(\\b|AND)', 'g');
+              // check mode and Select value, mark only if all matched
+              if ( (m == '!=' && !e.match(re)) || (m == '==' && e.match(re)) ) {
+                match = 1;
+              } else { match = 0; }
+            })
+          } else {
+            $.each(selection, function(index, value){
+              // check mode and Select value, mark any match
+              ( (m == '!=' && value != e) || (m == '==' && value == e) ) && (match = 1);
+            })
+          }
+
+          // save match
+          A_match = match;
+
+          if (!select.data('zlfield-dependent-'+unique_id+'-init')) {
+            select.on('change', function(){
+              dep.trigger('zlfield-dependent-event');
+            });
+          select.data('zlfield-dependent-'+unique_id+'-init', !0)}
+        };
+
+        // if checkbox
+        if (type == 'checkbox')
+        {
+          var checkbox = field.find('.zl-field input'),
+            match = 0,
+            checkd = checkbox.attr('checked') == 'checked'; // it is checked?
+
+            // check mode and Checkbox state, mark any match
+            ( (m == '!=' && !checkd) || (m == '==' && checkd) ) && (match = 1)
+
+          // save match
+          A_match = match;
+
+          if (!checkbox.data('zlfield-dependent-'+unique_id+'-init')) {
+            checkbox.on('change', function(){
+              dep.trigger('zlfield-dependent-event');
+            });
+          checkbox.data('zlfield-dependent-'+unique_id+'-init', !0)}
+        };
+
+        // if radio
+        if (type == 'radio')
+        {
+          var radio = field.find('.zl-field input'),
+            match = 0, // by default no match
+            option = e; // it must be declared local to avoid some weard issue that changes true string values to 1 number value
+
+          radio.each(function()
+          {
+            var checkd = $(this).attr('checked') == 'checked', // it is checked?
+              value = $(this).attr('value');
+
+            if(checkd) // proceed only if it's the checked input
+            {
+              if (option && option.match(/OR/g)){
+                var re = new RegExp(value, 'g');
+                // check mode, value and check state for multiple values, mark any match
+                ( (m == '!=' && !option.match(re)) || (m == '==' && option.match(re)) ) && (match = 1);
+              }
+              else
+              {
+                // check mode, value and check state, mark any match
+                ( (m == '!=' && value != option && checkd) || (m == '==' && value == option && checkd) && checkd) && (match = 1);
+              }
+            }
+          });
+
+          // save match
+          A_match = match;
+
+          if (!radio.data('zlfield-dependent-'+unique_id+'-init')) {
+            radio.on('change', function(){
+              dep.trigger('zlfield-dependent-event');
+            });
+          radio.data('zlfield-dependent-'+unique_id+'-init', !0)}
+        };
+
+        // if text
+        if (type == 'text')
+        {
+          var input = field.find('.zl-field input'),
+            filled = input.val() != ''; // has text?
+
+          // check mode and Input state, then slide Up or Down
+          ( (m == '!=' && !filled) || (m == '==' && filled) ) && (match = 1);
+
+          // save match
+          A_match = match;
+
+          if (!input.data('zlfield-dependent-'+unique_id+'-init')) {
+            input.on('keyup change', function(){
+              dep.trigger('zlfield-dependent-event');
+            });
+          input.data('zlfield-dependent-'+unique_id+'-init', !0)}
+        };
+
+        // stop iteration if not match allready
+        if ( (mode == 'AND' && !A_match) || (mode == 'OR' && A_match) ) loop = false;
+      });
+
+      return A_match;
+    }
+  });
+  // Don't touch
+  $.fn[Plugin.prototype.name] = function() {
+    var args   = arguments;
+    var method = args[0] ? args[0] : null;
+    return this.each(function() {
+      var element = $(this);
+      if (Plugin.prototype[method] && element.data(Plugin.prototype.name) && method != 'initialize') {
+        element.data(Plugin.prototype.name)[method].apply(element.data(Plugin.prototype.name), Array.prototype.slice.call(args, 1));
+      } else if (!method || $.isPlainObject(method)) {
+        var plugin = new Plugin();
+        if (Plugin.prototype['initialize']) {
+          plugin.initialize.apply(plugin, $.merge([element], args));
+        }
+        element.data(Plugin.prototype.name, plugin);
+      } else {
+        $.error('Method ' +  method + ' does not exist on jQuery.' + Plugin.name);
+      }
+    });
+  };
+})(jQuery);
+
+/* ===================================================
+ * ZLfield Widgetkit2 layout
+ * https://zoolanders.com/extensions/zlframework
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+(function($, window) {
+
+  $(function() {
+
+      $('.wk2-zl-selector').each(function(i, item){
+
+        var input = $(this).nextAll('input'),
+          span = $(this).nextAll('span'),
+          value;
+
+            try {
+                value = JSON.parse(input.val());
+            } catch (e) {
+                value = {};
+            }
+
+            // set initial widget label
+            if (value.widget && window.widgetkit.config.widgets[value.widget]) {
+              span.html('('+window.widgetkit.config.widgets[value.widget].label+')');
+            }
+        });
+    });
+
+    $(function() {
+
+    $('body').on('click', '.wk2-zl-selector', function(e) {
+            e.preventDefault();
+
+        var input = $(this).nextAll('input'),
+          span = $(this).nextAll('span'),
+          widgets = $(this).data('zl-widgets'),
+          value, scope;
+
+            try {
+                value = JSON.parse(input.val());
+            } catch (e) {
+                value = {};
+            }
+
+            // init Widget assistent
+            window.zlwk.env.init(value, function(attrs) {
+              if (scope.widget) {
+                span.html('('+scope.widget.label+')');
+              }
+
+                input.val(JSON.stringify(attrs));
+            });
+
+      $(window.zlwk.env.modal.element).on('show.uk.modal', function() {
+        var modal = $(this);
+
+        // get scope
+        scope = angular.element( $('[ng-controller]', modal)[0] ).scope();
+      });
+    });
+    });
+
+})(jQuery, window);

@@ -1,10 +1,9 @@
 <?php
 
 /*
-	Class: Fieldset
-		The Fieldset abstract class
+    Class: Fieldset
+        The Fieldset abstract class
 */
-
 abstract class Fieldset {
 
     /* ZOO app */
@@ -29,7 +28,7 @@ abstract class Fieldset {
         Parameters:
             $app - App A reference to an App Object
     */
-    public function __construct ($app, $element) {
+    public function __construct($app, $element) {
 
         // set application
         $this->app = $app;
@@ -51,7 +50,7 @@ abstract class Fieldset {
         Returns:
             Element - element object
     */
-    public function getElement () {
+    public function getElement() {
         return $this->_element;
     }
 
@@ -62,7 +61,7 @@ abstract class Fieldset {
         Returns:
             Item - item object
     */
-    public function getItem () {
+    public function getItem() {
         return $this->_element->getItem();
     }
 
@@ -73,7 +72,7 @@ abstract class Fieldset {
         Returns:
             string - the fieldset type
     */
-    public function getFieldsetType () {
+    public function getFieldsetType() {
         return $this->_type;
     }
 
@@ -84,7 +83,7 @@ abstract class Fieldset {
         Returns:
             string - the fieldset name
     */
-    public function getFieldsetName () {
+    public function getFieldsetName() {
         return $this->name ? $this->name : ucfirst($this->getFieldsetType());
     }
 
@@ -95,7 +94,7 @@ abstract class Fieldset {
         Returns:
             Mixed - the elements data
     */
-    public function get ($key, $default = null) {
+    public function get($key, $default = null) {
         return $this->_element->get($key, $default);
     }
 
@@ -106,7 +105,7 @@ abstract class Fieldset {
         Returns:
             Element - this
     */
-    public function set ($key, $value) {
+    public function set($key, $value) {
         return $this->_element->set($key, $value);
     }
 
@@ -117,7 +116,7 @@ abstract class Fieldset {
         Returns:
             String - the control name
     */
-    public function getControlName ($name, $array = false) {
+    public function getControlName($name, $array = false) {
         return $this->_element->getControlName($name, $array);
     }
 
@@ -128,7 +127,7 @@ abstract class Fieldset {
         Returns:
             String - Layout path
     */
-    public function getLayout ($layout = null) {
+    public function getLayout($layout = null) {
 
         // init vars
         $type = $this->getFieldsetType();
@@ -154,7 +153,8 @@ abstract class Fieldset {
         Returns:
             Boolean - true, on success
     */
-    public function hasValue ($params = array()) {
+    public function hasValue($params = array())
+    {
         $value = $this->get('value');
 
         return !empty($value);
@@ -171,7 +171,8 @@ abstract class Fieldset {
         Returns:
             String - html
     */
-    public function renderLayout ($__layout, $__args = array()) {
+    public function renderLayout($__layout, $__args = array())
+    {
         // init vars
         if (is_array($__args)) {
             foreach ($__args as $__var => $__value) {
@@ -189,28 +190,30 @@ abstract class Fieldset {
         return $__html;
     }
 
-    /*
-       Function: edit
-           Renders the edit form field.
+     /*
+        Function: edit
+            Renders the edit form field.
 
-       Returns:
-           String - html
-   */
-    public function edit () {
+        Returns:
+            String - html
+    */
+    public function edit()
+    {
         // render layout
         if ($layout = $this->getLayout('edit/layout.php')) {
             return $this->renderLayout($layout);
         }
     }
 
-    /*
-       Function: render
-           Renders the fieldset values
+     /*
+        Function: render
+            Renders the fieldset values
 
-       Returns:
-           String - html
-   */
-    public function render ($params = array()) {
+        Returns:
+            String - html
+    */
+    public function render($params = array())
+    {
         return $this->get('value', array());
     }
 
@@ -226,7 +229,8 @@ abstract class Fieldset {
         Returns:
             Array - cleaned value
     */
-    public function validateSubmission ($values, $params) {
+    public function validateSubmission($values, $params)
+    {
         // init vars
         $required = $params->get('required');
 
@@ -249,6 +253,5 @@ abstract class Fieldset {
         Returns:
             Void
     */
-    public function bindData () {
-    }
+    public function bindData(){}
 }

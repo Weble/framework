@@ -2,7 +2,8 @@
 
 jimport('joomla.form.formfield');
 
-require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
+// load config
+require_once(JPATH_ADMINISTRATOR.'/components/com_zoo/config.php');
 
 class JFormFieldZlux extends JFormField {
 
@@ -12,16 +13,19 @@ class JFormFieldZlux extends JFormField {
      * Method to get the field label markup.
      *
      * @return  string  The field label markup.
+     *
+     * @since   11.1
      */
-    protected function getLabel () {
+    protected function getLabel()
+    {
         // get zoo app
         $app = App::getInstance('zoo');
 
-        // init var
-        $node = $this->element;
+         // init var
+         $node       = $this->element;
         $node_atr = (array)$node->attributes();
         $node_atr = $node_atr['@attributes'];
-        $class = $node->attributes()->class;
+        $class      = $node->attributes()->class;
 
         // init fields engine
         $engine = $app->zlfw->zlux->fields->create('joomla');
@@ -30,10 +34,10 @@ class JFormFieldZlux extends JFormField {
         $engine->setValues($this->value);
 
         // prepare control
-        $ctrl = count($node->children()) > 1 ? $this->name : $this->formControl . '[' . $this->group . ']';
+        $ctrl = count($node->children()) > 1 ? $this->name : $this->formControl.'['.$this->group.']';
 
         // allow additional control
-        if ($node->attributes()->addcontrol) $ctrl .= "[" . $node->attributes()->addcontrol . ']';
+        if ($node->attributes()->addcontrol) $ctrl .= "[".$node->attributes()->addcontrol.']';
 
         // set control
         $engine->setControl($ctrl);
@@ -47,14 +51,17 @@ class JFormFieldZlux extends JFormField {
      * Method to get the field input markup.
      *
      * @return  string  The field input markup.
+     *
+     * @since   11.1
      */
-    protected function getInput () {
+    protected function getInput()
+    {
         return '';
     }
 
     // when j3.2 wide supported this method should be used to totally remove the control layout
     // public function getControlGroup()
     // {
-    // 	return $this->getInput();
+    //     return $this->getInput();
     // }
 }

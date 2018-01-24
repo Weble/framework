@@ -1,48 +1,50 @@
 <?php
 
 /**
- * Original Credits
- * AkeebaBackupPro AEUtilDropbox \backend\akeeba\plugins\utils\dropbox.php
- *
- * @copyright    Copyright (c)2009-2013 Nicholas K. Dionysopoulos
- * @license        GNU GPL version 3 or, at your option, any later version
- * @package        akeebaengine
- *
- *
- * Dropbox API implementation in PHP
- *
- * Modified by Nicholas K. Dionysopoulos <nikosdion@gmail.com>
- *
- * Based on the work of Ben Tadiar <ben@handcraftedbyben.co.uk>, found at
- * https://github.com/benthedesigner/dropbox and licensed under the MIT license.
- *
- * The following license notice is present in the original code:
- *
- * Copyright (c) 2012 Ben Tadiar
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-class AEUtilDropbox {
+* Original Credits
+* AkeebaBackupPro AEUtilDropbox \backend\akeeba\plugins\utils\dropbox.php
+*
+* @copyright    Copyright (c)2009-2013 Nicholas K. Dionysopoulos
+* @license        GNU GPL version 3 or, at your option, any later version
+* @package        akeebaengine
+*
+*
+* Dropbox API implementation in PHP
+*
+* Modified by Nicholas K. Dionysopoulos <nikosdion@gmail.com>
+*
+* Based on the work of Ben Tadiar <ben@handcraftedbyben.co.uk>, found at
+* https://github.com/benthedesigner/dropbox and licensed under the MIT license.
+*
+* The following license notice is present in the original code:
+*
+* Copyright (c) 2012 Ben Tadiar
+*
+* Permission is hereby granted, free of charge, to any person obtaining
+* a copy of this software and associated documentation files (the
+* "Software"), to deal in the Software without restriction, including
+* without limitation the rights to use, copy, modify, merge, publish,
+* distribute, sublicense, and/or sell copies of the Software, and to
+* permit persons to whom the Software is furnished to do so, subject to
+* the following conditions:
+*
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+* LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+* OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+* WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+class AEUtilDropbox
+{
     // Dropbox web endpoint
     const WEB_URL = 'https://www.dropbox.com/1/';
-    const API_URL = 'https://api.dropbox.com/1/';
+    const API_URL     = 'https://api.dropbox.com/1/';
     const CONTENT_URL = 'https://api-content.dropbox.com/1/';
 
     // OAuth flow methods
@@ -53,9 +55,9 @@ class AEUtilDropbox {
     /** @var array Default cURL options */
     private $defaultOptions = array(
         CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_VERBOSE => true,
-        CURLOPT_HEADER => true,
-        CURLINFO_HEADER_OUT => false,
+        CURLOPT_VERBOSE        => true,
+        CURLOPT_HEADER         => true,
+        CURLINFO_HEADER_OUT    => false,
         CURLOPT_RETURNTRANSFER => true,
         //CURLOPT_FOLLOWLOCATION => true,
     );
@@ -107,7 +109,7 @@ class AEUtilDropbox {
      * Sets the API keys
      * @param object $keys
      */
-    public function setAppKeys ($keys) {
+    public function setAppKeys($keys) {
         $this->appKey = $keys->app;
         $this->appSecret = $keys->secret;
     }
@@ -116,10 +118,11 @@ class AEUtilDropbox {
      * Returns the API keys
      * @return object
      */
-    public function getAppKeys () {
+    public function getAppKeys()
+    {
         $keys = (object)array(
-            'app' => $this->appKey,
-            'secret' => $this->appSecret
+            'app'        => $this->appKey,
+            'secret'    => $this->appSecret
         );
     }
 
@@ -127,7 +130,8 @@ class AEUtilDropbox {
      * Sets the OAuth token
      * @param object $token
      */
-    public function setToken ($token) {
+    public function setToken($token)
+    {
         $this->token = $token;
     }
 
@@ -135,11 +139,12 @@ class AEUtilDropbox {
      * Returns the OAuth token
      * @return type object
      */
-    public function getToken () {
-        if (!is_object($this->token)) {
+    public function getToken()
+    {
+        if(!is_object($this->token)) {
             $this->token = (object)array(
-                'oauth_token' => null,
-                'oauth_token_secret' => null
+                'oauth_token'            => null,
+                'oauth_token_secret'    => null
             );
         }
         return $this->token;
@@ -149,19 +154,20 @@ class AEUtilDropbox {
      * Sets the OAuth authorisation request token
      * @param object $token
      */
-    public function setReqToken ($token) {
+    public function setReqToken($token)
+    {
         $this->requestToken = $token;
     }
-
     /**
      * Returns the OAuth authorisation request token
      * @return type object
      */
-    public function getReqToken () {
-        if (!is_object($this->requestToken)) {
+    public function getReqToken()
+    {
+        if(!is_object($this->requestToken)) {
             $this->requestToken = (object)array(
-                'oauth_token' => null,
-                'oauth_token_secret' => null
+                'oauth_token'            => null,
+                'oauth_token_secret'    => null
             );
         }
         return $this->requestToken;
@@ -172,9 +178,10 @@ class AEUtilDropbox {
      * @param string $method Either PLAINTEXT or HMAC-SHA1
      * @return void
      */
-    public function setSignatureMethod ($method) {
+    public function setSignatureMethod($method)
+    {
         $method = strtoupper($method);
-        switch ($method) {
+        switch($method){
             case 'PLAINTEXT':
             case 'HMAC-SHA1':
                 $this->sigMethod = $method;
@@ -189,9 +196,10 @@ class AEUtilDropbox {
      * @param string $format One of php, json or jsonp
      * @return void
      */
-    public function setResponseFormat ($format) {
+    public function setResponseFormat($format)
+    {
         $format = strtolower($format);
-        if (!in_array($format, array('php', 'json', 'jsonp'))) {
+        if(!in_array($format, array('php', 'json', 'jsonp'))){
             throw new Exception("Expected a format of php, json or jsonp, got '$format'");
         } else {
             $this->responseFormat = $format;
@@ -202,16 +210,18 @@ class AEUtilDropbox {
      * Return the API response format
      * @return string
      */
-    public function getResponseFormat () {
+    public function getResponseFormat()
+    {
         return $this->responseFormat;
     }
 
     /**
-     * Set the JSONP callback function
-     * @param string $function
-     * @return void
-     */
-    public function setCallback ($function) {
+    * Set the JSONP callback function
+    * @param string $function
+    * @return void
+    */
+    public function setCallback($function)
+    {
         $this->callback = $function;
     }
 
@@ -220,9 +230,10 @@ class AEUtilDropbox {
      * @param mixed $root
      * @throws Exception
      * @return void
-     */
-    public function setRoot ($root) {
-        if ($root !== 'sandbox' && $root !== 'dropbox') {
+    */
+    public function setRoot($root)
+    {
+        if($root !== 'sandbox' && $root !== 'dropbox'){
             throw new Exception("Expected a root of either 'dropbox' or 'sandbox', got '$root'");
         } else {
             $this->root = $root;
@@ -234,7 +245,8 @@ class AEUtilDropbox {
      *
      * @return string Root level ("dropbox" or "sandbox")
      */
-    public function getRoot () {
+    public function getRoot()
+    {
         return $this->root;
     }
 
@@ -242,8 +254,9 @@ class AEUtilDropbox {
      * Set the output file
      * @return void
      */
-    public function setOutFile ($handle) {
-        if (!is_resource($handle) || get_resource_type($handle) != 'stream') {
+    public function setOutFile($handle)
+    {
+        if(!is_resource($handle) || get_resource_type($handle) != 'stream'){
             throw new AEUtilDropboxException('Outfile must be a stream resource');
         }
         $this->outFile = $handle;
@@ -253,8 +266,9 @@ class AEUtilDropbox {
      * Set the input file
      * @return void
      */
-    public function setInFile ($handle) {
-        if (!is_resource($handle) || get_resource_type($handle) != 'stream') {
+    public function setInFile($handle)
+    {
+        if(!is_resource($handle) || get_resource_type($handle) != 'stream'){
             throw new AEUtilDropboxException('Infile must be a stream resource');
         }
         fseek($handle, 0);
@@ -276,13 +290,14 @@ class AEUtilDropbox {
      *
      * @return string The URL to redirect the browser to
      */
-    public function getAuthoriseUrl () {
+    public function getAuthoriseUrl()
+    {
         $this->getRequestToken();
 
         // Prepare request parameters
         $params = array(
-            'oauth_token' => $this->requestToken->oauth_token,
-            'oauth_token_secret' => $this->requestToken->oauth_token_secret
+                'oauth_token' => $this->requestToken->oauth_token,
+                'oauth_token_secret' => $this->requestToken->oauth_token_secret
         );
 
         // Build the URL and redirect the user
@@ -294,7 +309,8 @@ class AEUtilDropbox {
     /**
      * Fetches the access token (step 3 of OAuth authentication)
      */
-    public function getAccessToken () {
+    public function getAccessToken()
+    {
         $token = $this->getReqToken();
         $this->setToken($token);
         $response = $this->fetch('POST', self::API_URL, self::ACCESS_TOKEN_METHOD);
@@ -306,7 +322,8 @@ class AEUtilDropbox {
      * Retrieves information about the user's account
      * @return object stdClass
      */
-    public function accountInfo () {
+    public function accountInfo()
+    {
         $response = $this->fetch('POST', self::API_URL, 'account/info');
         return $response;
     }
@@ -321,16 +338,17 @@ class AEUtilDropbox {
      * @param boolean $overwrite Should the file be overwritten? (Default: true)
      * @return object stdClass
      */
-    public function putFile ($file, $filename = false, $path = '', $overwrite = true) {
-        if (file_exists($file)) {
-            if (filesize($file) <= 157286400) {
+    public function putFile($file, $filename = false, $path = '', $overwrite = true)
+    {
+        if(file_exists($file)){
+            if(filesize($file) <= 157286400){
                 $call = 'files/' . $this->root . '/' . $this->encodePath($path);
                 // If no filename is provided we'll use the original filename
                 $filename = (is_string($filename)) ? $filename : basename($file);
                 $params = array(
                     'filename' => $filename,
                     'file' => '@' . str_replace('\\', '/', $file) . ';filename=' . $filename,
-                    'overwrite' => (int)$overwrite,
+                    'overwrite' => (int) $overwrite,
                 );
                 $response = $this->fetch('POST', self::CONTENT_URL, $call, $params);
                 return $response;
@@ -351,11 +369,12 @@ class AEUtilDropbox {
      * @param boolean $overwrite Should the file be overwritten? (Default: true)
      * @return array
      */
-    public function putStream ($stream, $filename, $overwrite = true) {
+    public function putStream($stream, $filename, $overwrite = true)
+    {
         $this->setInFile($stream);
         $path = $this->encodePath($filename);
         $call = 'files_put/' . $this->root . '/' . $path;
-        $params = array('overwrite' => (int)$overwrite);
+        $params = array('overwrite' => (int) $overwrite);
         $response = $this->fetch('PUT', self::CONTENT_URL, $call, $params);
         return $response;
     }
@@ -368,16 +387,17 @@ class AEUtilDropbox {
      * @param string $revision The revision of the file to retrieve
      * @return array
      */
-    public function getFile ($file, $outFile = false, $revision = null) {
+    public function getFile($file, $outFile = false, $revision = null)
+    {
         // Only allow php response format for this call
-        if ($this->responseFormat !== 'php') {
+        if($this->responseFormat !== 'php'){
             throw new Exception('This method only supports the `php` response format');
         }
 
         $handle = null;
-        if ($outFile !== false) {
+        if($outFile !== false){
             // Create a file handle if $outFile is specified
-            if (!$handle = fopen($outFile, 'w')) {
+            if(!$handle = fopen($outFile, 'w')){
                 throw new Exception("Unable to open file handle for $outFile");
             } else {
                 $this->setOutFile($handle);
@@ -390,7 +410,7 @@ class AEUtilDropbox {
         $response = $this->fetch('GET', self::CONTENT_URL, $call, $params);
 
         // Close the file handle if one was opened
-        if ($handle) fclose($handle);
+        if($handle) fclose($handle);
 
         return array(
             'name' => ($outFile) ? $outFile : basename($file),
@@ -410,13 +430,14 @@ class AEUtilDropbox {
      * @param bool $deleted Include files/folders that have been deleted
      * @return object stdClass
      */
-    public function metaData ($path = null, $rev = null, $limit = 10000, $hash = false, $list = true, $deleted = false) {
+    public function metaData($path = null, $rev = null, $limit = 10000, $hash = false, $list = true, $deleted = false)
+    {
         $call = 'metadata/' . $this->root . '/' . $this->encodePath($path);
         $params = array(
-            'file_limit' => ($limit < 1) ? 1 : (($limit > 10000) ? 10000 : (int)$limit),
+            'file_limit' => ($limit < 1) ? 1 : (($limit > 10000) ? 10000 : (int) $limit),
             'hash' => (is_string($hash)) ? $hash : 0,
-            'list' => (int)$list,
-            'include_deleted' => (int)$deleted,
+            'list' => (int) $list,
+            'include_deleted' => (int) $deleted,
             'rev' => (is_string($rev)) ? $rev : null,
         );
         $response = $this->fetch('POST', self::API_URL, $call, $params);
@@ -429,10 +450,11 @@ class AEUtilDropbox {
      * @param integer Number of revisions to return (1-1000)
      * @return array
      */
-    public function revisions ($file, $limit = 10) {
+    public function revisions($file, $limit = 10)
+    {
         $call = 'revisions/' . $this->root . '/' . $this->encodePath($file);
         $params = array(
-            'rev_limit' => ($limit < 1) ? 1 : (($limit > 1000) ? 1000 : (int)$limit),
+            'rev_limit' => ($limit < 1) ? 1 : (($limit > 1000) ? 1000 : (int) $limit),
         );
         $response = $this->fetch('GET', self::API_URL, $call, $params);
         return $response;
@@ -444,7 +466,8 @@ class AEUtilDropbox {
      * @param string $revision The revision of the file to restore
      * @return object stdClass
      */
-    public function restore ($file, $revision) {
+    public function restore($file, $revision)
+    {
         $call = 'restore/' . $this->root . '/' . $this->encodePath($file);
         $params = array('rev' => $revision);
         $response = $this->fetch('POST', self::API_URL, $call, $params);
@@ -459,12 +482,13 @@ class AEUtilDropbox {
      * @param boolean $deleted Include deleted files/folders in the search
      * @return array
      */
-    public function search ($query, $path = '', $limit = 1000, $deleted = false) {
+    public function search($query, $path = '', $limit = 1000, $deleted = false)
+    {
         $call = 'search/' . $this->root . '/' . $this->encodePath($path);
         $params = array(
             'query' => $query,
-            'file_limit' => ($limit < 1) ? 1 : (($limit > 1000) ? 1000 : (int)$limit),
-            'include_deleted' => (int)$deleted,
+            'file_limit' => ($limit < 1) ? 1 : (($limit > 1000) ? 1000 : (int) $limit),
+            'include_deleted' => (int) $deleted,
         );
         $response = $this->fetch('GET', self::API_URL, $call, $params);
         return $response;
@@ -475,8 +499,9 @@ class AEUtilDropbox {
      * @param string $path The path to the file/folder you want a sharable link to
      * @return object stdClass
      */
-    public function shares ($path) {
-        $call = 'shares/' . $this->root . '/' . $this->encodePath($path);
+    public function shares($path)
+    {
+        $call = 'shares/' . $this->root . '/' .$this->encodePath($path);
         $response = $this->fetch('POST', self::API_URL, $call);
         return $response;
     }
@@ -486,7 +511,8 @@ class AEUtilDropbox {
      * @param string $path The path to the media file you want a direct link to
      * @return object stdClass
      */
-    public function media ($path) {
+    public function media($path)
+    {
         $call = 'media/' . $this->root . '/' . $this->encodePath($path);
         $response = $this->fetch('POST', self::API_URL, $call);
         return $response;
@@ -499,20 +525,21 @@ class AEUtilDropbox {
      * @param string $size The size of the thumbnail
      * @return array
      */
-    public function thumbnails ($file, $format = 'JPEG', $size = 'small') {
+    public function thumbnails($file, $format = 'JPEG', $size = 'small')
+    {
         // Only allow php response format for this call
-        if ($this->responseFormat !== 'php') {
+        if($this->responseFormat !== 'php'){
             throw new Exception('This method only supports the `php` response format');
         }
 
         $format = strtoupper($format);
         // If $format is not 'PNG', default to 'JPEG'
-        if ($format != 'PNG') $format = 'JPEG';
+        if($format != 'PNG') $format = 'JPEG';
 
         $size = strtolower($size);
         $sizes = array('s', 'm', 'l', 'xl', 'small', 'medium', 'large');
         // If $size is not valid, default to 'small'
-        if (!in_array($size, $sizes)) $size = 'small';
+        if(!in_array($size, $sizes)) $size = 'small';
 
         $call = 'thumbnails/' . $this->root . '/' . $this->encodePath($file);
         $params = array('format' => $format, 'size' => $size);
@@ -532,7 +559,8 @@ class AEUtilDropbox {
      * @param string $to Destination path, relative to root
      * @return object stdClass
      */
-    public function copy ($from, $to) {
+    public function copy($from, $to)
+    {
         $call = 'fileops/copy';
         $params = array(
             'root' => $this->root,
@@ -548,7 +576,8 @@ class AEUtilDropbox {
      * @param string New folder to create relative to root
      * @return object stdClass
      */
-    public function create ($path) {
+    public function create($path)
+    {
         $call = 'fileops/create_folder';
         $params = array('root' => $this->root, 'path' => $this->normalisePath($path));
         $response = $this->fetch('POST', self::API_URL, $call, $params);
@@ -560,7 +589,8 @@ class AEUtilDropbox {
      * @param string $path The path to the file or folder to be deleted
      * @return object stdClass
      */
-    public function delete ($path) {
+    public function delete($path)
+    {
         $call = 'fileops/delete';
         $params = array('root' => $this->root, 'path' => $this->normalisePath($path));
         $response = $this->fetch('POST', self::API_URL, $call, $params);
@@ -573,12 +603,13 @@ class AEUtilDropbox {
      * @param string $to Destination path, relative to root
      * @return object stdClass
      */
-    public function move ($from, $to) {
+    public function move($from, $to)
+    {
         $call = 'fileops/move';
         $params = array(
-            'root' => $this->root,
-            'from_path' => $this->normalisePath($from),
-            'to_path' => $this->normalisePath($to),
+                'root' => $this->root,
+                'from_path' => $this->normalisePath($from),
+                'to_path' => $this->normalisePath($to),
         );
         $response = $this->fetch('POST', self::API_URL, $call, $params);
         return $response;
@@ -595,7 +626,8 @@ class AEUtilDropbox {
      * @link http://tools.ietf.org/html/rfc5849#section-2.1
      * @return void
      */
-    private function getRequestToken () {
+    private function getRequestToken()
+    {
         $url = self::API_URL . self::REQUEST_TOKEN_METHOD;
         $response = $this->fetch('POST', $url, '');
         $token = $this->parseTokenString($response['body']);
@@ -611,7 +643,8 @@ class AEUtilDropbox {
      * @param array $params Additional parameters
      * @return string|object stdClass
      */
-    private function fetch ($method, $url, $call, array $additional = array()) {
+    private function fetch($method, $url, $call, array $additional = array())
+    {
         // Get the signed request URL
         $request = $this->getSignedRequest($method, $url, $call, $additional);
 
@@ -621,16 +654,16 @@ class AEUtilDropbox {
         // Get the default options array
         $options = $this->defaultOptions;
 
-        if ($method == 'GET' && $this->outFile) { // GET
+        if($method == 'GET' && $this->outFile){ // GET
             $options[CURLOPT_RETURNTRANSFER] = false;
             $options[CURLOPT_HEADER] = false;
             $options[CURLOPT_FILE] = $this->outFile;
             $options[CURLOPT_BINARYTRANSFER] = true;
             $this->outFile = null;
-        } elseif ($method == 'POST') { // POST
+        } elseif($method == 'POST') { // POST
             $options[CURLOPT_POST] = true;
             $options[CURLOPT_POSTFIELDS] = $request['postfields'];
-        } elseif ($method == 'PUT' && $this->inFile) { // PUT
+        } elseif($method == 'PUT' && $this->inFile) { // PUT
             $options[CURLOPT_PUT] = true;
             $options[CURLOPT_INFILE] = $this->inFile;
             // @todo Update so the data is not loaded into memory to get its size
@@ -648,12 +681,12 @@ class AEUtilDropbox {
         curl_close($ch);
 
         // Parse the response if it is a string
-        if (is_string($response)) {
+        if(is_string($response)){
             $response = $this->parse($response);
         }
 
         // Check if an error occurred and throw an Exception
-        if (!empty($response['body']->error)) {
+        if(!empty($response['body']->error)){
             $message = $response['body']->error . ' (Status Code: ' . $response['code'] . ')';
             throw new AEUtilDropboxException($message);
         }
@@ -666,7 +699,8 @@ class AEUtilDropbox {
      * @param string $response
      * @return array
      */
-    private function parse ($response) {
+    private function parse($response)
+    {
         // Explode the response into headers and body parts (separated by double EOL)
         list($headers, $response) = explode("\r\n\r\n", $response, 2);
 
@@ -675,7 +709,7 @@ class AEUtilDropbox {
 
         // If the status code is 100, the API server must send a final response
         // We need to explode the response again to get the actual response
-        if (preg_match('#^HTTP/1.1 100#', $lines[0])) {
+        if(preg_match('#^HTTP/1.1 100#', $lines[0])){
             list($headers, $response) = explode("\r\n\r\n", $response, 2);
             $lines = explode("\r\n", $headers);
         }
@@ -688,14 +722,14 @@ class AEUtilDropbox {
 
         // Parse the remaining headers into an associative array
         $headers = array();
-        foreach ($lines as $line) {
+        foreach ($lines as $line){
             list($k, $v) = explode(': ', $line, 2);
             $headers[strtolower($k)] = $v;
         }
 
         // If the response body is not a JSON encoded string
         // we'll return the entire response body
-        if (!$body = json_decode($response)) {
+        if(!$body = json_decode($response)){
             $body = $response;
         }
 
@@ -705,7 +739,8 @@ class AEUtilDropbox {
     /**
      * Generate signed request URL
      */
-    private function getSignedRequest ($method, $url, $call, array $additional = array()) {
+    private function getSignedRequest($method, $url, $call, array $additional = array())
+    {
         $token = $this->getToken();
 
         // Generate a random string for the request
@@ -728,11 +763,11 @@ class AEUtilDropbox {
 
         // URL encode each parameter to RFC3986 for use in the base string
         $encoded = array();
-        foreach ($params as $param => $value) {
-            if ($value !== null) {
+        foreach($params as $param => $value){
+            if($value !== null){
                 // If the value is a file upload (prefixed with @), replace it with
                 // the destination filename, the file path will be sent in POSTFIELDS
-                if ($value[0] === '@') $value = $params['filename'];
+                if($value[0] === '@') $value = $params['filename'];
                 $encoded[] = $this->encode($param) . '=' . $this->encode($value);
             } else {
                 unset($params[$param]);
@@ -765,17 +800,18 @@ class AEUtilDropbox {
      * @param string $base Signature base string, used by HMAC-SHA1
      * @param string $key Concatenated consumer and token secrets
      */
-    private function getSignature ($base, $key) {
-        switch ($this->sigMethod) {
+    private function getSignature($base, $key)
+    {
+        switch($this->sigMethod){
             case 'PLAINTEXT':
                 $signature = $key;
                 break;
             case 'HMAC-SHA1':
                 //$hash = hash_hmac('sha1', $base, $key, true);
                 $hash = pack('H*', sha1(
-                    (str_pad($key, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
-                    pack('H*', sha1((str_pad($key, 64, chr(0x00)) ^
-                            (str_repeat(chr(0x36), 64))) . $base))));
+                (str_pad($key, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
+                pack('H*', sha1((str_pad($key, 64, chr(0x00)) ^
+                (str_repeat(chr(0x36), 64))) . $base))));
                 $signature = base64_encode($hash);
                 break;
         }
@@ -792,10 +828,11 @@ class AEUtilDropbox {
      * @param string $response
      * @return object stdClass
      */
-    private function parseTokenString ($response) {
+    private function parseTokenString($response)
+    {
         $parts = explode('&', $response);
         $token = new stdClass();
-        foreach ($parts as $part) {
+        foreach($parts as $part){
             list($k, $v) = explode('=', $part, 2);
             $k = strtolower($k);
             $token->$k = $v;
@@ -811,7 +848,8 @@ class AEUtilDropbox {
      * @link http://tools.ietf.org/html/rfc5849#section-3.6
      * @param mixed $value
      */
-    private function encode ($value) {
+    private function encode($value)
+    {
         return str_replace('%7E', '~', rawurlencode($value));
     }
 
@@ -822,10 +860,11 @@ class AEUtilDropbox {
      * @param string $isFilename Is $data a filename?
      * @return boolean|string Mime type and encoding of the file
      */
-    private function getMimeType ($data, $isFilename = false) {
-        if (extension_loaded('fileinfo')) {
+    private function getMimeType($data, $isFilename = false)
+    {
+        if(extension_loaded('fileinfo')){
             $finfo = new finfo(FILEINFO_MIME);
-            if ($isFilename !== false) return $finfo->file($data);
+            if($isFilename !== false) return $finfo->file($data);
             return $finfo->buffer($data);
         }
         return false;
@@ -837,7 +876,8 @@ class AEUtilDropbox {
      * @param string $path The path to normalise
      * @return string
      */
-    private function normalisePath ($path) {
+    private function normalisePath($path)
+    {
         $path = preg_replace('#/+#', '/', trim($path, '/'));
         return $path;
     }
@@ -848,12 +888,12 @@ class AEUtilDropbox {
      * @param string $path The path to encode
      * @return string
      */
-    private function encodePath ($path) {
+    private function encodePath($path)
+    {
         $path = $this->normalisePath($path);
         $path = str_replace('%2F', '/', rawurlencode($path));
         return $path;
     }
 }
 
-class AEUtilDropboxException extends Exception {
-}
+class AEUtilDropboxException extends Exception {}

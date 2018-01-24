@@ -35,7 +35,8 @@ class zlRouter {
      *
      * @param string $app App instance.
      */
-    public function __construct ($app) {
+    public function __construct($app)
+    {
         // set application
         $this->app = $app;
 
@@ -64,19 +65,17 @@ class zlRouter {
     /**
      * Route building
      */
-    public function buildRoute (&$query, &$segments) {
-    }
+    public function buildRoute(&$query, &$segments) {}
 
     /**
      * Route parsing
      */
-    public function parseRoute (&$segments, &$vars) {
-    }
+    public function parseRoute(&$segments, &$vars) {}
 
     /**
      * Clears the router cache
      */
-    public function clearCache () {
+    public function clearCache() {
         if ($this->_cache) {
             $this->_cache->clear()->save();
         }
@@ -87,7 +86,7 @@ class zlRouter {
      *
      * @return string the link base
      */
-    public function getLinkBase () {
-        return 'index.php?option=' . $this->app->component->com_zoolanders->name;
+    public function getLinkBase() {
+        return 'index.php?option='.$this->app->component->com_zoolanders->name;
     }
 }

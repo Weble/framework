@@ -1,10 +1,9 @@
 <?php
 
 /*
-	Class: zlfwHelperEnvironment
-		The ZLFW environment helper class
+    Class: zlfwHelperEnvironment
+        The ZLFW environment helper class
 */
-
 class zlfwHelperEnvironment extends AppHelper {
 
     public $params;
@@ -12,7 +11,7 @@ class zlfwHelperEnvironment extends AppHelper {
     /*
        Function: Constructor
     */
-    public function __construct ($app) {
+    public function __construct($app) {
 
         // call parent constructor
         parent::__construct($app);
@@ -33,10 +32,11 @@ class zlfwHelperEnvironment extends AppHelper {
         Returns:
             string - the environment route
     */
-    public function get () {
+    public function get()
+    {
         // init vars
         $environment = array();
-        $jinput = JFactory::getApplication()->input;
+        $jinput      = JFactory::getApplication()->input;
 
         $Itemid = $jinput->getCmd('Itemid', null);
         $component = $jinput->getCmd('option', null);
@@ -53,7 +53,7 @@ class zlfwHelperEnvironment extends AppHelper {
         $environment[] = $this->app->request->getCmd('controller', null);
 
         // if ZOO
-        if ($component == 'com_zoo') {
+        if ($component == 'com_zoo'){
 
             // if zoo item full view
             if ($task == 'item') {
@@ -70,7 +70,9 @@ class zlfwHelperEnvironment extends AppHelper {
                 }
 
                 unset($view);
-            } // if zoo cat
+            }
+
+            // if zoo cat
             else if ($task == 'category') {
                 $environment[] = 'category';
                 $this->params->set('category_id', $this->app->request->getCmd('category_id'));
@@ -100,12 +102,13 @@ class zlfwHelperEnvironment extends AppHelper {
             checks if the passed environment is the current environment
 
         Params:
-            @environments	string of environments to check separated by space
+            @environments    string of environments to check separated by space
 
         Returns:
             boolean
     */
-    public function is ($environments) {
+    public function is($environments)
+    {
         // multiple environments posible
         $environments = explode(' ', $environments);
 

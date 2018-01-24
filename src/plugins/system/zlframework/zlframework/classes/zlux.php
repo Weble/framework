@@ -17,7 +17,8 @@ class zlux {
      *
      * @param string $app App instance.
      */
-    public function __construct ($app) {
+    public function __construct($app)
+    {
         // set application
         $this->app = $app;
     }

@@ -4,10 +4,9 @@
 App::getInstance('zoo')->loader->register('PathHelper', 'helpers:path.php');
 
 /*
-	Class: zlfwHelperPath
-		The ZLFW path helper class
+    Class: zlfwHelperPath
+        The ZLFW path helper class
 */
-
 class zlfwHelperPath extends PathHelper {
 
     /*
@@ -20,10 +19,11 @@ class zlfwHelperPath extends PathHelper {
         Returns:
             array
     */
-    public function resources ($resource) {
-        $paths = (array)$this->app->path->paths($resource);
+    public function resources($resource)
+    {
+        $paths = (array) $this->app->path->paths($resource);
         $parts = explode(':', $resource, 2);
-        $file = ltrim($parts[1], "\\/");
+        $file  = ltrim($parts[1], "\\/");
 
         $return = array();
         foreach ($paths as $path) {
@@ -35,22 +35,26 @@ class zlfwHelperPath extends PathHelper {
         return $return;
     }
 
-    public function path ($resource) {
-        if ($path = $this->pathZOO($resource)) {
+    public function path($resource)
+    {
+        if ($path = $this->pathZOO($resource))
+        {
             return $path;
         }
 
-        if ($path = $this->pathWK($resource)) {
+        if ($path = $this->pathWK($resource))
+        {
             return $path;
         }
 
         return null;
     }
 
-    public function pathWK ($resource) {
+    public function pathWK($resource)
+    {
         // load widgetkit
-        if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_widgetkit/widgetkit.php')) {
-            require_once(JPATH_ADMINISTRATOR . '/components/com_widgetkit/widgetkit.php');
+        if (JFile::exists(JPATH_ADMINISTRATOR.'/components/com_widgetkit/widgetkit.php')) {
+            require_once(JPATH_ADMINISTRATOR.'/components/com_widgetkit/widgetkit.php');
         }
 
         $widgetkit = Widgetkit::getInstance();
@@ -62,15 +66,15 @@ class zlfwHelperPath extends PathHelper {
      *
      * @return string   If check failed warning message will be returned
      */
-    public function checkSystemPaths () {
+    public function checkSystemPaths(){
         $app = JFactory::getApplication();
 
         $real_tmp_path = $app->getCfg('tmp_path');
-        $tmp_expect = JPATH_SITE . '/tmp';
+        $tmp_expect = JPATH_SITE.'/tmp';
 
-        if (!$this->checkPathAccessible($real_tmp_path) && !$this->checkPathAccessible($tmp_expect)) {
+        if(!$this->checkPathAccessible($real_tmp_path) && !$this->checkPathAccessible($tmp_expect)){
             return JText::sprintf('PLG_ZLFRAMEWORK_SYSTEM_FOLDER_SUSPECT');
-        } else {
+        }else{
             return null;
         }
     }
@@ -82,12 +86,13 @@ class zlfwHelperPath extends PathHelper {
      *
      * @return bool
      */
-    public function checkPathAccessible ($path) {
+    public function checkPathAccessible($path){
 
         return file_exists($path) && is_writable($path);
     }
 
-    public function pathZOO ($resource) {
+    public function pathZOO($resource)
+    {
         return $this->app->path->path($resource);
     }
 
@@ -95,15 +100,16 @@ class zlfwHelperPath extends PathHelper {
      * Return the full directory path
      *
      * Original Credits:
-     * @package   	JCE
-     * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
-     * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+     * @package       JCE
+     * @copyright     Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+     * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
      *
      * Extended and adapted:
      * by JOOlanders (zoolanders.com)
      * Copyright 2011, JOOlanders SL
      */
-    public function getDirectory ($root, $allowroot = false) {
+    public function getDirectory($root, $allowroot = false)
+    {
         $user = JFactory::getUser();
 
         // Restricted Joomla! folders

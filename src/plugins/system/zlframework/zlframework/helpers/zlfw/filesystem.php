@@ -4,10 +4,9 @@
 App::getInstance('zoo')->loader->register('FilesystemHelper', 'helpers:filesystem.php');
 
 /*
-	Class: zlfwHelperFileSystem
-		The ZLFW filesystem helper class
+    Class: zlfwHelperFileSystem
+        The ZLFW filesystem helper class
 */
-
 class zlfwHelperFileSystem extends FilesystemHelper {
 
     /**
@@ -16,14 +15,14 @@ class zlfwHelperFileSystem extends FilesystemHelper {
      * @return mixed The sanitised string or array
      *
      * Original Credits:
-     * @package    JCE
-     * @copyright    Copyright �� 2009-2011 Ryan Demmer. All rights reserved.
-     * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+     * @package       JCE
+     * @copyright     Copyright �� 2009-2011 Ryan Demmer. All rights reserved.
+     * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
      *
      * Adapted to ZOO (ZOOlanders.com)
      * Copyright 2011, ZOOlanders.com
      */
-    public function makeSafe ($subject, $mode = 'utf-8', $allowspaces = false) {
+    public function makeSafe($subject, $mode = 'utf-8', $allowspaces = false) {
         $search = array();
 
         // replace spaces with underscore
@@ -76,7 +75,7 @@ class zlfwHelperFileSystem extends FilesystemHelper {
         return preg_replace($search, '', $subject);
     }
 
-    private function utf8_latin_to_ascii ($subject) {
+    private function utf8_latin_to_ascii($subject) {
 
         static $CHARS = NULL;
 
@@ -107,7 +106,7 @@ class zlfwHelperFileSystem extends FilesystemHelper {
         return str_replace(array_keys($CHARS), array_values($CHARS), $subject);
     }
 
-    private function utf8_cyrillic_to_ascii ($subject) {
+    private function utf8_cyrillic_to_ascii($subject) {
         static $CHARS = NULL;
 
         if (is_null($CHARS)) {
@@ -120,7 +119,7 @@ class zlfwHelperFileSystem extends FilesystemHelper {
         return str_replace(array_keys($CHARS), array_values($CHARS), $subject);
     }
 
-    public function cleanPath ($path, $ds = DIRECTORY_SEPARATOR, $prefix = '') {
+    public function cleanPath($path, $ds = DIRECTORY_SEPARATOR, $prefix = '') {
         $path = trim(urldecode($path));
 
         // check for UNC path on IIS and set prefix
@@ -141,7 +140,7 @@ class zlfwHelperFileSystem extends FilesystemHelper {
      * @param string $ds optional directory seperator
      * @return string $a DIRECTORY_SEPARATOR $b
      */
-    public function makePath ($a, $b, $ds = DIRECTORY_SEPARATOR) {
+    public function makePath($a, $b, $ds = DIRECTORY_SEPARATOR) {
         return $this->cleanPath($a . $ds . $b, $ds);
     }
 
@@ -153,14 +152,15 @@ class zlfwHelperFileSystem extends FilesystemHelper {
         Returns:
             boolean true on success
         Original Credits:
-            @package   	JCE
-            @copyright 	Copyright �� 2009-2011 Ryan Demmer. All rights reserved.
-            @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+            @package       JCE
+            @copyright     Copyright �� 2009-2011 Ryan Demmer. All rights reserved.
+            @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
     */
-    public function folderCreate ($folder) {
+    public function folderCreate($folder)
+    {
         if (@JFolder::create($folder)) {
             $buffer = '<html><body bgcolor="#FFFFFF"></body></html>';
-            JFile::write($folder . '/index.html', $buffer);
+            JFile::write($folder.'/index.html', $buffer);
         } else {
             return false;
         }
@@ -169,19 +169,19 @@ class zlfwHelperFileSystem extends FilesystemHelper {
 
     /**
      * Original Credits:
-     * @package    JCE
-     * @copyright    Copyright �� 2009-2011 Ryan Demmer. All rights reserved.
-     * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+     * @package       JCE
+     * @copyright     Copyright �� 2009-2011 Ryan Demmer. All rights reserved.
+     * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
      *
      * Adapted to ZOO by ZOOlanders
      * Copyright 2011, ZOOlanders.com
      */
-    public function getUploadValue () {
+    public function getUploadValue() {
         $upload = trim(ini_get('upload_max_filesize'));
-        $post = trim(ini_get('post_max_size'));
+        $post     = trim(ini_get('post_max_size'));
 
         $upload = $this->returnBytes($upload);
-        $post = $this->returnBytes($post);
+        $post     = $this->returnBytes($post);
 
         $result = $post;
         if (intval($upload) <= intval($post)) {
@@ -201,19 +201,12 @@ class zlfwHelperFileSystem extends FilesystemHelper {
         Returns:
             String
     */
-    public function returnBytes ($size_str) {
-        switch (substr($size_str, -1)) {
-            case 'M':
-            case 'm':
-                return (int)$size_str * 1048576;
-            case 'K':
-            case 'k':
-                return (int)$size_str * 1024;
-            case 'G':
-            case 'g':
-                return (int)$size_str * 1073741824;
-            default:
-                return $size_str;
+    public function returnBytes($size_str) {
+        switch (substr ($size_str, -1)) {
+            case 'M': case 'm': return (int)$size_str * 1048576;
+            case 'K': case 'k': return (int)$size_str * 1024;
+            case 'G': case 'g': return (int)$size_str * 1073741824;
+            default: return $size_str;
         }
     }
 
@@ -229,7 +222,8 @@ class zlfwHelperFileSystem extends FilesystemHelper {
         Returns:
             String - Filesize
     */
-    public function formatFilesize ($bytes, $format = false, $precision = 2) {
+    public function formatFilesize($bytes, $format = false, $precision = 2)
+    {
         $kilobyte = 1024;
         $megabyte = $kilobyte * 1024;
         $gigabyte = $megabyte * 1024;
@@ -265,10 +259,11 @@ class zlfwHelperFileSystem extends FilesystemHelper {
         Returns:
             String
     */
-    public function getSourceSize ($source = null, $format = true) {
+    public function getSourceSize($source = null, $format = true)
+    {
         // init vars
-        $sourcepath = $this->app->path->path('root:' . $source);
-        $size = '';
+        $sourcepath = $this->app->path->path('root:'.$source);
+        $size = 0;
 
         if (strpos($source, 'http') === 0) // external source
         {
@@ -282,9 +277,11 @@ class zlfwHelperFileSystem extends FilesystemHelper {
 
             $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
         }
-        if (is_file($sourcepath)) {
+        if (is_file($sourcepath))
+        {
             $size = filesize($sourcepath);
-        } else if (is_dir($sourcepath)) foreach ($this->app->path->files('root:' . $source, false, '/^.*()$/i') as $file) {
+        }
+        else if(is_dir($sourcepath)) foreach ($this->app->path->files('root:'.$source, false, '/^.*()$/i') as $file){
             $size += filesize($this->app->path->path("root:{$source}/{$file}"));
         }
 
@@ -299,13 +296,19 @@ class zlfwHelperFileSystem extends FilesystemHelper {
      * Get the mapping from extension to mime type
      *
      * @return array The associative array of extension => mime type mapping
+     *
+     * @since 1.0.0
      */
-    public static function getMimeMapping () {
+    public static function getMimeMapping()
+    {
         // get current mimes
         $mimes = parent::getMimeMapping();
 
         // add missing mimes
         $mimes['mp3'][] = 'audio/mp3'; // necesary for Chrome unsolved bug
+        $mimes['p7m'][] = 'application/pkcs7-mime';
+        $mimes['kml'][] = 'application/octet-stream';
+        $mimes['kmz'][] = 'application/octet-stream';
 
         return $mimes;
     }

@@ -4,31 +4,31 @@
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
 return
-    '{"fields": {
+'{"fields": {
 
-		"widget_separator":{
-			"type": "separator",
-			"text": "Slideshow Widget",
-			"big":"1"
-		},
-		"_style":{
-			"type": "layout",
-			"label": "Style",
-			"default": "default",
-			"specific": {
-				"path":"elements:pro\/tmpl\/render\/widgetkit\/slideshow",
-				"mode":"folders"
-			},
-			"childs":{
-				"loadfields": {
+    "widget_separator":{
+        "type": "separator",
+        "text": "Slideshow Widget",
+        "big":"1"
+    },
+    "_style":{
+        "type": "layout",
+        "label": "Style",
+        "default": "default",
+        "specific": {
+            "path":"elements:pro\/tmpl\/render\/widgetkit\/slideshow",
+            "mode":"folders"
+        },
+        "childs":{
+            "loadfields": {
 
-					"_style_settings": {
-						"type":"subfield",
-						"path":"elements:' . $element->getElementType() . '\/tmpl\/render\/widgetkit\/slideshow\/{value}\/params.php"
-					}
+                "_style_settings": {
+                    "type":"subfield",
+                    "path":"elements:'.$element->getElementType().'\/tmpl\/render\/widgetkit\/slideshow\/{value}\/params.php"
+                }
 
-				}
-			}
-		}
+            }
+        }
+    }
 
-	}}';
+}}';

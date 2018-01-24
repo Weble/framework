@@ -25,7 +25,7 @@ class ZLStorageAdapterDropbox extends ZLStorageAdapterBase implements ZLStorageA
     /**
      * Class Constructor
      */
-    public function __construct ($options) {
+    public function __construct($options) {
 
         // init vars
         $this->app = App::getInstance('zoo');
@@ -35,9 +35,9 @@ class ZLStorageAdapterDropbox extends ZLStorageAdapterBase implements ZLStorageA
         $this->dropbox->setAppKeys(json_decode(base64_decode('eyJhcHAiOiJqZng4enFwdGwyYXc1NGQiLCJzZWNyZXQiOiJuZ2prZmxkY2R3ZDhnd3EifQ==')));
 
         $token = (object)array(
-            'oauth_token_secret' => $token_secret,
-            'oauth_token' => $token,
-            'uid' => $token_uid,
+            'oauth_token_secret'    => $token_secret,
+            'oauth_token'            => $token,
+            'uid'                    => $token_uid,
         );
 
         $this->dropbox->setToken($token);
@@ -51,7 +51,7 @@ class ZLStorageAdapterDropbox extends ZLStorageAdapterBase implements ZLStorageA
      *
      * @return boolean The success of the operation
      */
-    public function write ($file, $content, $overwrite = true) {
+    public function write($file, $content, $overwrite = true){
     }
 
     /**
@@ -59,7 +59,7 @@ class ZLStorageAdapterDropbox extends ZLStorageAdapterBase implements ZLStorageA
      *
      * @param string $file The filename (or path)
      */
-    public function read ($file) {
+    public function read($file) {
     }
 
     /**
@@ -69,7 +69,7 @@ class ZLStorageAdapterDropbox extends ZLStorageAdapterBase implements ZLStorageA
      *
      * @return boolean The success of the operation
      */
-    public function delete ($file) {
+    public function delete($file) {
     }
 
     /**
@@ -77,7 +77,7 @@ class ZLStorageAdapterDropbox extends ZLStorageAdapterBase implements ZLStorageA
      *
      * @param string $file The filename (or path)
      */
-    public function exists ($file) {
+    public function exists($file) {
     }
 
     /**
@@ -86,7 +86,8 @@ class ZLStorageAdapterDropbox extends ZLStorageAdapterBase implements ZLStorageA
      * @param string $file The name of the php (temporary) uploaded file
      * @param string $dest The path (including filename) to move the uploaded file to
      */
-    public function upload ($file, $dest) {
+    public function upload($file, $dest)
+    {
     }
 
     /**
@@ -96,6 +97,7 @@ class ZLStorageAdapterDropbox extends ZLStorageAdapterBase implements ZLStorageA
      *
      * @return boolean The success of the operation
      */
-    public function getTree ($root, $legalExt) {
+    public function getTree($root, $legalExt)
+    {
     }
 }

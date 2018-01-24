@@ -6,7 +6,6 @@ App::getInstance('zoo')->loader->register('ElementRepeatable', 'elements:repeata
    Class: ElementRepeatablePro
        The repeatable element class
 */
-
 abstract class ElementRepeatablePro extends ElementRepeatable {
 
     protected $_rendered_values = array();
@@ -14,7 +13,7 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
     /*
        Function: Constructor
     */
-    public function __construct () {
+    public function __construct() {
 
         // call parent constructor
         parent::__construct();
@@ -24,8 +23,8 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         $this->registerCallback('getemptylayout');
 
         // load default and current language
-        $this->app->system->language->load('plg_system_zoo_zlelements_' . $this->getElementType(), JPATH_ADMINISTRATOR, 'en-GB');
-        $this->app->system->language->load('plg_system_zoo_zlelements_' . $this->getElementType(), JPATH_ADMINISTRATOR);
+        $this->app->system->language->load('plg_system_zoo_zlelements_'.$this->getElementType(), JPATH_ADMINISTRATOR, 'en-GB');
+        $this->app->system->language->load('plg_system_zoo_zlelements_'.$this->getElementType(), JPATH_ADMINISTRATOR);
     }
 
     /*
@@ -41,7 +40,7 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             Void
     */
-    public function setType ($type) {
+    public function setType($type) {
         parent::setType($type);
 
         $this->checkInstallation();
@@ -55,7 +54,7 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             Void
     */
-    protected function checkInstallation () {
+    protected function checkInstallation(){
 
     }
 
@@ -69,8 +68,8 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             Boolean - true, on success
     */
-    public function hasValue ($params = array()) {
-        $value = $this->getRenderedValues($this->app->data->create($params));
+    public function hasValue($params = array()) {
+        $value = $this->getRenderedValues( $this->app->data->create($params) );
         return !empty($value['result']);
     }
 
@@ -78,7 +77,8 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Function: getEmptyLayout
             Load Element specified Edit Layout
     */
-    public function getEmptyLayout ($layout = null) {
+    public function getEmptyLayout($layout = null)
+    {
         // get layout from var or request
         $layout = $layout ? $layout : $this->app->request->getString('layout', '');
 
@@ -94,7 +94,8 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             String - Layout path
     */
-    public function getLayout ($layout = null) {
+    public function getLayout($layout = null)
+    {
         // init vars
         $type = $this->getElementType();
 
@@ -104,9 +105,11 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         }
 
         // find layout
-        if ($path = $this->app->path->path("elements:{$type}/tmpl/{$layout}")) {
+        if ($path = $this->app->path->path("elements:{$type}/tmpl/{$layout}"))
+        {
             return $path;
-        } else if ($path = $this->app->path->path("elements:repeatablepro/tmpl/{$layout}")) // if no specific use common layout
+        }
+        else if ($path = $this->app->path->path("elements:repeatablepro/tmpl/{$layout}")) // if no specific use common layout
         {
             return $path;
         }
@@ -119,10 +122,8 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Function: returnData
             Renders the element data - use for ajax requests
     */
-    public function returnData ($layout, $separator = '', $filter = '', $specific = '') {
-        $separator = json_decode($separator, true);
-        $filter = json_decode($filter, true);
-        $specific = json_decode($specific, true);
+    public function returnData($layout, $separator = '', $filter = '', $specific = '') {
+        $separator = json_decode($separator, true); $filter = json_decode($filter, true); $specific = json_decode($specific, true);
         $params = compact('layout', 'separator', 'filter', 'specific');
         return $this->render($params);
     }
@@ -134,7 +135,7 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             Void
     */
-    public function loadAssets () {
+    public function loadAssets() {
         if ($this->config->get('repeatable')) {
             $this->app->document->addScript('elements:repeatablepro/repeatablepro.js');
         }
@@ -149,7 +150,7 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
        Returns:
            String - html
     */
-    protected function _edit () {
+    protected function _edit(){
         // render layout
         $_edit = $this->config->find('specific._edit_sublayout', '_edit.php');
         return (($layout = $this->getLayout("edit/$_edit")) || ($layout = $this->getLayout("edit/_edit.php"))) ? $this->renderLayout($layout) : '';
@@ -162,18 +163,20 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             array
     */
-    public function getRenderedValues ($params = array(), $mode = false, $opts = array()) {
+    public function getRenderedValues($params=array(), $mode=false, $opts=array())
+    {
         // create a unique hash for this element position
         $hash = md5(serialize(array(
             $opts,
             $this->getType()->getApplication()->getGroup(),
             $this->getType()->id,
-            $params->get('element') . $params->get('_layout'),
-            $params->get('_position') . $params->get('_index')
+            $params->get('element').$params->get('_layout'),
+            $params->get('_position').$params->get('_index')
         )));
 
         // check for value, if not exist render it
-        if (!array_key_exists($hash, $this->_rendered_values)) {
+        if (!array_key_exists($hash, $this->_rendered_values))
+        {
             // of limit 0, abort
             if ($params->find('filter._limit') == '0') return null;
 
@@ -185,7 +188,7 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
             $result = array();
             $this->seek(0); // let's be sure is starting from first index
             foreach ($this as $self) if ($this->_hasValue($params) && $values = $this->_render($params, $mode, $opts)) {
-                if ($data_is_subarray) foreach ($values as $value) {
+                if($data_is_subarray) foreach ($values as $value) {
                     $result[] = $value; // filespro compatibility
                 } else {
                     $result[] = $values;
@@ -195,17 +198,17 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
             if (empty($result)) return null; // if no results abort
 
             // set offset/limit
-            $offset = (($params->find('filter._offset', '') == '') || (!is_numeric($params->find('filter._offset', 0)))) ? 0 : $params->find('filter._offset', 0);
-            $limit = (($params->find('filter._limit', '') == '') || (!is_numeric($params->find('filter._limit', '')))) ? null : $params->find('filter._limit', null);
+            $offset = ( ($params->find('filter._offset', '') == '') || (!is_numeric($params->find('filter._offset', 0))) ) ? 0 : $params->find('filter._offset', 0);
+            $limit  = ( ($params->find('filter._limit', '') == '') || (!is_numeric($params->find('filter._limit', ''))) ) ? null : $params->find('filter._limit', null);
 
             $report['limited'] = $limit != null ? $limit < count($result) : false;
             $result = array_slice($result, $offset, $limit);
 
             // set prefix/suffix
-            if ($prefix = $params->find('specific._prefix')) array_unshift($result, '<span class="prefix">' . $prefix . '</span>');
+            if ($prefix = $params->find('specific._prefix')) array_unshift($result, '<span class="prefix">'.$prefix.'</span>');
             if ($suffix = $params->find('specific._suffix')) {
-                if (count($result) > 1) $result[] = '<span class="suffix">' . $suffix . '</span>';
-                else $result[0] .= '<span class="suffix">' . $suffix . '</span>';
+                if (count($result) > 1) $result[] = '<span class="suffix">'.$suffix.'</span>';
+                else $result[0] .= '<span class="suffix">'.$suffix.'</span>';
             }
 
             $report['hash'] = $hash;
@@ -225,13 +228,16 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             String - html
     */
-    public function render ($params = array()) {
+    public function render($params = array())
+    {
         $params = $this->app->data->create($params);
 
         // render layout
-        if ($layout = $this->getLayout('render/' . $params->find('layout._layout', 'default.php'))) {
+        if ($layout = $this->getLayout('render/'.$params->find('layout._layout', 'default.php'))) {
             return $this->renderLayout($layout, compact('params'));
-        } else {
+        }
+        else
+        {
             // for old elements
             $result = array();
             foreach ($this as $self) {
@@ -251,10 +257,11 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             String - html
     */
-    protected function _render ($params = array()) {
+    protected function _render($params = array())
+    {
         // render layout or value
         $main_layout = basename($params->find('layout._layout', 'default.php'), '.php');
-        if ($layout = $this->getLayout('render/' . $main_layout . '/_sublayouts/' . $params->find('layout._sublayout', '_default.php'))) {
+        if($layout = $this->getLayout('render/'.$main_layout.'/_sublayouts/'.$params->find('layout._sublayout', '_default.php'))){
             return $this->renderLayout($layout, compact('params'));
         } else {
             return $this->get('value');
@@ -268,19 +275,19 @@ abstract class ElementRepeatablePro extends ElementRepeatable {
         Returns:
             String - output
     */
-    protected function _renderRepeatable ($function, $params = array()) {
-        return $this->renderLayout($this->app->path->path('elements:' . $this->getElementType() . '/tmpl/edit/edit.php'), compact('function', 'params'));
+    protected function _renderRepeatable($function, $params = array()) {
+        return $this->renderLayout($this->app->path->path('elements:'.$this->getElementType().'/tmpl/edit/edit.php'), compact('function', 'params'));
     }
 
-    /*
-    Function: getControlName
-        Gets the controle name for given name.
+        /*
+        Function: getControlName
+            Gets the controle name for given name.
 
-    Returns:
-        String - the control name
-*/
-    public function getControlName ($name, $array = false) {
-        return "elements[{$this->identifier}][{$this->index()}][{$name}]" . ($array ? "[]" : "");
+        Returns:
+            String - the control name
+    */
+    public function getControlName($name, $array = false) {
+        return "elements[{$this->identifier}][{$this->index()}][{$name}]" . ($array ? "[]":"");
     }
 
 }

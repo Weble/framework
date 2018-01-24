@@ -14,7 +14,7 @@ $folding = $this->config->find('layout._folding', '');
 <div id="<?php echo $this->identifier; ?>">
 
     <script type="text/javascript">
-        jQuery(function ($) {
+        jQuery(function($) {
             $("#<?php echo $this->identifier; ?>").ZOOtoolsSeparatorSection({
                 title: '<?php echo $title; ?>',
                 folding: '<?php echo $folding ?>'

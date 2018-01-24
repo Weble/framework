@@ -4,7 +4,6 @@
     Class: ElementSeparator
         The Separator element class
 */
-
 class ElementSeparator extends ElementPro implements iSubmittable {
 
     /*
@@ -17,7 +16,7 @@ class ElementSeparator extends ElementPro implements iSubmittable {
         Returns:
             String - html
     */
-    public function render ($params = array()) {
+    public function render($params = array()) {
         return null;
     }
 
@@ -28,8 +27,9 @@ class ElementSeparator extends ElementPro implements iSubmittable {
        Returns:
            String - html
     */
-    public function edit () {
-        if ($layout = $this->getLayout('edit/' . $this->config->find('layout._layout', 'default.php'))) {
+    public function edit()
+    {
+        if ($layout = $this->getLayout('edit/'.$this->config->find('layout._layout', 'default.php'))) {
             return $this->renderLayout($layout);
         }
     }
@@ -44,7 +44,7 @@ class ElementSeparator extends ElementPro implements iSubmittable {
         Returns:
             String - html
     */
-    public function renderSubmission ($params = array()) {
+    public function renderSubmission($params = array()) {
         return $this->edit();
     }
 
@@ -59,7 +59,7 @@ class ElementSeparator extends ElementPro implements iSubmittable {
         Returns:
             Array - cleaned value
     */
-    public function validateSubmission ($value, $params) {
+    public function validateSubmission($value, $params){
         return array();
     }
 

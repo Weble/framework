@@ -1,3 +1,1 @@
-
-
-.zlux-itemsmanager.zlux-dialog [data-zlux-status=true] .zlux-object .zlux-x-name a.zlux-x-name-link{color:#444;cursor:default}.zlux-itemsmanager.zlux-dialog [data-zlux-status=true] .zlux-object .zlux-x-name a.zlux-x-name-link:focus,.zlux-itemsmanager.zlux-dialog [data-zlux-status=true] .zlux-object .zlux-x-name a.zlux-x-name-link:hover{text-decoration:none}
+.zlux-itemsmanager.zlux-dialog [data-zlux-status="true"] .zlux-object .zlux-x-name a.zlux-x-name-link{color:#444;cursor:default}.zlux-itemsmanager.zlux-dialog [data-zlux-status="true"] .zlux-object .zlux-x-name a.zlux-x-name-link:hover,.zlux-itemsmanager.zlux-dialog [data-zlux-status="true"] .zlux-object .zlux-x-name a.zlux-x-name-link:focus{text-decoration:none}

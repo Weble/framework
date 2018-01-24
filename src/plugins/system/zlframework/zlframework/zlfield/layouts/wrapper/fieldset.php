@@ -1,7 +1,8 @@
 <?php
 
 // prepare label
-if ($label = $fld->find('specific.toggle.label')) {
+if($label = $fld->find('specific.toggle.label'))
+{
     $vars = explode('||', $label);
     $text = JText::_($vars[0]);
     unset($vars[0]);
@@ -13,29 +14,29 @@ if ($label = $fld->find('specific.toggle.label')) {
 
 <?php if ($fld->find('specific.toggle')) : ?>
 
-    <fieldset class="wrapper" data-layout="fieldset-toggle" data-id="<?php echo $id ?>">
+<fieldset class="wrapper" data-layout="fieldset-toggle" data-id="<?php echo $id ?>">
 
-        <div class="zl-toggle open">
-            <div class="btn-close">
-                <?php echo $label ?>
-                <span class="sign"></span>
-            </div>
-            <div class="btn-open">
-                <?php echo $label ?>
-                <span class="sign"></span>
-            </div>
+    <div class="zl-toggle open">
+        <div class="btn-close">
+            <?php echo $label ?>
+            <span class="sign"></span>
         </div>
-
-        <div class="zl-toggle-content">
-            <?php echo $content ?>
+        <div class="btn-open">
+            <?php echo $label ?>
+            <span class="sign"></span>
         </div>
+    </div>
 
-    </fieldset>
+    <div class="zl-toggle-content">
+        <?php echo $content ?>
+    </div>
+
+</fieldset>
 
 <?php else : ?>
 
-    <fieldset class="wrapper" data-id="<?php echo $id ?>">
-        <?php echo $content ?>
-    </fieldset>
+<fieldset class="wrapper" data-id="<?php echo $id ?>">
+    <?php echo $content ?>
+</fieldset>
 
 <?php endif; ?>

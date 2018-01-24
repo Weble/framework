@@ -1,6 +1,7 @@
 <?php
 
-class ZLModelItem extends ZLModel {
+class ZLModelItem extends ZLModel
+{
     protected $join_cats = false;
     protected $join_frontpage = false;
     protected $join_tags = false;
@@ -8,9 +9,10 @@ class ZLModelItem extends ZLModel {
     /**
      * Magic method to set states by calling a method named as the filter
      * @param  string $name The name of the state to apply
-     * @param  array $args The list of arguments passed to the method
+     * @param  array  $args The list of arguments passed to the method
      */
-    public function __call ($name, $args) {
+    public function __call($name, $args)
+    {
         // Go for the states!
         if (!method_exists($this, $name)) {
 
@@ -18,7 +20,7 @@ class ZLModelItem extends ZLModel {
             if (!isset($args[0])) return $this;
 
             // The state name to set is the method name
-            $state = (string)$name;
+            $state = (string) $name;
 
             // $model->categories(array('value' => '123', 'mode' => 'AND'));
             if (is_array($args[0]) || is_object($args[0])) {
@@ -56,7 +58,7 @@ class ZLModelItem extends ZLModel {
      * @param [type] $key   [description]
      * @param [type] $value [description]
      */
-    public function setState ($key, $value = null, $overwrite = false) {
+    public function setState($key, $value = null, $overwrite = false) {
 
         if (!$overwrite) {
             $old_value = $this->getState($key, array());
@@ -77,27 +79,30 @@ class ZLModelItem extends ZLModel {
         Function: _buildQueryFrom
             Builds FROM tables list for the query
     */
-    protected function _buildQueryFrom (&$query) {
-        $query->from(ZOO_TABLE_ITEM . ' AS a');
+    protected function _buildQueryFrom(&$query)
+    {
+        $query->from(ZOO_TABLE_ITEM.' AS a');
     }
 
     /*
         Function: _buildQueryJoins
             Builds JOINS clauses for the query
     */
-    protected function _buildQueryJoins (&$query) {
+    protected function _buildQueryJoins(&$query)
+    {
         // frontpage
         if ($this->join_frontpage) {
-            $query->join('LEFT', ZOO_TABLE_CATEGORY_ITEM . " AS f ON a.id = f.item_id");
+            $query->join('LEFT', ZOO_TABLE_CATEGORY_ITEM." AS f ON a.id = f.item_id");
         }
 
         // tags
         if ($this->join_tags) {
-            $query->join('LEFT', ZOO_TABLE_TAG . " AS t ON a.id = t.item_id");
+            $query->join('LEFT', ZOO_TABLE_TAG." AS t ON a.id = t.item_id");
         }
 
         // elements
-        if ($orderby = $this->getState('order_by')) {
+        if ($orderby = $this->getState('order_by'))
+        {
             // get item ordering
             list($join, $order) = $this->_getItemOrder($orderby);
 
@@ -105,7 +110,7 @@ class ZLModelItem extends ZLModel {
             $this->orderby = $order;
 
             // join
-            if ($join) { // don't use escape() here
+            if($join){ // don't use escape() here
                 $query->leftJoin($join);
             }
         }
@@ -115,7 +120,8 @@ class ZLModelItem extends ZLModel {
         Function: _buildQueryWhere
             Builds WHERE query
     */
-    protected function _buildQueryWhere (&$query) {
+    protected function _buildQueryWhere(&$query)
+    {
         // Apply basic filters
         $this->basicFilters($query);
 
@@ -127,8 +133,9 @@ class ZLModelItem extends ZLModel {
         Function: _buildQueryGroup
             Builds a GROUP BY clause for the query
     */
-    protected function _buildQueryGroup (&$query) {
-        if ($group_by = $this->_db->escape($this->getState('group_by'))) {
+    protected function _buildQueryGroup(&$query)
+    {
+        if($group_by = $this->_db->escape( $this->getState('group_by') )){
             $query->group('a.' . $group_by);
         }
     }
@@ -137,27 +144,30 @@ class ZLModelItem extends ZLModel {
         Function: _buildQueryOrder
             Bilds ORDER BY query
     */
-    protected function _buildQueryOrder (&$query) {
+    protected function _buildQueryOrder(&$query)
+    {
         // custom order
-        if ($this->getState('order_by') && isset($this->orderby)) {
-            $query->order($this->orderby);
+        if ($this->getState('order_by') && isset($this->orderby))
+        {
+            $query->order( $this->orderby );
         }
     }
 
     /**
      * Apply general filters like searchable, publicated, etc
      */
-    protected function basicFilters (&$query) {
+    protected function basicFilters(&$query)
+    {
         // init vars
         $date = JFactory::getDate();
-        $now = $this->_db->Quote($date->toSql());
+        $now  = $this->_db->Quote($date->toSql());
         $null = $this->_db->Quote($this->_db->getNullDate());
 
         // Items id
         if ($ids = $this->getState('id', false)) {
             $where = array();
-            foreach ($ids as $id) {
-                $where[] = 'a.id IN (' . implode(',', $id->toArray()) . ')';
+            foreach($ids as $id) {
+                $where[] = 'a.id IN ('.implode(',', $id->toArray()).')';
             }
             $query->where('(' . implode(' OR ', $where) . ')');
         }
@@ -174,7 +184,7 @@ class ZLModelItem extends ZLModel {
 
         // Accessible
         $user = $this->getState('user');
-        $user = isset($user[0]) ? $this->app->user->get($this->_db->escape($user[0])) : null;
+        $user = isset($user[0]) ? $this->app->user->get($this->_db->escape( $user[0] )) : null;
 
         $query->where('a.' . $this->app->user->getDBAccessString($user));
 
@@ -197,85 +207,89 @@ class ZLModelItem extends ZLModel {
         }
 
         // Created
-        if ($date = $this->getState('created', array())) {
+        if ($date = $this->getState('created', array()))
+        {
             $date = array_shift($date);
 
-            $sql_value = "a.created";
-            $value = $date->get('value', '');
-            $value_from = !empty($value) ? $value : '';
-            $value_to = $date->get('value_to', '');
-            $search_type = $date->get('type', false);
-            $period_mode = $date->get('period_mode', 'static');
-            $interval = $date->get('interval', 0);
-            $interval_unit = $date->get('interval_unit', '');
-            $datetime = $date->get('datetime', false);
+            $sql_value         = "a.created";
+            $value             = $date->get('value', '');
+            $value_from        = !empty($value) ? $value : '';
+            $value_to         = $date->get('value_to', '');
+            $search_type     = $date->get('type', false);
+            $period_mode     = $date->get('period_mode', 'static');
+            $interval         = $date->get('interval', 0);
+            $interval_unit     = $date->get('interval_unit', '');
+            $datetime        = $date->get('datetime', false);
 
             $query->where($this->getDateSearch(compact('sql_value', 'value', 'value_from', 'value_to', 'search_type', 'period_mode', 'interval', 'interval_unit', 'datetime')));
         }
 
         // Modified
-        if ($date = $this->getState('modified', array())) {
+        if ($date = $this->getState('modified', array()))
+        {
             $date = array_shift($date);
 
-            $sql_value = "a.modified";
-            $value = $date->get('value', '');
-            $value_from = !empty($value) ? $value : '';
-            $value_to = $date->get('value_to', '');
-            $search_type = $date->get('type', false);
-            $period_mode = $date->get('period_mode', 'static');
-            $interval = $date->get('interval', 0);
-            $interval_unit = $date->get('interval_unit', '');
-            $datetime = $date->get('datetime', false);
+            $sql_value         = "a.modified";
+            $value             = $date->get('value', '');
+            $value_from        = !empty($value) ? $value : '';
+            $value_to         = $date->get('value_to', '');
+            $search_type     = $date->get('type', false);
+            $period_mode     = $date->get('period_mode', 'static');
+            $interval         = $date->get('interval', 0);
+            $interval_unit     = $date->get('interval_unit', '');
+            $datetime        = $date->get('datetime', false);
 
             $query->where($this->getDateSearch(compact('sql_value', 'value', 'value_from', 'value_to', 'search_type', 'period_mode', 'interval', 'interval_unit', 'datetime')));
         }
 
         // Published up
-        if ($date = $this->getState('published', array())) {
+        if ($date = $this->getState('published', array()))
+        {
             $date = array_shift($date);
 
-            $sql_value = "a.publish_up";
-            $value = $date->get('value', '');
-            $value_from = !empty($value) ? $value : '';
-            $value_to = $date->get('value_to', '');
-            $search_type = $date->get('type', false);
-            $period_mode = $date->get('period_mode', 'static');
-            $interval = $date->get('interval', 0);
-            $interval_unit = $date->get('interval_unit', '');
-            $datetime = $date->get('datetime', false);
+            $sql_value         = "a.publish_up";
+            $value             = $date->get('value', '');
+            $value_from        = !empty($value) ? $value : '';
+            $value_to         = $date->get('value_to', '');
+            $search_type     = $date->get('type', false);
+            $period_mode     = $date->get('period_mode', 'static');
+            $interval         = $date->get('interval', 0);
+            $interval_unit     = $date->get('interval_unit', '');
+            $datetime        = $date->get('datetime', false);
 
             $query->where($this->getDateSearch(compact('sql_value', 'value', 'value_from', 'value_to', 'search_type', 'period_mode', 'interval', 'interval_unit', 'datetime')));
 
-            // default
-        } elseif (!$this->getState('created') && !$this->getState('modified')) {
+        // default
+        } else {
             $where = array();
-            $where[] = 'a.publish_up = ' . $null;
-            $where[] = 'a.publish_up <= ' . $now;
-            $query->where('(' . implode(' OR ', $where) . ')');
+            $where[] = 'a.publish_up = '.$null;
+            $where[] = 'a.publish_up <= '.$now;
+            $query->where('('.implode(' OR ', $where).')');
         }
 
         // Published down
-        if ($date = $this->getState('published_down', array())) {
+        if ($date = $this->getState('published_down', array()))
+        {
             $date = array_shift($date);
 
-            $sql_value = "a.publish_down";
-            $value = $date->get('value', '');
-            $value_from = !empty($value) ? $value : '';
-            $value_to = $date->get('value_to', '');
-            $search_type = $date->get('type', false);
-            $period_mode = $date->get('period_mode', 'static');
-            $interval = $date->get('interval', 0);
-            $interval_unit = $date->get('interval_unit', '');
-            $datetime = $date->get('datetime', false);
+            $sql_value         = "a.publish_down";
+            $value             = $date->get('value', '');
+            $value_from        = !empty($value) ? $value : '';
+            $value_to         = $date->get('value_to', '');
+            $search_type     = $date->get('type', false);
+            $period_mode     = $date->get('period_mode', 'static');
+            $interval         = $date->get('interval', 0);
+            $interval_unit     = $date->get('interval_unit', '');
+            $datetime        = $date->get('datetime', false);
 
             $query->where($this->getDateSearch(compact('sql_value', 'value', 'value_from', 'value_to', 'search_type', 'period_mode', 'interval', 'interval_unit', 'datetime')));
 
-            // default
+        // default
         } else if (!$this->getState('published_down')) {
             $where = array();
-            $where[] = 'a.publish_down = ' . $null;
-            $where[] = 'a.publish_down >= ' . $now;
-            $query->where('(' . implode(' OR ', $where) . ')');
+            $where[] = 'a.publish_down = '.$null;
+            $where[] = 'a.publish_down >= '.$now;
+            $query->where('('.implode(' OR ', $where).')');
         }
 
         // Frontpage
@@ -291,14 +305,15 @@ class ZLModelItem extends ZLModel {
     /**
      * Create and returns a nested array of App->Type->Elements
      */
-    protected function getNestedArrayFilter () {
+    protected function getNestedArrayFilter()
+    {
         // init vars
-        $this->apps = $this->getState('application', array());
+        $this->apps  = $this->getState('application', array());
         $this->types = $this->getState('type', array());
         $elements = $this->getState('element', array());
 
         // if no filter data, abort
-        if (empty($this->apps) && empty($this->types) && empty($elements)) {
+        if(empty($this->apps) && empty($this->types) && empty($elements)) {
             return array();
         }
 
@@ -313,11 +328,11 @@ class ZLModelItem extends ZLModel {
         }
 
         // get apps selected objects, or all if none filtered
-        $apps = $this->app->table->application->all(array('conditions' => count($this->apps) ? 'id IN(' . implode(',', $this->apps) . ')' : ''));
+        $apps = $this->app->table->application->all(array('conditions' => count($this->apps) ? 'id IN('.implode(',', $this->apps).')' : ''));
 
         // create a nested array with all app/type/elements filtering data
         $filters = array();
-        foreach ($apps as $app) {
+        foreach($apps as $app) {
 
             $filters[$app->id] = array();
             foreach ($app->getTypes() as $type) {
@@ -352,46 +367,50 @@ class ZLModelItem extends ZLModel {
             }
         }
 
-        return $filters;
+        return array_filter($filters);
     }
 
     /**
      * Apply element filters
      */
-    protected function elementFilters (&$query) {
+    protected function elementFilters(&$query)
+    {
         $wheres = array('AND' => array(), 'OR' => array());
+        $defaultElements = array('AND' => array(), 'OR' => array());
 
         // Item name filtering
         $names = $this->getState('name');
-        if ($names) {
+        if ($names){
             foreach ($names as $name) {
                 $logic = strtoupper($name->get('logic', 'AND'));
-                $wheres[$logic][] = 'a.name LIKE ' . $this->getQuotedValue($name);
+                $defaultElements[$logic][] = 'a.name LIKE ' . $this->getQuotedValue( $name );
             }
         }
 
         // Category filtering
         $categories = $this->getState('categories', array());
+
         if ($categories) {
             $j = 0;
-            foreach ($categories as $cats) {
+            foreach ( $categories as $cats ) {
                 if ($value = $cats->get('value', array())) {
                     $logic = $cats->get('logic', 'AND');
                     // build the where for ORs
-                    if (strtoupper($cats->get('mode', 'OR')) == 'OR') {
-                        $wheres[$logic][] = "c$j.category_id IN (" . implode(',', $value) . ")";
+                    if ( strtoupper($cats->get('mode', 'OR')) == 'OR' ){
+                        $defaultElements[$logic][] = "c$j.category_id IN (".implode(',', $value).")";
 
                         // set the join only on the OR, since AND has a subquery
-                        $query->join('LEFT', ZOO_TABLE_CATEGORY_ITEM . " AS c$j ON a.id = c$j.item_id");
-                    } else {
+                        $query->join('LEFT', ZOO_TABLE_CATEGORY_ITEM." AS c$j ON a.id = c$j.item_id");
+                    }
+                    else {
                         // it's heavy query but the only way for AND mode
                         foreach ($value as $id) {
-                            $wheres[$logic][] =
-                                "a.id IN ("
-                                . " SELECT b.id FROM " . ZOO_TABLE_ITEM . " AS b"
-                                . " LEFT JOIN " . ZOO_TABLE_CATEGORY_ITEM . " AS y"
-                                . " ON b.id = y.item_id"
-                                . " WHERE y.category_id = " . (int)$id . ")";
+                            $defaultElements[$logic][] =
+                            "a.id IN ("
+                            ." SELECT b.id FROM ".ZOO_TABLE_ITEM." AS b"
+                            ." LEFT JOIN " . ZOO_TABLE_CATEGORY_ITEM . " AS y"
+                            ." ON b.id = y.item_id"
+                            ." WHERE y.category_id = ".(int) $id .")";
                         }
                     }
                 }
@@ -402,30 +421,31 @@ class ZLModelItem extends ZLModel {
         // Tags filtering
         $allTags = $this->getState('tags', array());
         if ($allTags) {
-            foreach ($allTags as $tags) {
+            foreach ( $allTags as $tags ) {
                 if ($values = $tags->get('value', array())) {
                     $logic = $tags->get('logic', 'AND');
 
                     // quote the values
                     foreach ($values as &$val) {
-                        $val = $this->_db->Quote($val);
+                        $val = $this->_db->Quote( $val );
                     }
                     unset($val);
                     // build the where for ORs
-                    if (strtoupper($tags->get('mode', 'OR')) == 'OR') {
-                        $wheres[$logic][] = "t.name IN (" . implode(',', $values) . ")";
+                    if ( strtoupper($tags->get('mode', 'OR')) == 'OR' ){
+                        $defaultElements[$logic][] = "t.name IN (".implode(',', $values ).")";
 
                         // set the join only on the OR, since AND has a subquery
                         $this->join_tags = true;
-                    } else {
+                    }
+                    else {
                         // it's heavy query but the only way for AND mode
                         foreach ($values as $val) {
-                            $wheres[$logic][] =
-                                "a.id IN ("
-                                . " SELECT ti.id FROM " . ZOO_TABLE_ITEM . " AS ti"
-                                . " LEFT JOIN " . ZOO_TABLE_TAG . " AS t"
-                                . " ON ti.id = t.item_id"
-                                . " WHERE t.name = " . $val . ")";
+                            $defaultElements[$logic][] =
+                            "a.id IN ("
+                            ." SELECT ti.id FROM " . ZOO_TABLE_ITEM . " AS ti"
+                            ." LEFT JOIN " . ZOO_TABLE_TAG . " AS t"
+                            ." ON ti.id = t.item_id"
+                            ." WHERE t.name = " . $val . ")";
                         }
                     }
                 }
@@ -440,6 +460,15 @@ class ZLModelItem extends ZLModel {
         $i = 0;
         $nestedFilterQuery = '';
         $join_info = array();
+
+        // Special case: if we don't have nested filters, but we have defaultElements
+        // we should query just the defaultElements
+        if (empty($nestedFilter)) {
+            $wheres['OR'] = array_merge($wheres['OR'], $defaultElements['OR']);
+            $wheres['AND'] = array_merge($wheres['AND'], $defaultElements['AND']);
+        }
+
+
         foreach ($nestedFilter as $app => &$types) {
 
             // iterate over types
@@ -457,13 +486,15 @@ class ZLModelItem extends ZLModel {
                     $this->getElementSearch($element, $k, $elements_where, $join_info);
                 }
 
+                $elements_where['OR'] = array_merge($elements_where['OR'], $defaultElements['OR']);
+                $elements_where['AND']= array_merge($elements_where['AND'], $defaultElements['AND']);
                 // merge elements ORs / ANDs
                 $elements_query = '';
-                if (count($elements_where['OR'])) {
+                if ( count( $elements_where['OR'] ) ) {
                     $type_query .= ' AND (' . implode(' OR ', $elements_where['OR']) . ')';
                 }
 
-                if (count($elements_where['AND'])) {
+                if ( count( $elements_where['AND'] ) ) {
                     $type_query .= ' AND (' . implode(' AND ', $elements_where['AND']) . ')';
                 }
 
@@ -489,10 +520,10 @@ class ZLModelItem extends ZLModel {
         }
 
         // add nestedFilterQuery
-        if (!empty($nestedFilterQuery)) $wheres['AND'][] = '(' . $nestedFilterQuery . ')';
+        if(!empty($nestedFilterQuery)) $wheres['AND'][] = '(' . $nestedFilterQuery . ')';
 
         // At the end, merge ORs
-        if (count($wheres['OR'])) {
+        if( count( $wheres['OR'] ) ) {
             $query->where('(' . implode(' OR ', $wheres['OR']) . ')');
         }
 
@@ -508,30 +539,31 @@ class ZLModelItem extends ZLModel {
     /**
      * Get the individual element search
      */
-    protected function getElementSearch ($element, &$k, &$wheres, &$join_info) {
+    protected function getElementSearch($element, &$k, &$wheres, &$join_info)
+    {
         // abort if no value is set
-        if (!$element->get('value')) return;
+        if (!$element->get('value') && !in_array($element->get('type', false), array('isnotnull'))) return;
 
         // Options!
-        $id = $element->get('id');
-        $value = $element->get('value');
-        $logic = strtoupper($element->get('logic', 'AND'));
-        $mode = $element->get('mode', 'AND');
-        $type = $element->get('type', false);
-        $from = $element->get('from', in_array($type, array('range', 'rangeequal', 'outofrangeequal', 'outofrange')) ? 0 : null);
-        $to = $element->get('to', in_array($type, array('range', 'rangeequal', 'outofrangeequal', 'outofrange')) ? 0 : null);
-        $convert = $element->get('convert', 'DECIMAL');
+        $id         = $element->get('id');
+        $value      = $element->get('value');
+        $logic      = strtoupper($element->get('logic', 'AND'));
+        $mode       = $element->get('mode', 'AND');
+        $type       = $element->get('type', false);
+        $from       = $element->get('from', in_array($type, array('range', 'rangeequal', 'outofrangeequal', 'outofrange')) ? 0 : null);
+        $to         = $element->get('to', in_array($type, array('range', 'rangeequal', 'outofrangeequal', 'outofrange')) ? 0 : null);
+        $convert    = $element->get('convert', 'DECIMAL');
 
-        $is_select = $element->get('is_select', false);
-        $is_date = $element->get('is_date', false);
-        $is_range = in_array($type, array('range', 'rangeequal', 'from', 'to', 'fromequal', 'toequal', 'outofrange', 'outofrangeequal'));
+        $is_select  = $element->get('is_select', false);
+        $is_date    = $element->get('is_date', false);
+        $is_range   = in_array($type, array('range', 'rangeequal', 'from', 'to', 'fromequal', 'toequal', 'outofrange', 'outofrangeequal'));
 
         // Multiple choice!
-        if (is_array($value) && !$from && !$to) {
+        if( is_array( $value ) && !$from && !$to) {
             $wheres[$logic][] = $this->getElementMultipleSearch($id, $value, $mode, $k, $is_select);
         } else {
             // Search ranges!
-            if ($is_range && !$is_date) {
+            if ($is_range && !$is_date){
 
                 // make sure the values are not null
                 $from = $from !== null ? $from : $value;
@@ -542,7 +574,7 @@ class ZLModelItem extends ZLModel {
                     $wheres[$logic][] = $sql;
                 }
 
-            } else {
+            } else  {
                 // Special date case
                 if ($is_date) {
                     $sql_value = "b$k.value";
@@ -569,6 +601,8 @@ class ZLModelItem extends ZLModel {
                         $value = implode(" OR TRIM(b$k.value) LIKE ", $words);
 
                         $wheres[$logic][] = "(b$k.element_id = '" . $id . "' AND (TRIM(b$k.value) LIKE " . $value . ')) ';
+                    } elseif ($element->get('type', 'exact_phrase') == 'isnotnull') {
+                        $wheres[$logic][] = "(b$k.element_id = '" . $id . "' AND (b$k.value IS NOT NULL AND TRIM(IFNULL(b$k.value,'')) <> '')) ";
                     } else {
                         $wheres[$logic][] = "(b$k.element_id = '" . $id . "' AND TRIM(b$k.value) LIKE " . $value . ') ';
                     }
@@ -582,7 +616,8 @@ class ZLModelItem extends ZLModel {
     /**
      * Get the range search sql
      */
-    protected function getElementRangeSearch ($identifier, $from, $to, $type, $convert, $k) {
+    protected function getElementRangeSearch($identifier, $from, $to, $type, $convert, $k)
+    {
         // basic check
         if (!isset($from) || !isset($to)) return;
 
@@ -603,7 +638,7 @@ class ZLModelItem extends ZLModel {
         $symbol = "";
 
         // Symbol and value based on the type
-        switch ($type) {
+        switch($type) {
             case "from":
                 $value = $from;
                 $symbol = ">";
@@ -647,14 +682,15 @@ class ZLModelItem extends ZLModel {
         }
 
         // Build range sql
-        return "(b$k.element_id = '" . $identifier . "' AND CONVERT(TRIM(b$k.value+0), $convert) " . $symbol . " " . $value . ")";
+        return "(b$k.element_id = '" . $identifier . "' AND CONVERT(TRIM(b$k.value+0), $convert) " . $symbol . " " . $value.")";
     }
 
     /**
      * Get the date search sql
      * $sql_value, $value, $value_from, $value_to, $type, $period_mode, $wrapper=false, $interval, $interval_unit, $datetime
      */
-    protected function getDateSearch ($__args = array()) {
+    protected function getDateSearch($__args = array())
+    {
         // init vars
         if (is_array($__args)) {
             foreach ($__args as $__var => $__value) {
@@ -666,30 +702,38 @@ class ZLModelItem extends ZLModel {
         $tzoffset = $this->app->date->getOffset();
         $datetime = isset($datetime) ? (bool)$datetime : false;
         $regex = '/^(19[0-9]{2}|2[0-9]{3})-(0[1-9]|1[012])-([123]0|[012][1-9]|31)/'; // date format yyyy-mm-dd
+        $regexTodayTime = '/\[today time=(([0-9]|0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]))\]/'; // time format H:i:s
 
         // replace vars
         $yesterday = $this->app->date->create('yesterday', $tzoffset);
         $today = $this->app->date->create('today', $tzoffset);
         $tomorrow = $this->app->date->create('tomorrow', $tzoffset);
+        $todayDate = $today->format('Y-m-d', $local = true);
+
+        preg_match($regexTodayTime, $value, $matchesTimeValue);
+        preg_match($regexTodayTime, $value_from, $matchesTimeValueFrom);
+        preg_match($regexTodayTime, $value_to, $matchesTimeValueTo);
+
+        $datetime = $datetime || !empty($matchesTimeValue[1]) || !empty($matchesTimeValueFrom[1]) | !empty($matchesTimeValueTo[1]) ;
 
         if (is_string($value)) $value = preg_replace(
-            array('/\[yesterday\]/', '/\[today\]/', '/\[tomorrow\]/'),
-            array($yesterday, $today, $tomorrow),
+            array('/\[yesterday\]/', '/\[today\]/', '/\[tomorrow\]/', $regexTodayTime),
+            array($yesterday, $today, $tomorrow, $todayDate.' '.(!empty($matchesTimeValue[1]) ? $matchesTimeValue[1] : '')),
             $value
         );
         if (is_string($value_from)) $value_from = preg_replace(
-            array('/\[yesterday\]/', '/\[today\]/', '/\[tomorrow\]/'),
-            array($yesterday, $today, $tomorrow),
+            array('/\[yesterday\]/', '/\[today\]/', '/\[tomorrow\]/', $regexTodayTime),
+            array($yesterday, $today, $tomorrow, $todayDate.' '.(!empty($matchesTimeValueFrom[1]) ? $matchesTimeValueFrom[1] : '')),
             $value_from
         );
         if (is_string($value_to)) {
-            $yesterday = substr($yesterday, 0, 10) . ' 23:59:59';
-            $today = substr($today, 0, 10) . ' 23:59:59';
-            $tomorrow = substr($tomorrow, 0, 10) . ' 23:59:59';
+            $yesterday = substr($yesterday, 0, 10).' 23:59:59';
+            $today = substr($today, 0, 10).' 23:59:59';
+            $tomorrow = substr($tomorrow, 0, 10).' 23:59:59';
 
             $value_to = preg_replace(
-                array('/\[yesterday\]/', '/\[today\]/', '/\[tomorrow\]/'),
-                array($yesterday, $today, $tomorrow),
+                array('/\[yesterday\]/', '/\[today\]/', '/\[tomorrow\]/', $regexTodayTime),
+                array($yesterday, $today, $tomorrow, $todayDate.' '.(!empty($matchesTimeValueTo[1]) ? $matchesTimeValueTo[1] : '')),
                 $value_to
             );
         }
@@ -702,24 +746,24 @@ class ZLModelItem extends ZLModel {
         // search_type = to:from:default
         if (!empty($value) && $search_type != 'period') {
 
-            if ($datetime) {
+            if($datetime) {
                 $from = $to = $value;
                 $date = substr($value, 0, 19);
             } else {
                 $date = substr($value, 0, 10);
-                $from = $date . ' 00:00:00';
-                $to = $date . ' 23:59:59';
+                $from = $date.' 00:00:00';
+                $to   = $date.' 23:59:59';
             }
 
-            // search_type = period
+        // search_type = period
         } else {
 
-            if ($datetime) {
+            if($datetime) {
                 $from = $value_from;
-                $to = $value_to;
+                $to   = $value_to;
             } else {
-                $from = substr($value_from, 0, 10) . ' 00:00:00';
-                $to = substr($value_to, 0, 10) . ' 23:59:59';
+                $from = substr($value_from, 0, 10).' 00:00:00';
+                $to   = substr($value_to, 0, 10).' 23:59:59';
             }
         }
 
@@ -729,7 +773,7 @@ class ZLModelItem extends ZLModel {
 
         // set quotes
         $from = $this->_db->Quote($this->_db->escape($from));
-        $to = $this->_db->Quote($this->_db->escape($to));
+        $to   = $this->_db->Quote($this->_db->escape($to));
 
         // change to from/to if one of the period value is empty
         if ($search_type == 'period' || $search_type == 'range') {
@@ -742,7 +786,7 @@ class ZLModelItem extends ZLModel {
 
         switch ($search_type) {
             case 'from':
-                if ($datetime)
+                if($datetime)
                     $el_where = "( ($sql_value >= $from) OR ($from <= $sql_value) )";
                 else
                     $el_where = "( (SUBSTR($sql_value, -19) >= $from) OR ($from <= SUBSTR($sql_value, -19)) )";
@@ -753,12 +797,14 @@ class ZLModelItem extends ZLModel {
                 break;
 
             case 'period':
-                if ($period_mode == 'static') {
-                    if ($datetime)
-                        $el_where = "( ($from BETWEEN $sql_value AND $sql_value) OR ($to BETWEEN $sql_value AND $sql_value) OR ($sql_value BETWEEN $from AND $to) OR ($sql_value BETWEEN $from AND $to) )";
+                if ($period_mode == 'static')
+                {
+                    if($datetime)
+                    $el_where = "( ($from BETWEEN $sql_value AND $sql_value) OR ($to BETWEEN $sql_value AND $sql_value) OR ($sql_value BETWEEN $from AND $to) OR ($sql_value BETWEEN $from AND $to) )";
                     else
-                        $el_where = "( ($from BETWEEN SUBSTR($sql_value, 1, 19) AND SUBSTR($sql_value, -19)) OR ($to BETWEEN SUBSTR($sql_value, 1, 19) AND SUBSTR($sql_value, -19)) OR (SUBSTR($sql_value, 1, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, -19) BETWEEN $from AND $to) )";
-                } else // dynamic
+                    $el_where = "( ($from BETWEEN SUBSTR($sql_value, 1, 19) AND SUBSTR($sql_value, -19)) OR ($to BETWEEN SUBSTR($sql_value, 1, 19) AND SUBSTR($sql_value, -19)) OR (SUBSTR($sql_value, 1, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, -19) BETWEEN $from AND $to) )";
+                }
+                else // dynamic
                 {
                     $interval_unit = strtoupper($interval_unit);
                     $valid = array('MONTH', 'DAY', 'WEEK', 'YEAR', 'MINUTE', 'SECOND', 'HOUR');
@@ -774,29 +820,32 @@ class ZLModelItem extends ZLModel {
                     }
                 }
                 break;
-
+            case 'isnotnull':
+                $el_where = "($sql_value IS NOT NULL AND TRIM(IFNULL($sql_value,'')) <> '') ";
+                break;
             default:
                 // set offset and escape quotes
                 $date = preg_match($regex, $date) ? $this->app->date->create($date, $tzoffset)->toSQL() : $date;
                 $date = $this->_db->escape($date);
 
-                if ($datetime)
-                    $el_where = "( ($sql_value LIKE '%$date%') OR (('$date' BETWEEN $sql_value AND $sql_value) AND $sql_value NOT REGEXP '[[.LF.]]') )";
+                if($datetime)
+                $el_where = "( ($sql_value LIKE '%$date%') OR (('$date' BETWEEN $sql_value AND $sql_value) AND $sql_value NOT REGEXP '[[.LF.]]') )";
                 else
-                    $el_where = "( ($sql_value LIKE '%$date%') OR (SUBSTR($sql_value, 1, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, 21, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, 41, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, 61, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, 81, 19) BETWEEN $from AND $to))";
+                $el_where = "( ($sql_value LIKE '%$date%') OR (SUBSTR($sql_value, 1, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, 21, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, 41, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, 61, 19) BETWEEN $from AND $to) OR (SUBSTR($sql_value, 81, 19) BETWEEN $from AND $to))";
         }
 
         // wrapper the query if necesary
         $el_where = $wrapper ? preg_replace('/{query}/', $el_where, $wrapper) : $el_where;
 
         // return with extra space
-        return $el_where . ' ';
+        return $el_where.' ';
     }
 
     /**
      * Get the multiple values search sql
      */
-    protected function getElementMultipleSearch ($identifier, $values, $mode, $k, $is_select = true) {
+    protected function getElementMultipleSearch($identifier, $values, $mode, $k, $is_select = true)
+    {
         $el_where = "b$k.element_id = " . $this->_db->Quote($identifier);
 
         // lets be sure mode is set
@@ -805,26 +854,31 @@ class ZLModelItem extends ZLModel {
         $multiples = array();
 
         // Normal selects / radio / etc (ElementOption)
-        if ($is_select) {
-            foreach ($values as $value) {
-                $multiple = "TRIM(b$k.value) LIKE " . $this->_db->Quote(trim($this->_db->escape($value))) . " OR ";
-                $multiple .= "TRIM(b$k.value) LIKE " . $this->_db->Quote(trim($this->_db->escape($value) . "\n%")) . " OR ";
-                $multiple .= "TRIM(b$k.value) LIKE " . $this->_db->Quote(trim("%\n" . $this->_db->escape($value))) . " OR ";
-                $multiple .= "TRIM(b$k.value) LIKE " . $this->_db->Quote(trim("%\n" . $this->_db->escape($value) . "\n%"));
-                $multiples[] = "(" . $multiple . ")";
+        if($is_select)
+        {
+            foreach($values as $value)
+            {
+                $multiple = "TRIM(b$k.value) LIKE ".$this->_db->Quote(trim($this->_db->escape($value)))." OR ";
+                $multiple .= "TRIM(b$k.value) LIKE ".$this->_db->Quote(trim($this->_db->escape($value)."\n%"))." OR ";
+                $multiple .= "TRIM(b$k.value) LIKE ".$this->_db->Quote(trim("%\n".$this->_db->escape($value)))." OR ";
+                $multiple .= "TRIM(b$k.value) LIKE ".$this->_db->Quote(trim("%\n".$this->_db->escape($value)."\n%"));
+                $multiples[] = "(".$multiple.")";
             }
-        } // This covers country element too
-        else {
-            foreach ($values as $value) {
-                $multiple = "TRIM(b$k.value) LIKE " . $this->_db->Quote(trim($this->_db->escape($value))) . " OR ";
-                $multiple .= "TRIM(b$k.value) LIKE " . $this->_db->Quote(trim($this->_db->escape($value) . ' %')) . " OR ";
-                $multiple .= "TRIM(b$k.value) LIKE " . $this->_db->Quote(trim('% ' . $this->_db->escape($value))) . " OR ";
-                $multiple .= "TRIM(b$k.value) LIKE " . $this->_db->Quote(trim('% ' . $this->_db->escape($value) . ' %'));
-                $multiples[] = "(" . $multiple . ")";
+        }
+        // This covers country element too
+        else
+        {
+            foreach($values as $value)
+            {
+                $multiple = "TRIM(b$k.value) LIKE ".$this->_db->Quote(trim($this->_db->escape($value)))." OR ";
+                $multiple .= "TRIM(b$k.value) LIKE ".$this->_db->Quote(trim($this->_db->escape($value).' %'))." OR ";
+                $multiple .= "TRIM(b$k.value) LIKE ".$this->_db->Quote(trim('% '.$this->_db->escape($value)))." OR ";
+                $multiple .= "TRIM(b$k.value) LIKE ".$this->_db->Quote(trim('% '.$this->_db->escape($value).' %'));
+                $multiples[] = "(".$multiple.")";
             }
         }
 
-        $el_where .= " AND (" . implode(" " . $mode . " ", $multiples) . ")";
+        $el_where .= " AND (".implode(" ".$mode. " ", $multiples).")";
 
         return $el_where;
     }
@@ -835,14 +889,15 @@ class ZLModelItem extends ZLModel {
      * @param array $order Array of order params
      * Example:array(0 => '_itemcreated', 1 => '_reversed', 2 => '_random')
      */
-    protected function _getItemOrder ($order) {
+    protected function _getItemOrder($order)
+    {
         // if string, try to convert ordering
         if (is_string($order)) {
             $order = $this->app->itemorder->convert($order);
         }
 
         $result = array(null, null);
-        $order = (array)$order;
+        $order = (array) $order;
 
         // remove empty and duplicate values
         $order = array_unique(array_filter($order));
@@ -899,7 +954,7 @@ class ZLModelItem extends ZLModel {
 
         // else order by elements
         if (!isset($result[1])) {
-            $result[0] = ZOO_TABLE_SEARCH . " AS s ON a.id = s.item_id AND s.element_id IN ('" . implode("', '", $order) . "')";
+            $result[0] = ZOO_TABLE_SEARCH." AS s ON a.id = s.item_id AND s.element_id IN ('".implode("', '", $order)."')";
             if ($alphanumeric) {
                 $result[1] = $reversed == 'ASC' ? "ISNULL(s.value), s.value+0<>0 DESC, s.value+0, s.value" : "ISNULL(s.value), s.value+0<>0, s.value+0 DESC, s.value DESC";
             } else {
@@ -916,24 +971,26 @@ class ZLModelItem extends ZLModel {
     /**
      * One Join for each element filter
      */
-    protected function addRepeatableJoins (&$query, $k, $join_info) {
+    protected function addRepeatableJoins(&$query, $k, $join_info)
+    {
         // 1 join for each parameter
-        for ($i = 0; $i < $k; $i++) {
-            $query->leftJoin(ZOO_TABLE_SEARCH . " AS b$i ON a.id = b$i.item_id AND b$i.element_id=" . $this->_db->quote($join_info[$i]));
+        for ( $i = 0; $i < $k; $i++ ){
+            $query->leftJoin(ZOO_TABLE_SEARCH . " AS b$i ON a.id = b$i.item_id AND b$i.element_id=".$this->_db->quote($join_info[$i]));
         }
     }
 
     /**
      * Get the value quoted and with %% if needed
      */
-    protected function getQuotedValue ($name, $quote = true) {
+    protected function getQuotedValue($name, $quote = true)
+    {
         // init vars
         $type = $name->get('type', 'exact_phrase');
 
         // backward compatibility
-        if ($type == 'partial') $type = 'exact_phrase';
+        if($type == 'partial') $type = 'exact_phrase';
 
-        switch ($type) {
+        switch($type) {
             case 'exact_phrase':
                 $value = '%' . $name->get('value', '') . '%';
                 break;
@@ -946,7 +1003,7 @@ class ZLModelItem extends ZLModel {
                 // get all words and quote them
                 $words = explode(' ', $name->get('value', ''));
                 foreach ($words as &$word) {
-                    $word = $this->_db->Quote("%$word%");
+                    $word = $this->_db->Quote( "%$word%" );
                 }
 
                 // disable general quote
@@ -962,8 +1019,8 @@ class ZLModelItem extends ZLModel {
         }
 
         // quote the value
-        if ($quote) {
-            return $this->_db->Quote($value);
+        if($quote) {
+            return $this->_db->Quote( $value );
         }
 
         return $value;

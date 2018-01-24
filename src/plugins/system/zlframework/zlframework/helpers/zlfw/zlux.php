@@ -1,10 +1,9 @@
 <?php
 
 /*
-	Class: zlfwHelperZlux
-		A class that contains ZLUX functions
+    Class: zlfwHelperZlux
+        A class that contains ZLUX functions
 */
-
 class zlfwHelperZlux extends AppHelper {
 
     /**
@@ -19,7 +18,7 @@ class zlfwHelperZlux extends AppHelper {
      *
      * @param App $app A reference to the global App object
      */
-    public function __construct ($app) {
+    public function __construct($app) {
         parent::__construct($app);
 
         // load class
@@ -33,11 +32,12 @@ class zlfwHelperZlux extends AppHelper {
      *
      * @return object The zlux class
      */
-    public function get ($name) {
+    public function get($name)
+    {
         // load zlux class
         $name = strtolower($name);
-        $class = 'zlux' . ucfirst($name);
-        $this->app->loader->register($class, 'zlfw:zlux/manager' . strtolower($name) . '/class.php');
+        $class = 'zlux'.ucfirst($name);
+        $this->app->loader->register($class, 'zlfw:zlux/manager'.strtolower($name).'/class.php');
 
         // add class, if not exists
         if (!isset($this->_classes[$name])) {
@@ -54,7 +54,7 @@ class zlfwHelperZlux extends AppHelper {
      *
      * @return object The class object
      */
-    public function __get ($name) {
+    public function __get($name) {
         return $this->get($name);
     }
 
@@ -63,12 +63,12 @@ class zlfwHelperZlux extends AppHelper {
      */
     protected $_zlux1_loaded = false;
     protected $_zlux2_loaded = false;
-
-    public function loadMainAssets ($zlux2 = false) {
+    public function loadMainAssets($zlux2 = false)
+    {
         // load zlux2 if indicated
-        if ($zlux2 && !$this->_zlux2_loaded) {
+        if($zlux2 && !$this->_zlux2_loaded) {
             $template = JFactory::getApplication()->getTemplate();
-            $path = 'root:templates/' . $template . '/warp.php';
+            $path = 'root:templates/'.$template.'/warp.php';
 
             // if no file found it's not warp 7, load zlux uikit css and js
             if (!$this->app->path->path($path)) {
@@ -76,7 +76,7 @@ class zlfwHelperZlux extends AppHelper {
                 $this->app->document->addScript('zlmedia:vendor/uikit/js/uikit.min.js');
             } else {
                 // load warp uikit js
-                $this->app->document->addScript('root:templates/' . $template . '/warp/vendor/uikit/js/uikit.js');
+                $this->app->document->addScript('root:templates/'.$template.'/warp/vendor/uikit/js/uikit.js');
                 // and zlux styles
                 $this->app->document->addStylesheet('zlmedia:vendor/zlux/dist/css/zlux.min.css');
             }
@@ -88,7 +88,7 @@ class zlfwHelperZlux extends AppHelper {
             // set loaded state
             $this->_zlux2_loaded = true;
 
-        } else if (!$zlux2 && !$this->_zlux1_loaded) {
+        } else if(!$zlux2 && !$this->_zlux1_loaded) {
 
             // zlux assets
             $this->app->document->addStylesheet('zlfw:zlux/zluxMain.css');
@@ -105,7 +105,8 @@ class zlfwHelperZlux extends AppHelper {
     /**
      * Load ZL Bootstrap assets
      */
-    public function loadBootstrap ($loadJS = false) {
+    public function loadBootstrap($loadJS = false)
+    {
         if ($this->app->joomla->isVersion('2.5')) {
             $this->app->document->addStylesheet('zlfw:zlux/assets/zlbootstrap/css/bootstrap-zl.min.css');
             $this->app->document->addStylesheet('zlfw:zlux/assets/zlbootstrap/css/bootstrap-zl-responsive.min.css');
@@ -113,7 +114,7 @@ class zlfwHelperZlux extends AppHelper {
             // if stated load JS too
             if ($loadJS) $this->app->document->addScript('zlfw:zlux/assets/zlbootstrap/js/bootstrap.min.js');
 
-            // j3
+        // j3
         } else {
 
             // load the BS assets
@@ -126,7 +127,8 @@ class zlfwHelperZlux extends AppHelper {
     /**
      * Load JS Variables
      */
-    public function loadVariables ($zlux2 = false) {
+    public function loadVariables($zlux2 = false)
+    {
         // init vars
         $javascript = '';
 
@@ -135,7 +137,7 @@ class zlfwHelperZlux extends AppHelper {
             $urls = array(
                 'zlfw' => 'plugins/system/zlframework/zlframework/',
                 'zlux' => 'media/com_zoolanders/vendor/zlux/dist/',
-                'ajax' => JURI::base() . 'index.php?option=com_zoolanders&format=raw&' . $this->app->session->getFormToken() . '=1',
+                'ajax' => JURI::base() . 'index.php?option=com_zoolanders&format=raw&'. $this->app->session->getFormToken() .'=1',
                 'root' => JURI::root(),
                 'root_path' => JURI::root(true)
             );
@@ -179,26 +181,26 @@ class zlfwHelperZlux extends AppHelper {
             'FOLDER_NAME' => 'PLG_ZLFRAMEWORK_ZLUX_FM_FOLDER_NAME',
             'EMPTY_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_EMPTY_FOLDER',
 
-            // Upload
-            'ADD_NEW_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ADD_NEW_FILES',
-            'START_UPLOADING' => 'PLG_ZLFRAMEWORK_ZLUX_FM_START_UPLOADING',
-            'CANCEL_CURRENT_UPLOAD' => 'PLG_ZLFRAMEWORK_ZLUX_FM_CANCEL_CURRENT_UPLOAD',
-            'NEW_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_NEW_FOLDER',
-            'UPLOAD_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_UPLOAD_FILES',
-            'DROP_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_DROP_FILES',
+                // Upload
+                'ADD_NEW_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ADD_NEW_FILES',
+                'START_UPLOADING' => 'PLG_ZLFRAMEWORK_ZLUX_FM_START_UPLOADING',
+                'CANCEL_CURRENT_UPLOAD' => 'PLG_ZLFRAMEWORK_ZLUX_FM_CANCEL_CURRENT_UPLOAD',
+                'NEW_FOLDER' => 'PLG_ZLFRAMEWORK_ZLUX_FM_NEW_FOLDER',
+                'UPLOAD_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_UPLOAD_FILES',
+                'DROP_FILES' => 'PLG_ZLFRAMEWORK_ZLUX_FM_DROP_FILES',
 
-            // Errors
-            'FILE_EXT_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_FILE_EXT',
-            'FILE_SIZE_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_FILE_SIZE',
-            'RUNTIME_MEMORY_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_RUNTIME_MEMORY',
-            'S3_BUCKET_PERIOD_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_S3_BUCKET_PERIOD',
-            'S3_BUCKET_MISSCONFIG_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_S3_BUCKET_MISSCONFIG',
-            'UPLOAD_URL_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_UPLOAD_URL',
+                // Errors
+                'FILE_EXT_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_FILE_EXT',
+                'FILE_SIZE_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_FILE_SIZE',
+                'RUNTIME_MEMORY_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_RUNTIME_MEMORY',
+                'S3_BUCKET_PERIOD_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_S3_BUCKET_PERIOD',
+                'S3_BUCKET_MISSCONFIG_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_S3_BUCKET_MISSCONFIG',
+                'UPLOAD_URL_ERROR' => 'PLG_ZLFRAMEWORK_ZLUX_FM_ERR_UPLOAD_URL',
 
-            // plupload core strings
-            'File extension error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_EXTENSION_ERROR',
-            'File size error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_SIZE_ERROR',
-            'File count error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_COUNT_ERROR',
+                // plupload core strings
+                'File extension error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_EXTENSION_ERROR',
+                'File size error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_SIZE_ERROR',
+                'File count error.' => 'PLG_ZLFRAMEWORK_FLP_FILE_COUNT_ERROR',
 
             // ZLUX ItemsManager
             'IM_NO_ITEMS_FOUND' => 'PLG_ZLFRAMEWORK_ZLUX_IM_NO_ITEMS_FOUND',
@@ -226,7 +228,8 @@ class zlfwHelperZlux extends AppHelper {
     /**
      * Get Amazon S3 signed policy
      */
-    public function getAmazonS3signedPolicy ($bucket, $secretkey) {
+    public function getAmazonS3signedPolicy($bucket, $secretkey)
+    {
         // prepare policy
         $policy = base64_encode(json_encode(array(
             // ISO 8601 - date('c'); generates uncompatible date, so better do it manually
@@ -262,16 +265,18 @@ class zlfwHelperZlux extends AppHelper {
      *
      * @return array List of ZLUX Items Objects
      */
-    public function getItemObject ($items) {
+    public function getItemObject($items)
+    {
         // validate data
         settype($items, 'array');
 
         $objects = array();
-        foreach ($items as $item) {
+        foreach ($items as $item)
+        {
             // prepare author data
             $author = $item->created_by_alias;
             $author_id = $item->created_by;
-            $users = $this->app->table->item->getUsers($item->application_id);
+            $users  = $this->app->table->item->getUsers($item->application_id);
             if (!$author && isset($users[$item->created_by])) {
                 $author = $users[$item->created_by]->name;
                 $author_id = $users[$item->created_by]->id;

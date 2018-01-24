@@ -35,7 +35,7 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
     /**
      * Class Constructor
      */
-    public function __construct ($options) {
+    public function __construct($options) {
 
         // init vars
         $this->app = App::getInstance('zoo');
@@ -54,8 +54,7 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return boolean The success of the operation
      */
-    public function exists ($file) {
-    }
+    public function exists($file) {}
 
     /**
      * Writes a file to the filesystem selected
@@ -65,7 +64,7 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return boolean The success of the operation
      */
-    public function write ($file, $content, $overwrite = true) {
+    public function write($file, $content, $overwrite = true){
     }
 
     /**
@@ -75,17 +74,17 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return mixed The content of the file
      */
-    public function read ($file) {
-    }
+    public function read($file) {}
 
     /**
      * Creates a folder
      *
-     * @param string $path The path to the new object
+      * @param string $path The path to the new object
      *
      * @return boolean The success of the operation
      */
-    public function createFolder ($path) {
+    public function createFolder($path)
+    {
         $result = false;
 
         // create
@@ -113,12 +112,13 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
     /**
      * Moves an object
      *
-     * @param string $src The path to the source file
+      * @param string $src The path to the source file
      * @param string $dest The path to the destination file
      *
      * @return boolean The success of the operation
      */
-    public function move ($src, $dest) {
+    public function move($src, $dest)
+    {
         $result = false;
 
         // if is folder
@@ -173,12 +173,13 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return boolean The success of the operation
      */
-    public function upload ($file, $dest) {
+    public function upload($file, $dest)
+    {
         $rrs = false;
         $absolute_filename = $this->app->path->path('zlfw:changelog.txt');
         // Legacy single part uploads
         $result = $this->s3->putObject(
-            AEUtilAmazons3::inputFile($absolute_filename, false),        // File to read from
+            AEUtilAmazons3::inputFile( $absolute_filename, false ),        // File to read from
             'milcom.testing',                                                    // Bucket name
             'changelog.txt',                                                    // Remote relative filename, including directory
             AEUtilAmazons3::ACL_BUCKET_OWNER_FULL_CONTROL,                // ACL (bucket owner has full control, file owner gets full control)
@@ -186,7 +187,7 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
             // Other request headers
             array(
                 // Amazon storage class (support for RRS - Reduced Redundancy Storage)
-                'x-amz-storage-class' => $rrs ? 'REDUCED_REDUNDANCY' : 'STANDARD'
+                'x-amz-storage-class'    => $rrs ? 'REDUCED_REDUNDANCY' : 'STANDARD'
             )
         );
 
@@ -200,7 +201,8 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return boolean The success of the operation
      */
-    public function delete ($path) {
+    public function delete($path)
+    {
         $result = false;
 
         // if is folder
@@ -244,7 +246,8 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return boolean The success of the operation
      */
-    public function getTree ($root, $legalExt) {
+    public function getTree($root, $legalExt)
+    {
         // init vars
         $rows = array();
         $prefix = $root ? $root . '/' : '';
@@ -256,15 +259,16 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
         settype($objects, 'array');
 
         // folders
-        foreach ($objects as $name => $obj) {
+        foreach ($objects as $name => $obj)
+        {
             // skip root folder
-            if (!isset($obj['prefix']) && $obj['size'] == 0) {
+            if(!isset($obj['prefix']) && $obj['size'] == 0) {
                 unset($objects[$name]);
                 continue;
             }
 
             // if folder
-            if (isset($obj['prefix'])) {
+            if(isset($obj['prefix'])) {
                 $row = array('type' => 'folder');
                 $row['name'] = basename($name);
                 $row['path'] = $obj['prefix'];
@@ -277,7 +281,8 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
         }
 
         // files, only left
-        foreach ($objects as $name => $obj) {
+        foreach ($objects as $name => $obj)
+        {
             $row = array('type' => 'file');
             $row['name'] = basename($name);
             $row['path'] = $name;
@@ -304,7 +309,8 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return array The object info
      */
-    public function getObjectInfo ($path) {
+    public function getObjectInfo($path)
+    {
         $result = false;
         $obj = null;
 
@@ -328,13 +334,13 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
         $obj = array();
         $obj['name'] = basename($path);
         $obj['path'] = $path;
-        $obj['ext'] = JFile::getExt($obj['name']);
+        $obj['ext']  = JFile::getExt($obj['name']);
         $obj['basename'] = basename($obj['name'], '.' . $obj['ext']);
         $obj['content_type'] = $this->app->zlfw->filesystem->getContentType($obj['name']);
         $obj['size']['value'] = $this->app->zlfw->filesystem->returnBytes($result['size']);
         $obj['size']['display'] = $this->app->zlfw->filesystem->formatFilesize($obj['size']['value'], 'KB');
 
-        // 'preview'	=> $this->s3->getAuthenticatedURL($this->bucket, $path, 900);
+        // 'preview'    => $this->s3->getAuthenticatedURL($this->bucket, $path, 900);
 
         // set the object type
         if (preg_match('/\/$/', $path)) { // is folder, they have a slash at the end
@@ -353,7 +359,8 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return array The resources
      */
-    public function getValidResources ($path, $legalExt) {
+    public function getValidResources($path, $legalExt)
+    {
         // basic check
         if (empty($path)) return false;
 
@@ -370,7 +377,8 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
             $objects = $this->s3->getBucket($this->bucket, $path, null, null, '/', true);
 
             // folders
-            foreach ($objects as $name => $obj) {
+            foreach ($objects as $name => $obj)
+            {
                 // skip root folder
                 if (!isset($obj['prefix']) && $obj['size'] == 0) continue;
 
@@ -381,8 +389,8 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
                 $resources[] = $obj['name'];
             }
 
-            // if file
-        } else if ($obj = $this->getObjectInfo($path)) {
+        // if file
+        } else if ($obj = $this->getObjectInfo($path)){
             $resources[] = $obj['path'];
         }
 
@@ -396,7 +404,8 @@ class ZLStorageAdapterAmazonS3 extends ZLStorageAdapterBase implements ZLStorage
      *
      * @return string The absolute url
      */
-    public function getAbsoluteURL ($path) {
+    public function getAbsoluteURL($path)
+    {
         return $this->s3->getAuthenticatedURL($this->bucket, $path, 3600);
     }
 }

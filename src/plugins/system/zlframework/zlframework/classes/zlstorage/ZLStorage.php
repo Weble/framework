@@ -28,7 +28,7 @@ class ZLStorage {
     /**
      * Class Constructor
      */
-    public function __construct ($adapter, $options = array()) {
+    public function __construct($adapter, $options = array()) {
 
         // init vars
         $this->app = App::getInstance('zoo');
@@ -40,14 +40,14 @@ class ZLStorage {
     /**
      * Returns the current Adapter
      */
-    public function getAdapter () {
+    public function getAdapter() {
         return $this->adapter;
     }
 
     /**
      * Returns and init an Adapter instance
      */
-    public function getAdapterInstance ($type, $options = array()) {
+    public function getAdapterInstance($type, $options = array()) {
         $types = $this->getAdapters();
 
         if (!in_array($type, $types)) {
@@ -69,7 +69,7 @@ class ZLStorage {
      *
      * @return boolean The success of the operation
      */
-    public function exists ($file) {
+    public function exists($file) {
         return $this->adapter->exists($file);
     }
 
@@ -81,7 +81,7 @@ class ZLStorage {
      *
      * @return boolean The success of the operation
      */
-    public function write ($file, $content, $overwrite = true) {
+    public function write($file, $content, $overwrite = true) {
         return $this->adapter->write($file, $content, $overwrite);
     }
 
@@ -92,18 +92,19 @@ class ZLStorage {
      *
      * @return mixed The content of the file
      */
-    public function read ($file) {
+    public function read($file) {
         return $this->adapter->read($file);
     }
 
     /**
      * Creates a folder
      *
-     * @param string $path The path to the new object
+      * @param string $path The path to the new object
      *
      * @return boolean The success of the operation
      */
-    public function createFolder ($path) {
+    public function createFolder($path)
+    {
         return $this->adapter->createFolder($path);
     }
 
@@ -115,7 +116,7 @@ class ZLStorage {
      *
      * @return boolean The success of the operation
      */
-    public function move ($src, $dest) {
+    public function move($src, $dest){
         return $this->adapter->move($src, $dest);
     }
 
@@ -127,7 +128,7 @@ class ZLStorage {
      *
      * @return boolean The success of the operation
      */
-    public function upload ($file, $dest) {
+    public function upload($file, $dest) {
         return $this->adapter->upload($file, $dest);
     }
 
@@ -138,7 +139,8 @@ class ZLStorage {
      *
      * @return boolean The success of the operation
      */
-    public function delete ($path) {
+    public function delete($path)
+    {
         // workaround if object passed instead
         if (is_object($path)) $path = $path->getPathname();
 
@@ -153,7 +155,7 @@ class ZLStorage {
      *
      * @return boolean The success of the operation
      */
-    public function getTree ($root, $legalExt = '') {
+    public function getTree($root, $legalExt = '') {
         return $this->adapter->getTree($root, $legalExt);
     }
 
@@ -164,7 +166,8 @@ class ZLStorage {
      *
      * @return array The object info
      */
-    public function getObjectInfo ($path) {
+    public function getObjectInfo($path)
+    {
         // workaround if object passed instead
         if (is_object($path)) $path = $path->getPathname();
 
@@ -179,7 +182,8 @@ class ZLStorage {
      *
      * @return array The resources
      */
-    public function getValidResources ($path, $legalExt = '') {
+    public function getValidResources($path, $legalExt = '')
+    {
         // workaround if object passed instead
         if (is_object($path)) $path = $path->getPathname();
 
@@ -193,7 +197,8 @@ class ZLStorage {
      *
      * @return string The absolute url
      */
-    public function getAbsoluteURL ($path) {
+    public function getAbsoluteURL($path)
+    {
         // workaround if object passed instead
         if (is_object($path)) $path = $path->getPathname();
 
@@ -205,7 +210,7 @@ class ZLStorage {
      *
      * @param string $error The error message
      */
-    public function setError ($error) {
+    public function setError($error) {
         return $this->adapter->setError($error);
     }
 
@@ -216,7 +221,7 @@ class ZLStorage {
      *
      * @return array A list of errors
      */
-    public function getErrors () {
+    public function getErrors() {
         return $this->adapter->getErrors();
     }
 
@@ -227,7 +232,7 @@ class ZLStorage {
      *
      * @return array A list of warnings
      */
-    public function getWarnings () {
+    public function getWarnings() {
         return $this->adapter->getWarnings();
     }
 
@@ -236,7 +241,7 @@ class ZLStorage {
      *
      * @return Adapters array The populated array of valid Adapters
      */
-    public function getAdapters () {
+    public function getAdapters() {
 
         if (!$this->adapters) {
             foreach ($this->app->path->files('classes:zlstorage/adapter', false, '/^.*(php)$/i') as $adapter) {
@@ -257,7 +262,7 @@ interface ZLStorageAdapter {
      *
      * @return boolean The success of the operation
      */
-    public function exists ($file);
+    public function exists($file);
 
     /**
      * Writes a file to the filesystem selected
@@ -268,7 +273,7 @@ interface ZLStorageAdapter {
      *
      * @return boolean The success of the operation
      */
-    public function write ($file, $content, $overwrite = true);
+    public function write($file, $content, $overwrite = true);
 
     /**
      * Reads a file content from the filesystem selected
@@ -277,7 +282,7 @@ interface ZLStorageAdapter {
      *
      * @return mixed The content of the file
      */
-    public function read ($file);
+    public function read($file);
 
     /**
      * Deletes a file from the filesystem selected
@@ -286,7 +291,7 @@ interface ZLStorageAdapter {
      *
      * @return boolean The success of the operation
      */
-    public function move ($src, $dest);
+    public function move($src, $dest);
 
     /**
      * Deletes a file from the filesystem selected
@@ -295,11 +300,10 @@ interface ZLStorageAdapter {
      *
      * @return boolean The success of the operation
      */
-    public function delete ($file);
+    public function delete($file);
 }
 
 /**
  * This class should contain the common methods between the adapters
  */
-abstract class ZLStorageAdapterBase extends ZLErrorHandlerAbstractObject {
-}
+abstract class ZLStorageAdapterBase extends ZLErrorHandlerAbstractObject {}

@@ -6,33 +6,24 @@
 
 /* ZlFilesystemHelper // DEPRICATED CLASS - Use the ZLFW Helper instead */
 App::getInstance('zoo')->loader->register('zlfwHelperFileSystem', 'plugins:system/zlframework/zlframework/helpers/zlfw/filesystem.php');
-
-class ZlFilesystemHelper extends zlfwHelperFileSystem {
-}
+class ZlFilesystemHelper extends zlfwHelperFileSystem {}
 
 /* ZlStringHelper // DEPRICATED CLASS - Use the ZLFW Helper instead */
 App::getInstance('zoo')->loader->register('zlfwHelperString', 'plugins:system/zlframework/zlframework/helpers/zlfw/string.php');
-
-class ZlStringHelper extends zlfwHelperString {
-}
+class ZlStringHelper extends zlfwHelperString {}
 
 /* ZlPathHelper // DEPRICATED CLASS - Use the ZLFW Helper instead */
 App::getInstance('zoo')->loader->register('zlfwHelperPath', 'plugins:system/zlframework/zlframework/helpers/zlfw/path.php');
-
-class ZlPathHelper extends zlfwHelperPath {
-}
+class ZlPathHelper extends zlfwHelperPath {}
 
 /* ZLXmlHelper // DEPRICATED CLASS - Use the ZLFW Helper instead */
 App::getInstance('zoo')->loader->register('zlfwHelperXml', 'plugins:system/zlframework/zlframework/helpers/zlfw/xml.php');
-
-class ZLXmlHelper extends zlfwHelperXml {
-}
+class ZLXmlHelper extends zlfwHelperXml {}
 
 /*
  Class: ZLFW Helper
  The general ZL Framework helper Class for zoo
  */
-
 class zlfwHelper extends AppHelper {
 
     /* prefix */
@@ -45,7 +36,7 @@ class zlfwHelper extends AppHelper {
         Function: __construct
             Class Constructor.
     */
-    public function __construct ($app) {
+    public function __construct($app) {
         parent::__construct($app);
 
         // set helper prefix
@@ -63,7 +54,7 @@ class zlfwHelper extends AppHelper {
         Returns:
             Mixed
     */
-    public function get ($name, $prefix = null) {
+    public function get($name, $prefix = null) {
 
         // set prefix
         if ($prefix == null) {
@@ -73,11 +64,11 @@ class zlfwHelper extends AppHelper {
         // load class
         $class = $prefix . $name;
 
-        $this->app->loader->register($class, 'zlfw:helpers/zlfw/' . strtolower($name) . '.php');
+        $this->app->loader->register($class, 'zlfw:helpers/zlfw/'.strtolower($name).'.php');
 
         // add helper, if not exists
         if (!isset($this->_helpers[$name])) {
-            $this->_helpers[$name] = class_exists($class) ? new $class($this->app) : new AppHelper($this->app, $prefix . $name);
+            $this->_helpers[$name] = class_exists($class) ? new $class($this->app) : new AppHelper($this->app, $prefix.$name);
         }
 
         return $this->_helpers[$name];
@@ -93,7 +84,7 @@ class zlfwHelper extends AppHelper {
         Returns:
             Mixed
     */
-    public function __get ($name) {
+    public function __get($name) {
         return $this->get($name);
     }
 
@@ -103,8 +94,11 @@ class zlfwHelper extends AppHelper {
      * get Enviroment
      *
      * @return @object The enviroment parameters
+     *
+     * @since 3.0.6
      */
-    public function getEnviroment () {
+    public function getEnviroment()
+    {
         $obj = new stdClass;
 
         // component, eg. zoo
@@ -126,13 +120,17 @@ class zlfwHelper extends AppHelper {
      * get The Enviroment
      *
      * @return @string An known enviroment in simple string
+     *
+     * @since 3.0.6
      */
-    public function getTheEnviroment () {
+    public function getTheEnviroment()
+    {
         // init vars
         $env = $this->getEnviroment();
 
         // ZOO
-        if ($env->component == 'zoo') {
+        if ($env->component == 'zoo')
+        {
             $path = 'zoo-';
             switch ($env->task) {
                 case 'editelements':
@@ -165,7 +163,8 @@ class zlfwHelper extends AppHelper {
         }
 
         // Modules
-        if ($env->component == 'advancedmodules' || $env->component == 'modules') {
+        if ($env->component == 'advancedmodules' || $env->component == 'modules')
+        {
             return 'joomla-module';
         }
     }
@@ -174,8 +173,11 @@ class zlfwHelper extends AppHelper {
      * output json content
      *
      * @return @json The JSON string with application/json content type
+     *
+     * @since 3.0.10
      */
-    public function outputJSON ($json) {
+    public function outputJSON($json)
+    {
         header("Pragma: public");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         header("Expires: 0");
@@ -191,8 +193,11 @@ class zlfwHelper extends AppHelper {
      * is the Enviroment
      *
      * @return @boolean True if enviroment match
+     *
+     * @since 3.0.6
      */
-    public function isTheEnviroment ($enviroment) {
+    public function isTheEnviroment($enviroment)
+    {
         return (strpos($this->getTheEnviroment(), $enviroment) === 0);
     }
 
@@ -204,7 +209,8 @@ class zlfwHelper extends AppHelper {
      *
      * @return Object The requested plugin
      */
-    public function getPlugin ($name, $type = 'system') {
+    public function getPlugin($name, $type = 'system')
+    {
         $db = JFactory::getDBO();
         $query = 'SELECT * FROM #__extensions WHERE element LIKE ' . $db->Quote($name) . ' AND folder LIKE ' . $db->Quote($type) . ' LIMIT 1';
 
@@ -215,7 +221,8 @@ class zlfwHelper extends AppHelper {
     /**
      * Fix plugins order
      */
-    public function checkPluginOrder ($plugin = '') {
+    public function checkPluginOrder($plugin = '')
+    {
         // init vars
         $db = JFactory::getDBO();
         $zf = $this->app->zlfw->getPlugin('zlframework', 'system');
@@ -228,17 +235,17 @@ class zlfwHelper extends AppHelper {
         // set ZOOtools and ZL Elements right after ZOOlingual
         $order++;
         $db->setQuery("UPDATE `#__extensions` SET `ordering` = {$order} WHERE `type` = 'plugin' AND `element` in
-			('zootools', 'zoo_zlelements')
-		")->execute();
+            ('zootools', 'zoo_zlelements')
+        ")->execute();
 
         // set others and provided plugin after
         $order++;
         // known plugins
         $plugins = array('zooaccess', 'zooaksubs', 'zoocart', 'zoocompare', 'zoofilter', 'zooorder', 'zooseo', 'zootrack', 'zlwidgets');
         // add the new plugin
-        if (!empty($plugin)) array_push($plugins, $plugin);
+        if(!empty($plugin)) array_push($plugins, $plugin);
         // query
-        $db->setQuery("UPDATE `#__extensions` SET `ordering` = {$order} WHERE `type` = 'plugin' AND `element` in ('" . implode('\',\'', $plugins) . "')")->execute();
+        $db->setQuery("UPDATE `#__extensions` SET `ordering` = {$order} WHERE `type` = 'plugin' AND `element` in ('".implode('\',\'', $plugins)."')")->execute();
     }
 
     /*
@@ -247,16 +254,19 @@ class zlfwHelper extends AppHelper {
      Params
      $renderif - extension name. Ex: com_widgetkit
      */
-    public function checkExt ($ext = null) {
+    public function checkExt($ext = null)
+    {
         if (strpos($ext, 'com_') === 0) // it's component
         {
             $name = str_replace('com_', '', $ext);
 
             jimport('joomla.filesystem.file');
-            if (JFile::exists(JPATH_ADMINISTRATOR . '/components/' . $ext . '/classes/' . $name . '.php') && JComponentHelper::getComponent($ext, true)->enabled) {
+            if (JFile::exists(JPATH_ADMINISTRATOR . '/components/' . $ext . '/classes/' . $name . '.php') && JComponentHelper::getComponent($ext, true)->enabled)
+            {
                 return true;
             }
-        } else if (strpos($ext, 'plg_') === 0) // it's plugin
+        }
+        else if (strpos($ext, 'plg_') === 0) // it's plugin
         {
             $name = str_replace('plg_', '', $ext);
             $plugin = JPluginHelper::getPlugin('system', strtolower($name));
@@ -272,8 +282,9 @@ class zlfwHelper extends AppHelper {
      *
      * @param bool Force check through get
      */
-    public function checkToken ($force_get = false) {
-        if ($force_get || $this->app->zlfw->request->isAjax()) {
+    public function checkToken($force_get = false)
+    {
+        if($force_get || $this->app->zlfw->request->isAjax()) {
             $this->app->session->checkToken('get') or jexit('Invalid Token');
         } else {
             $this->app->session->checkToken() or jexit('Invalid Token');
@@ -290,17 +301,19 @@ class zlfwHelper extends AppHelper {
      $group - filter by App group
 
      */
-    public function getApplications ($apps, $all = false, $groups = array()) {
+    public function getApplications($apps, $all = false, $groups = array())
+    {
         // init vars
         $table = $this->app->table->application;
         $result = array();
 
-        $apps = array_filter((array)($apps));
-        $groups = array_filter((array)($groups));
+        $apps         = array_filter((array)($apps));
+        $groups     = array_filter((array)($groups));
 
         // get apps
         foreach ($apps as $app) {
-            if ($app && $app = $table->get($app)) {
+            if ($app && $app = $table->get($app))
+            {
                 // filter by App group
                 if (empty($groups) || in_array($app->getGroup(), $groups)) {
                     $result[] = $app;
@@ -310,7 +323,8 @@ class zlfwHelper extends AppHelper {
 
         // if empty get All
         if (empty($result) && $all) {
-            foreach ($table->all(array('order' => 'name')) as $app) {
+            foreach ($table->all(array('order' => 'name')) as $app)
+            {
                 // filter by App group
                 if (empty($groups) || in_array($app->getGroup(), $groups)) {
                     $result[] = $app;
@@ -322,7 +336,7 @@ class zlfwHelper extends AppHelper {
     }
 
     /* deprecated name */
-    public function getAppsObject ($apps, $all = false, $group = null) {
+    public function getAppsObject($apps, $all = false, $group = null){
         return $this->getApplications($apps, $all, $group);
     }
 
@@ -341,37 +355,43 @@ class zlfwHelper extends AppHelper {
      Ex. of use:
      echo $this->app->zlfw->renderView($this->_item, 'LAYOUTNAME');
      */
-    public function renderView ($item, $layoutName = 'full', $path = null, $view = null) {
+    public function renderView($item, $layoutName = 'full', $path=null, $view=null)
+    {
         // create it, if is not object
-        if (!is_object($item)) {
+        if (!is_object($item))
+        {
             $item = $this->app->table->item->get($item);
         }
 
-        if (is_object($item)) {
+        if (is_object($item))
+        {
             // init vars
-            $app = $item->getApplication();
-            $path = $path ? $path : $app->getTemplate()->getPath();
-            $renderer = $this->app->renderer->create('item')->addPath(array($this->app->path->path('component.site:'), $path));
+            $app          = $item->getApplication();
+            $path         = $path ? $path : $app->getTemplate()->getPath();
+            $renderer     = $this->app->renderer->create('item')->addPath(array($this->app->path->path('component.site:'), $path));
             $layoutName = str_replace(".php", "", $layoutName);
 
             $path = 'item';
             $prefix = 'item.';
             $type = $item->getType()->id;
-            if ($renderer->pathExists($path . DIRECTORY_SEPARATOR . $type)) {
+            if ($renderer->pathExists($path . DIRECTORY_SEPARATOR . $type))
+            {
                 $path .= DIRECTORY_SEPARATOR . $type;
                 $prefix .= $type . '.';
             }
 
             // set view object
-            if (empty($view)) {
-                $view = new AppView(array('name' => 'item'));
+            if(empty($view)){
+                $view = new AppView( array('name' => 'item'));
                 $view->params = $app->getParams('site');
             }
 
             if (in_array($layoutName, $renderer->getLayouts($path))) {
                 return $renderer->render($prefix . $layoutName, array('item' => $item, 'view' => $view));
             }
-        } else {
+        }
+        else
+        {
             return JText::_('Item does not exist.');
         }
     }
@@ -396,20 +416,25 @@ class zlfwHelper extends AppHelper {
      Ex. of use:
      echo $this->app->zlfw->renderModule($id);
      */
-    public function renderModule ($modID = null) {
+    public function renderModule($modID = null)
+    {
 
         // get modules
         $modules = $this->app->module->load();
 
-        if ($modID && isset($modules[$modID])) {
-            if ($modules[$modID]->published) {
+        if ($modID && isset($modules[$modID]))
+        {
+            if ($modules[$modID]->published)
+            {
 
                 $attribs['style'] = 'xhtml';
                 $rendered = JModuleHelper::renderModule($modules[$modID], $attribs);
 
-                if (isset($modules[$modID]->params)) {
+                if (isset($modules[$modID]->params))
+                {
                     $module_params = $this->app->parameter->create($modules[$modID]->params);
-                    if ($moduleclass_sfx = $module_params->get('moduleclass_sfx')) {
+                    if ($moduleclass_sfx = $module_params->get('moduleclass_sfx'))
+                    {
                         $html[] = '<div class="' . $moduleclass_sfx . '">';
                         $html[] = $rendered;
                         $html[] = '</div>';
@@ -438,18 +463,22 @@ class zlfwHelper extends AppHelper {
      Ex. of use:
      echo $this->app->zlfw->renderModulePosition('POSITION');
      */
-    public function renderModulePosition ($position = null) {
+    public function renderModulePosition($position = null)
+    {
         // get modules
         $modules = $this->app->module->load();
         $result = array();
 
-        foreach ($modules as $mod) {
-            if ($mod->position == $position) {
+        foreach ($modules as $mod)
+        {
+            if ($mod->position == $position)
+            {
                 $result[] = $this->renderModule($mod->id);
             }
         }
 
-        if (!empty($result)) {
+        if (!empty($result))
+        {
             return implode("\n", $result);
         }
 
@@ -463,13 +492,16 @@ class zlfwHelper extends AppHelper {
      * @param  string $action Posible values are 'encrypt' or 'decrypt'
      *
      * @return string The encrypted/decrypted text
+     *
+     * @since 3.0.3
      */
-    public function crypt ($text, $action) {
+    public function crypt($text, $action)
+    {
         $secret = $this->app->system->config->get('secret');
-        $key = new JCryptKey('simple', $secret, $secret);
-        $crypt = new JCrypt(null, $key);
+        $key     = new JCryptKey('simple', $secret, $secret);
+        $crypt     = new JCrypt(null, $key);
 
-        return $crypt->$action($text);
+        return $crypt->$action( $text );
     }
 
     /**
@@ -478,8 +510,11 @@ class zlfwHelper extends AppHelper {
      * @param  string $pass The encrypted password to decrypt
      *
      * @return string The decrypted password
+     *
+     * @since 3.0.3
      */
-    public function decryptPassword ($pass) {
+    public function decryptPassword($pass)
+    {
         $matches = array();
         if (preg_match('/zl-encrypted\[(.*)\]/', $pass, $matches)) {
             return $this->crypt($matches[1], 'decrypt');
@@ -497,8 +532,10 @@ class zlfwHelper extends AppHelper {
      Returns:
      String - image path
      */
-    public function resizeImage ($file, $width, $height, $avoid_cropping = null, $unique = null, $cache = true, $avoid_resize_small = 0) {
-        if (is_file($file)) {
+    public function resizeImage($file, $width, $height, $avoid_cropping = null, $unique = null, $cache = true, $avoid_resize_small = 0)
+    {
+        if (is_file($file))
+        {
             // init vars
             $width = (int)$width;
             $height = (int)$height;
@@ -514,7 +551,8 @@ class zlfwHelper extends AppHelper {
             $format = '';
 
             $file_size = getimagesize($file);
-            if ($avoid_cropping > 0) {
+            if ($avoid_cropping > 0)
+            {
                 $format = ($file_size[0] > $file_size[1]) ? 'landscape' : 'portrait';
             }
 
@@ -529,50 +567,67 @@ class zlfwHelper extends AppHelper {
             }
 
             // check thumbnail directory
-            if (!JFolder::exists(dirname($thumbfile))) {
+            if (!JFolder::exists(dirname($thumbfile)))
+            {
                 JFolder::create(dirname($thumbfile));
             }
 
             // create or re-cache thumbnail
-            if ($this->app->imagethumbnail->check() && (!is_file($thumbfile) || filemtime($file) > filemtime($thumbfile) || !$cache)) {
+            if ($this->app->imagethumbnail->check() && (!is_file($thumbfile) || filemtime($file) > filemtime($thumbfile) || !$cache))
+            {
                 $thumbnail = $this->app->imagethumbnail->create($file);
 
                 // without cropping - check cropping condition
-                if ($avoid_cropping && $format == 'landscape' && $avoid_cropping != 3 && $width > 0) {
+                if ($avoid_cropping && $format == 'landscape' && $avoid_cropping != 3 && $width > 0)
+                {
                     $thumbnail->sizeWidth($width);
                     $thumbnail->save($thumbfile);
-                } else
-                    if ($avoid_cropping && $format == 'portrait' && $avoid_cropping != 2 && $height > 0) {
-                        $thumbnail->sizeHeight($height);
-                        $thumbnail->save($thumbfile);
+                }
+                else
+                if ($avoid_cropping && $format == 'portrait' && $avoid_cropping != 2 && $height > 0)
+                {
+                    $thumbnail->sizeHeight($height);
+                    $thumbnail->save($thumbfile);
 
-                        // with cropping
-                    } else
-                        if ($width > 0 && $height > 0) {
-                            $thumbnail->setSize($width, $height);
-                            $thumbnail->save($thumbfile);
-                        } else
-                            if ($width > 0 && $height == 0) {
-                                $thumbnail->sizeWidth($width);
-                                $thumbnail->save($thumbfile);
-                            } else
-                                if ($width == 0 && $height > 0) {
-                                    $thumbnail->sizeHeight($height);
-                                    $thumbnail->save($thumbfile);
-                                } else {
-                                    if (JFile::exists($file) && $cache) {
-                                        JFile::copy($file, $thumbfile);
-                                    }
-                                }
+                    // with cropping
+                }
+                else
+                if ($width > 0 && $height > 0)
+                {
+                    $thumbnail->setSize($width, $height);
+                    $thumbnail->save($thumbfile);
+                }
+                else
+                if ($width > 0 && $height == 0)
+                {
+                    $thumbnail->sizeWidth($width);
+                    $thumbnail->save($thumbfile);
+                }
+                else
+                if ($width == 0 && $height > 0)
+                {
+                    $thumbnail->sizeHeight($height);
+                    $thumbnail->save($thumbfile);
+                }
+                else
+                {
+                    if (JFile::exists($file) && $cache)
+                    {
+                        JFile::copy($file, $thumbfile);
+                    }
+                }
             }
 
-            if (is_file($thumbfile)) {
+            if (is_file($thumbfile))
+            {
                 return $thumbfile;
             }
 
             return $file;
 
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
@@ -588,41 +643,53 @@ class zlfwHelper extends AppHelper {
      Returns:
      String
      */
-    public function applySeparators ($separated_by, $values, $class = '', $fixHTML = false) {
-        if (!is_array($values)) {
+    public function applySeparators($separated_by, $values, $class = '', $fixHTML = false)
+    {
+        if (!is_array($values))
+        {
             $values = array($values);
         }
 
         $separator = '';
         $tag = '';
         $enclosing_tag = '';
-        if ($separated_by) {
-            if (preg_match('/separator=\[(.*)\]/U', $separated_by, $result)) {
+        if ($separated_by)
+        {
+            if (preg_match('/separator=\[(.*)\]/U', $separated_by, $result))
+            {
                 $separator = $result[1];
             }
 
             // seach the tag in the beginning or in the midle with space before
-            if (preg_match('/(^tag|\stag)=\[(.*)\]/U', $separated_by, $result)) {
+            if (preg_match('/(^tag|\stag)=\[(.*)\]/U', $separated_by, $result))
+            {
                 $tag = $result[2]; // as regex has sub patrons the match is in index 2
             }
 
-            if (preg_match('/enclosing_tag=\[(.*)\]/U', $separated_by, $result)) {
+            if (preg_match('/enclosing_tag=\[(.*)\]/U', $separated_by, $result))
+            {
                 $enclosing_tag = $result[1];
             }
         }
 
         // add class to tag or enclosing tag
-        if (!empty($class) && preg_match('/<((.*).*)>/U', $tag, $result)) {
+        if (!empty($class) && preg_match('/<((.*).*)>/U', $tag, $result))
+        {
             // If there is enclosing, apply the class to the enclosing and not to the tag itself
-            if (!empty($enclosing_tag) && preg_match('/<((.*).*)>/U', $enclosing_tag, $result)) {
+            if (!empty($enclosing_tag) && preg_match('/<((.*).*)>/U', $enclosing_tag, $result))
+            {
                 $enclosing_tag = str_replace('<' . $result[1] . '>', '<' . $result[1] . ' class="' . $class . '">', $enclosing_tag);
-            } else {
+            }
+            else
+            {
                 $tag = str_replace('<' . $result[1] . '>', '<' . $result[1] . ' class="' . $class . '">', $tag);
             }
         }
 
-        if (!empty($tag)) {
-            foreach ($values as $key => $value) {
+        if (!empty($tag))
+        {
+            foreach ($values as $key => $value)
+            {
                 $values[$key] = sprintf($tag, $values[$key]);
             }
         }
@@ -646,8 +713,9 @@ class zlfwHelper extends AppHelper {
         Return :
             string - the current language in en-GB format or en
     */
-    public static function getCurrentLanguage ($url_safe = false) {
-        $zoo = App::getInstance('zoo');
+    public static function getCurrentLanguage($url_safe=false)
+    {
+        $zoo = App::getInstance( 'zoo' );
 
         $current_lang = '';
         if ($zoo->joomla->isVersion('1.5')) {
@@ -663,13 +731,17 @@ class zlfwHelper extends AppHelper {
     }
 
     /* depricated since zlfw 2.5.6 */
-    public function limitText ($text, $limit, $etc = false) {
+    public function limitText($text, $limit, $etc = false)
+    {
         $result = strip_tags($text);
         $etc = $etc ? $etc : '';
 
-        if ($limit > 0 && $limit < strlen($result)) {
+        if ($limit > 0 && $limit < strlen($result))
+        {
             return substr($result, 0, strrpos(substr($result, 0, $limit), ' ')) . $etc;
-        } else {
+        }
+        else
+        {
             return $result;
         }
     }
@@ -685,15 +757,17 @@ class zlfwHelper extends AppHelper {
         Return :
             string
     */
-    public function replaceShortCodes ($string, $args = array()) {
+    public function replaceShortCodes($string, $args=array())
+    {
         // expression to search for
-        $regex = '/{\S*}/';
-        $matches = array();
+        $regex        = '/{\S*}/';
+        $matches    = array();
 
         // find all instances of plugin and put in $matches
         preg_match_all($regex, $string, $matches, PREG_SET_ORDER);
 
-        foreach ($matches as $match) {
+        foreach($matches as $match)
+        {
             $string = preg_replace("|$match[0]|", $this->shortCode($match[0], $args), $string, 1);
         }
 
@@ -709,7 +783,8 @@ class zlfwHelper extends AppHelper {
         Return :
             string
     */
-    public function shortCode ($shortcode, $args = array()) {
+    public function shortCode($shortcode, $args=array())
+    {
         // extract the arguments
         extract($args, EXTR_OVERWRITE);
 
@@ -744,7 +819,8 @@ class zlfwHelper extends AppHelper {
      *
      * @return string The html output
      */
-    function renderLayout ($__layout, $__args = array()) {
+    function renderLayout($__layout, $__args = array())
+    {
         // init vars
         if (is_array($__args)) {
             foreach ($__args as $__var => $__value) {
@@ -766,8 +842,10 @@ class zlfwHelper extends AppHelper {
      Function: loadLibrary
      load libraries
      */
-    public function loadLibrary ($lib) {
-        switch ($lib) {
+    public function loadLibrary($lib)
+    {
+        switch($lib)
+        {
             case 'qtip' :
                 // load qTip libraries
                 $this->app->document->addStylesheet('zlfw:assets/libraries/qtip/jquery.qtip.min.css');
@@ -813,7 +891,8 @@ class zlfwHelper extends AppHelper {
         Parameters:
             $selectable_countries - Element Chosen Countries
     */
-    public function getCountryOptions ($selectable_countries) {
+    public function getCountryOptions($selectable_countries)
+    {
         $element_options = array();
         $countries = $this->app->country->getIsoToNameMapping();
         $keys = array_flip($selectable_countries);
@@ -827,40 +906,42 @@ class zlfwHelper extends AppHelper {
     /*
      Function: getqtipOptions
      */
-    public function getqtipOptions ($element = null, $lparams) {
+    public function getqtipOptions($element = null, $lparams)
+    {
         $result = '';
         if ($lparams->find('qtip._mode') == 'modal')// if MODAL
         {
             $result .= "
-			position: {
-				at: 'center',
-				my: 'center',
-				target: $(window),
-				effect: false
-			},
-			hide: false,";
-        } else// if NOT MODAL
+            position: {
+                at: 'center',
+                my: 'center',
+                target: $(window),
+                effect: false
+            },
+            hide: false,";
+        }
+        else// if NOT MODAL
         {
             $result .= "
-			position: {
-				my: '" . $lparams->find('qtip._my', 'left bottom') . "',
-				at: '" . $lparams->find('qtip._at', 'top right') . "'
-			},
-			hide: {
-				event: '" . $lparams->find('qtip._hide_event', 'mouseleave') . "'
-				" . ($lparams->find('qtip._hide_delay') ? ', delay: ' . $lparams->find('qtip._hide_delay') : '') . ($lparams->find('qtip._hide_fixed') ? ', fixed: true' : '') . "
-			},";
+            position: {
+                my: '" . $lparams->find('qtip._my', 'left bottom') . "',
+                at: '" . $lparams->find('qtip._at', 'top right') . "'
+            },
+            hide: {
+                event: '" . $lparams->find('qtip._hide_event', 'mouseleave') . "'
+                " . ($lparams->find('qtip._hide_delay') ? ', delay: ' . $lparams->find('qtip._hide_delay') : '') . ($lparams->find('qtip._hide_fixed') ? ', fixed: true' : '') . "
+            },";
         }
 
         $result .= "
-			show: {
-				event: '" . $lparams->find('qtip._show_event', 'mouseenter') . "'
-				" . ($lparams->find('qtip._show_solo') ? ', solo: true' : '') . ($lparams->find('qtip._mode') == 'modal' ? ', modal: true' : '') . ($lparams->find('qtip._show_delay') ? ', delay: ' . $lparams->find('qtip._show_delay') : '') . "
-			},
-			style: {
-				classes: '" . $this->getqTipStyle($element, $lparams) . "'
-				" . ($lparams->find('qtip._width') ? ', width: ' . $lparams->find('qtip._width') : '') . ($lparams->find('qtip._height') ? ', height: ' . $lparams->find('qtip._height') : '') . "
-			}";
+            show: {
+                event: '" . $lparams->find('qtip._show_event', 'mouseenter') . "'
+                " . ($lparams->find('qtip._show_solo') ? ', solo: true' : '') . ($lparams->find('qtip._mode') == 'modal' ? ', modal: true' : '') . ($lparams->find('qtip._show_delay') ? ', delay: ' . $lparams->find('qtip._show_delay') : '') . "
+            },
+            style: {
+                classes: '" . $this->getqTipStyle($element, $lparams) . "'
+                " . ($lparams->find('qtip._width') ? ', width: ' . $lparams->find('qtip._width') : '') . ($lparams->find('qtip._height') ? ', height: ' . $lparams->find('qtip._height') : '') . "
+            }";
 
         return $result;
     }
@@ -869,7 +950,8 @@ class zlfwHelper extends AppHelper {
      Function: getqTipStyle
      return qtip style string
      */
-    public function getqTipStyle ($element = null, $lparams) {
+    public function getqTipStyle($element = null, $lparams)
+    {
         $type = $element->getType();
         $classes = array();
 
@@ -892,9 +974,11 @@ class zlfwHelper extends AppHelper {
      Function: getqTipTitle
      return qtip title string
      */
-    public function getqTipTitle ($element = null, $params) {
+    public function getqTipTitle($element = null, $params)
+    {
         $title = '';
-        switch ($params->find('layout.qtip._title', '')) {
+        switch ($params->find('layout.qtip._title', ''))
+        {
             case 'label' :
                 $title = $params->get('altlabel', 0) ? $params->get('altlabel') : $element->config->get('name');
                 break;
@@ -916,12 +1000,17 @@ class zlfwHelper extends AppHelper {
      Function: getqTipTrigger
      return qtip trigger string
      */
-    public function getqTipTrigger ($element = null, $params, $el_id) {
+    public function getqTipTrigger($element = null, $params, $el_id)
+    {
         $trigger = '';
-        if ($params->find('layout.qtip._trigger_render') == '4') {
+        if ($params->find('layout.qtip._trigger_render') == '4')
+        {
             return $trigger;
-        } else {
-            switch ($params->find('layout.qtip._trigger_content', '')) {
+        }
+        else
+        {
+            switch ($params->find('layout.qtip._trigger_content', ''))
+            {
                 case 'label' :
                     $trigger = $params->get('altlabel', 0) ? $params->get('altlabel') : $element->config->get('name');
                     break;
@@ -938,7 +1027,8 @@ class zlfwHelper extends AppHelper {
 
             // trigger title
             $title = '';
-            switch ($params->find('layout.qtip._trigger_title', '')) {
+            switch ($params->find('layout.qtip._trigger_title', ''))
+            {
                 case 'label' :
                     $title = $params->get('altlabel', 0) ? $params->get('altlabel') : $element->config->get('name');
                     break;

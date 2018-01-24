@@ -16,7 +16,7 @@ class zlHelper extends AppHelper {
     /**
      * Class Constructor
      */
-    public function __construct ($app) {
+    public function __construct($app){
         parent::__construct($app);
 
         // set helper prefix
@@ -31,7 +31,8 @@ class zlHelper extends AppHelper {
      *
      * @return mixed
      */
-    public function get ($name, $prefix = null) {
+    public function get($name, $prefix = null)
+    {
         // set prefix
         if ($prefix == null) {
             $prefix = $this->_prefix;
@@ -39,11 +40,11 @@ class zlHelper extends AppHelper {
 
         // load class
         $class = $prefix . $name;
-        $this->app->loader->register($class, 'helpers:zl/' . strtolower($name) . '.php');
+        $this->app->loader->register($class, 'helpers:zl/'.strtolower($name).'.php');
 
         // add helper, if not exists
         if (!isset($this->_helpers[$name])) {
-            $this->_helpers[$name] = class_exists($class) ? new $class($this->app) : new AppHelper($this->app, $prefix . $name);
+            $this->_helpers[$name] = class_exists($class) ? new $class($this->app) : new AppHelper($this->app, $prefix.$name);
         }
 
         return $this->_helpers[$name];
@@ -56,7 +57,7 @@ class zlHelper extends AppHelper {
      *
      * @return mixed
      */
-    public function __get ($name) {
+    public function __get($name) {
         return $this->get($name);
     }
 
@@ -68,7 +69,8 @@ class zlHelper extends AppHelper {
      *
      * @return @boolean True on success
      */
-    public function setConfig ($wrapper, $params) {
+    public function setConfig($wrapper, $params)
+    {
         // basic check
         if (!isset($wrapper)) return false;
 
@@ -86,7 +88,8 @@ class zlHelper extends AppHelper {
      *
      * @return @object The params data object
      */
-    public function getConfig ($wrapper) {
+    public function getConfig($wrapper)
+    {
         // retrieve and return
         return $this->app->data->create($this->app->component->com_zoolanders->get($wrapper));
     }
@@ -100,7 +103,7 @@ class zlHelper extends AppHelper {
      *
      * @return string The link to the resource
      */
-    public function link ($query = array(), $xhtml = true, $ssl = null) {
+    public function link($query = array(), $xhtml = true, $ssl = null) {
         return $this->app->component->com_zoolanders->link($query, $xhtml, $ssl);
     }
 }

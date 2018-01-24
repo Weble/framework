@@ -3,7 +3,7 @@
 // load config
 require_once(JPATH_ADMINISTRATOR . '/components/com_zoo/config.php');
 
-return
+    return
     '{"fields": {
 
         "layout_wrapper":{
@@ -15,7 +15,7 @@ return
                     "label":"PLG_ZOOTOLS_SEPARATOR_TITLE",
                     "help":"PLG_ZOOTOLS_SEPARATOR_TITLE_DESC",
                     "adjust_ctrl":{
-                        "pattern":' . json_encode('/\[layout\]/') . ',
+                        "pattern":'.json_encode('/\[layout\]/').',
                         "replacement":""
                     }
                 },

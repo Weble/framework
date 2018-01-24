@@ -10,7 +10,7 @@
 [data-type="options"] .zl-field,
 [data-type="attributes"] .zl-label,
 [data-type="attributes"] .zl-field {
-	float: none !important;
+    float: none !important;
 }
 
 div.zlfield [data-type="options"] .zl-label + .zl-field *,
@@ -22,174 +22,174 @@ div.zlfield [data-type="attributes"] .zl-label + .zl-field * {
 div.zlfield div.zl-row[data-type="options"],
 div.zlfield div.zl-row[data-type="attributes"] {
 
-	// list
-	ul {
-		margin: 0 0 10px;
-		padding: 0;
-		overflow: hidden;
-	}
+    // list
+    ul {
+        margin: 0 0 10px;
+        padding: 0;
+        overflow: hidden;
+    }
 
-	// option
-	.zlux-x-option {
-		overflow: hidden;
-		padding: 10px 5px;
-		position: relative;
-		width: 100%;
+    // option
+    .zlux-x-option {
+        overflow: hidden;
+        padding: 10px 5px;
+        position: relative;
+        width: 100%;
 
-		.zlux-x-name,
-		.zlux-x-value {
-			float: left;
-			margin: 0px 5px;
-		}
+        .zlux-x-name,
+        .zlux-x-value {
+            float: left;
+            margin: 0px 5px;
+        }
 
-		.zlux-x-value {
-			margin-left: 10px;
+        .zlux-x-value {
+            margin-left: 10px;
 
-			label {
-				float: none !important;
-			}
-			.trigger {
-				display: block;
-				float: none !important;
-				margin-top: 6px;
-			}
-		}
+            label {
+                float: none !important;
+            }
+            .trigger {
+                display: block;
+                float: none !important;
+                margin-top: 6px;
+            }
+        }
 
 
-		// label
-		label[for="name"] {
-			display: block;
-			color: #666666;
-			float: none !important;
-			margin-bottom: 0px;
-		}
-		
-		// panel
-		div.panel {
-			margin-left: 5px;
-			display: none;
-			float: none !important;
+        // label
+        label[for="name"] {
+            display: block;
+            color: #666666;
+            float: none !important;
+            margin-bottom: 0px;
+        }
 
-			&.active { 
-				display: block;
-			}
+        // panel
+        div.panel {
+            margin-left: 5px;
+            display: none;
+            float: none !important;
 
-			.btns {
-				display: block;
-				float: none !important;
-			}
+            &.active {
+                display: block;
+            }
 
-			input.accept {
-				margin: 5px 0px 0px 5px;
-			}
+            .btns {
+                display: block;
+                float: none !important;
+            }
 
-			a.cancel {
-				margin: 5px 0px 0px 5px;
-				color: #BC0B0B;
-				cursor: pointer;
-			}
-		}
+            input.accept {
+                margin: 5px 0px 0px 5px;
+            }
 
-		// tools
-		.zlux-x-tools {
-			position: absolute;
-			right: 9px;
-			visibility: hidden;
+            a.cancel {
+                margin: 5px 0px 0px 5px;
+                color: #BC0B0B;
+                cursor: pointer;
+            }
+        }
 
-			i {
-				margin: 0 5px;
-				cursor: pointer;
-			}
-		}
+        // tools
+        .zlux-x-tools {
+            position: absolute;
+            right: 9px;
+            visibility: hidden;
 
-		&:hover > .zlux-x-tools { visibility: visible; }
-	}
+            i {
+                margin: 0 5px;
+                cursor: pointer;
+            }
+        }
+
+        &:hover > .zlux-x-tools { visibility: visible; }
+    }
 }
 
 // attributes field
 div.zlfield div.zl-row[data-type="attributes"] {
 
-	// list
-	ul.zlux-field-attributes {
-		
-		// visual separation
-		& > li {
-			border: 1px solid transparent;
-			&:hover {
-				border-top: 1px solid #E9E9E9;
-				border-bottom: 1px solid #E9E9E9;
-			}
-			padding: 10px 0;
-			overflow: hidden;
-		}
+    // list
+    ul.zlux-field-attributes {
 
-		// margins
-		ul {
-			margin: 0 0 10px;
-			padding: 0;
-			overflow: hidden;
-		}
-		& li > ul,
-		& li > button {
-			margin-left: 10px;
-		}
+        // visual separation
+        & > li {
+            border: 1px solid transparent;
+            &:hover {
+                border-top: 1px solid #E9E9E9;
+                border-bottom: 1px solid #E9E9E9;
+            }
+            padding: 10px 0;
+            overflow: hidden;
+        }
 
-		// tools
-		.zlux-x-tools {
-			i {
-				margin: 0 5px;
-				cursor: pointer;
-			}
-		}
-	}
+        // margins
+        ul {
+            margin: 0 0 10px;
+            padding: 0;
+            overflow: hidden;
+        }
+        & li > ul,
+        & li > button {
+            margin-left: 10px;
+        }
+
+        // tools
+        .zlux-x-tools {
+            i {
+                margin: 0 5px;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 // Items field
 div.zlfield div.zl-row[data-type="items"] {
 
-	.zl-label,
-	.zl-field {
-		float: none;
-	}
+    .zl-label,
+    .zl-field {
+        float: none;
+    }
 
-	ul.zlux-field-items {
-		position: relative;
-		margin: 0;
+    ul.zlux-field-items {
+        position: relative;
+        margin: 0;
 
-		li.zlux-x-item {
-			position: relative;
-			padding: 5px 0;
-			left: 0;
+        li.zlux-x-item {
+            position: relative;
+            padding: 5px 0;
+            left: 0;
 
-			&:hover .zlux-x-tools {
-				visibility: visible;
-			}
+            &:hover .zlux-x-tools {
+                visibility: visible;
+            }
 
-			.zlux-x-tools {
-				visibility: hidden;
-				position: absolute;
-				right: 0;
-				top: 12px;
+            .zlux-x-tools {
+                visibility: hidden;
+                position: absolute;
+                right: 0;
+                top: 12px;
 
-				.zlux-x-sort,
-				.zlux-x-delete {
-					cursor: pointer;
-					margin: 0 4px;
-				}
-			}
+                .zlux-x-sort,
+                .zlux-x-delete {
+                    cursor: pointer;
+                    margin: 0 4px;
+                }
+            }
 
-			.zlux-x-info {
-				margin-left: 5px;
-			}
-		}
+            .zlux-x-info {
+                margin-left: 5px;
+            }
+        }
 
-		li.dragging {
-			padding: 4px 0;
-		}
-	}
+        li.dragging {
+            padding: 4px 0;
+        }
+    }
 
-	.btn {
-		display: block;
-		margin-top: 10px;
-	}
+    .btn {
+        display: block;
+        margin-top: 10px;
+    }
 }

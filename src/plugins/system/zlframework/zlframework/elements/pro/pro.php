@@ -7,13 +7,12 @@ App::getInstance('zoo')->loader->register('Element', 'elements:element/element.p
     Class: ElementPro
         The Element Pro abstract class
 */
-
 abstract class ElementPro extends Element {
 
     /*
        Function: Constructor
     */
-    public function __construct () {
+    public function __construct() {
 
         // call parent constructor
         parent::__construct();
@@ -22,8 +21,8 @@ abstract class ElementPro extends Element {
         $this->registerCallback('returndata');
 
         // load default and current language
-        $this->app->system->language->load('plg_system_zoo_zlelements_' . $this->getElementType(), JPATH_ADMINISTRATOR, 'en-GB');
-        $this->app->system->language->load('plg_system_zoo_zlelements_' . $this->getElementType(), JPATH_ADMINISTRATOR);
+        $this->app->system->language->load('plg_system_zoo_zlelements_'.$this->getElementType(), JPATH_ADMINISTRATOR, 'en-GB');
+        $this->app->system->language->load('plg_system_zoo_zlelements_'.$this->getElementType(), JPATH_ADMINISTRATOR);
     }
 
     /*
@@ -39,7 +38,7 @@ abstract class ElementPro extends Element {
         Returns:
             Void
     */
-    public function setType ($type) {
+    public function setType($type) {
         parent::setType($type);
 
         $this->checkInstallation();
@@ -53,7 +52,7 @@ abstract class ElementPro extends Element {
         Returns:
             Void
     */
-    protected function checkInstallation () {
+    protected function checkInstallation(){
 
     }
 
@@ -64,7 +63,7 @@ abstract class ElementPro extends Element {
         Returns:
             String - Layout path
     */
-    public function getLayout ($layout = null) {
+    public function getLayout($layout = null) {
 
         // init vars
         $type = $this->getElementType();
@@ -75,7 +74,7 @@ abstract class ElementPro extends Element {
         }
 
         // find layout
-        if ($path = $this->app->path->path("elements:{$type}/tmpl/{$layout}")) {
+        if ($path = $this->app->path->path("elements:{$type}/tmpl/{$layout}")){
             return $path;
         }
 
@@ -87,11 +86,8 @@ abstract class ElementPro extends Element {
         Function: returnData
             Renders the element data - use for ajax requests
     */
-    public function returnData ($layout, $separator = '', $filter = '', $specific = '') {
-        $layout = json_decode($layout, true);
-        $separator = json_decode($separator, true);
-        $filter = json_decode($filter, true);
-        $specific = json_decode($specific, true);
+    public function returnData($layout, $separator = '', $filter = '', $specific = '') {
+        $layout = json_decode($layout, true); $separator = json_decode($separator, true); $filter = json_decode($filter, true); $specific = json_decode($specific, true);
         $params = compact('layout', 'separator', 'filter', 'specific');
         return $this->render($params);
     }
@@ -106,11 +102,11 @@ abstract class ElementPro extends Element {
         Returns:
             String - html
     */
-    public function render ($params = array()) {
+    public function render($params = array()) {
         $params = $this->app->data->create($params);
 
         // render layout
-        if ($layout = $this->getLayout('render/' . $params->find('layout._layout', 'default.php'))) {
+        if ($layout = $this->getLayout('render/'.$params->find('layout._layout', 'default.php'))) {
             return $this->renderLayout($layout, compact('params'));
         }
     }

@@ -1,3 +1,19 @@
 
+/* separator */
+.element-list .element.zl-separator .name {
+    display: block;
+    text-align: center;
+    min-height: 16px;
+    color: #333;
+    text-indent: 0;
+    background-image: none;
+}
 
-.element-list .element.zl-separator .name{display:block;text-align:center;min-height:16px;color:#333;text-indent:0;background-image:none}.element-list.unassigned .element.zl-separator .name,.element-list[data-position=unassigned] .element.zl-separator .name{cursor:default}.element-list .element.zl-separator:hover{background:#F6F6F6}
+.element-list[data-position="unassigned"] .element.zl-separator .name,
+.element-list.unassigned .element.zl-separator .name {
+    cursor: default;
+}
+
+.element-list .element.zl-separator:hover {
+    background: none repeat scroll 0 0 #F6F6F6;
+}

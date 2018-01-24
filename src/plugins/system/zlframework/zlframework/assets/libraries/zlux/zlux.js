@@ -1,1 +1,588 @@
-!function(t){var e=function(){};e.prototype=t.extend(e.prototype,{name:"zluxSaveElement",options:{url:"",msgSaveElement:"Save Element"},initialize:function(e,i){this.options=t.extend({},this.options,i);var o=this;t('<a class="btn btn-small save" href="javascript:void(0);"><i class="icon-ok-sign"></i> '+o.options.msgSaveElement+"</a>").on("click",function(){var e=t(this).addClass("btn-working"),i=e.closest(".element").find("input, textarea").serializeArray();t.post(o.options.url+"&task=saveelement",i,function(t){e.removeClass("btn-working")})}).appendTo(e.find(".btn-toolbar"))}}),t.fn[e.prototype.name]=function(){var i=arguments,o=i[0]?i[0]:null;return this.each(function(){var n=t(this);if(e.prototype[o]&&n.data(e.prototype.name)&&"initialize"!=o)n.data(e.prototype.name)[o].apply(n.data(e.prototype.name),Array.prototype.slice.call(i,1));else if(!o||t.isPlainObject(o)){var a=new e;e.prototype.initialize&&a.initialize.apply(a,t.merge([n],i)),n.data(e.prototype.name,a)}else t.error("Method "+o+" does not exist on jQuery."+e.name)})}}(jQuery),function(t){var e=function(){};e.prototype=t.extend(e.prototype,{name:"zluxBrowseFile",options:{url:"",path:"images"},initialize:function(e,i){this.options=t.extend({},this.options,i);var o=this,n=location.href.match(/^(.+)administrator\/index\.php.*/i)[1];e.wrap('<div class="zlux-finder"><div /></div>').zluxDialog({title:"Dialog title",width:600,height:400,classes:"zlux-finder"},function(i){i.content.zluxFinder({dialog:i,url:o.options.url,path:o.options.path}),i.content.on("click",".item.file a",function(){e.val(t(this).closest(".item").data("path"))&&e.trigger("change")})});var a=t('<div class="file-preview zl-bootstrap" />').append(t('<img class="img-polaroid" />')).appendTo(e.parent());e.on("change",function(){a.find("img").attr("src",n+e.val())}).trigger("change"),t("<span>").addClass("input-cancel").insertAfter(e).click(function(){e.val("")})}}),t.fn[e.prototype.name]=function(){var i=arguments,o=i[0]?i[0]:null;return this.each(function(){var n=t(this);if(e.prototype[o]&&n.data(e.prototype.name)&&"initialize"!=o)n.data(e.prototype.name)[o].apply(n.data(e.prototype.name),Array.prototype.slice.call(i,1));else if(!o||t.isPlainObject(o)){var a=new e;e.prototype.initialize&&a.initialize.apply(a,t.merge([n],i)),n.data(e.prototype.name,a)}else t.error("Method "+o+" does not exist on jQuery."+e.name)})}}(jQuery),function(t){var e=function(){};e.prototype=t.extend(e.prototype,{name:"zluxFinder",options:{dialog:{},url:"",path:"images",open:"open",filemanager:!0},initialize:function(e,i){function o(i){i.preventDefault();var s=t(this).closest(".zlux-dialog li",e);s.length||(s=e),s.hasClass("file")||(s.hasClass(l)&&!s.hasClass("reload")?s.removeClass(l).children("ul").slideUp():(s.addClass("loading"),t.post(n.options.url+"&controller=zlframework&task=JSONfiles",{path:s.data("path")},function(i){s.removeClass("loading").addClass(l),n.options.dialog.loaded(),s.children().remove("ul.items"),!i||i.msg||(n.buildItemsTree(i,s),s.find("ul a").on("click",o).on("click",function(){t(this).closest(".zlux-dialog").find(".selected").removeClass("selected"),t(this).closest(".item").addClass("selected")}),s.children("ul").slideDown(),!s.hasClass("reload")||!s.children("ul").length,n.options.filemanager&&(e.data("toolbar-initialized")||(t('<span class="root-folder tools" />').append(t('<span class="zl-btn-small refresh action" title="Refresh" />').bind("click",function(){s.addClass("reload").find("li").addClass("loading"),e.trigger("zluxFinder.retrieve")})).append(t('<span class="zl-btn-small plupload action" title="'+filesPro.translate("Upload files into the main folder")+'" />').bind("click",function(){n.plupload(t(this),"",function(){s.addClass("reload").find("li").addClass("loading"),e.trigger("zluxFinder.retrieve")})})).append(t('<span class="zl-btn-small add action" title="'+filesPro.translate("Create a new folder into the main folder")+'" />').bind("click",function(){n.Prompt(filesPro.translate("Input a name for the new folder"),filesPro.translate("MyFolder"),t(this),function(e){e&&s.find("li").addClass("loading")&&t.post(n.options.url+"&method=newfolder",{path:"",newfolder:e},function(){s.addClass("reload"),a.trigger("zluxFinder.retrieve")},"json")})})).prependTo(e.closest(".ui-dialog").find(".ui-dialog-titlebar")),e.data("toolbar-initialized",!0)),t(".ui-dialog").find(".tools span").qtip({position:{my:"bottom left",at:"top center"},show:{delay:700},style:"ui-tooltip-custom ui-tooltip-light ui-tooltip-rounded ui-tooltip-dialogue"})))},"json")))}this.options=t.extend({},this.options,i);var n=this,l=n.options.open;e.data("path",this.options.path).bind("zluxFinder.retrieve",o).trigger("zluxFinder.retrieve")},buildItemsTree:function(e,i){var o=this;i.append('<ul class="items" />').children("ul").hide(),t.each(e,function(e,n){var a=t('<li class="item" />').addClass(n.type).data("path",n.path).data("size",n.size);o.options.filemanager&&t('<div class="btns"><a href="#">'+n.name+"</a></div>").append(t('<span class="tools" />').append("folder"==n.type&&t('<span class="zl-btn-small plupload action" title="'+filesPro.translate("Upload files into this folder")+'" />').bind("click",function(){var e=t(this);o.plupload(e.closest("li"),n.path,function(){e.closest("li").addClass("reload"),e.closest(".finderpro .btns").find("a").trigger("click")})})).append("folder"==n.type&&t('<span class="zl-btn-small add action" title="'+filesPro.translate("Create a new subfolder")+'" />').bind("click",function(){var e=t(this);o.Prompt(filesPro.translate("Input a name for the new folder"),filesPro.translate("MyFolder"),e.closest("li"),function(i){i&&e.closest("li").addClass("reload loading")&&t.post(o.options.url+"&method=newfolder",{path:n.path,newfolder:i},function(){e.closest(".btns").find("a").trigger("click")},"json")})})).append(t('<span class="zl-btn-small delete action" title="'+filesPro.translate("Delete")+'" />').click(function(){var e=t(this);o.Confirm(filesPro.translate("You are about to delete")+' "'+n.name+'"',e.closest("li"),function(i){i&&e.closest("li").addClass("loading")&&t.post(o.options.url+"&method=delete",{path:n.path},function(){e.closest("li").fadeOut(400,function(){e.closest("li").remove()})},"json")})}))).appendTo(a),a.appendTo(i.children("ul"))})},plupload:function(e,i,o){var n=this,a=t("<div />").appendTo("body").Plupload({url:n.options.url,path:void 0===i?"":i,extensions:n.options.extensions,fileMode:"files",callback:o});t('<a class="plupload_button plupload_cancel ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" />').append(t('<span class="ui-button-icon-primary ui-icon ui-icon-circle-close"></span>')).append(t('<span class="ui-button-text">'+filesPro.translate("Cancel")+"</span>")).bind("hover",function(){t(this).toggleClass("ui-state-hover")}).bind("click",function(){t(this).closest(".qtip").qtip("hide"),n.reset()}).appendTo(a.find(".plupload_buttons")),this.dialogue(a,e,"plupload")},dialogue:function(e,i,o){this.reset(),i.find(".btns").first().addClass("action"),t(i).qtip({content:{text:e},position:{my:"left bottom",at:"top right",viewport:t(window)},show:{ready:!0,solo:!0,delay:0},hide:!1,style:o+" ui-tooltip-custom ui-tooltip-filespro ui-tooltip-light ui-tooltip-rounded ui-tooltip-dialogue",events:{render:function(e,i){t("button",i.elements.content).click(i.hide)},hide:function(t,e){e.destroy()}}})},Confirm:function(e,i,o){var n=t("<p />",{text:e}),a=t("<button />",{text:filesPro.translate("Confirm"),click:function(){o(!0),i.closest(".finderpro").find(".btns").removeClass("action")}}),l=t("<button />",{text:filesPro.translate("Cancel"),click:function(){o(!1),i.closest(".finderpro").find(".btns").removeClass("action")}});this.dialogue(n.add(a).add(l),i)},Prompt:function(e,i,o,n){var a=t("<p />",{text:e}),l=t("<input />",{val:i}),s=t("<button />",{text:filesPro.translate("Confirm"),click:function(){n(l.val()),o.closest(".finderpro").find(".btns").removeClass("action")}}),r=t("<button />",{text:filesPro.translate("Cancel"),click:function(){n(null),o.closest(".finderpro").find(".btns").removeClass("action")}});this.dialogue(a.add(l).add(s).add(r),o)},reset:function(){t(".finderpro").find(".btns").removeClass("action"),t(".qtip").qtip("hide")}}),t.fn[e.prototype.name]=function(){var i=arguments,o=i[0]?i[0]:null;return this.each(function(){var n=t(this);if(e.prototype[o]&&n.data(e.prototype.name)&&"initialize"!=o)n.data(e.prototype.name)[o].apply(n.data(e.prototype.name),Array.prototype.slice.call(i,1));else if(!o||t.isPlainObject(o)){var a=new e;e.prototype.initialize&&a.initialize.apply(a,t.merge([n],i)),n.data(e.prototype.name,a)}else t.error("Method "+o+" does not exist on jQuery."+e.name)})}}(jQuery),function(t){var e=function(){};e.prototype=t.extend(e.prototype,{name:"zluxDialog",options:{width:"300",height:"150",title:"Dialog",classes:""},initialize:function(e,i,o){this.options=t.extend({},this.options,i);var n=this;this.content=t('<div><span class="zlux-loader-horiz" /></div>').insertAfter(e);var n=this,a=n.content.dialog(t.extend({autoOpen:!1,resizable:!1,width:n.options.width,height:n.options.height,dialogClass:"zlux-dialog zl-bootstrap"+(n.options.classes?" "+n.options.classes:""),open:function(){a.position({of:l,my:"left top",at:"right bottom"})},dragStop:function(e,i){window.qtip&&t(".qtip").qtip("reposition")},close:function(e,i){window.qtip&&t(".qtip").qtip("hide")}},n.options)).dialog("widget"),l=t('<span title="'+n.options.title+'" class="files" />').insertAfter(e).bind("click",function(){n.content.dialog(n.content.dialog("isOpen")?"close":"open"),t(this).data("initialized")||o(n),t(this).data("initialized",!0)});t("html").bind("mousedown",function(e){n.content.dialog("isOpen")&&!l.is(e.target)&&!a.find(e.target).length&&!t(e.target).closest(".qtip").length&&n.content.dialog("close")})},loaded:function(){this.content.find(".zlux-loader-horiz").remove()},close:function(){this.content.dialog("close")}}),t.fn[e.prototype.name]=function(){var i=arguments,o=i[0]?i[0]:null;return this.each(function(){var n=t(this);if(e.prototype[o]&&n.data(e.prototype.name)&&"initialize"!=o)n.data(e.prototype.name)[o].apply(n.data(e.prototype.name),Array.prototype.slice.call(i,1));else if(!o||t.isPlainObject(o)){var a=new e;e.prototype.initialize&&a.initialize.apply(a,t.merge([n],i)),n.data(e.prototype.name,a)}else t.error("Method "+o+" does not exist on jQuery."+e.name)})}}(jQuery);
+/* ===================================================
+ * ZLUX SaveElement v0.1
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL 
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+(function ($) {
+    var Plugin = function(){};
+    Plugin.prototype = $.extend(Plugin.prototype, {
+        name: 'zluxSaveElement',
+        options: {
+            url: '',
+            msgSaveElement: 'Save Element'
+        },
+        initialize: function(element, options) {
+            this.options = $.extend({}, this.options, options);
+            var $this = this;
+
+            // append the button
+            $('<a class="btn btn-small save" href="javascript:void(0);"><i class="icon-ok-sign"></i> '+$this.options.msgSaveElement+'</a>')
+            .on('click', function()
+            {
+                var button = $(this).addClass('btn-working'),
+                    postData = button.closest('.element').find('input, textarea').serializeArray();
+
+                $.post($this.options.url+'&task=saveelement', postData, function(data) {
+                    button.removeClass('btn-working');
+                });
+            }
+            ).appendTo(element.find('.btn-toolbar'));
+        }
+    });
+    // Don't touch
+    $.fn[Plugin.prototype.name] = function() {
+        var args   = arguments;
+        var method = args[0] ? args[0] : null;
+        return this.each(function() {
+            var element = $(this);
+            if (Plugin.prototype[method] && element.data(Plugin.prototype.name) && method != 'initialize') {
+                element.data(Plugin.prototype.name)[method].apply(element.data(Plugin.prototype.name), Array.prototype.slice.call(args, 1));
+            } else if (!method || $.isPlainObject(method)) {
+                var plugin = new Plugin();
+                if (Plugin.prototype['initialize']) {
+                    plugin.initialize.apply(plugin, $.merge([element], args));
+                }
+                element.data(Plugin.prototype.name, plugin);
+            } else {
+                $.error('Method ' +  method + ' does not exist on jQuery.' + Plugin.name);
+            }
+        });
+    };
+})(jQuery);
+
+
+/* ===================================================
+ * ZLUX BrowseFile v0.1
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL 
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+(function ($) {
+    var Plugin = function(){};
+    Plugin.prototype = $.extend(Plugin.prototype, {
+        name: 'zluxBrowseFile',
+        options: {
+            url: '',
+            path: 'images'
+        },
+        initialize: function(input, options) {
+            this.options = $.extend({}, this.options, options);
+            var $this = this,
+                JRoot = location.href.match(/^(.+)administrator\/index\.php.*/i)[1];
+
+            // wrap
+            input.wrap('<div class="zlux-finder"><div /></div>')
+
+            // call dialog
+            .zluxDialog({
+                title: 'Dialog title',
+                width: 600,
+                height: 400,
+                classes: 'zlux-finder'
+            }, function(dialog){
+
+                // load content on dialog
+                dialog.content.zluxFinder({
+                    dialog: dialog,
+                    url: $this.options.url,
+                    path: $this.options.path
+                });
+
+                // create events
+                dialog.content.on('click', '.item.file a', function() {
+                    input.val($(this).closest('.item').data('path')) && input.trigger('change');
+                });
+            });
+
+            // prepare preview
+            var preview = $('<div class="file-preview zl-bootstrap" />').append( $('<img class="img-polaroid" />') ).appendTo(input.parent());
+
+             // '<div class="file-preview">'
+             //        +'<div class="zlux-fp-found">'
+             //            +'<div class="file-preview"></div>'
+             //            +'<div class="file-info">'
+             //                +'<div class="file-name"><span></span></div>'
+             //                +'<div class="file-properties"></div>'
+             //            +'</div>'
+             //        +'</div>'
+             //        +'<div class="fp-missing"></div>'
+             //    +'</div>');
+
+
+            // listen for new values
+            input.on('change', function(){
+                preview.find('img').attr('src', JRoot+input.val());
+            })
+
+            // init
+            .trigger('change');
+
+           
+
+            // cancel button
+            $('<span>').addClass('input-cancel').insertAfter(input).click(function () {
+                input.val('');
+                // $this.resetFileDetails(details);
+            });
+        }
+    });
+    // Don't touch
+    $.fn[Plugin.prototype.name] = function() {
+        var args   = arguments;
+        var method = args[0] ? args[0] : null;
+        return this.each(function() {
+            var element = $(this);
+            if (Plugin.prototype[method] && element.data(Plugin.prototype.name) && method != 'initialize') {
+                element.data(Plugin.prototype.name)[method].apply(element.data(Plugin.prototype.name), Array.prototype.slice.call(args, 1));
+            } else if (!method || $.isPlainObject(method)) {
+                var plugin = new Plugin();
+                if (Plugin.prototype['initialize']) {
+                    plugin.initialize.apply(plugin, $.merge([element], args));
+                }
+                element.data(Plugin.prototype.name, plugin);
+            } else {
+                $.error('Method ' +  method + ' does not exist on jQuery.' + Plugin.name);
+            }
+        });
+    };
+})(jQuery);
+
+
+
+/* ===================================================
+ * ZLUX Finder v0.1
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL 
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+(function ($) {
+    var Plugin = function(){};
+    Plugin.prototype = $.extend(Plugin.prototype, {
+        name: 'zluxFinder',
+        options: {
+            dialog: {},
+            url: '',
+            path: 'images',
+            open: 'open',
+            filemanager: true
+        },
+        initialize: function(parent, options) {
+            this.options = $.extend({}, this.options, options);
+            var $this = this,
+                $open = $this.options.open;
+
+            parent.data('path', this.options.path).bind('zluxFinder.retrieve', retrieve).trigger('zluxFinder.retrieve');
+
+            function retrieve(e) {
+                e.preventDefault();
+                var item = $(this).closest('.zlux-dialog li', parent);
+
+                if (!item.length) {
+                    item = parent;
+                }
+
+                if(!item.hasClass('file')) // if folder
+                {
+                    if(item.hasClass($open) && !item.hasClass('reload')){
+                        item.removeClass($open).children('ul').slideUp() ;
+                    } else {
+                        item.addClass('loading');
+
+                        $.post($this.options.url+'&controller=zlframework&task=JSONfiles', {path: item.data('path')},
+                        function (itemsData) // AJAX response
+                        {
+                            item.removeClass('loading').addClass($open);
+
+                            // item.html(''); // clean scenario
+                            $this.options.dialog.loaded();
+                            item.children().remove('ul.items');
+
+                            if(!itemsData || itemsData.msg) // fail
+                            {
+                                // if msg present show it instead
+                                // item.append('<ul>').children('ul').append($('<li>' + itemsData.msg + '</li>'));
+                            }
+                            else // succesfull
+                            {
+                                $this.buildItemsTree(itemsData, item);
+                                item.find('ul a').on('click', retrieve).on('click', function(){
+                                    $(this).closest('.zlux-dialog').find('.selected').removeClass('selected');
+                                    $(this).closest('.item').addClass('selected');
+                                })
+                                
+                                item.children('ul').slideDown();
+
+                                // populate with data tree
+                            
+                                if(!item.hasClass('reload') || !item.children('ul').length) // first time
+                                {
+                                    // $this.buildItemsTree(itemsData, item);
+                                    // item.find('ul a').bind('click', retrieve);
+                                    // item.children('ul').slideDown();
+                                }
+                                else
+                                {
+                                    // item.children('ul').slideUp(400, function()
+                                    // {
+                                    //     item.removeClass('reload');
+                                    //     $this.buildItemsTree(itemsData, item);
+                                    //     item.find('ul a').bind('click', retrieve);
+                                    //     item.children('ul').slideDown();
+                                    // })
+                                }
+                                
+
+                                // add root file manager options
+                                if($this.options.filemanager) {
+                                    ( parent.data('toolbar-initialized') || (
+                                        
+                                        // append toolbar for the main folder
+                                        $('<span class="root-folder tools" />')
+                                            .append(
+                                                // refresh feature
+                                                $('<span class="zl-btn-small refresh action" title="Refresh" />').bind('click', function()
+                                                {
+                                                    item.addClass('reload').find('li').addClass('loading');
+                                                    parent.trigger('zluxFinder.retrieve');
+                                                })
+                                            ).append(
+                                                // upload feature
+                                                $('<span class="zl-btn-small plupload action" title="'+filesPro.translate('Upload files into the main folder')+'" />').bind('click', function()
+                                                {
+                                                    $this.plupload($(this), '', function(){
+                                                        item.addClass('reload').find('li').addClass('loading');
+                                                        parent.trigger('zluxFinder.retrieve');
+                                                    })
+                                                })
+                                            ).append(
+                                                // new folder feature
+                                                $('<span class="zl-btn-small add action" title="'+filesPro.translate('Create a new folder into the main folder')+'" />').bind('click', function()
+                                                {
+                                                    $this.Prompt(filesPro.translate('Input a name for the new folder'), filesPro.translate('MyFolder'), $(this), function(response){
+                                                        // if yes create new folder
+                                                        
+                                                        response && item.find('li').addClass('loading') && $.post($this.options.url+'&method=newfolder', {path: '', newfolder: response}, function () {
+                                                            item.addClass('reload');
+                                                            a.trigger('zluxFinder.retrieve');
+                                                        }, 'json')
+                                                    });
+                                                })
+                                                
+                                            ).prependTo(parent.closest('.ui-dialog').find('.ui-dialog-titlebar'))
+                                        
+                                    , parent.data('toolbar-initialized', !0)) );
+                                    
+                                    // attach qTip Events
+                                    $('.ui-dialog').find('.tools span').qtip({
+                                        position: {
+                                            my: 'bottom left',
+                                            at: 'top center'
+                                        },
+                                        show: {
+                                            delay: 700
+                                        },
+                                        style: 'ui-tooltip-custom ui-tooltip-light ui-tooltip-rounded ui-tooltip-dialogue'
+                                    });
+                                }
+                            }
+                        }, 'json');
+                    }
+                }
+            }
+        },
+        // create dom tree
+        buildItemsTree: function (itemsData, item)
+        {
+            var $this = this;
+            item.append('<ul class="items" />').children('ul').hide();
+
+            $.each(itemsData, function(h, g) 
+            {
+                var newItem = $('<li class="item" />').addClass(g.type).data('path', g.path).data('size', g.size);
+
+                // add file manager options
+                if($this.options.filemanager)
+                {
+                    $('<div class="btns"><a href="#">' + g.name + '</a></div>').append
+                    (
+                        $('<span class="tools" />')
+                        .append(
+                            // upload feature if folder
+                            (g.type == 'folder') && $('<span class="zl-btn-small plupload action" title="'+filesPro.translate('Upload files into this folder')+'" />').bind('click', function()
+                            {
+                                var clicked = $(this);
+                                $this.plupload(clicked.closest('li'), g.path, function(){
+                                    clicked.closest('li').addClass('reload');
+                                    clicked.closest('.finderpro .btns').find('a').trigger('click');
+                                })
+                            })
+                        ).append(
+                            // new folder feature
+                            (g.type == 'folder') && $('<span class="zl-btn-small add action" title="'+filesPro.translate('Create a new subfolder')+'" />').bind('click', function()
+                            {
+                                var clicked = $(this);
+                                $this.Prompt(filesPro.translate('Input a name for the new folder'), filesPro.translate('MyFolder'), clicked.closest('li'), function(response){
+                                    // if yes create new folder
+                                    response && clicked.closest('li').addClass('reload loading') && $.post($this.options.url+'&method=newfolder', {path: g.path, newfolder: response}, function () {
+                                        // add dom
+                                        clicked.closest('.btns').find('a').trigger('click');
+                                    }, 'json')
+                                });
+                            })
+                        ).append(
+                            // delete feature
+                            $('<span class="zl-btn-small delete action" title="'+filesPro.translate('Delete')+'" />').click(function()
+                            {
+                                var clicked = $(this);
+                                $this.Confirm(filesPro.translate('You are about to delete')+' "'+g.name+'"', clicked.closest('li'), function(response){
+                                    // if yes, delete
+                                    response && clicked.closest('li').addClass('loading') && $.post($this.options.url+'&method=delete', {path: g.path}, function () {
+                                        clicked.closest('li').fadeOut(400, function(){
+                                            clicked.closest('li').remove()
+                                        })
+                                    }, 'json')
+                                });
+                                
+                            })
+                        )
+                    )
+                    
+                    // append
+                    .appendTo(newItem);
+                };
+
+                // set and append
+                newItem.appendTo(item.children('ul'));     
+            });
+            
+        },
+        
+        // Plupload
+        plupload: function (target, path, callback)
+        {
+            var $this = this,
+                p = $('<div />').appendTo('body').Plupload({
+                    url: $this.options.url,
+                    path: (path === undefined ? '' : path),
+                    extensions:  $this.options.extensions,
+                    fileMode: 'files',
+                    callback: callback
+                });
+            
+            // append to plupload the cancel button
+            $('<a class="plupload_button plupload_cancel ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" />')
+                .append($('<span class="ui-button-icon-primary ui-icon ui-icon-circle-close"></span>'))
+                .append($('<span class="ui-button-text">'+filesPro.translate('Cancel')+'</span>'))
+                .bind('hover', function(){
+                    $(this).toggleClass('ui-state-hover')
+                })
+                .bind('click', function(){
+                    $(this).closest('.qtip').qtip('hide')
+                    $this.reset();
+                })
+                .appendTo(p.find('.plupload_buttons'));
+            
+            this.dialogue(p, target, 'plupload');
+        },
+        
+        // qTip Dialogue
+        dialogue: function (content, target, style)
+        {
+            this.reset();
+            target.find('.btns').first().addClass('action'); // add action class
+            $(target).qtip({
+                content: {
+                    text: content
+                },
+                position: {
+                    my: 'left bottom',
+                    at: 'top right',
+                    viewport: $(window)
+                },
+                show: {
+                    ready: true, // Show it straight away
+                    solo: true,
+                    delay: 0
+                },
+                hide: false, // We'll hide it maunally so disable hide events
+                style: style+' ui-tooltip-custom ui-tooltip-filespro ui-tooltip-light ui-tooltip-rounded ui-tooltip-dialogue', // Add a few styles
+                events: {
+                    // Hide the tooltip when any buttons in the dialogue are clicked
+                    render: function(event, api) {
+                        $('button', api.elements.content).click(api.hide);
+                    },
+                    // Destroy the tooltip once it's hidden as we no longer need it!
+                    hide: function(event, api) { api.destroy(); }
+                }
+            });
+        },
+        
+        // Confirm method
+        Confirm: function (question, target, callback)
+        {
+            // Content will consist of the question and ok/cancel buttons
+            var message = $('<p />', { text: question }),
+                ok = $('<button />', { 
+                    text: filesPro.translate('Confirm'),
+                    click: function() { 
+                        callback(true);
+                        target.closest('.finderpro').find('.btns').removeClass('action');
+                    }
+                }),
+                cancel = $('<button />', { 
+                    text: filesPro.translate('Cancel'),
+                    click: function() { 
+                        callback(false); 
+                        target.closest('.finderpro').find('.btns').removeClass('action');
+                    }
+                });
+
+            this.dialogue(message.add(ok).add(cancel), target);
+        },
+        
+        // Prompt method
+        Prompt: function (question, placeholder, target, callback)
+        {
+            // Content will consist of a question elem and input, with ok/cancel buttons
+            var message = $('<p />', { text: question }),
+                input = $('<input />', { val: placeholder }),
+                ok = $('<button />', { 
+                    text: filesPro.translate('Confirm'),
+                    click: function() { 
+                        callback(input.val());
+                        target.closest('.finderpro').find('.btns').removeClass('action');
+                    }
+                }),
+                cancel = $('<button />', {
+                    text: filesPro.translate('Cancel'),
+                    click: function() { 
+                        callback(null);
+                        target.closest('.finderpro').find('.btns').removeClass('action');
+                    }
+                });
+
+            this.dialogue(message.add(input).add(ok).add(cancel), target);
+        },
+        
+        // reset
+        reset: function ()
+        {
+            $('.finderpro').find('.btns').removeClass('action'); // remove from all
+            $('.qtip').qtip('hide');
+        }
+    });
+    // Don't touch
+    $.fn[Plugin.prototype.name] = function() {
+        var args   = arguments;
+        var method = args[0] ? args[0] : null;
+        return this.each(function() {
+            var element = $(this);
+            if (Plugin.prototype[method] && element.data(Plugin.prototype.name) && method != 'initialize') {
+                element.data(Plugin.prototype.name)[method].apply(element.data(Plugin.prototype.name), Array.prototype.slice.call(args, 1));
+            } else if (!method || $.isPlainObject(method)) {
+                var plugin = new Plugin();
+                if (Plugin.prototype['initialize']) {
+                    plugin.initialize.apply(plugin, $.merge([element], args));
+                }
+                element.data(Plugin.prototype.name, plugin);
+            } else {
+                $.error('Method ' +  method + ' does not exist on jQuery.' + Plugin.name);
+            }
+        });
+    };
+})(jQuery);
+
+
+
+
+/* ===================================================
+ * ZLUX Dialog v0.1
+ * https://zoolanders.com/extensions/zl-framework
+ * ===================================================
+ * Copyright (C) JOOlanders SL 
+ * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
+ * ========================================================== */
+(function ($) {
+    var Plugin = function(){};
+    Plugin.prototype = $.extend(Plugin.prototype, {
+        name: 'zluxDialog',
+        options: {
+            width: '300',
+            height: '150',
+            title: 'Dialog',
+            classes: ''
+        },
+        initialize: function(input, options, callback) {
+            this.options = $.extend({}, this.options, options);
+            var $this = this;
+
+            // dialog content
+            this.content = $('<div><span class="zlux-loader-horiz" /></div>').insertAfter(input);
+            
+            // create dialog
+            var $this = this,
+                h = $this.content.dialog($.extend({
+                autoOpen: !1,
+                resizable: !1,
+                width: $this.options.width,
+                height: $this.options.height,
+                dialogClass: 'zlux-dialog zl-bootstrap'+($this.options.classes ? ' '+$this.options.classes : ''),
+                open: function () {
+                    h.position({
+                        of: f,
+                        my: 'left top',
+                        at: 'right bottom'
+                    })
+                },
+                dragStop: function(event, ui) {
+                    window.qtip && $('.qtip').qtip('reposition');
+                },
+                close: function(event, ui) {
+                    window.qtip && $('.qtip').qtip('hide');
+                }
+            }, $this.options)).dialog('widget'),
+            
+            // open dialog icon
+            f = $('<span title="' + $this.options.title + '" class="files" />').insertAfter(input).bind("click", function () {
+                $this.content.dialog($this.content.dialog("isOpen") ? "close" : "open")
+                if (!$(this).data('initialized')){
+                    callback($this);
+                } $(this).data('initialized', !0);
+            });
+            
+            $('html').bind('mousedown', function(event) {
+                // close if target is not the trigger, the dialog it self or a child of any qtip
+                $this.content.dialog('isOpen') && !f.is(event.target) && !h.find(event.target).length && !$(event.target).closest('.qtip').length && $this.content.dialog('close')
+            });
+        },
+        loaded: function () {
+            this.content.find('.zlux-loader-horiz').remove();
+        },
+        close: function () {
+            this.content.dialog('close');
+        }
+    });
+    // Don't touch
+    $.fn[Plugin.prototype.name] = function() {
+        var args   = arguments;
+        var method = args[0] ? args[0] : null;
+        return this.each(function() {
+            var element = $(this);
+            if (Plugin.prototype[method] && element.data(Plugin.prototype.name) && method != 'initialize') {
+                element.data(Plugin.prototype.name)[method].apply(element.data(Plugin.prototype.name), Array.prototype.slice.call(args, 1));
+            } else if (!method || $.isPlainObject(method)) {
+                var plugin = new Plugin();
+                if (Plugin.prototype['initialize']) {
+                    plugin.initialize.apply(plugin, $.merge([element], args));
+                }
+                element.data(Plugin.prototype.name, plugin);
+            } else {
+                $.error('Method ' +  method + ' does not exist on jQuery.' + Plugin.name);
+            }
+        });
+    };
+})(jQuery);

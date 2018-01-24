@@ -10,7 +10,6 @@ jimport('joomla.filesystem.file');
     Class: ElementFilesPro
         The files pro element class
 */
-
 abstract class ElementFilesPro extends ElementRepeatablePro {
 
     protected $_extensions = '';
@@ -24,7 +23,7 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
     /*
        Function: Constructor
     */
-    public function __construct () {
+    public function __construct() {
 
         // call parent constructor
         parent::__construct();
@@ -44,7 +43,8 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Function: itemSaved
             Performs actions after item was saved
     */
-    public function itemSaved ($event) {
+    public function itemSaved($event)
+    {
         $item = $event->getSubject();
         $elem = $item->getElement($this->identifier);
 
@@ -68,6 +68,28 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
                 $item_table->save($item);
             }
         }
+        $this->fixUpgradedElement($event);
+    }
+
+    /**
+     * Update files pro element values to PRO format after upgrade element during clean db func
+     */
+    public function fixUpgradedElement($event)
+    {
+        $item = $event->getSubject();
+        $elem = $item->getElement($this->identifier);
+
+        if ($elem) {
+            $data = $elem->data();
+
+            if (!isset($data['file'])) return;
+
+            $elem->bindData(array($data));
+
+            $item->elements->set($this->identifier, $elem->data());
+            $item_table = new AppTable($this->app, ZOO_TABLE_ITEM);
+            $item_table->save($item);
+        }
     }
 
     /*
@@ -77,7 +99,8 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             String - The ID
     */
-    public function getUniqid () {
+    public function getUniqid()
+    {
         if (!$this->_uniqid && $this->_item->id == 0) {
             $this->_uniqid = $this->get('uniqid') ? $this->get('uniqid') : uniqid();
         }
@@ -92,21 +115,30 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             Class - Storage php class
     */
-    public function storage () {
+    public function storage()
+    {
         // init storage
-        if ($this->_storage == null) {
+        if ($this->_storage == null)
+        {
             // if source is an URI
-            if (strpos($this->get('file'), 'http') === 0) {
+            if (strpos($this->get('file'), 'http') === 0)
+            {
                 $this->_storage = new ZLStorage('URI');
-            } // s3
-            else if ($this->config->find('files._s3', 0)) {
-                $bucket = trim($this->config->find('files._s3bucket'));
+            }
+
+            // s3
+            else if ($this->config->find('files._s3', 0))
+            {
+                $bucket       = trim($this->config->find('files._s3bucket'));
                 $accesskey = trim($this->app->zlfw->decryptPassword($this->config->find('files._awsaccesskey')));
                 $secretkey = trim($this->app->zlfw->decryptPassword($this->config->find('files._awssecretkey')));
 
                 $this->_storage = new ZLStorage('AmazonS3', array('secretkey' => $secretkey, 'accesskey' => $accesskey, 'bucket' => $bucket));
-            } // local
-            else {
+            }
+
+            // local
+            else
+            {
                 $this->_storage = new ZLStorage('Local');
             }
         }
@@ -120,7 +152,7 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             Mixed - the elements data
     */
-    public function get ($key, $default = null) {
+    public function get($key, $default = null) {
         // workaround for the repeatable element transition
         if ($value = $this->_item->elements->find("{$this->identifier}.{$key}", null)) {
             // IMPORTANT, ignore the default value
@@ -133,9 +165,11 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
     /*
         DEPICATED since 3.0.15, still needed for old FilesPro elements
     */
-    public function _S3 () {
-        if ($this->_s3 == null) {
-            $bucket = $this->config->find('files._s3bucket');
+    public function _S3()
+    {
+        if ($this->_s3 == null)
+        {
+            $bucket       = $this->config->find('files._s3bucket');
             $accesskey = trim($this->app->zlfw->decryptPassword($this->config->find('files._awsaccesskey')));
             $secretkey = trim($this->app->zlfw->decryptPassword($this->config->find('files._awssecretkey')));
 
@@ -155,17 +189,17 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             Boolean
     */
-    function isDownloadLimitReached () {
+    function isDownloadLimitReached() {
         return ($limit = $this->get('download_limit')) && $this->get('hits', 0) >= $limit;
     }
 
     /* DEPRICATED since 3.0.15 */
-    public function getExtension ($file = null, $checkMime = true) {
+    public function getExtension($file = null, $checkMime = true) {
         $file = empty($file) ? $this->get('file') : $file;
         return strtolower($this->app->zlfw->filesystem->getExtension($file, $checkMime));
     }
 
-    /* RENDER --------------------------------------------------------------------------------------------------------------------------- */
+/* RENDER --------------------------------------------------------------------------------------------------------------------------- */
 
     /*
         Function: _hasValue
@@ -177,9 +211,23 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             Boolean - true, on success
     */
-    protected function _hasValue ($params = array()) {
+    protected function _hasValue($params = array())
+    {
         $files = $this->getValidResources($this->get('file'));
         return !empty($files);
+    }
+
+    /*
+        Function: getRawRenderedValues
+            render raw repeatable values
+
+        Returns:
+            array
+    */
+    public final function getRawRenderedValues($params=array(), $wk=false, $opts=array())
+    {
+        $opts['data_is_subarray'] = true;
+        return parent::getRenderedValues($params, $wk, $opts);
     }
 
     /*
@@ -189,13 +237,15 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             array
     */
-    public function getRenderedValues ($params = array(), $wk = false, $opts = array()) {
+    public function getRenderedValues($params=array(), $wk=false, $opts=array())
+    {
         $opts['data_is_subarray'] = true;
         return parent::getRenderedValues($params, $wk, $opts);
     }
 
     /* DEPRICATED */
-    public function getFiles ($path = null) {
+    public function getFiles($path = null)
+    {
         return $this->_resources = $this->getValidResources($path);
     }
 
@@ -207,13 +257,14 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
             Array or resources
     */
     protected $_valid_resources = array();
-
-    public function getValidResources ($path = null) {
+    public function getValidResources($path = null)
+    {
         // get final path
         $path = $path ? $path : $this->getDefaultSource();
 
         // use resouce cache if exist
-        if (!array_key_exists($path, $this->_valid_resources)) {
+        if (!array_key_exists($path, $this->_valid_resources))
+        {
             // get the valid resources from the path
             $this->_valid_resources[$path] = $this->storage()->getValidResources($path, $this->getLegalExtensions());
         }
@@ -228,7 +279,8 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             String - Path to file(s)
     */
-    protected function getDefaultSource () {
+    protected function getDefaultSource()
+    {
         // get default, fallback to default_file as the param name was changed
         $default_source = $this->config->find('files._default_source', $this->config->find('files._default_file', ''));
 
@@ -242,7 +294,8 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             Void
     */
-    public function loadAssets () {
+    public function loadAssets()
+    {
         parent::loadAssets();
 
         // load ZLUX assets
@@ -252,7 +305,7 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         $this->app->document->addScript('elements:filespro/filespro.js');
     }
 
-    /* FILE MANAGER ----------------------------------------------------------------------------------------------------------------------  */
+/* FILE MANAGER ----------------------------------------------------------------------------------------------------------------------  */
 
     /*
         Function: getFileDetails
@@ -265,12 +318,13 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             JSON or Array
     */
-    public function getFileDetails ($file = null, $json = true) {
+    public function getFileDetails($file = null, $json = true)
+    {
         // get the object path
         $path = $file === null ? $this->get('file') : $file;
 
         // get the object info
-        if ($data = $this->storage()->getObjectInfo($path)) {
+        if($data = $this->storage()->getObjectInfo($path)) {
 
             // return in json or param object
             return $json ? json_encode($data) : $this->app->data->create($data);
@@ -289,12 +343,14 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             HTML
     */
-    public function getFileDetailsDom ($file = null) {
+    public function getFileDetailsDom($file=null)
+    {
         $file = $file === null ? $this->get('file') : $file;
 
         // set storage params
         $storage = array();
-        if ($this->config->find('files._s3', 0)) {
+        if ($this->config->find('files._s3', 0))
+        {
             $bucket = trim($this->config->find('files._s3bucket'));
 
             // decrypt the ZLField password
@@ -311,7 +367,7 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
             $storage['bucket'] = $bucket;
             $storage['accesskey'] = urlencode($accesskey);
             $storage['secretkey'] = urlencode($secretkey);
-            $storage['policy'] = $policy['policy'];
+            $storage['policy']      = $policy['policy'];
             $storage['signature'] = $policy['signature'];
 
         } else {
@@ -323,7 +379,7 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
 
         // file details
         $fdetails = '';
-        if ($file_obj = $this->getFileDetails($file, false)) {
+        if($file_obj = $this->getFileDetails($file, false)) {
             $fdetails = $file ? " data-zlux-data='" . json_encode($file_obj) . "'" : '';
         }
 
@@ -343,7 +399,7 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
        Returns:
            String - element legal extensions
     */
-    public function getLegalExtensions ($separator = '|') {
+    public function getLegalExtensions($separator = '|') {
         $extensions = $this->config->find('files._extensions', $this->_extensions);
         return str_replace('|', $separator, $extensions);
     }
@@ -351,8 +407,10 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
     /*
      * Return the full directory path
      */
-    public function getDirectory ($allowroot = false, $item = false) {
-        if (!$this->_directory) {
+    public function getDirectory($allowroot = false, $item = false)
+    {
+        if (!$this->_directory)
+        {
             $user = JFactory::getUser();
             $item = $item ? $item : $this->getItem();
 
@@ -408,7 +466,8 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         return $this->_directory;
     }
 
-    public function replaceVars ($path, $item = false) {
+    public function replaceVars($path, $item = false)
+    {
         jimport('joomla.user.helper');
 
         $user = JFactory::getUser();
@@ -439,7 +498,7 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         $authorgroup = $group->title;
 
         // zoo
-        $zooapp = strtolower($item->getApplication()->name);
+        $zooapp     = strtolower($item->getApplication()->name);
         $zooprimarycat = $item->getPrimaryCategory() ? $item->getPrimaryCategory()->alias : 'none';
         $zooprimarycatid = $item->getPrimaryCategoryId();
 
@@ -462,7 +521,7 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         return preg_replace($pattern, $replace, $path);
     }
 
-    /* SUBMISSIONS ------------------------------------------------------------------------------------------------------------------------  */
+/* SUBMISSIONS ------------------------------------------------------------------------------------------------------------------------  */
 
     /*
         Function: _renderSubmission
@@ -474,10 +533,11 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             String - html
     */
-    public function _renderSubmission ($params = array()) {
+    public function _renderSubmission($params = array())
+    {
         // init vars
         $trusted_mode = $params->get('trusted_mode');
-        $layout = $params->find('layout._layout', 'default.php');
+        $layout          = $params->find('layout._layout', 'default.php');
 
         if ($layout == 'advanced') {
             if ($trusted_mode)
@@ -486,7 +546,8 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
                 $layout = 'default.php';
         }
 
-        if ($layout = $this->getLayout("submission/$layout")) {
+        if ($layout = $this->getLayout("submission/$layout"))
+        {
             return $this->renderLayout($layout, compact('params', 'trusted_mode'));
         }
     }
@@ -502,10 +563,11 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             Array - cleaned value
     */
-    public function validateSubmission ($value, $params) {
+    public function validateSubmission($value, $params)
+    {
         // get old file values, the allready stored ones
         $old_files = array();
-        foreach ($this as $self) {
+        foreach($this as $self) {
             $old_files[] = $this->get('file');
         }
         $old_files = array_filter($old_files);
@@ -515,15 +577,15 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
 
         // Reorganize the files to make them easier to manage (tricky)
         $userfiles = array();
-        foreach ($value->get('userfile', array()) as $key => $vals) {
+        foreach($value->get('userfile', array()) as $key => $vals) {
             $vals = array_filter($vals);
-            foreach ($vals as $i => $val) {
+            foreach($vals as $i => $val){
                 $userfiles[$i][$key] = $val;
             }
         }
 
         // remove the old user info
-        if (isset($value['userfile']))
+        if(isset($value['userfile']))
             unset($value['userfile']);
 
         // reindex values, important
@@ -535,8 +597,10 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         }
 
         $result = array();
-        foreach ($value as $key => &$single_value) {
-            if (isset($userfiles[$key])) {
+        foreach($value as $key => &$single_value)
+        {
+            if (isset($userfiles[$key]))
+            {
                 $single_value = array('old_file' => (isset($old_files) ? $old_files : ''), 'userfile' => $userfiles[$key], 'values' => $single_value);
             } else {
                 $single_value = array('values' => $single_value);
@@ -578,13 +642,14 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
         Returns:
             void
     */
-    public function submissionBeforeSave ($event) {
+    public function submissionBeforeSave($event)
+    {
         $userfiles = array();
         // merge userfiles element data with post data
         foreach ($_FILES as $key => $userfile) {
-            if (strpos($key, 'elements_' . $this->identifier) === 0) {
+            if (strpos($key, 'elements_'.$this->identifier) === 0) {
                 // Reorganize the files to make them easier to manage (tricky)
-                foreach ($userfile as $key => $values) foreach ($values as $i => $value) {
+                foreach($userfile as $key => $values) foreach($values as $i => $value){
                     $userfiles[$i][$key] = $value;
                 }
             }
@@ -592,7 +657,8 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
 
         $files = array();
         // now for the real upload
-        foreach ($userfiles as $userfile) {
+        foreach($userfiles as $userfile)
+        {
             // get the uploaded file information
             if ($userfile && $userfile['error'] == 0 && is_array($userfile)) {
 
@@ -600,9 +666,9 @@ abstract class ElementFilesPro extends ElementRepeatablePro {
                 $fileName = $this->app->zlfw->filesystem->makeSafe($userfile['name'], 'ascii');
 
                 // init vars
-                $ext = strtolower(JFile::getExt($fileName));
-                $basename = substr($fileName, 0, strrpos($fileName, '.'));
-                $targetDir = JPATH_ROOT . '/' . $this->getDirectory();
+                $ext         = strtolower(JFile::getExt($fileName));
+                $basename     = substr($fileName, 0, strrpos($fileName, '.'));
+                $targetDir     = JPATH_ROOT.'/'.$this->getDirectory();
 
                 // construct filename
                 $fileName = "{$basename}.{$ext}";
@@ -648,7 +714,7 @@ App::getInstance('zoo')->loader->register('AppValidatorFile', 'classes:validator
  */
 class AppValidatorFilepro extends AppValidatorFile {
 
-    /**
+  /**
      * Clean the file value
      *
      * @param  mixed $value The value to clean
@@ -656,8 +722,10 @@ class AppValidatorFilepro extends AppValidatorFile {
      * @return mixed        The cleaned value
      *
      * @see AppValidator::clean()
+     *
+     * @since 2.0
      */
-    public function clean ($value) {
+    public function clean($value) {
         if (!is_array($value) || !isset($value['tmp_name'])) {
             throw new AppValidatorException($this->getMessage('invalid'));
         }
@@ -667,8 +735,8 @@ class AppValidatorFilepro extends AppValidatorFile {
         }
 
         // init vars
-        $ext = strtolower(JFile::getExt($value['name']));
-        $basename = substr($value['name'], 0, strrpos($value['name'], '.'));
+        $ext         = strtolower(JFile::getExt($value['name']));
+        $basename     = substr($value['name'], 0, strrpos($value['name'], '.'));
 
         // construct filename
         $value['name'] = "{$basename}.{$ext}";
@@ -727,7 +795,7 @@ class AppValidatorFilepro extends AppValidatorFile {
         }
 
         // check file size
-        if ($this->hasOption('max_size') && $this->getOption('max_size') < (int)$value['size']) {
+        if ($this->hasOption('max_size') && $this->getOption('max_size') < (int) $value['size']) {
             throw new AppValidatorException(sprintf(JText::_($this->getMessage('max_size')), ($this->getOption('max_size') / 1024)));
         }
 
@@ -746,12 +814,13 @@ class AppValidatorFilepro extends AppValidatorFile {
         The ZLSplFileInfo extends SplFileInfo class which offers a high-level object oriented interface to information for an individual file.
         http://au1.php.net/manual/en/class.splfileinfo.php
 */
-
-class FilesProSplFileInfo extends SplFileInfo {
+class FilesProSplFileInfo extends SplFileInfo
+{
     /**
      * Reference to the global App object
      *
      * @var App
+     * @since 3.0.5
      */
     public $app;
 
@@ -761,7 +830,7 @@ class FilesProSplFileInfo extends SplFileInfo {
      *
      * @param String $file_path Path to the file
      */
-    public function __construct ($file_path, &$element) {
+    public function __construct($file_path, &$element) {
 
         // call parent constructor
         parent::__construct($file_path);
@@ -777,8 +846,11 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Gets the file extension
      *
      * @return string The file extension or empty if the file has no extension
+     *
+     * @since 3.0.4
      */
-    public function getExtension () {
+    public function getExtension()
+    {
         if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
             return parent::getExtension();
         } else {
@@ -790,8 +862,11 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Get the file content type
      *
      * @return string The content type
+     *
+     * @since 3.0.5
      */
-    public function getContentType () {
+    public function getContentType()
+    {
         return $this->app->filesystem->getContentType($this->getPathname());
     }
 
@@ -799,8 +874,11 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Get the absolute url to a file
      *
      * @return string The absolute url
+     *
+     * @since 3.0.5
      */
-    public function getURL () {
+    public function getURL()
+    {
         if ($this->element->config->find('files._s3', 0)) // Amazon S3
         {
             $bucket = $this->element->config->find('files._s3bucket');
@@ -816,9 +894,12 @@ class FilesProSplFileInfo extends SplFileInfo {
      * Gets the file title
      *
      * @return string The file title
+     *
+     * @since 3.0.5
      */
-    public function getTitle ($title = null) {
-        $title = $title ? $title : $this->getBasename('.' . $this->getExtension());
+    public function getTitle($title = null)
+    {
+        $title = $title ? $title : $this->getBasename('.'.$this->getExtension());
 
         // return without _ carachter
         return str_replace('_', ' ', $title);

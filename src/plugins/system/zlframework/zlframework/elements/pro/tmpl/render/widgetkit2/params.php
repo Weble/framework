@@ -1,7 +1,7 @@
 <?php
 
 return
-    '{"fields": {
+'{"fields": {
 
     "_widget":{
         "type": "wk2",

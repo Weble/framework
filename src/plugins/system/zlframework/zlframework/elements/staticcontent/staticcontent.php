@@ -1,10 +1,9 @@
 <?php
 
 /*
-	Class: ElementStaticContent
-		The Static Content element class
+    Class: ElementStaticContent
+        The Static Content element class
 */
-
 class ElementStaticContent extends ElementPro implements iSubmittable {
 
     protected $_rendered_values = array();
@@ -19,8 +18,8 @@ class ElementStaticContent extends ElementPro implements iSubmittable {
         Returns:
             Boolean - true, on success
     */
-    public function hasValue ($params = array()) {
-        $value = $this->getRenderedValues($this->app->data->create($params));
+    public function hasValue($params = array()) {
+        $value = $this->getRenderedValues( $this->app->data->create($params) );
         return !empty($value['result']);
     }
 
@@ -31,16 +30,19 @@ class ElementStaticContent extends ElementPro implements iSubmittable {
         Returns:
             array
     */
-    protected function getRenderedValues ($params = array()) {
-        $hash = md5(serialize(array($params->get('layout'), $params->get('specific'), $params->get('separator'))));
-        if (!array_key_exists($hash, $this->_rendered_values)) {
+    protected function getRenderedValues($params = array())
+    {
+        $hash = md5( serialize(array($params->get('layout'), $params->get('specific'), $params->get('separator'))) );
+        if (!array_key_exists ($hash, $this->_rendered_values))
+        {
             // init vars
             $result = '';
-            $sp = $this->app->data->create($params->get('specific'));
+            $sp     =  $this->app->data->create($params->get('specific'));
 
-            switch ($sp->get('_render', 'text')) {
+            switch ($sp->get('_render', 'text'))
+            {
                 case 'text':
-                    if ($sp->get('_loadplugins', '')) {
+                    if ($sp->get('_loadplugins', '')){
                         $result = $this->app->zoo->triggerContentPlugins($sp->get('_text'));
                     } else {
                         $result = $sp->get('_text');
@@ -49,35 +51,36 @@ class ElementStaticContent extends ElementPro implements iSubmittable {
                     break;
 
                 case 'link':
-                    $title = $sp->get('_linktitle', '') ? ' title="' . $sp->get('_linktitle') . '"' : '';
+                    $title  = $sp->get('_linktitle', '') ? ' title="'.$sp->get('_linktitle').'"' : '';
                     $target = $sp->get('_linktarget', '') ? ' target="_blank"' : '';
-                    $rel = $sp->get('_rel', '') ? ' rel="' . $sp->get('_rel') . '"' : '';
-                    $text = $sp->get('_linktext', '');
-                    $url = '';
+                    $rel     = $sp->get('_rel', '') ? ' rel="'.$sp->get('_rel').'"' : '';
+                    $text    = $sp->get('_linktext', '');
+                    $url     = '';
 
-                    switch ($sp->get('_linktype', 'item')) {
+                    switch ($sp->get('_linktype', 'item'))
+                    {
                         case 'item':
                             $item = ($sp->get('_linkitemsource') == 'specified' && $sp->get('_linkitemid', '')) ? $this->app->table->item->get($sp->get('_linkitemid')) : $this->_item;
                             $text = $text ? $text : $item->name;
                             if (!$item->getState()) return array($text); // if item no published return name
-                            $item_layout = $sp->get('_linkitemlayout', 'full') != 'full' ? '&item_layout=' . $sp->get('_linkitemlayout', '') : false;
-                            $url = $item_layout ? 'index.php?option=' . $this->app->component->self->name . '&task=item&item_id=' . $item->id . $item_layout : $this->app->route->item($item);
+                            $item_layout = $sp->get('_linkitemlayout', 'full') != 'full' ? '&item_layout='.$sp->get('_linkitemlayout', '') : false;
+                            $url  = $item_layout ? 'index.php?option='.$this->app->component->self->name.'&task=item&item_id='.$item->id.$item_layout : $this->app->route->item($item);
                             break;
 
                         case 'category':
-                            $cat = $this->app->table->category->get($sp->get('_linkcatid'));
+                            $cat  = $this->app->table->category->get($sp->get('_linkcatid'));
                             $text = $text ? $text : $cat->name;
                             if (!$cat->isPublished()) return array($text); // if cat no published return name
-                            $url = $this->app->route->category($cat);
+                            $url  = $this->app->route->category($cat);
                             break;
 
                         case 'custom':
-                            $url = $sp->get('_linkurl', '');
-                            $text = $text ? $text : 'link';
+                            $url    = $sp->get('_linkurl', '');
+                            $text    = $text ? $text : 'link';
                             break;
                     }
 
-                    $result = '<a href="' . JRoute::_($url) . '"' . $title . $target . $rel . ' >' . $text . '</a>';
+                    $result = '<a href="'.JRoute::_($url).'"'.$title.$target.$rel.' >'.$text.'</a>';
                     break;
 
                 case 'item':
@@ -95,8 +98,8 @@ class ElementStaticContent extends ElementPro implements iSubmittable {
                     // render iframe
                     $item_id = $params->find('specific._itemsource') == 'current' ? $this->_item->id : $params->find('specific._itemid');
                     $iframelink = $params->find('specific._iframe_custom_url') ? $params->find('specific._iframe_custom_url') : $this->app->link(array('controller' => 'zlframework', 'task' => 'renderview', 'tmpl' => 'component', 'item_id' => $item_id, 'item_layout' => $params->find('specific._itemlayout', 'related')), false);
-                    $result = '<iframe class="qtip-iframe" src="' . $iframelink . '" width="100%" height="100%"><p>' . JText::_('QT_IFRAME_NOT_SUPPORTED') . '</p></iframe>';
-                    break;
+                    $result = '<iframe class="qtip-iframe" src="'.$iframelink.'" width="100%" height="100%"><p>'.JText::_('QT_IFRAME_NOT_SUPPORTED').'</p></iframe>';
+                break;
             }
 
             $result = $result ? array($result) : null; // if there is value, set the array
@@ -110,7 +113,7 @@ class ElementStaticContent extends ElementPro implements iSubmittable {
        Function: edit
            Renders the edit form field.
     */
-    public function edit () {
+    public function edit() {
         return null;
     }
 
@@ -124,7 +127,8 @@ class ElementStaticContent extends ElementPro implements iSubmittable {
         Returns:
             String - html
     */
-    public function renderSubmission ($params = array()) {
+    public function renderSubmission($params = array())
+    {
         return $this->render($params);
     }
 
@@ -139,7 +143,6 @@ class ElementStaticContent extends ElementPro implements iSubmittable {
         Returns:
             Array - cleaned value
     */
-    public function validateSubmission ($value, $params) {
-    }
+    public function validateSubmission($value, $params) {}
 
 }

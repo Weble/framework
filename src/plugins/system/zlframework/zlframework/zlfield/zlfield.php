@@ -730,6 +730,8 @@ class ZlfieldHelper extends AppHelper {
      * getTheEnviroment
      *
      * @return @string item-edit, type-config, type-positions
+     *
+     * @since 3.0
      */
     public function getTheEnviroment()
     {

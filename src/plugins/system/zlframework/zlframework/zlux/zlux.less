@@ -1,6 +1,3 @@
-/* Copyright (C) JOOlanders SL http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only */
-
-
 /* Vars
 ----------------------------------------------------------------------------------------------------*/
 @red: #b94a48;
@@ -22,329 +19,329 @@
 // dialog
 .zlux-manager-dialog-tmpl(){
 
-	// TOOLBAR
-	[class^="zlux-dialog-toolbar-"] {
+    // TOOLBAR
+    [class^="zlux-dialog-toolbar-"] {
 
-		> ul.inline {
-			[class*=" icon-"],
-			[class^="icon-"] {
-				font-size: 20px;
-			}
-		}
+        > ul.inline {
+            [class*=" icon-"],
+            [class^="icon-"] {
+                font-size: 20px;
+            }
+        }
 
-		// subtoolbar
-		[class^="zlux-dialog-subtoolbar-"] {
-			border-top: 1px solid #EEE;
-			margin-top: 4px;
+        // subtoolbar
+        [class^="zlux-dialog-subtoolbar-"] {
+            border-top: 1px solid #EEE;
+            margin-top: 4px;
 
-			.zlux-x-input {
-				width: 262px;
-				margin: 4px 0 0;
-			}
-		}
-	}
+            .zlux-x-input {
+                width: 262px;
+                margin: 4px 0 0;
+            }
+        }
+    }
 
-	// FILTER TOOLBAR
-	.zlux-dialog-subtoolbar-filter {
-		margin: 4px 2px 0;
+    // FILTER TOOLBAR
+    .zlux-dialog-subtoolbar-filter {
+        margin: 4px 2px 0;
 
-		// dropdowns
-		.btn-group {
-			display: block;
-			width: 276px;
-			margin: 5px auto !important;
+        // dropdowns
+        .btn-group {
+            display: block;
+            width: 276px;
+            margin: 5px auto !important;
 
-			// menu triggerer
-			a.dropdown-toggle {
-				display: block;
-				background-color: white;
-				background-image: none;
-				.border-radius(4px);
-				box-shadow: none;
-				text-shadow: none;
-				color: #444;
-				border: 1px solid #CCC;
+            // menu triggerer
+            a.dropdown-toggle {
+                display: block;
+                background-color: white;
+                background-image: none;
+                .border-radius(4px);
+                box-shadow: none;
+                text-shadow: none;
+                color: #444;
+                border: 1px solid #CCC;
 
-				&:focus {
-					box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-					border-color: rgba(82, 168, 236, 0.8);
-					outline: 0 none;
-				}
+                &:focus {
+                    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+                    border-color: rgba(82, 168, 236, 0.8);
+                    outline: 0 none;
+                }
 
-				// if disabled
-				&.disabled {
-					font-weight: normal;
-					
-					&:focus {
-						box-shadow: none;
-						border-color: #CCC;
-					}
-				}
+                // if disabled
+                &.disabled {
+                    font-weight: normal;
 
-				// caret
-				.caret {
-					margin-left: 5px;
-				}
-			}
+                    &:focus {
+                        box-shadow: none;
+                        border-color: #CCC;
+                    }
+                }
 
-			&.open a.dropdown-toggle {
-				background-color: white;
-			}
+                // caret
+                .caret {
+                    margin-left: 5px;
+                }
+            }
 
-			// remove icon
-			.zlux-ui-dropdown-unselect {
-				font-size: 13px;
-				padding: 9px 10px 7px;
-				position: absolute;
-				right: 0;
-				top: -1px;
-				z-index: 3;
-			}
+            &.open a.dropdown-toggle {
+                background-color: white;
+            }
 
-			// menu list
-			.dropdown-menu {
-				min-width: 275px;
-				max-height: 300px;
-				border: 1px solid #CCC;
-				text-align: left;
-				overflow: auto;
+            // remove icon
+            .zlux-ui-dropdown-unselect {
+                font-size: 13px;
+                padding: 9px 10px 7px;
+                position: absolute;
+                right: 0;
+                top: -1px;
+                z-index: 3;
+            }
 
-				a[data-value="0"] {
-					text-align: center;
-				}
-			}
-		}
+            // menu list
+            .dropdown-menu {
+                min-width: 275px;
+                max-height: 300px;
+                border: 1px solid #CCC;
+                text-align: left;
+                overflow: auto;
 
-		// Input
-		.zlux-x-filter-input_wrapper {
-			position: relative;
-			margin: 5px auto 0;
-			width: 276px;
+                a[data-value="0"] {
+                    text-align: center;
+                }
+            }
+        }
 
-			.zlux-x-filter-input {
-				width: 262px;
-				margin: 0;
-				text-indent: 20px;
-			}
+        // Input
+        .zlux-x-filter-input_wrapper {
+            position: relative;
+            margin: 5px auto 0;
+            width: 276px;
 
-			[class^="icon-"] {
-				cursor: default;
-				font-size: 13px;
-				left: -1px;
-				position: absolute;
-				top: 4px;
-			}
+            .zlux-x-filter-input {
+                width: 262px;
+                margin: 0;
+                text-indent: 20px;
+            }
 
-			.zlux-ui-dropdown-unselect {
-				cursor: pointer;
-				font-size: 13px;
-				left: auto;
-				right: 1px;
-			}
-		}
-	}
+            [class^="icon-"] {
+                cursor: default;
+                font-size: 13px;
+                left: -1px;
+                position: absolute;
+                top: 4px;
+            }
 
-	// load object css
-	.zlux-object-tmpl();
+            .zlux-ui-dropdown-unselect {
+                cursor: pointer;
+                font-size: 13px;
+                left: auto;
+                right: 1px;
+            }
+        }
+    }
 
-	// DIALOG
-	.ui-dialog-content {
-		height: 349px !important;
-		max-height: 349px !important;
-		overflow: hidden;
-		position: relative;
-		opacity: 0; // init visibility
-	}
+    // load object css
+    .zlux-object-tmpl();
 
-	// bootstrap rows
-	.row-fluid {
-		margin-bottom: 5px;
-	}
+    // DIALOG
+    .ui-dialog-content {
+        height: 349px !important;
+        max-height: 349px !important;
+        overflow: hidden;
+        position: relative;
+        opacity: 0; // init visibility
+    }
 
-	// TABLE
-	table.table {
-		clear: both;
-		margin-bottom: 0 !important;
-		max-width: none !important;
+    // bootstrap rows
+    .row-fluid {
+        margin-bottom: 5px;
+    }
 
-		// TD
-		td {
-			&.right {
-				text-align: left;
-			}
+    // TABLE
+    table.table {
+        clear: both;
+        margin-bottom: 0 !important;
+        max-width: none !important;
 
-			&.center {
-				text-align: center;
-			}
+        // TD
+        td {
+            &.right {
+                text-align: left;
+            }
 
-			&.right {
-				text-align: right;
-			}
+            &.center {
+                text-align: center;
+            }
 
-			// icon column
-			&.column-icon {
-				font-size: 14px;
-				width: 14px;
-				padding-top: 12px;
-				text-align: center;
-				
+            &.right {
+                text-align: right;
+            }
 
-				[class^="icon-"],
-				[class*=" icon-"] {
-					cursor: default;
-					margin: 0;
+            // icon column
+            &.column-icon {
+                font-size: 14px;
+                width: 14px;
+                padding-top: 12px;
+                text-align: center;
 
-					&:before {
-						margin-left: 1px;
-					}
-				}
-			}
 
-			// name column
-			&.column-name {
-				max-width: 229px;
-				word-wrap: break-word;
-			}
-		}
+                [class^="icon-"],
+                [class*=" icon-"] {
+                    cursor: default;
+                    margin: 0;
 
-		// TH
-		th {
-			&:active {
-				outline: none;
-			}
-		}
-	}
+                    &:before {
+                        margin-left: 1px;
+                    }
+                }
+            }
 
-	// PAGINATION
-	.pagination {
-		text-align: center;
+            // name column
+            &.column-name {
+                max-width: 229px;
+                word-wrap: break-word;
+            }
+        }
 
-		ul.zlux-x-pagination > li {
-			[class^="icon-"] {
-				font-size: 15px;
-			}
+        // TH
+        th {
+            &:active {
+                outline: none;
+            }
+        }
+    }
 
-			& > a {
-				padding: 4px 13px;
-			}
+    // PAGINATION
+    .pagination {
+        text-align: center;
 
-			a.zlux-x-btn {
-				padding: 6px 13px;
-			}
-		}
-	}
+        ul.zlux-x-pagination > li {
+            [class^="icon-"] {
+                font-size: 15px;
+            }
 
-	// INFO
-	.zlux-x-info {
-		margin-bottom: 0;
+            & > a {
+                padding: 4px 13px;
+            }
 
-		.span12 {
-			min-height: 0;
-		}
+            a.zlux-x-btn {
+                padding: 6px 13px;
+            }
+        }
+    }
 
-		.dataTables_info {
-			text-align: center;
-		}
-	}
+    // INFO
+    .zlux-x-info {
+        margin-bottom: 0;
+
+        .span12 {
+            min-height: 0;
+        }
+
+        .dataTables_info {
+            text-align: center;
+        }
+    }
 }
 
 // ZLUX Object
 .zlux-object-tmpl() {
-	.zlux-object {
+    .zlux-object {
 
-		.column-icon {
-			width: 21px;
-		}
+        .column-icon {
+            width: 21px;
+        }
 
-		// icons
-		[class^="icon-"],
-		[class*=" icon-"] {
-			float: right;
-			margin: 3px 0 0 4px;
-			cursor: pointer;
-			font-size: 14px;
-			display: inline-block;
-			text-align: center;
-			width: 1.25em;
-		}
+        // icons
+        [class^="icon-"],
+        [class*=" icon-"] {
+            float: right;
+            margin: 3px 0 0 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-block;
+            text-align: center;
+            width: 1.25em;
+        }
 
-		// red color icons
-		.zlux-x-object-icon.icon-warning-sign {
-			color: @red;
-		}
+        // red color icons
+        .zlux-x-object-icon.icon-warning-sign {
+            color: @red;
+        }
 
-		// ok icon
-		.zlux-x-object-icon.icon-ok {
-			color: @green;
-		}
+        // ok icon
+        .zlux-x-object-icon.icon-ok {
+            color: @green;
+        }
 
-		// hide/show buttons
-		.zlux-x-remove,
-		.zlux-x-name-edit {
-			visibility: hidden;
-		}
+        // hide/show buttons
+        .zlux-x-remove,
+        .zlux-x-name-edit {
+            visibility: hidden;
+        }
 
-		// &:hover 
-		.zlux-ui-open {
-			.zlux-x-remove,
-			.zlux-x-name-edit {
-				visibility: visible;
-			}
-		}
+        // &:hover
+        .zlux-ui-open {
+            .zlux-x-remove,
+            .zlux-x-name-edit {
+                visibility: visible;
+            }
+        }
 
-		// name
-		.zlux-x-name {
-			max-width: 175px;
+        // name
+        .zlux-x-name {
+            max-width: 175px;
 
-			// name edit
-			i.zlux-x-name-edit {
-				display: inline-block;
-				float: none;
-				font-size: 15px;
-				position: relative;
+            // name edit
+            i.zlux-x-name-edit {
+                display: inline-block;
+                float: none;
+                font-size: 15px;
+                position: relative;
 
-				&:before {
-					position: absolute;
-					top: -11px;
-					left: 2px;
-				}
-			}
-		}
+                &:before {
+                    position: absolute;
+                    top: -11px;
+                    left: 2px;
+                }
+            }
+        }
 
-		.zlux-x-input {
-			margin: 7px 0;
-			width: 156px;
-		}
+        .zlux-x-input {
+            margin: 7px 0;
+            width: 156px;
+        }
 
-		// details
-		.zlux-x-details {
-			display: none;
+        // details
+        .zlux-x-details {
+            display: none;
 
-			.zlux-x-details-content {
-				border-top: 1px dashed #DDD;
-				margin-top: 8px;
-				padding-top: 8px;
-				margin-bottom: 0;
+            .zlux-x-details-content {
+                border-top: 1px dashed #DDD;
+                margin-top: 8px;
+                padding-top: 8px;
+                margin-bottom: 0;
 
-				ul.unstyled {
-					margin: 0;
-				}
+                ul.unstyled {
+                    margin: 0;
+                }
 
-				&.zlux-x-msg {
-					text-align: center;
-					font-weight: bold;
-					position: relative;
-					padding-left: 11px;
-					padding-right: 11px;
+                &.zlux-x-msg {
+                    text-align: center;
+                    font-weight: bold;
+                    position: relative;
+                    padding-left: 11px;
+                    padding-right: 11px;
 
-					.zlux-x-msg-remove {
-						font-size: 11px;
-						position: absolute;
-						right: -3px;
-						top: 0;
-					}
-				}
-			}
-		}
-	}
+                    .zlux-x-msg-remove {
+                        font-size: 11px;
+                        position: absolute;
+                        right: -3px;
+                        top: 0;
+                    }
+                }
+            }
+        }
+    }
 }

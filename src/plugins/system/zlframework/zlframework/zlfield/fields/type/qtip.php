@@ -7,7 +7,7 @@ class JElementQtip extends JElement {
 
     var $_name = 'Qtip';
 
-    function fetchElement ($name, $value, $node, $control_name) {
+    function fetchElement($name, $value, $node, $control_name) {
 
         // get app
         // $app = App::getInstance('zoo');
@@ -19,31 +19,31 @@ class JElementQtip extends JElement {
         // $html[] = '<div class="zl-fields qtip-options placeholder">';
 
         // $json = '{"fields": {
-        // 			"_style":{
-        // 				"type": "select",
-        // 				"label": "Style",
-        // 				"specific": {
-        // 					"options": '.json_encode($styles).'
-        // 				}
-        // 			},
-        // 			"_shadow":{
-        // 				"type": "checkbox",
-        // 				"label": "Shadow",
-        // 				"specific":{
-        // 					"label": "Yes"
-        // 				}
-        // 			},
-        // 			"_rounded":{
-        // 				"type": "checkbox",
-        // 				"label": "Rounded",
-        // 				"specific":{
-        // 					"label": "Yes"
-        // 				}
-        // 			}
-        // 		},
-        // 		"control": "qtip"}';
+        //             "_style":{
+        //                 "type": "select",
+        //                 "label": "Style",
+        //                 "specific": {
+        //                     "options": '.json_encode($styles).'
+        //                 }
+        //             },
+        //             "_shadow":{
+        //                 "type": "checkbox",
+        //                 "label": "Shadow",
+        //                 "specific":{
+        //                     "label": "Yes"
+        //                 }
+        //             },
+        //             "_rounded":{
+        //                 "type": "checkbox",
+        //                 "label": "Rounded",
+        //                 "specific":{
+        //                     "label": "Yes"
+        //                 }
+        //             }
+        //         },
+        //         "control": "qtip"}';
 
-        // 	$html[] = $app->zlfwhtml->JSONtoFields($json, $control_name.'[qtip]', null, '', '');
+        //     $html[] = $app->zlfwhtml->JSONtoFields($json, $control_name.'[qtip]', null, '', '');
         // $html[] = '</div>';
 
         //return implode("\n", $html);

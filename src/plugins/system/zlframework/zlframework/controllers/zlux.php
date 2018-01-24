@@ -1,13 +1,13 @@
 <?php
 
 /*
-	Class: ZlframeworkController
-		The controller class for zoolanders extensions
+    Class: ZlframeworkController
+        The controller class for zoolanders extensions
 */
-
 class ZluxController extends AppController {
 
-    public function __construct ($default = array()) {
+    public function __construct($default = array())
+    {
         parent::__construct($default);
 
         // set table
@@ -21,16 +21,17 @@ class ZluxController extends AppController {
         Function: saveElement
             Save Element data without the need to save the entire Item
     */
-    public function saveElement () {
+    public function saveElement()
+    {
         // get request vars
         $el_identifier = $this->app->request->getString('elm_id', '');
-        $item_id = $this->app->request->getInt('item_id', 0);
-        $post = $this->app->request->get('post:', 'array', array());
+        $item_id       = $this->app->request->getInt('item_id', 0);
+        $post           = $this->app->request->get('post:', 'array', array());
 
         // load element
         if ($item_id) {
             $item = $this->itemTable->get($item_id);
-        } elseif (!empty($type)) {
+        } elseif (!empty($type)){
             $item = $this->app->object->create('Item');
             $item->application_id = $this->application->id;
             $item->type = $type;
@@ -39,7 +40,8 @@ class ZluxController extends AppController {
             return;
         }
 
-        if (isset($post['elements'][$el_identifier]) && $item->getElement($el_identifier)) {
+        if(isset($post['elements'][$el_identifier]) && $item->getElement($el_identifier))
+        {
             $item = $this->itemTable->get($item_id);
 
             $item->elements->set($el_identifier, $post['elements'][$el_identifier]);
@@ -56,24 +58,26 @@ class ZluxController extends AppController {
         Returns:
             JSON object
     */
-    public function getItemsManagerData () {
+    public function getItemsManagerData()
+    {
         $zlux2 = $this->app->request->get('zlux2', 'boolean', false);
 
         echo json_encode($zlux2 ? $this->_getItemsManagerDataZLUX2() : $this->_getItemsManagerData());
     }
 
-    public function _getItemsManagerDataZLUX2 () {
-        $s_apps = explode(',', $this->app->request->get('apps', 'string', ''));
-        $s_types = explode(',', $this->app->request->get('types', 'string', ''));
-        $s_cats = explode(',', $this->app->request->get('categories', 'string', ''));
-        $s_tags = explode(',', $this->app->request->get('tags', 'string', ''));
-        $s_authors = explode(',', $this->app->request->get('authors', 'string', ''));
+    public function _getItemsManagerDataZLUX2()
+    {
+        $s_apps         = explode(',', $this->app->request->get('apps', 'string', ''));
+        $s_types    = explode(',', $this->app->request->get('types', 'string', ''));
+        $s_cats        = explode(',', $this->app->request->get('categories', 'string', ''));
+        $s_tags        = explode(',', $this->app->request->get('tags', 'string', ''));
+        $s_authors    = explode(',', $this->app->request->get('authors', 'string', ''));
 
-        $g_apps = explode(',', $this->app->request->get('filter_apps', 'string', ''));
-        $g_types = explode(',', $this->app->request->get('filter_types', 'string', ''));
-        $g_cats = explode(',', $this->app->request->get('filter_cats', 'string', ''));
-        $g_tags = explode(',', $this->app->request->get('filter_tags', 'string', ''));
-        $draw = $this->app->request->get('draw', 'integer', false);
+        $g_apps         = explode(',', $this->app->request->get('filter_apps', 'string', ''));
+        $g_types     = explode(',', $this->app->request->get('filter_types', 'string', ''));
+        $g_cats        = explode(',', $this->app->request->get('filter_cats', 'string', ''));
+        $g_tags        = explode(',', $this->app->request->get('filter_tags', 'string', ''));
+        $draw         = $this->app->request->get('draw', 'integer', false);
 
 
         // Array of database columns which should be read and sent back to DataTables
@@ -114,11 +118,12 @@ class ZluxController extends AppController {
         $model->setState('select', 'DISTINCT a.*');
 
         // get all Apps object
-        $apps = $this->app->table->application->all();
+        $apps =  $this->app->table->application->all();
 
         // get filter listings
         $aaApps = $aaTypes = $aaCats = $aaTags = array();
-        foreach ($apps as $app) if (empty($s_apps) || in_array($app->id, $s_apps)) {
+        foreach($apps as $app) if (empty($s_apps) || in_array($app->id, $s_apps))
+        {
             // add App to list
             $aaApps[] = array('name' => $app->name, 'id' => $app->id);
 
@@ -180,12 +185,15 @@ class ZluxController extends AppController {
 
         // ordering
         $aOrder = array();
-        if (isset($_POST['iSortCol_0'])) {
-            for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
-                if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
-                    $iColumnIndex = array_search($_POST['mDataProp_' . $_POST['iSortCol_' . $i]], $columns);
-                    $aOrder[] = $columns[$iColumnIndex];
-                    $aOrder[] = $_POST['sSortDir_' . $i] == 'desc' ? '_reversed' : '';
+        if ( isset( $_POST['iSortCol_0'] ) )
+        {
+            for ( $i=0 ; $i<intval( $_POST['iSortingCols'] ) ; $i++ )
+            {
+                if ( $_POST[ 'bSortable_'.intval($_POST['iSortCol_'.$i]) ] == "true" )
+                {
+                    $iColumnIndex = array_search( $_POST['mDataProp_'.$_POST['iSortCol_'.$i]], $columns );
+                    $aOrder[] = $columns[ $iColumnIndex ];
+                    $aOrder[] = $_POST['sSortDir_'.$i] == 'desc' ? '_reversed' : '';
                 }
             }
         }
@@ -195,27 +203,29 @@ class ZluxController extends AppController {
 
 
         // paging
-        if (isset($_POST['start']) && $_POST['length'] != '-1') {
+        if ( isset( $_POST['start'] ) && $_POST['length'] != '-1' )
+        {
             $model->setState('limitstart', $_POST['start'], true);
             $model->setState('limit', $_POST['length'], true);
         }
 
 
         // global search
-        if (isset($_POST['search']) && $_POST['search']['value'] != '') {
+        if ( isset($_POST['search']) && $_POST['search']['value'] != '' ) {
             $str = $_POST['search']['value'];
 
-            for ($i = 0, $ien = count($_POST['columns']); $i < $ien; $i++) {
+            for ( $i=0, $ien=count($_POST['columns']) ; $i<$ien ; $i++ ) {
                 $requestColumn = $_POST['columns'][$i];
-                $columnIdx = array_search($requestColumn['data'], $columns);
-                $column = $columns[$columnIdx];
+                $columnIdx = array_search( $requestColumn['data'], $columns );
+                $column = $columns[ $columnIdx ];
 
-                if ($requestColumn['searchable'] == 'true') {
+                if ( $requestColumn['searchable'] == 'true' ) {
 
                     /* === Core: Name element === */
-                    if (strlen(trim($column == '_itemname'))) {
+                    if( strlen( trim( $column == '_itemname' ) ) )
+                    {
                         $name = array(
-                            'value' => trim($str),
+                            'value' => trim( $str ),
                             'logic' => 'AND'
                         );
 
@@ -244,7 +254,7 @@ class ZluxController extends AppController {
             // author
             $author = $item->created_by_alias;
             $author_id = $item->created_by;
-            $users = $this->itemTable->getUsers($item->application_id);
+            $users  = $this->itemTable->getUsers($item->application_id);
             if (!$author && isset($users[$item->created_by])) {
                 $author = $users[$item->created_by]->name;
                 $author_id = $users[$item->created_by]->id;
@@ -278,19 +288,20 @@ class ZluxController extends AppController {
         return $JSON;
     }
 
-    public function _getItemsManagerData () {
+    public function _getItemsManagerData()
+    {
         // init vars
-        $s_apps = explode(',', $this->app->request->get('apps', 'string', ''));
-        $s_types = explode(',', $this->app->request->get('types', 'string', ''));
-        $s_cats = explode(',', $this->app->request->get('categories', 'string', ''));
-        $s_tags = explode(',', $this->app->request->get('tags', 'string', ''));
-        $s_authors = explode(',', $this->app->request->get('authors', 'string', ''));
+        $s_apps         = explode(',', $this->app->request->get('apps', 'string', ''));
+        $s_types    = explode(',', $this->app->request->get('types', 'string', ''));
+        $s_cats        = explode(',', $this->app->request->get('categories', 'string', ''));
+        $s_tags        = explode(',', $this->app->request->get('tags', 'string', ''));
+        $s_authors    = explode(',', $this->app->request->get('authors', 'string', ''));
 
-        $g_apps = explode(',', $this->app->request->get('filter_apps', 'string', ''));
-        $g_types = explode(',', $this->app->request->get('filter_types', 'string', ''));
-        $g_cats = explode(',', $this->app->request->get('filter_cats', 'string', ''));
-        $g_tags = explode(',', $this->app->request->get('filter_tags', 'string', ''));
-        $sEcho = $this->app->request->get('sEcho', 'string', '');
+        $g_apps         = explode(',', $this->app->request->get('filter_apps', 'string', ''));
+        $g_types     = explode(',', $this->app->request->get('filter_types', 'string', ''));
+        $g_cats        = explode(',', $this->app->request->get('filter_cats', 'string', ''));
+        $g_tags        = explode(',', $this->app->request->get('filter_tags', 'string', ''));
+        $sEcho         = $this->app->request->get('sEcho', 'string', '');
 
         $hideUnpublished = $this->app->request->get('hide_unpublished', 'string', '');
 
@@ -335,11 +346,12 @@ class ZluxController extends AppController {
         $model->setState('select', 'DISTINCT a.*');
 
         // get all Apps object
-        $apps = $this->app->table->application->all();
+        $apps =  $this->app->table->application->all();
 
         // get filter listings
         $aaApps = $aaTypes = $aaCats = $aaTags = array();
-        foreach ($apps as $app) if (empty($s_apps) || in_array($app->id, $s_apps)) {
+        foreach($apps as $app) if (empty($s_apps) || in_array($app->id, $s_apps))
+        {
             // add App to list
             $aaApps[] = array('name' => $app->name, 'id' => $app->id);
 
@@ -406,12 +418,15 @@ class ZluxController extends AppController {
 
         // ordering
         $aOrder = array();
-        if (isset($_POST['iSortCol_0'])) {
-            for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
-                if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
-                    $iColumnIndex = array_search($_POST['mDataProp_' . $_POST['iSortCol_' . $i]], $aColumns);
-                    $aOrder[] = $aColumns[$iColumnIndex];
-                    $aOrder[] = $_POST['sSortDir_' . $i] == 'desc' ? '_reversed' : '';
+        if ( isset( $_POST['iSortCol_0'] ) )
+        {
+            for ( $i=0 ; $i<intval( $_POST['iSortingCols'] ) ; $i++ )
+            {
+                if ( $_POST[ 'bSortable_'.intval($_POST['iSortCol_'.$i]) ] == "true" )
+                {
+                    $iColumnIndex = array_search( $_POST['mDataProp_'.$_POST['iSortCol_'.$i]], $aColumns );
+                    $aOrder[] = $aColumns[ $iColumnIndex ];
+                    $aOrder[] = $_POST['sSortDir_'.$i] == 'desc' ? '_reversed' : '';
                 }
             }
         }
@@ -420,20 +435,25 @@ class ZluxController extends AppController {
         $model->setState('order_by', $aOrder);
 
         // paging
-        if (isset($_POST['iDisplayStart']) && $_POST['iDisplayLength'] != '-1') {
+        if ( isset( $_POST['iDisplayStart'] ) && $_POST['iDisplayLength'] != '-1' )
+        {
 
             $model->setState('limitstart', $_POST['iDisplayStart'], true);
             $model->setState('limit', $_POST['iDisplayLength'], true);
         }
 
         // Input search filtering
-        if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
-            for ($i = 0; $i < count($aColumns); $i++) {
-                if (isset($_POST['bSearchable_' . $i]) && $_POST['bSearchable_' . $i] == "true") {
+        if ( isset($_POST['sSearch']) && $_POST['sSearch'] != "" )
+        {
+            for ( $i=0 ; $i<count($aColumns) ; $i++ )
+            {
+                if ( isset($_POST['bSearchable_'.$i]) && $_POST['bSearchable_'.$i] == "true" )
+                {
                     /* === Core: Name element === */
-                    if (strlen(trim($aColumns[$i] == '_itemname'))) {
+                    if( strlen( trim( $aColumns[$i] == '_itemname' ) ) )
+                    {
                         $name = array(
-                            'value' => trim($_POST['sSearch']),
+                            'value' => trim( $_POST['sSearch'] ),
                             'logic' => 'AND'
                         );
 
@@ -469,7 +489,7 @@ class ZluxController extends AppController {
             // author
             $author = $item->created_by_alias;
             $author_id = $item->created_by;
-            $users = $this->itemTable->getUsers($item->application_id);
+            $users  = $this->itemTable->getUsers($item->application_id);
             if (!$author && isset($users[$item->created_by])) {
                 $author = $users[$item->created_by]->name;
                 $author_id = $users[$item->created_by]->id;
@@ -505,18 +525,19 @@ class ZluxController extends AppController {
         Returns:
             JSON object
     */
-    public function getManagerFilesData () {
+    public function getManagerFilesData()
+    {
         // init vars
         $root = trim($this->app->request->get('root', 'string'), '/');
         $legalExt = str_replace(array(' ', ','), array('', '|'), $this->app->request->get('extensions', 'string'));
         $storage = $this->app->request->get('storage', 'string');
 
         // init storage
-        switch ($storage) {
+        switch($storage) {
             case 's3':
-                $bucket = $this->app->request->get('bucket', 'string');
-                $accesskey = urldecode($this->app->request->get('accesskey', 'string'));
-                $secretkey = $this->app->zlfw->crypt(urldecode($this->app->request->get('key', 'string')), 'decrypt');
+                $bucket     = $this->app->request->get('bucket', 'string');
+                $accesskey     = urldecode($this->app->request->get('accesskey', 'string'));
+                $secretkey     = $this->app->zlfw->crypt(urldecode($this->app->request->get('key', 'string')), 'decrypt');
                 $storage = new ZLStorage('AmazonS3', array('secretkey' => $secretkey, 'accesskey' => $accesskey, 'bucket' => $bucket));
 
                 // get root
@@ -563,18 +584,19 @@ class ZluxController extends AppController {
             $path: the relative path to the object
             $storage: the storage related information
     */
-    public function deleteObject () {
+    public function deleteObject()
+    {
         // init vars
         $path = $this->app->request->get('path', 'string', '');
         $storage = $this->app->request->get('storage', 'string');
         $result = false;
 
         // init storage
-        switch ($storage) {
+        switch($storage) {
             case 's3':
-                $bucket = $this->app->request->get('bucket', 'string');
-                $accesskey = urldecode($this->app->request->get('accesskey', 'string'));
-                $secretkey = $this->app->zlfw->crypt(urldecode($this->app->request->get('key', 'string')), 'decrypt');
+                $bucket     = $this->app->request->get('bucket', 'string');
+                $accesskey     = urldecode($this->app->request->get('accesskey', 'string'));
+                $secretkey     = $this->app->zlfw->crypt(urldecode($this->app->request->get('key', 'string')), 'decrypt');
                 $storage = new ZLStorage('AmazonS3', array('secretkey' => $secretkey, 'accesskey' => $accesskey, 'bucket' => $bucket));
                 break;
 
@@ -601,7 +623,8 @@ class ZluxController extends AppController {
             $dest: the relative path to the destination object
             $storage: the storage related information
     */
-    public function moveObject () {
+    public function moveObject()
+    {
         // init vars
         $src = $this->app->request->get('src', 'string', '');
         $dest = $this->app->request->get('dest', 'string', '');
@@ -615,11 +638,11 @@ class ZluxController extends AppController {
         $dest = dirname($src) . '/' . basename($dest);
 
         // init storage
-        switch ($storage) {
+        switch($storage) {
             case 's3':
-                $bucket = $this->app->request->get('bucket', 'string');
-                $accesskey = urldecode($this->app->request->get('accesskey', 'string'));
-                $secretkey = $this->app->zlfw->crypt(urldecode($this->app->request->get('key', 'string')), 'decrypt');
+                $bucket     = $this->app->request->get('bucket', 'string');
+                $accesskey     = urldecode($this->app->request->get('accesskey', 'string'));
+                $secretkey     = $this->app->zlfw->crypt(urldecode($this->app->request->get('key', 'string')), 'decrypt');
 
                 // workaround when object is on root
                 $dest = preg_replace('/^(\.\/)/', '', $dest);
@@ -655,7 +678,8 @@ class ZluxController extends AppController {
         Parameters:
             $path: parent folder path
     */
-    public function newFolder () {
+    public function newFolder()
+    {
         // init vars
         $path = $this->app->request->get('path', 'string', '');
         $storage = $this->app->request->get('storage', 'string');
@@ -665,11 +689,11 @@ class ZluxController extends AppController {
         $path = dirname($path) . '/' . $this->app->zlfw->filesystem->makeSafe(basename($path), 'ascii');
 
         // init storage
-        switch ($storage) {
+        switch($storage) {
             case 's3':
-                $bucket = $this->app->request->get('bucket', 'string');
-                $accesskey = urldecode($this->app->request->get('accesskey', 'string'));
-                $secretkey = $this->app->zlfw->crypt(urldecode($this->app->request->get('key', 'string')), 'decrypt');
+                $bucket     = $this->app->request->get('bucket', 'string');
+                $accesskey     = urldecode($this->app->request->get('accesskey', 'string'));
+                $secretkey     = $this->app->zlfw->crypt(urldecode($this->app->request->get('key', 'string')), 'decrypt');
 
                 // workaround when object is on root
                 $path = preg_replace('/^(\.\/)/', '', $path);
@@ -705,7 +729,8 @@ class ZluxController extends AppController {
         Parameters:
             $name: file name
     */
-    public function validateObjectName () {
+    public function validateObjectName()
+    {
         // init vars
         $name = $this->app->request->get('name', 'string', '');
 
@@ -713,7 +738,7 @@ class ZluxController extends AppController {
         $result = $this->app->zlfw->filesystem->makeSafe($name, 'ascii');
 
         // lowercase the extension
-        $result = JFile::stripExt($result) . '.' . strtolower(JFile::getExt($result));
+        $result = JFile::stripExt($result) . '.' . strtolower( JFile::getExt($result) );
 
         // return result
         echo json_encode(compact('result'));
@@ -730,7 +755,8 @@ class ZluxController extends AppController {
      * Adapted to ZOO by ZOOlanders.com
      * Copyright (C) JOOlanders, SL
      */
-    public function upload () {
+    public function upload()
+    {
         // load storage engine
         $storage = new ZLStorage('Local');
 
@@ -862,8 +888,6 @@ class ZluxController extends AppController {
 }
 
 /*
-	Class: ZoolandersControllerException
+    Class: ZoolandersControllerException
 */
-
-class ZluxControllerException extends AppException {
-}
+class ZluxControllerException extends AppException {}

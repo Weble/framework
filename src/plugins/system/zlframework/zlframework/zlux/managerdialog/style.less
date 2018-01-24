@@ -1,6 +1,3 @@
-/* Copyright (C) JOOlanders SL http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only */
-
-// import main file
 @import "../zlux.less";
 
 
@@ -8,357 +5,357 @@
 ----------------------------------------------------------------------------------------------------*/
 .zlux-dialog {
 
-	// TOOLBAR
-	[class^="zlux-dialog-toolbar-"] {
+    // TOOLBAR
+    [class^="zlux-dialog-toolbar-"] {
 
-		> ul.inline {
-			[class*=" icon-"],
-			[class^="icon-"] {
-				font-size: 20px;
-			}
-		}
+        > ul.inline {
+            [class*=" icon-"],
+            [class^="icon-"] {
+                font-size: 20px;
+            }
+        }
 
-		// subtoolbar
-		[class^="zlux-dialog-subtoolbar-"] {
-			border-top: 1px solid #EEE;
-			margin-top: 4px;
+        // subtoolbar
+        [class^="zlux-dialog-subtoolbar-"] {
+            border-top: 1px solid #EEE;
+            margin-top: 4px;
 
-			.zlux-x-input {
-				width: 262px;
-				margin: 4px 0 0;
-			}
-		}
-	}
+            .zlux-x-input {
+                width: 262px;
+                margin: 4px 0 0;
+            }
+        }
+    }
 
-	// FILTER TOOLBAR
-	.zlux-dialog-subtoolbar-filter {
-		margin: 4px 2px 0;
+    // FILTER TOOLBAR
+    .zlux-dialog-subtoolbar-filter {
+        margin: 4px 2px 0;
 
-		// dropdowns
-		.btn-group {
-			display: block;
-			width: 276px;
-			margin: 5px auto !important;
+        // dropdowns
+        .btn-group {
+            display: block;
+            width: 276px;
+            margin: 5px auto !important;
 
-			// menu triggerer
-			a.dropdown-toggle {
-				display: block;
-				background-color: white;
-				background-image: none;
-				.border-radius(4px);
-				box-shadow: none;
-				text-shadow: none;
-				color: #444;
-				border: 1px solid #CCC;
+            // menu triggerer
+            a.dropdown-toggle {
+                display: block;
+                background-color: white;
+                background-image: none;
+                .border-radius(4px);
+                box-shadow: none;
+                text-shadow: none;
+                color: #444;
+                border: 1px solid #CCC;
 
-				&:focus {
-					box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-					border-color: rgba(82, 168, 236, 0.8);
-					outline: 0 none;
-				}
+                &:focus {
+                    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+                    border-color: rgba(82, 168, 236, 0.8);
+                    outline: 0 none;
+                }
 
-				// if disabled
-				&.disabled {
-					font-weight: normal;
-					
-					&:focus {
-						box-shadow: none;
-						border-color: #CCC;
-					}
-				}
+                // if disabled
+                &.disabled {
+                    font-weight: normal;
 
-				// caret
-				.caret {
-					margin-left: 5px;
-				}
-			}
+                    &:focus {
+                        box-shadow: none;
+                        border-color: #CCC;
+                    }
+                }
 
-			&.open a.dropdown-toggle {
-				background-color: white;
-			}
+                // caret
+                .caret {
+                    margin-left: 5px;
+                }
+            }
 
-			// remove icon
-			.zlux-ui-dropdown-unselect {
-				font-size: 13px;
-				padding: 9px 10px 7px;
-				position: absolute;
-				right: 0;
-				top: -1px;
-				z-index: 3;
-			}
+            &.open a.dropdown-toggle {
+                background-color: white;
+            }
 
-			// menu list
-			.dropdown-menu {
-				min-width: 275px;
-				max-height: 300px;
-				border: 1px solid #CCC;
-				text-align: left;
-				overflow: auto;
+            // remove icon
+            .zlux-ui-dropdown-unselect {
+                font-size: 13px;
+                padding: 9px 10px 7px;
+                position: absolute;
+                right: 0;
+                top: -1px;
+                z-index: 3;
+            }
 
-				a[data-value="0"] {
-					text-align: center;
-				}
-			}
-		}
+            // menu list
+            .dropdown-menu {
+                min-width: 275px;
+                max-height: 300px;
+                border: 1px solid #CCC;
+                text-align: left;
+                overflow: auto;
 
-		// Input
-		.zlux-x-filter-input_wrapper {
-			position: relative;
-			margin: 5px auto 0;
-			width: 276px;
+                a[data-value="0"] {
+                    text-align: center;
+                }
+            }
+        }
 
-			.zlux-x-filter-input {
-				width: 262px;
-				margin: 0;
-				text-indent: 20px;
-			}
+        // Input
+        .zlux-x-filter-input_wrapper {
+            position: relative;
+            margin: 5px auto 0;
+            width: 276px;
 
-			[class^="icon-"] {
-				cursor: default;
-				font-size: 13px;
-				left: -1px;
-				position: absolute;
-				top: 4px;
-			}
+            .zlux-x-filter-input {
+                width: 262px;
+                margin: 0;
+                text-indent: 20px;
+            }
 
-			.zlux-ui-dropdown-unselect {
-				cursor: pointer;
-				font-size: 13px;
-				left: auto;
-				right: 1px;
-			}
-		}
-	}
+            [class^="icon-"] {
+                cursor: default;
+                font-size: 13px;
+                left: -1px;
+                position: absolute;
+                top: 4px;
+            }
 
-	// load object css
-	.zlux-object-tmpl();
+            .zlux-ui-dropdown-unselect {
+                cursor: pointer;
+                font-size: 13px;
+                left: auto;
+                right: 1px;
+            }
+        }
+    }
 
-	// DIALOG
-	.ui-dialog-content {
-		height: 349px !important;
-		max-height: 349px !important;
-		overflow: hidden;
-		position: relative;
-		opacity: 0; // init visibility
-	}
+    // load object css
+    .zlux-object-tmpl();
 
-	// bootstrap rows
-	.row-fluid {
-		margin-bottom: 5px;
-	}
+    // DIALOG
+    .ui-dialog-content {
+        height: 349px !important;
+        max-height: 349px !important;
+        overflow: hidden;
+        position: relative;
+        opacity: 0; // init visibility
+    }
 
-	// TABLE
-	table.table {
-		clear: both;
-		margin-bottom: 0 !important;
-		max-width: none !important;
+    // bootstrap rows
+    .row-fluid {
+        margin-bottom: 5px;
+    }
 
-		// TD
-		td {
-			&.right {
-				text-align: left;
-			}
+    // TABLE
+    table.table {
+        clear: both;
+        margin-bottom: 0 !important;
+        max-width: none !important;
 
-			&.center {
-				text-align: center;
-			}
+        // TD
+        td {
+            &.right {
+                text-align: left;
+            }
 
-			&.right {
-				text-align: right;
-			}
+            &.center {
+                text-align: center;
+            }
 
-			// icon column
-			&.column-icon {
-				font-size: 14px;
-				width: 14px;
-				padding-top: 12px;
-				text-align: center;
-				
+            &.right {
+                text-align: right;
+            }
 
-				[class^="icon-"],
-				[class*=" icon-"] {
-					cursor: default;
-					margin: 0;
+            // icon column
+            &.column-icon {
+                font-size: 14px;
+                width: 14px;
+                padding-top: 12px;
+                text-align: center;
 
-					&:before {
-						margin-left: 1px;
-					}
-				}
-			}
 
-			// name column
-			&.column-name {
-				max-width: 229px;
-				word-wrap: break-word;
-			}
-		}
+                [class^="icon-"],
+                [class*=" icon-"] {
+                    cursor: default;
+                    margin: 0;
 
-		// TH
-		th {
-			&:active {
-				outline: none;
-			}
-		}
-	}
+                    &:before {
+                        margin-left: 1px;
+                    }
+                }
+            }
 
-	// PAGINATION
-	.pagination {
-		text-align: center;
+            // name column
+            &.column-name {
+                max-width: 229px;
+                word-wrap: break-word;
+            }
+        }
 
-		ul.zlux-x-pagination > li {
-			[class^="icon-"] {
-				font-size: 15px;
-			}
+        // TH
+        th {
+            &:active {
+                outline: none;
+            }
+        }
+    }
 
-			& > a {
-				padding: 4px 13px;
-			}
+    // PAGINATION
+    .pagination {
+        text-align: center;
 
-			a.zlux-x-btn {
-				padding: 6px 13px;
-			}
-		}
-	}
+        ul.zlux-x-pagination > li {
+            [class^="icon-"] {
+                font-size: 15px;
+            }
 
-	// INFO
-	.zlux-x-info {
-		margin-bottom: 0;
+            & > a {
+                padding: 4px 13px;
+            }
 
-		.span12 {
-			min-height: 0;
-		}
+            a.zlux-x-btn {
+                padding: 6px 13px;
+            }
+        }
+    }
 
-		.dataTables_info {
-			text-align: center;
-		}
-	}
+    // INFO
+    .zlux-x-info {
+        margin-bottom: 0;
 
-	// widget adaption
-	&.ui-dialog {
-		min-height: 455px;
-		border: 1px solid #999;
-		border: 1px solid rgba(0, 0, 0, 0.3);
-		overflow: hidden;
-		*border: 1px solid #999;
-		.border-radius(6px);
-		-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-		 -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-			  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-		-webkit-background-clip: padding-box;
-		 -moz-background-clip: padding-box;
-			  background-clip: padding-box;
-	
-		.ui-dialog-titlebar {
-			background: none;
-			border: none;
-			padding: 9px 15px;
-			border-bottom: 1px solid #eee;
-			
-			.ui-dialog-title {
-				font-size: 18px;
-				margin: 0;
-				line-height: 30px;
-			}
+        .span12 {
+            min-height: 0;
+        }
 
-			.ui-dialog-titlebar-close {
-				width: 13px;
-				right: 0.5em;
-				color: inherit;
-				font-size: 17px;
+        .dataTables_info {
+            text-align: center;
+        }
+    }
 
-				&.ui-state-hover {
-					background: none;
-					border: none;
-					padding: 1px;
-				}
+    // widget adaption
+    &.ui-dialog {
+        min-height: 455px;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        *border: 1px solid #999;
+        .border-radius(6px);
+        -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+         -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+              box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        -webkit-background-clip: padding-box;
+         -moz-background-clip: padding-box;
+              background-clip: padding-box;
 
-				&:hover,
-				&:focus {
-					font-size: 17px;
-					text-decoration: none;
-				}
-			}
-		}
-	}
+        .ui-dialog-titlebar {
+            background: none;
+            border: none;
+            padding: 9px 15px;
+            border-bottom: 1px solid #eee;
 
-	// spinner
-	.zlux-loader-circle-big {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		font-size: 80px;
-		margin-left: -33px !important;
-		margin-top: -40px !important;
-		z-index: 1;
-		cursor: default;
-	}
+            .ui-dialog-title {
+                font-size: 18px;
+                margin: 0;
+                line-height: 30px;
+            }
 
-	&[data-zlux-status="ready"] {
-		.zlux-loader-circle-big {
-			margin-top: -5px !important;
-		}
-	}
+            .ui-dialog-titlebar-close {
+                width: 13px;
+                right: 0.5em;
+                color: inherit;
+                font-size: 17px;
 
-	// TOOLBAR
-	.zlux-dialog-toolbar {
-		position: relative;
-		text-align: center;
-		border-bottom: 1px solid #EEE;
-		.border-radius(2px);
-		padding: 4px 0;
+                &.ui-state-hover {
+                    background: none;
+                    border: none;
+                    padding: 1px;
+                }
 
-		// tools
-		[class*=" icon-"],
-		[class^="icon-"] {
-			cursor: pointer;
-			padding: 4px 9px 3px;
-			display: inline-block;
-			position: relative;
+                &:hover,
+                &:focus {
+                    font-size: 17px;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
 
-			&:hover {
-				border-color: #CFCFCF;
-			}
+    // spinner
+    .zlux-loader-circle-big {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 80px;
+        margin-left: -33px !important;
+        margin-top: -40px !important;
+        z-index: 1;
+        cursor: default;
+    }
 
-			&.disabled {
-				border-color: #EEEEEE;
-				color: #C0C0C0;
-				cursor: default;
-			}
+    &[data-zlux-status="ready"] {
+        .zlux-loader-circle-big {
+            margin-top: -5px !important;
+        }
+    }
 
-			&.zlux-ui-tool-enabled {
-				border-color: #CFCFCF;
-			}
-		}
+    // TOOLBAR
+    .zlux-dialog-toolbar {
+        position: relative;
+        text-align: center;
+        border-bottom: 1px solid #EEE;
+        .border-radius(2px);
+        padding: 4px 0;
 
-		// all toolbars
-		[class^="zlux-dialog-toolbar-"] {
-			display: none;
+        // tools
+        [class*=" icon-"],
+        [class^="icon-"] {
+            cursor: pointer;
+            padding: 4px 9px 3px;
+            display: inline-block;
+            position: relative;
 
-			ul.inline {
-				margin-bottom: 0;
-			}
-		}
+            &:hover {
+                border-color: #CFCFCF;
+            }
 
-		// main toolbar
-		[class^="zlux-dialog-toolbar-main"] {
-			display: block;
-		}
+            &.disabled {
+                border-color: #EEEEEE;
+                color: #C0C0C0;
+                cursor: default;
+            }
 
-		// back to main menu btn
-		.zlux-dialog-toolbar-backtomain {
-			display: none;
-			cursor: pointer;
-			font-size: 17px;
-			top: 5px;
-			left: 4px;
-			position: absolute;
-			border-color: transparent;
+            &.zlux-ui-tool-enabled {
+                border-color: #CFCFCF;
+            }
+        }
 
-			&:hover {
-				border-color: #CFCFCF;
-			}
-		}
-	}
+        // all toolbars
+        [class^="zlux-dialog-toolbar-"] {
+            display: none;
+
+            ul.inline {
+                margin-bottom: 0;
+            }
+        }
+
+        // main toolbar
+        [class^="zlux-dialog-toolbar-main"] {
+            display: block;
+        }
+
+        // back to main menu btn
+        .zlux-dialog-toolbar-backtomain {
+            display: none;
+            cursor: pointer;
+            font-size: 17px;
+            top: 5px;
+            left: 4px;
+            position: absolute;
+            border-color: transparent;
+
+            &:hover {
+                border-color: #CFCFCF;
+            }
+        }
+    }
 }
 
 
@@ -382,43 +379,43 @@
   right: 0;
   bottom: 0;
   left: 0;
-	&:focus {
-	  outline: thin dotted;
-	}
-	&::-webkit-scrollbar {
-	  visibility: hidden;
-	}
+    &:focus {
+      outline: thin dotted;
+    }
+    &::-webkit-scrollbar {
+      visibility: hidden;
+    }
   }
   > .@{paneClass} {
-	background: rgba(0,0,0,.25);
-	position:absolute;
-	width:10px;
-	right:0;
-	top:0;
-	bottom:0;
-	/* Target only IE7 and IE8 with this hack */
-	visibility:hidden\9; 
-	opacity: .01; 
-	-webkit-transition: .2s;
-	-moz-transition: .2s;
-	-o-transition: .2s;
-	transition: .2s;
-	.border-radius(5px);
-	> .@{sliderClass} {
-	  background: #444;
-	  background: rgba(0,0,0,.5);
-	  position: relative;
-	  margin : 0 1px;
-	  .border-radius(3px);
-	}
+    background: rgba(0,0,0,.25);
+    position:absolute;
+    width:10px;
+    right:0;
+    top:0;
+    bottom:0;
+    /* Target only IE7 and IE8 with this hack */
+    visibility:hidden\9;
+    opacity: .01;
+    -webkit-transition: .2s;
+    -moz-transition: .2s;
+    -o-transition: .2s;
+    transition: .2s;
+    .border-radius(5px);
+    > .@{sliderClass} {
+      background: #444;
+      background: rgba(0,0,0,.5);
+      position: relative;
+      margin : 0 1px;
+      .border-radius(3px);
+    }
   }
 }
 
-.@{nanoClass}:hover > .@{paneClass}, 
-.@{paneClass}.active, 
+.@{nanoClass}:hover > .@{paneClass},
+.@{paneClass}.active,
 .@{paneClass}.flashed {
   /* Target only IE7 and IE8 with this hack */
-  visibility: visible\9; 
+  visibility: visible\9;
   opacity: 0.99;
 }
 
@@ -429,25 +426,25 @@
 // ZLUX modifications
 .zlux-scroller {
 
-	.@{contentClass} {
-		padding: 0.5em 1em;
-	}
+    .@{contentClass} {
+        padding: 0.5em 1em;
+    }
 
-	> .@{paneClass} {
-		right: 1px;
-		width: 7px;
+    > .@{paneClass} {
+        right: 1px;
+        width: 7px;
 
-		// margin: 4px 0;
+        // margin: 4px 0;
 
-		> .@{sliderClass} {
-			margin: 0;
-		}
-	}
+        > .@{sliderClass} {
+            margin: 0;
+        }
+    }
 
-	// hide scroll
-	&.noscroll {
-		.@{paneClass} {
-			display: none !important;
-		}
-	}
+    // hide scroll
+    &.noscroll {
+        .@{paneClass} {
+            display: none !important;
+        }
+    }
 }
