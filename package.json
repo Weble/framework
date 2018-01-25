@@ -3,7 +3,7 @@
   "name": "@zoolanders/framework",
   "version": "4.1.0",
   "description": "ZOOlanders Framework",
-  "copyright": "(c) 2018 Joolanders, SL",
+  "copyright": "2018 Joolanders, SL",
   "license": "GPL",
   "author": {
     "name": "ZOOlanders",
@@ -11,12 +11,15 @@
   },
   "scripts": {
     "build": "node -r @std/esm scripts/build.js",
+    "build:plugin": "node -r @std/esm scripts/build-plugin.js",
+    "build:library": "node -r @std/esm scripts/build-library.js",
     "vendor": "node -r @std/esm scripts/vendor.js",
     "bump": "node -r @std/esm scripts/bump.js"
   },
   "devDependencies": {
     "@miljan/build": "^0.1.0",
     "@std/esm": "^0.19.6",
+    "clean-css": "^4.1.9",
     "date-fns": "^1.29.0",
     "eslint": "^4.13.1",
     "eslint-config-standard": "^10.2.1",
@@ -27,7 +30,9 @@
     "eslint-plugin-standard": "^3.0.1",
     "git-branch": "^1.0.0",
     "globby": "^7.1.1",
-    "semver": "^5.5.0"
+    "less": "^2.7.3",
+    "semver": "^5.5.0",
+    "uglify-js": "^3.3.8"
   },
   "engines": {
     "node": ">= 7.8.0",

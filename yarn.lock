@@ -1980,6 +1980,13 @@ uglify-js@^3.3.7:
     commander "~2.13.0"
     source-map "~0.6.1"
 
+uglify-js@^3.3.8:
+  version "3.3.8"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.8.tgz#51e9a5db73afb53ac98603d08224edcd0be45fd8"
+  dependencies:
+    commander "~2.13.0"
+    source-map "~0.6.1"
+
 unbzip2-stream@^1.0.9:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/unbzip2-stream/-/unbzip2-stream-1.2.5.tgz#73a033a567bbbde59654b193c44d48a7e4f43c47"
