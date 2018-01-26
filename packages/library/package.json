@@ -1,8 +1,11 @@
 {
   "private": true,
-  "name": "@zoolanders/framework",
+  "workspaces": [
+    "packages/*"
+  ],
+  "name": "@zoolanders/framework-library",
   "version": "4.1.0",
-  "description": "ZOOlanders Framework",
+  "description": "eCommerce solution for ZOO",
   "copyright": "2018 Joolanders, SL",
   "license": "GPL",
   "author": {
@@ -15,14 +18,7 @@
   },
   "devDependencies": {
     "@std/esm": "^0.19.6",
-    "@zoolanders/build": "^0.2.0",
-    "eslint": "^4.13.1",
-    "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "@zoolanders/build": "^0.1.0"
   },
   "@std/esm": {
     "cjs": true,

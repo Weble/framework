@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@miljan/build@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@miljan/build/-/build-0.1.0.tgz#b60c78c90d354595c9e80a92e7ae487955a5667a"
+"@miljan/build@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@miljan/build/-/build-0.3.0.tgz#f8ae909ddf116af55f1e918be225e6d48f4a1e17"
   dependencies:
     archiver "^2.1.1"
     cpy "^6.0.0"
@@ -21,8 +21,20 @@
     uglify-js "^3.3.7"
 
 "@std/esm@^0.19.6":
-  version "0.19.6"
-  resolved "https://registry.yarnpkg.com/@std/esm/-/esm-0.19.6.tgz#65d42ebcfe2e8c8d222c2c5792493dbe4748c15c"
+  version "0.19.7"
+  resolved "https://registry.yarnpkg.com/@std/esm/-/esm-0.19.7.tgz#8eeab6c54596a92e3557992621c91e8166a19852"
+
+"@zoolanders/build@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@zoolanders/build/-/build-0.2.0.tgz#7c851c3aac330d7d7425949c2087636d25240e7d"
+  dependencies:
+    "@miljan/build" "^0.3.0"
+    clean-css "^4.1.9"
+    date-fns "^1.29.0"
+    git-branch "^1.0.0"
+    globby "^7.1.1"
+    less "^2.7.3"
+    uglify-js "^3.3.7"
 
 acorn-jsx@^3.0.0:
   version "3.0.1"
@@ -531,7 +543,7 @@ doctrine@1.5.0:
     esutils "^2.0.2"
     isarray "^1.0.0"
 
-doctrine@^2.0.2:
+doctrine@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.1.0.tgz#5cd01fc101621b42c4cd7f5d1a66243716d3f39d"
   dependencies:
@@ -593,9 +605,9 @@ escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
 
-eslint-config-standard@^10.2.1:
-  version "10.2.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-standard/-/eslint-config-standard-10.2.1.tgz#c061e4d066f379dc17cd562c64e819b4dd454591"
+eslint-config-standard@^11.0.0-beta.0:
+  version "11.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-standard/-/eslint-config-standard-11.0.0-beta.0.tgz#f8afe69803d95c685a4b8392b8793188eb03cbb3"
 
 eslint-import-resolver-node@^0.3.1:
   version "0.3.2"
@@ -665,8 +677,8 @@ eslint-visitor-keys@^1.0.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#3f3180fb2e291017716acb4c9d6d5b5c34a6a81d"
 
 eslint@^4.13.1:
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.15.0.tgz#89ab38c12713eec3d13afac14e4a89e75ef08145"
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.16.0.tgz#934ada9e98715e1d7bbfd6f6f0519ed2fab35cc1"
   dependencies:
     ajv "^5.3.0"
     babel-code-frame "^6.22.0"
@@ -674,7 +686,7 @@ eslint@^4.13.1:
     concat-stream "^1.6.0"
     cross-spawn "^5.1.0"
     debug "^3.1.0"
-    doctrine "^2.0.2"
+    doctrine "^2.1.0"
     eslint-scope "^3.7.1"
     eslint-visitor-keys "^1.0.0"
     espree "^3.5.2"
@@ -919,8 +931,8 @@ glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.2:
     path-is-absolute "^1.0.0"
 
 globals@^11.0.1:
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/globals/-/globals-11.1.0.tgz#632644457f5f0e3ae711807183700ebf2e4633e4"
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-11.2.0.tgz#aa2ece052a787563ba70a3dcd9dc2eb8a9a0488c"
 
 globby@^5.0.0:
   version "5.0.0"
@@ -1144,8 +1156,8 @@ is-promise@^2.1.0:
   resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-2.1.0.tgz#79a2a9ece7f096e80f36d2b2f3bc16c1ff4bf3fa"
 
 is-resolvable@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.0.1.tgz#acca1cd36dbe44b974b924321555a70ba03b1cf4"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.1.0.tgz#fb18f87ce1feb925169c9a407c19318a3206ed88"
 
 is-retry-allowed@^1.0.0:
   version "1.1.0"
@@ -1754,7 +1766,7 @@ seek-bzip@^1.0.5:
   dependencies:
     commander "~2.8.1"
 
-"semver@2 || 3 || 4 || 5", semver@^5.3.0, semver@^5.5.0:
+"semver@2 || 3 || 4 || 5", semver@^5.3.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
 
@@ -1974,13 +1986,6 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
 uglify-js@^3.3.7:
-  version "3.3.7"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.7.tgz#28463e7c7451f89061d2b235e30925bf5625e14d"
-  dependencies:
-    commander "~2.13.0"
-    source-map "~0.6.1"
-
-uglify-js@^3.3.8:
   version "3.3.8"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.8.tgz#51e9a5db73afb53ac98603d08224edcd0be45fd8"
   dependencies:

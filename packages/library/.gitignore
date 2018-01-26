@@ -1,0 +1,4 @@
+dist/
+src/vendor
+
+src/__tests__/config/configuration.php

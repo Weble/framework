@@ -1,43 +1,25 @@
-import branch from 'git-branch'
 import pkg from '../package.json'
-import format from 'date-fns/format'
+import { pkgName } from '@zoolanders/build'
 import { remove, copy, exec, zip, task } from '@miljan/build'
 
 (async () => {
   await remove('dist/tmp')
 
-  await task('Build Plugin', async (spinner) => exec('yarn build:plugin'))
-
-  await task('Build Library - this can take a while...', async (spinner) => {
-    await exec('yarn build:library')
+  await task('Build Library - this can take a while...', async spinner => {
+    await exec('yarn build', { cwd: 'packages/library' })
+    await zip('packages/library/dist', 'dist/tmp/packages/lib_zoolanders.zip')
     spinner.text = 'Build Library'
   })
 
+  await task('Build Plugin', async () => {
+    await exec('yarn build', { cwd: 'packages/plugin' })
+    await zip('packages/plugin/dist', 'dist/tmp/packages/plg_zlframework.zip')
+  })
+
   await task('Package', async () => {
-    await copy('pkg.xml', 'dist/tmp/package', {
-      rename: name => `${name.replace('.xml', '')}_zoolanders_framework.xml`
-    })
-    await copy('src/administrator/**/*.ini', 'dist/tmp/package/language')
-    await Promise.all([
-      zip('dist/tmp/libraries/zoolanders', 'dist/tmp/package/packages/lib_zoolanders.zip'),
-      zip('dist/tmp/plugin', 'dist/tmp/package/packages/plg_zlframework.zip')
-    ])
-    await zip('dist/tmp/package', `dist/${getPackageName()}`)
+    await copy(['CHANGELOG.md', 'packages/package/*'], 'dist/tmp')
+    await zip('dist/tmp', `dist/${pkgName('zl-framework', pkg.version)}`)
   })
 
   await remove('dist/tmp')
 })()
-
-function getPackageName () {
-  const date = format(new Date(), 'YYYY-MM-DDTHHmm')
-  let branchName = branch.sync()
-
-  if (!branchName) {
-    // use travis env
-    branchName = process.env.TRAVIS_BRANCH
-  }
-
-  return branchName === 'master'
-    ? `zoolanders-framework_${pkg.version}.zip`
-    : `zoolanders-framework_${pkg.version}_${branchName}_${date}.zip`
-}

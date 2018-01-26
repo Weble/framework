@@ -17,4 +17,8 @@
         <filename>config.php</filename>
         <folder>zlframework</folder>
     </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_system_zlframework.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_system_zlframework.sys.ini</language>
+    </languages>
 </extension>

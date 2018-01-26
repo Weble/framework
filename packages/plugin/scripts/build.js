@@ -1,7 +1,7 @@
 import path from 'path'
 import globby from 'globby'
-import jexec from './util/jexec'
 import pkg from '../package.json'
+import { jexec } from '@zoolanders/build'
 import { remove, copyRecursive, banner, task, less, minifyJS, minifyCSS } from '@miljan/build'
 
 const bannerMIT = `/**
@@ -17,19 +17,17 @@ const bannerGPL = `/**
  */`
 
 ;(async () => {
-  await task('Cleanup', () => remove('dist/tmp/plugin'))
+  await task('Cleanup', () => remove('dist'))
 
-  await task('Copy source files', () =>
-    copyRecursive('src/plugins/system/zlframework', 'dist/tmp/plugin')
-  )
+  await task('Copy source files', () => copyRecursive('src', 'dist'))
 
   await task('Process ZLUX', async () => {
     let sources
 
     // compiles ZLUX less files
-    sources = await globby.sync([
-      'dist/tmp/plugin/zlframework/zlux/*/*.less',
-      'dist/tmp/plugin/zlframework/zlux/zluxMain.less'
+    sources = await globby([
+      'dist/zlframework/zlux/*/*.less',
+      'dist/zlframework/zlux/zluxMain.less'
     ])
 
     await Promise.all(sources.map(src =>
@@ -42,12 +40,12 @@ const bannerGPL = `/**
       })
     ))
 
-    await remove('dist/tmp/plugin/zlframework/zlux/**/*.less')
+    await remove('dist/zlframework/zlux/**/*.less')
 
     // minify CSS/JS
-    sources = await globby.sync([
-      'dist/tmp/plugin/zlframework/zlux/*/*.css',
-      'dist/tmp/plugin/zlframework/zlux/zluxMain.css'
+    sources = await globby([
+      'dist/zlframework/zlux/*/*.css',
+      'dist/zlframework/zlux/zluxMain.css'
     ])
 
     await Promise.all(sources.map(src =>
@@ -59,9 +57,9 @@ const bannerGPL = `/**
       })
     ))
 
-    sources = await globby.sync([
-      'dist/tmp/plugin/zlframework/zlux/*/*.js',
-      'dist/tmp/plugin/zlframework/zlux/zluxMain.js'
+    sources = await globby([
+      'dist/zlframework/zlux/*/*.js',
+      'dist/zlframework/zlux/zluxMain.js'
     ])
 
     await Promise.all(sources.map(src =>
@@ -73,15 +71,15 @@ const bannerGPL = `/**
       })
     ))
 
-    await banner('dist/tmp/plugin/zlframework/zlux/**/*.{css,js}', bannerMIT)
+    await banner('dist/zlframework/zlux/**/*.{css,js}', bannerMIT)
   })
 
   await task('Process other assets', async () => {
     let sources
 
     sources = [
-      'dist/tmp/plugin/zlframework/assets/libraries/zlux/zlux.less',
-      'dist/tmp/plugin/zlframework/elements/separator/tmpl/edit/section/style.less'
+      'dist/zlframework/assets/libraries/zlux/zlux.less',
+      'dist/zlframework/elements/separator/tmpl/edit/section/style.less'
     ]
 
     // compile less files
@@ -98,6 +96,6 @@ const bannerGPL = `/**
     await remove(sources)
   })
 
-  await task('Add jexec check', () => jexec('dist/tmp/plugin/**/*.php'))
-  await task('Add banner', () => banner('dist/tmp/plugin/**/*.php', bannerGPL))
+  await task('Add jexec check', () => jexec('dist/**/*.php'))
+  await task('Add banner', () => banner('dist/**/*.php', bannerGPL))
 })()
