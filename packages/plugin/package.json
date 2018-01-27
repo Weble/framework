@@ -14,8 +14,9 @@
     "bump": "node -r @std/esm scripts/bump.js"
   },
   "devDependencies": {
+    "@miljan/build": "^0.4.1",
     "@std/esm": "^0.19.6",
-    "@zoolanders/build": "^0.1.0"
+    "@zoolanders/build": "^0.2.0"
   },
   "@std/esm": {
     "cjs": true,

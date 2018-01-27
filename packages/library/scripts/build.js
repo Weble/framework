@@ -1,6 +1,6 @@
 import pkg from '../package.json'
 import { jexec } from '@zoolanders/build'
-import { remove, copyRecursive, banner, exec, task } from '@miljan/build'
+import { remove, copyRecursive, banner, exec, run, task } from '@miljan/build'
 
 const bannerGPL = `/**
  * @package    ZOOlanders Framework ${pkg.version}
@@ -8,7 +8,7 @@ const bannerGPL = `/**
  * @license    GPL
  */`
 
-;(async () => {
+run(async () => {
   await remove('dist')
 
   // copy files filtering out vendor|tests|node
@@ -25,7 +25,7 @@ const bannerGPL = `/**
   await task('Add banner', () => banner('dist/**/*.php', bannerGPL))
 
   // run composer install
-  await task('Install vendor - this can take a while...', async (spinner) => {
+  await task('Install vendor - this can take a while...', async spinner => {
     await exec(`docker run --rm --interactive \
       --volume $PWD/dist:/app \
       composer install --no-dev --optimize-autoloader --ignore-platform-reqs`
@@ -37,7 +37,7 @@ const bannerGPL = `/**
   await task('Optimize vendor', () => {
     const vendor = 'dist/vendor'
 
-    remove([
+    return remove([
       // common unnecessary files
       `${vendor}/**/.*`,
       `${vendor}/**/*.md`,
@@ -80,4 +80,4 @@ const bannerGPL = `/**
     ])
   })
 
-})()
+})

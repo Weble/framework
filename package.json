@@ -1,5 +1,8 @@
 {
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "name": "@zoolanders/framework",
   "version": "4.1.0",
   "description": "ZOOlanders Framework",

@@ -2,7 +2,7 @@
 
 // load assets
 $this->app->document->addStylesheet('elements:separator/tmpl/edit/section/style.css');
-$this->app->document->addScript('elements:separator/tmpl/edit/section/script.min.js');
+$this->app->document->addScript('elements:separator/tmpl/edit/section/script.js');
 $this->app->zlfw->zlux->loadBootstrap();
 
 // init vars

@@ -1,1 +1,32 @@
-.zl-bootstrap.zl-separator-section{text-align:center;background-color:#f0f0f0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:0;position:relative;height:40px}.zl-bootstrap.zl-separator-section i.icon-eye-close,.zl-bootstrap.zl-separator-section i.icon-eye-open{font-size:20px;margin-right:0}.zl-bootstrap.zl-separator-section i.icon-eye-close:before,.zl-bootstrap.zl-separator-section i.icon-eye-open:before{color:#333}.zl-bootstrap.zl-separator-section .zlux-x-title{display:inline-block;font-size:17px;padding:10px}.zl-bootstrap.zl-separator-section .btn{margin:6px 9px;position:absolute;right:0;top:0}.zl-bootstrap.zl-separator-section .btn:focus{outline:0}
+.zl-bootstrap.zl-separator-section {
+  text-align: center;
+  background-color: #f0f0f0;
+  border-top: 1px solid #CCCCCC;
+  border-bottom: 1px solid #CCCCCC;
+  margin: 0;
+  position: relative;
+  height: 40px;
+}
+.zl-bootstrap.zl-separator-section i.icon-eye-close,
+.zl-bootstrap.zl-separator-section i.icon-eye-open {
+  font-size: 20px;
+  margin-right: 0;
+}
+.zl-bootstrap.zl-separator-section i.icon-eye-close:before,
+.zl-bootstrap.zl-separator-section i.icon-eye-open:before {
+  color: #333333;
+}
+.zl-bootstrap.zl-separator-section .zlux-x-title {
+  display: inline-block;
+  font-size: 17px;
+  padding: 10px;
+}
+.zl-bootstrap.zl-separator-section .btn {
+  margin: 6px 9px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.zl-bootstrap.zl-separator-section .btn:focus {
+  outline: none;
+}

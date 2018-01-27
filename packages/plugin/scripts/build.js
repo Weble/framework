@@ -2,7 +2,7 @@ import path from 'path'
 import globby from 'globby'
 import pkg from '../package.json'
 import { jexec } from '@zoolanders/build'
-import { remove, copyRecursive, banner, task, less, minifyJS, minifyCSS } from '@miljan/build'
+import { remove, copyRecursive, banner, task, less, minify } from '@miljan/build'
 
 const bannerMIT = `/**
  * ZOOlanders Framework ${pkg.version}
@@ -22,6 +22,27 @@ const bannerGPL = `/**
   await task('Copy source files', () => copyRecursive('src', 'dist'))
 
   await task('Process ZLUX', async () => {
+    let sources
+    // compile less files
+    sources = [
+      'dist/zlframework/assets/libraries/zlux/zlux.less'
+    ]
+    await Promise.all(sources.map(src =>
+      less({
+        src
+      })
+    ))
+    await remove(sources)
+
+    // minify
+    await minify([
+      'dist/zlframework/assets/libraries/zlux/*.css'
+    ], { sourceMap: true })
+
+    await banner('dist/zlframework/assets/libraries/zlux/*.css', bannerMIT)
+  })
+
+  await task('Process ZLUX 2', async () => {
     let sources
 
     // compiles ZLUX less files
@@ -43,57 +64,24 @@ const bannerGPL = `/**
     await remove('dist/zlframework/zlux/**/*.less')
 
     // minify CSS/JS
-    sources = await globby([
-      'dist/zlframework/zlux/*/*.css',
-      'dist/zlframework/zlux/zluxMain.css'
-    ])
-
-    await Promise.all(sources.map(src =>
-      minifyCSS({
-        src,
-        options: {
-          sourceMap: {}
-        }
-      })
-    ))
-
-    sources = await globby([
-      'dist/zlframework/zlux/*/*.js',
-      'dist/zlframework/zlux/zluxMain.js'
-    ])
-
-    await Promise.all(sources.map(src =>
-      minifyJS({
-        src,
-        options: {
-          sourceMap: {}
-        }
-      })
-    ))
+    sources = await minify([
+      'dist/zlframework/zlux/*/*.{css,js}',
+      'dist/zlframework/zlux/zluxMain.{css,js}'
+    ], { sourceMap: true })
 
     await banner('dist/zlframework/zlux/**/*.{css,js}', bannerMIT)
   })
 
-  await task('Process other assets', async () => {
-    let sources
-
-    sources = [
-      'dist/zlframework/assets/libraries/zlux/zlux.less',
-      'dist/zlframework/elements/separator/tmpl/edit/section/style.less'
+  await task('Process Other Assets', async () => {
+    const sources = [
+      'dist/zlframework/assets/css/*.css',
+      'dist/zlframework/elements/filespro/*.js',
+      'dist/zlframework/elements/repeatablepro/*.{css,js}',
+      'dist/zlframework/elements/separator/tmpl/edit/*/*.{css,js}'
     ]
 
-    // compile less files
-    await Promise.all(sources.map(src =>
-      less({
-        src,
-        options: {
-          relativeUrls: true,
-          paths: [ path.resolve(path.dirname(src)) ]
-        }
-      })
-    ))
-
-    await remove(sources)
+    await minify(sources, { sourceMap: true })
+    await banner(sources, bannerMIT)
   })
 
   await task('Add jexec check', () => jexec('dist/**/*.php'))
