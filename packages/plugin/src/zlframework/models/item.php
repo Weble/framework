@@ -387,6 +387,26 @@ class ZLModelItem extends ZLModel
             }
         }
 
+        // Author
+		if ($authors = $this->getState('created_by_alias', array())) {			
+			// set query
+			$author = array_shift($authors);
+
+			if ($author['type'] == 'exact_phrase') {
+				$created_by_ids_logic = "a.created_by IN ("
+										." SELECT u.id FROM #__users AS u"
+										." WHERE u.name LIKE '". $author->get('value') ."' )";
+				$logic = strtoupper($author->get('logic', 'AND'));
+				$defaultElements[$logic][] = "(a.created_by_alias LIKE '". $author->get('value') ."' OR (". $created_by_ids_logic ." AND a.created_by_alias = ''))";
+			} else {
+				$created_by_ids_logic = "a.created_by IN ("
+										." SELECT u.id FROM #__users AS u"
+										." WHERE u.name LIKE '%". $author->get('value') ."%' )";
+				$logic = strtoupper($author->get('logic', 'AND'));
+				$defaultElements[$logic][] = "(a.created_by_alias LIKE '%". $author->get('value') ."%' OR (". $created_by_ids_logic ." AND a.created_by_alias = ''))";
+			}
+		}
+
         // Category filtering
         $categories = $this->getState('categories', array());
 
